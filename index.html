@@ -24,30 +24,47 @@
     <!-- Spacing after fixed navbar -->
     <div data-aos="fade-up" style="margin-top: 80px;"></div>
     <!-- Navigation -->
-    <nav class="navbar">
-        <div class="container" data-aos="fade-up">
-            <div class="nav-wrapper" data-aos="fade-up">
-                
-                <div class="logo" data-aos="fade-up">
-                    <img alt="Paradigm Classes Logo" class="logo-img" src="images/logo.png" />
-                    <div data-aos="fade-up">
-                        <div class="logo-primary" data-aos="fade-up">PARADIGM</div>
-                        <div class="logo-secondary" data-aos="fade-up">CLASSES</div>
-                    </div>
-                </div>
-                <div class="nav-links" data-aos="fade-up">
-                    <a class="nav-link" href="#home">Home</a>
-                    <a class="nav-link" href="#courses">Courses</a>
-                    <a class="nav-link" href="#about">About</a>
-                    <a class="nav-link" href="#testimonials">Testimonials</a>
-                    <a class="nav-link" href="#contact">Contact</a>
-                </div>
-                <div class="nav-cta" data-aos="fade-up">
-                    <a class="btn btn-primary" href="#contact">Enroll Now</a>
-                </div>
-            </div>
+    <div class="nav-wrapper">
+
+    <!-- LEFT: Logo + Name -->
+    <div class="nav-left">
+        <img src="images/logo.png" alt="Logo" class="logo-img">
+        <div class="logo-text">
+            <span class="logo-primary">PARADIGM</span>
+            <span class="logo-secondary">CLASSES</span>
         </div>
-    </nav>
+    </div>
+
+    <!-- CENTER: Navigation Links -->
+    <div class="nav-center">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="study-notes.html" class="nav-link">Notes</a>
+        <a href="video-lectures.html" class="nav-link">Video</a>
+        <a href="gallery.html" class="nav-link">Gallery</a>
+        <a href="faculty.html" class="nav-link">Faculty</a>
+    </div>
+
+    <!-- RIGHT: Controls -->
+    <div class="nav-right">
+
+        <!-- Dark / Light Toggle -->
+        <label class="toggle-switch">
+            <input type="checkbox" id="dark-toggle">
+            <span class="slider"></span>
+        </label>
+
+        <!-- Font Size Controls -->
+        <div class="font-controls">
+            <button onclick="changeFontSize(-1)">A−</button>
+            <button onclick="changeFontSize(1)">A+</button>
+        </div>
+
+        <!-- Login Button -->
+        <a href="login.html" class="btn btn-primary">Login</a>
+
+    </div>
+
+</div>
     
     <!-- Gallery Section -->
     <section class="faq" data-aos="fade-up" style="padding-top: 7rem;">
