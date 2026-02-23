@@ -1,29 +1,3 @@
-// Sidebar toggle
-document.addEventListener("DOMContentLoaded", () => {
-  const sidebarToggle = document.getElementById("sidebar-toggle");
-  const sidebar = document.getElementById("sidebar");
-  const closeSidebarBtn = document.getElementById("close-sidebar");
-
-  if (sidebarToggle && sidebar && closeSidebarBtn) {
-    // Open sidebar
-    sidebarToggle.addEventListener("click", (e) => {
-      e.stopPropagation(); // Prevents click from bubbling to document
-      sidebar.classList.add("open");
-    });
-
-    // Close sidebar
-    closeSidebarBtn.addEventListener("click", () => {
-      sidebar.classList.remove("open");
-    });
-
-    // Click outside to close
-    document.addEventListener("click", (e) => {
-      if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
-        sidebar.classList.remove("open");
-      }
-    });
-  }
-});
 
 // Dark mode toggle
 const darkToggle = document.getElementById("dark-toggle");
