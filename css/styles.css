@@ -1267,7 +1267,17 @@ label {
         flex-direction: column;
         width: 100%;
     }
+.gallery {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    scroll-behavior: smooth;
+}
 
+.gallery img {
+    min-width: 250px;
+    height: auto;
+}
     /* Gallery Slider */
     .slider-wrapper {
         overflow: hidden;
