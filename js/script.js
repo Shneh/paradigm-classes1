@@ -85,9 +85,27 @@ document.querySelectorAll("form").forEach(form => {
     });
   });
 });
-const gallery = document.querySelector('.gallery');
 
-gallery.addEventListener('wheel', (e) => {
+const gallery = document.querySelector('.gallery');
+if (gallery) {
+  gallery.addEventListener('wheel', (e) => {
     e.preventDefault();
     gallery.scrollLeft += e.deltaY;
-});
+  });
+}
+
+// Mobile nav menu toggle
+const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+const mobileMenu = document.getElementById('mobileMenu');
+
+if (mobileMenuToggle && mobileMenu) {
+  mobileMenuToggle.addEventListener('click', () => {
+    mobileMenu.classList.toggle('open');
+  });
+
+  document.querySelectorAll('.mobile-link').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+    });
+  });
+}
