@@ -26,24 +26,22 @@
 </style>
 </head>
 <body>
-  <!-- Spacing after fixed navbar -->
-  <div style="margin-top: 80px;"></div>
-
-  <!-- Navbar -->
-  <nav class="navbar">
-        <div class="container" data-aos="fade-up">
-            <div class="nav-wrapper" data-aos="fade-up">
+ <!-- Spacing after fixed navbar -->
+    <div style="margin-top: 80px;"></div>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
                 
-                <div class="logo" data-aos="fade-up">
+                <div class="logo">
                     <img alt="Paradigm Classes Logo" class="logo-img" src="images/logo.png" />
-                    <div data-aos="fade-up">
-                        <div class="logo-primary" data-aos="fade-up">PARADIGM</div>
-                        <div class="logo-secondary" data-aos="fade-up">CLASSES</div>
+                    <div>
+                        <div class="logo-primary">PARADIGM</div>
+                        <div class="logo-secondary">CLASSES</div>
                     </div>
                 </div>
-                <div class="nav-links" data-aos="fade-up">
+                <div class="nav-links">
                     <a class="nav-link" href="index.html">Home</a>
-                    <a class="nav-link" href="index.html#courses">Courses</a>
                     <a class="nav-link" href="study-notes.html">Notes</a>
                     <a class="nav-link" href="video-lectures.html">Videos</a>
                     <a class="nav-link" href="gallery.html">Gallery</a>
@@ -51,12 +49,26 @@
                     <a class="nav-link" href="faculty.html">Faculty</a>
                     <a class="nav-link" href="index.html#contact">Contact</a>
                 </div>
-                <div class="nav-cta" data-aos="fade-up">
+
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open Menu">☰</button>
+
+                <div class="nav-cta">
                     <a class="btn btn-primary" href="login.html">LOGIN</a>
                 </div>
             </div>
+            <div class="mobile-menu" id="mobileMenu">
+                <a class="mobile-link" href="index.html">Home</a>
+                <a class="mobile-link" href="study-notes.html">Notes</a>
+                <a class="mobile-link" href="video-lectures.html">Videos</a>
+                <a class="mobile-link" href="gallery.html">Gallery</a>
+                <a class="mobile-link" href="askai.html">Ask AI</a>
+                <a class="mobile-link" href="faculty.html">Faculty</a>
+                <a class="mobile-link" href="index.html#contact">Contact</a>
+                <a class="mobile-cta" href="login.html">LOGIN</a>
+            </div>
         </div>
     </nav>
+
 
   <!-- Gallery Section -->
   <section class="faq" style="padding-top: 7rem;">
