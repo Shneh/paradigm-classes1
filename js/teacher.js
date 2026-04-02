@@ -16,17 +16,26 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentEditingTestId = null;
 
     // Render Data functions
-    function renderStudents() {
-        const students = DB.getStudents();
-        studentsTableBody.innerHTML = '';
-        students.forEach(student => {
+    function renderSalaries() {
+        const salariesTableBody = document.querySelector('#salariesTable tbody');
+        if(!salariesTableBody) return;
+        
+        const salaries = DB.getSalaries().filter(s => s.teacherId === user.id);
+        salariesTableBody.innerHTML = '';
+        
+        if (salaries.length === 0) {
+            salariesTableBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--text-light);">No salary records found.</td></tr>';
+            return;
+        }
+
+        salaries.forEach(salary => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td>${student.id}</td>
-                <td>${student.name}</td>
-                <td><button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #dc2626; border-color: #dc2626;" onclick="removeStudent('${student.id}')">Remove</button></td>
+                <td>${salary.month}</td>
+                <td>${salary.dateIssued}</td>
+                <td class="text-right" style="text-align: right; font-weight: 700; color: var(--primary-color);">₹${salary.amount.toLocaleString('en-IN')}</td>
             `;
-            studentsTableBody.appendChild(tr);
+            salariesTableBody.appendChild(tr);
         });
     }
 
@@ -59,14 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Handlers
-    window.removeStudent = (id) => {
-        if(confirm(`Remove student ${id}?`)) {
-            let students = DB.getStudents();
-            students = students.filter(s => s.id !== id);
-            DB.setStudents(students);
-            renderStudents();
-        }
-    };
 
     window.openMarkEntry = (testId) => {
         const tests = DB.getTests();
@@ -115,21 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Form Submits
-    addStudentForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = document.getElementById('studentName').value;
-        const students = DB.getStudents();
-        // generate simple incremental id
-        const numIds = students.filter(s => s.id.startsWith('s')).map(s => parseInt(s.id.substring(1)) || 0);
-        const maxId = numIds.length > 0 ? Math.max(...numIds) : 100;
-        const newId = 's' + (maxId + 1);
-
-        students.push({ id: newId, name });
-        DB.setStudents(students);
-        document.getElementById('studentName').value = '';
-        renderStudents();
-        alert(`Added ${name} with ID: ${newId}`);
-    });
 
     addTestForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -184,6 +170,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Initial render
-    renderStudents();
+    renderSalaries();
     renderTests();
 });

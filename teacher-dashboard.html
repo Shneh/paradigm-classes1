@@ -102,23 +102,14 @@
                 </div>
 
                 <div class="card">
-                    <h2 class="card-header">Student Management</h2>
-                    <div style="display: flex; gap: 1rem; margin-bottom: 1rem; flex-direction: column;">
-                        <form id="add-student-form" style="display: flex; gap: 1rem; align-items: flex-end;">
-                            <div class="form-group" style="flex: 1; margin:0;">
-                                <label>Student Name</label>
-                                <input class="form-input" id="studentName" type="text" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary" style="height: 44px;">Add</button>
-                        </form>
-                    </div>
+                    <h2 class="card-header">My Salary History</h2>
                     <div style="overflow-x: auto;">
-                        <table class="table" id="studentsTable" style="min-width: 500px;">
+                        <table class="table" id="salariesTable" style="min-width: 400px;">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th style="width: 80px;">Action</th>
+                                    <th>Month</th>
+                                    <th>Issued On</th>
+                                    <th class="text-right" style="text-align: right;">Amount (₹)</th>
                                 </tr>
                             </thead>
                             <tbody><!-- Filled by JS --></tbody>
