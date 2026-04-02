@@ -80,9 +80,9 @@ const DB = {
         const students = await DB.getStudents();
         if (students.length === 0) {
             await DB.setStudents([
-                { id: 's101', name: 'Ananya Sharma', password: 'password123' },
-                { id: 's102', name: 'Rahul Verma', password: 'password123' },
-                { id: 's103', name: 'Priya Patel', password: 'password123' }
+                { id: 's101', name: 'Ananya Sharma', class: 'XII', password: 'password123' },
+                { id: 's102', name: 'Rahul Verma', class: 'XI', password: 'password123' },
+                { id: 's103', name: 'Priya Patel', class: 'NDA', password: 'password123' }
             ]);
         }
         

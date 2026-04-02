@@ -82,11 +82,15 @@
                                 <input class="form-input" id="studentName" type="text" required>
                             </div>
                             <div class="form-group">
-                                <label>Assign Password</label>
+                                <label>Class</label>
+                                <input class="form-input" id="studentClass" type="text" placeholder="e.g. IX, NDA" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
                                 <input class="form-input" id="studentPassword" type="text" required>
                             </div>
-                            <button type="submit" class="btn btn-primary" style="height: 44px; background:#b91c1c; border-color:#b91c1c;">Add</button>
                         </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 1rem; background:#b91c1c; border-color:#b91c1c;">Add Student</button>
                     </form>
                     <div style="overflow-x: auto;">
                         <table class="table" id="studentsTable" style="min-width: 500px;">
@@ -94,6 +98,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Name</th>
+                                    <th>Class</th>
                                     <th>Password</th>
                                     <th style="width: 80px;">Action</th>
                                 </tr>

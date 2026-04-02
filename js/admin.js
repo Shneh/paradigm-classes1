@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             tr.innerHTML = `
                 <td>${student.id}</td>
                 <td>${student.name}</td>
+                <td><span class="badge" style="background:#e2e8f0; color:#475569;">${student.class || 'N/A'}</span></td>
                 <td style="font-family: monospace; color: var(--primary-light);">${student.password}</td>
                 <td><button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #dc2626; border-color: #dc2626;" onclick="removeStudent('${student.id}')">Remove</button></td>
             `;
@@ -108,6 +109,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     addStudentForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const name = document.getElementById('studentName').value.trim();
+        const studentClass = document.getElementById('studentClass').value.trim();
         const password = document.getElementById('studentPassword').value.trim();
         const students = await DB.getStudents();
         
@@ -116,7 +118,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const maxId = numIds.length > 0 ? Math.max(...numIds) : 100;
         const newId = 's' + (maxId + 1);
 
-        students.push({ id: newId, name, password });
+        students.push({ id: newId, name, class: studentClass, password });
         await DB.setStudents(students);
         
         addStudentForm.reset();
