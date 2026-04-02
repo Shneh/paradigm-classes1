@@ -24,7 +24,10 @@ async function getList(docId) {
         }
         return [];
     } catch (error) {
-        console.error(`Error getting ${docId}:`, error);
+        console.error(`🔥 Firebase Permission Error getting ${docId}:`, error.message);
+        if(docId !== 'admin') {
+            alert(`Database Read Error: Firebase is blocking data access. Please set Firestore Security Rules to 'true'.\n\n${error.message}`);
+        }
         return [];
     }
 }
@@ -34,7 +37,8 @@ async function setList(docId, list) {
     try {
         await db.collection('appData').doc(docId).set({ list });
     } catch (error) {
-        console.error(`Error setting ${docId}:`, error);
+        console.error(`🔥 Firebase Permission Error setting ${docId}:`, error.message);
+        alert(`Database Write Error: Firebase is blocking data modifications. Please set Firestore Security Rules to 'true'.\n\n${error.message}`);
     }
 }
 
