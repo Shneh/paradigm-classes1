@@ -3,6 +3,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const user = Auth.checkAuth('teacher');
     if (!user) return;
 
+    const welcomeMessage = document.getElementById('welcomeMessage');
+    if (welcomeMessage) {
+        welcomeMessage.textContent = `Welcome, ${user.name}`;
+    }
+
     // DOM Elements
     const testsList = document.getElementById('testsList');
     const studentsTableBody = document.querySelector('#studentsTable tbody');
