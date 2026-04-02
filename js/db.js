@@ -31,22 +31,17 @@ const DB = {
                 { id: 't201', name: 'Dr. R.K. Singh', password: 'password123' }
             ]);
         }
+        if (localStorage.getItem('tests_salaries_cleared') !== 'true') {
+            localStorage.removeItem('pc_salaries');
+            localStorage.removeItem('pc_tests');
+            localStorage.setItem('tests_salaries_cleared', 'true');
+        }
+
         if (!localStorage.getItem('pc_salaries')) {
-            DB.setSalaries([
-                { id: 1, teacherId: 't201', month: '2025-04', amount: 45000, dateIssued: new Date().toISOString().split('T')[0] }
-            ]);
+            DB.setSalaries([]);
         }
         if (!localStorage.getItem('pc_tests')) {
-            DB.setTests([
-                {
-                    id: 1,
-                    subject: 'Physics',
-                    maxMarks: 100,
-                    date: new Date().toISOString().split('T')[0],
-                    marks: [{ studentId: 's101', mark: 95 }, { studentId: 's102', mark: 88 }, { studentId: 's103', mark: 92 }],
-                    published: true
-                }
-            ]);
+            DB.setTests([]);
         }
     }
 };
