@@ -169,6 +169,25 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = 'index.html';
     });
 
+    const changePasswordForm = document.getElementById('change-password-form');
+    if (changePasswordForm) {
+        changePasswordForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newPassword = document.getElementById('newPassword').value.trim();
+            if(!newPassword) return;
+
+            let teachers = DB.getTeachers();
+            let idx = teachers.findIndex(t => t.id === user.id);
+            if(idx !== -1) {
+                teachers[idx].password = newPassword;
+                DB.setTeachers(teachers);
+                alert("Password updated successfully! Please log in again.");
+                DB.logout();
+                window.location.href = 'login.html';
+            }
+        });
+    }
+
     // Initial render
     renderSalaries();
     renderTests();

@@ -59,5 +59,24 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = 'index.html';
     });
 
+    const changePasswordForm = document.getElementById('change-password-form');
+    if (changePasswordForm) {
+        changePasswordForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newPassword = document.getElementById('newPassword').value.trim();
+            if(!newPassword) return;
+
+            let students = DB.getStudents();
+            let idx = students.findIndex(s => s.id === user.id);
+            if(idx !== -1) {
+                students[idx].password = newPassword;
+                DB.setStudents(students);
+                alert("Password updated successfully! Please log in again.");
+                DB.logout();
+                window.location.href = 'login.html';
+            }
+        });
+    }
+
     renderResults();
 });
