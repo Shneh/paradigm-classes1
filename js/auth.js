@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             
             const userId = document.getElementById('userId').value.trim().toLowerCase();
-            const password = document.getElementById('password').value;
+            const password = document.getElementById('password').value.trim();
             
             const adminData = DB.getAdmin();
             if (userId === adminData.id.toLowerCase()) {
