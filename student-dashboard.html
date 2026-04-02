@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="Paradigm Classes - Student Dashboard" name="description" />
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
+    <title>Student Dashboard - Paradigm Classes</title>
+    <style>
+        :root {
+            --primary-color: #1e3a8a;
+            --primary-light: #3b82f6;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --radius-md: 0.375rem;
+            --radius-lg: 0.5rem;
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+        .dashboard-container { padding: 8rem 2rem 4rem; max-width: 1000px; margin: 0 auto; min-height: calc(100vh - 80px); }
+        .dashboard-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; border-bottom: 2px solid var(--gray-200); padding-bottom: 1rem; }
+        .card { background: white; padding: 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); margin-bottom: 2rem; }
+        .stat-box { background: white; color: var(--text-dark); padding: 1.5rem; border-radius: var(--radius-md); text-align: center; border: 2px solid var(--gray-200); }
+        .stat-value { font-size: 2.5rem; font-weight: 700; line-height: 1; margin-bottom: 0.5rem; }
+        .stat-label { font-size: 1rem; font-weight: 500; opacity: 0.9; }
+        .table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        .table th, .table td { padding: 1rem; border-bottom: 1px solid var(--gray-200); text-align: left; }
+        .table th { font-weight: 700; color: var(--primary-color); }
+        .text-right { text-align: right; }
+        @media (max-width: 768px) {
+            .dashboard-container { padding: 6rem 1rem 2rem; }
+            .dashboard-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+            .card { padding: 1.5rem 1rem; }
+            .stat-box { width: 100%; }
+            .section-title { font-size: 1.6rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo">
+                    <a href="index.html" style="display: flex; align-items: center;"><img alt="Paradigm Classes Logo" class="logo-img" src="images/logo.png" style="height: 40px; width: auto; object-fit: contain; margin-right: 8px;"/></a>
+                    <div>
+                        <div class="logo-primary">PARADIGM</div>
+                        <div class="logo-secondary">STUDENT PORTAL</div>
+                    </div>
+                </div>
+                <div class="nav-links">
+                    <a class="nav-link" href="index.html">Home</a>
+                    <a class="nav-link" href="study-notes.html">Notes</a>
+                    <a class="nav-link" href="video-lectures.html">Videos</a>
+                    <a class="nav-link" href="results.html">Results</a>
+                </div>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open Menu">☰</button>
+                <div class="nav-cta">
+                    <button id="logoutBtn" class="btn btn-outline" style="background:#1e3a8a; color:white; border:none; padding: 0.5rem 1rem;">Logout</button>
+                </div>
+            </div>
+            <div class="mobile-menu" id="mobileMenu">
+                <a class="mobile-link" href="index.html">Home</a>
+                <a class="mobile-link" href="study-notes.html">Notes</a>
+                <a class="mobile-link" href="video-lectures.html">Videos</a>
+                <a class="mobile-link" href="results.html">Results</a>
+            </div>
+        </div>
+    </nav>
+    <div style="margin-top: 80px;"></div>
+
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <div>
+                <h1 class="section-title" style="margin: 0;" id="welcomeMessage">Welcome, Student</h1>
+                <p class="section-subtitle" style="margin-top:0.5rem;">View your performance records below.</p>
+            </div>
+            <div class="stat-box" style="min-width: 200px;">
+                <div class="stat-value" id="cumulativeScore">0%</div>
+                <div class="stat-label">Cumulative Performance</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--primary-color); margin-bottom: 1.5rem;">Your Test Results</h2>
+            <div style="overflow-x: auto;">
+                <table class="table" id="resultsTable" style="min-width: 600px;">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Subject</th>
+                            <th class="text-right">Max Marks</th>
+                            <th class="text-right">Obtained Marks</th>
+                            <th class="text-right">Percentage</th>
+                        </tr>
+                    </thead>
+                    <tbody><!-- Filled by JS --></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/db.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/student.js"></script>
+    <script>
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+        if(mobileMenuToggle && mobileMenu) {
+            mobileMenuToggle.addEventListener('click', () => {
+                mobileMenu.classList.toggle('open');
+            });
+        }
+    </script>
+</body>
+</html>
