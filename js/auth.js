@@ -9,9 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const userId = document.getElementById('userId').value.trim().toLowerCase();
             const password = document.getElementById('password').value;
             
-            if (userId === 'admin') {
-                if (password === 'admin123') {
-                    DB.setCurrentUser({ id: userId, role: 'admin', name: 'Super Admin' });
+            const adminData = DB.getAdmin();
+            if (userId === adminData.id.toLowerCase()) {
+                if (password === adminData.password) {
+                    DB.setCurrentUser({ id: adminData.id, role: 'admin', name: 'Super Admin' });
                     window.location.href = 'admin-dashboard.html';
                 } else {
                     loginError.textContent = "Incorrect admin password.";
@@ -46,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     window.location.href = 'student-dashboard.html';
                 }
             } else {
-                loginError.textContent = "Invalid User ID. Must be 'admin', or start with 't' or 's'.";
+                loginError.textContent = "Invalid User ID.";
                 loginError.style.display = 'block';
             }
         });

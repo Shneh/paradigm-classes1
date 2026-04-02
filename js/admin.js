@@ -158,6 +158,30 @@ document.addEventListener('DOMContentLoaded', () => {
         alert(`Salary issued!`);
     });
 
+    const updateAdminForm = document.getElementById('update-admin-form');
+    if (updateAdminForm) {
+        // Pre-fill the admin id input
+        document.getElementById('adminIdInput').value = DB.getAdmin().id;
+        
+        updateAdminForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newId = document.getElementById('adminIdInput').value.trim();
+            const newPassword = document.getElementById('adminPasswordInput').value.trim();
+            
+            if (newId === '' || newPassword === '') {
+                return alert("ID and Password cannot be empty.");
+            }
+            
+            DB.setAdmin({ id: newId, password: newPassword });
+            
+            // Also update the current session so the user doesn't get kicked out immediately
+            // but we'll force a re-login to be safe
+            alert(`Admin credentials successfully updated! Please log in again with your new credentials.`);
+            DB.logout();
+            window.location.href = 'login.html';
+        });
+    }
+
     document.getElementById('logoutBtn').addEventListener('click', () => {
         DB.logout();
         window.location.href = 'index.html';

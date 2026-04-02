@@ -8,6 +8,9 @@ const DB = {
     getSalaries: () => JSON.parse(localStorage.getItem('pc_salaries') || '[]'),
     setSalaries: (salaries) => localStorage.setItem('pc_salaries', JSON.stringify(salaries)),
     
+    getAdmin: () => JSON.parse(localStorage.getItem('pc_admin') || '{"id":"admin", "password":"admin123"}'),
+    setAdmin: (admin) => localStorage.setItem('pc_admin', JSON.stringify(admin)),
+
     getTests: () => JSON.parse(localStorage.getItem('pc_tests') || '[]'),
     setTests: (tests) => localStorage.setItem('pc_tests', JSON.stringify(tests)),
 
