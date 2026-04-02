@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         students.forEach(student => {
             studentStats[student.id] = {
                 name: student.name,
+                classStr: student.class || '-',
                 testMarks: {},
                 totalMax: 0,
                 totalObtained: 0,
@@ -49,9 +50,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         studentList.sort((a, b) => b.cumulativePercentage - a.cumulativePercentage);
 
         // Build header rows
-        let dateRow = '<th style="border-top-left-radius: 12px; padding: 1rem; border-bottom: 1px solid #e2e8f0; color: #64748b; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;"><svg style="width: 14px; height: 14px; display: inline; margin-bottom: -2px; margin-right: 4px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> Date</th>';
-        let maxMarksRow = '<th style="padding: 1rem; border-bottom: 1px solid #e2e8f0; color: #64748b; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;"><svg style="width: 14px; height: 14px; display: inline; margin-bottom: -2px; margin-right: 4px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg> Max Marks</th>';
-        let nameRow = '<th style="padding: 1rem; border-bottom: 2px solid var(--primary-color); color: var(--primary-color); font-size: 1.1rem; font-weight: 700;">Student Name</th>';
+        let dateRow = '<th colspan="2" style="border-top-left-radius: 12px; padding: 1rem; border-bottom: 1px solid #e2e8f0; color: #64748b; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;"><svg style="width: 14px; height: 14px; display: inline; margin-bottom: -2px; margin-right: 4px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> Date</th>';
+        let maxMarksRow = '<th colspan="2" style="padding: 1rem; border-bottom: 1px solid #e2e8f0; color: #64748b; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;"><svg style="width: 14px; height: 14px; display: inline; margin-bottom: -2px; margin-right: 4px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg> Max Marks</th>';
+        let nameRow = '<th style="padding: 1rem; border-bottom: 2px solid var(--primary-color); color: var(--primary-color); font-size: 1.1rem; font-weight: 700;">Student Name</th><th style="padding: 1rem; border-bottom: 2px solid var(--primary-color); color: var(--text-light); text-align: center; font-size: 1rem; font-weight: 700; width: 90px;">Class</th>';
 
         publishedTests.forEach(test => {
             dateRow += `<th style="text-align: center; padding: 1rem; border-bottom: 1px solid #e2e8f0; color: #64748b; font-size: 0.85rem; font-weight: 500;">${test.date}</th>`;
@@ -80,6 +81,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             let rowVars = `<td style="padding: 1.25rem 1rem; border-bottom: 1px solid #f1f5f9;"><div style="display: flex; align-items: center;">${rankBadge}<span style="font-weight: 600; color: #1e293b; font-size: 1.05rem;">${student.name}</span></div></td>`;
+            rowVars += `<td style="text-align: center; padding: 1.25rem 1rem; border-bottom: 1px solid #f1f5f9;"><span style="background: #e2e8f0; color: #475569; padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600;">${student.classStr}</span></td>`;
             
             publishedTests.forEach(test => {
                 const mark = student.testMarks[test.id];
