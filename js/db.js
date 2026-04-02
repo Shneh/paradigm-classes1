@@ -31,10 +31,15 @@ const DB = {
                 { id: 't201', name: 'Dr. R.K. Singh', password: 'password123' }
             ]);
         }
-        if (localStorage.getItem('tests_salaries_cleared') !== 'true') {
+        // Schema Migration v2: Wipes old cache layout so passwords inject correctly
+        if (localStorage.getItem('db_schema_v2') !== 'true') {
+            localStorage.removeItem('pc_students');
+            localStorage.removeItem('pc_teachers');
             localStorage.removeItem('pc_salaries');
             localStorage.removeItem('pc_tests');
-            localStorage.setItem('tests_salaries_cleared', 'true');
+            localStorage.removeItem('pc_admin');
+            localStorage.removeItem('pc_currentUser');
+            localStorage.setItem('db_schema_v2', 'true');
         }
 
         if (!localStorage.getItem('pc_salaries')) {
