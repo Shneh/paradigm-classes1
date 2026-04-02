@@ -59,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
                 <div class="test-actions">
+                    <button class="btn btn-outline" style="color: #dc2626; border-color: #dc2626;" onclick="removeTest(${test.id})">Remove</button>
                     <button class="btn btn-outline" onclick="openMarkEntry(${test.id})">Feed Marks</button>
                     ${!test.published ? `<button class="btn btn-primary" onclick="publishTest(${test.id})">Publish</button>` : ''}
                 </div>
@@ -68,6 +69,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Handlers
+    window.removeTest = (testId) => {
+        if(confirm('Are you sure you want to permanently delete this test and all its marks?')) {
+            let tests = DB.getTests();
+            tests = tests.filter(t => t.id !== testId);
+            DB.setTests(tests);
+            renderTests();
+        }
+    };
 
     window.openMarkEntry = (testId) => {
         const tests = DB.getTests();

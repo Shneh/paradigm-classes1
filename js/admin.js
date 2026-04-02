@@ -70,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${teacherName} <span style="font-size:0.8rem; color:var(--text-light);">(${salary.teacherId})</span></td>
                 <td>${salary.month}</td>
                 <td class="text-right" style="text-align: right; font-weight: 700;">₹${salary.amount.toLocaleString('en-IN')}</td>
+                <td class="text-right"><button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #dc2626; border-color: #dc2626;" onclick="removeSalary(${salary.id})">Remove</button></td>
             `;
             salariesTableBody.appendChild(tr);
         });
@@ -91,6 +92,15 @@ document.addEventListener('DOMContentLoaded', () => {
             teachers = teachers.filter(t => t.id !== id);
             DB.setTeachers(teachers);
             renderTeachers();
+        }
+    };
+
+    window.removeSalary = (id) => {
+        if(confirm(`Are you sure you want to void this salary payout?`)) {
+            let salaries = DB.getSalaries();
+            salaries = salaries.filter(s => s.id !== id);
+            DB.setSalaries(salaries);
+            renderSalaries();
         }
     };
 
