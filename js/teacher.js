@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     // Standard auth check
     const user = Auth.checkAuth('teacher');
     if (!user) return;
@@ -16,11 +16,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentEditingTestId = null;
 
     // Render Data functions
-    function renderSalaries() {
+    async function renderSalaries() {
         const salariesTableBody = document.querySelector('#salariesTable tbody');
         if(!salariesTableBody) return;
         
-        const salaries = DB.getSalaries().filter(s => s.teacherId === user.id);
+        const allSalaries = await DB.getSalaries();
+        const salaries = allSalaries.filter(s => s.teacherId === user.id);
         salariesTableBody.innerHTML = '';
         
         if (salaries.length === 0) {
@@ -39,8 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function renderTests() {
-        const tests = DB.getTests();
+    async function renderTests() {
+        const tests = await DB.getTests();
         testsList.innerHTML = '';
         if (tests.length === 0) {
             testsList.innerHTML = '<p>No tests created yet.</p>';
@@ -69,17 +70,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Handlers
-    window.removeTest = (testId) => {
+    window.removeTest = async (testId) => {
         if(confirm('Are you sure you want to permanently delete this test and all its marks?')) {
-            let tests = DB.getTests();
+            let tests = await DB.getTests();
             tests = tests.filter(t => t.id !== testId);
-            DB.setTests(tests);
-            renderTests();
+            await DB.setTests(tests);
+            await renderTests();
         }
     };
 
-    window.openMarkEntry = (testId) => {
-        const tests = DB.getTests();
+    window.openMarkEntry = async (testId) => {
+        const tests = await DB.getTests();
         const test = tests.find(t => t.id === testId);
         if(!test) return;
 
@@ -87,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
         markEntrySubject.textContent = `Subject: ${test.subject} (Max: ${test.maxMarks})`;
         markEntryPanel.style.display = 'block';
 
-        const students = DB.getStudents();
+        const students = await DB.getStudents();
         marksTableBody.innerHTML = '';
         
         students.forEach(student => {
@@ -107,14 +108,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    window.publishTest = (testId) => {
+    window.publishTest = async (testId) => {
         if(confirm('Are you sure you want to publish? Students will be able to see the results.')) {
-            let tests = DB.getTests();
+            let tests = await DB.getTests();
             const idx = tests.findIndex(t => t.id === testId);
             if(idx !== -1) {
                 tests[idx].published = true;
-                DB.setTests(tests);
-                renderTests();
+                await DB.setTests(tests);
+                await renderTests();
             }
         }
     };
@@ -126,12 +127,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Form Submits
 
-    addTestForm.addEventListener('submit', (e) => {
+    addTestForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const subject = document.getElementById('testSubject').value;
         const maxMarks = parseInt(document.getElementById('testMaxMarks').value);
         
-        const tests = DB.getTests();
+        const tests = await DB.getTests();
         const newId = tests.length > 0 ? Math.max(...tests.map(t => t.id)) + 1 : 1;
         
         tests.unshift({
@@ -143,12 +144,12 @@ document.addEventListener('DOMContentLoaded', () => {
             published: false
         });
         
-        DB.setTests(tests);
+        await DB.setTests(tests);
         addTestForm.reset();
-        renderTests();
+        await renderTests();
     });
 
-    feedMarksForm.addEventListener('submit', (e) => {
+    feedMarksForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         if(!currentEditingTestId) return;
 
@@ -163,11 +164,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        const tests = DB.getTests();
+        const tests = await DB.getTests();
         const idx = tests.findIndex(t => t.id === currentEditingTestId);
         if(idx !== -1) {
             tests[idx].marks = newMarks;
-            DB.setTests(tests);
+            await DB.setTests(tests);
             alert('Marks saved successfully!');
             markEntryPanel.style.display = 'none';
         }
@@ -180,16 +181,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const changePasswordForm = document.getElementById('change-password-form');
     if (changePasswordForm) {
-        changePasswordForm.addEventListener('submit', (e) => {
+        changePasswordForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const newPassword = document.getElementById('newPassword').value.trim();
             if(!newPassword) return;
 
-            let teachers = DB.getTeachers();
+            let teachers = await DB.getTeachers();
             let idx = teachers.findIndex(t => t.id === user.id);
             if(idx !== -1) {
                 teachers[idx].password = newPassword;
-                DB.setTeachers(teachers);
+                await DB.setTeachers(teachers);
                 alert("Password updated successfully! Please log in again.");
                 DB.logout();
                 window.location.href = 'login.html';
@@ -198,6 +199,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Initial render
-    renderSalaries();
-    renderTests();
+    await renderSalaries();
+    await renderTests();
 });

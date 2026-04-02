@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     // Standard auth check
     const user = Auth.checkAuth('admin');
     if (!user) return;
@@ -14,8 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const salaryTeacherIdSelect = document.getElementById('salaryTeacherId');
 
     // Render Functions
-    function renderStudents() {
-        const students = DB.getStudents();
+    async function renderStudents() {
+        const students = await DB.getStudents();
         studentsTableBody.innerHTML = '';
         students.forEach(student => {
             const tr = document.createElement('tr');
@@ -29,8 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function renderTeachers() {
-        const teachers = DB.getTeachers();
+    async function renderTeachers() {
+        const teachers = await DB.getTeachers();
         teachersTableBody.innerHTML = '';
         salaryTeacherIdSelect.innerHTML = '<option value="" disabled selected>-- Select Teacher --</option>';
 
@@ -53,9 +53,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function renderSalaries() {
-        const salaries = DB.getSalaries();
-        const teachers = DB.getTeachers();
+    async function renderSalaries() {
+        const salaries = await DB.getSalaries();
+        const teachers = await DB.getTeachers();
         salariesTableBody.innerHTML = '';
         
         // Sort by newest first using ID
@@ -77,39 +77,39 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Removal Logic
-    window.removeStudent = (id) => {
+    window.removeStudent = async (id) => {
         if(confirm(`Are you sure you want to completely remove student ${id}?`)) {
-            let students = DB.getStudents();
+            let students = await DB.getStudents();
             students = students.filter(s => s.id !== id);
-            DB.setStudents(students);
+            await DB.setStudents(students);
             renderStudents();
         }
     };
 
-    window.removeTeacher = (id) => {
+    window.removeTeacher = async (id) => {
         if(confirm(`Are you sure you want to completely remove teacher ${id}?`)) {
-            let teachers = DB.getTeachers();
+            let teachers = await DB.getTeachers();
             teachers = teachers.filter(t => t.id !== id);
-            DB.setTeachers(teachers);
+            await DB.setTeachers(teachers);
             renderTeachers();
         }
     };
 
-    window.removeSalary = (id) => {
+    window.removeSalary = async (id) => {
         if(confirm(`Are you sure you want to void this salary payout?`)) {
-            let salaries = DB.getSalaries();
+            let salaries = await DB.getSalaries();
             salaries = salaries.filter(s => s.id !== id);
-            DB.setSalaries(salaries);
+            await DB.setSalaries(salaries);
             renderSalaries();
         }
     };
 
     // Form Submissions
-    addStudentForm.addEventListener('submit', (e) => {
+    addStudentForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const name = document.getElementById('studentName').value.trim();
         const password = document.getElementById('studentPassword').value.trim();
-        const students = DB.getStudents();
+        const students = await DB.getStudents();
         
         // Generate chronological ID like s104
         const numIds = students.filter(s => s.id.startsWith('s')).map(s => parseInt(s.id.substring(1)) || 0);
@@ -117,18 +117,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const newId = 's' + (maxId + 1);
 
         students.push({ id: newId, name, password });
-        DB.setStudents(students);
+        await DB.setStudents(students);
         
         addStudentForm.reset();
         renderStudents();
         alert(`Successfully added ${name}. Logic ID assigned: ${newId}`);
     });
 
-    addTeacherForm.addEventListener('submit', (e) => {
+    addTeacherForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const name = document.getElementById('teacherName').value.trim();
         const password = document.getElementById('teacherPassword').value.trim();
-        const teachers = DB.getTeachers();
+        const teachers = await DB.getTeachers();
         
         // Generate chronological ID like t201
         const numIds = teachers.filter(t => t.id.startsWith('t')).map(t => parseInt(t.id.substring(1)) || 0);
@@ -136,14 +136,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const newId = 't' + (maxId + 1);
 
         teachers.push({ id: newId, name, password });
-        DB.setTeachers(teachers);
+        await DB.setTeachers(teachers);
         
         addTeacherForm.reset();
         renderTeachers(); // Will also re-render the dropdown list!
         alert(`Successfully added ${name}. Logic ID assigned: ${newId}`);
     });
 
-    addSalaryForm.addEventListener('submit', (e) => {
+    addSalaryForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const teacherId = document.getElementById('salaryTeacherId').value;
         const month = document.getElementById('salaryMonth').value;
@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if(!teacherId) return alert("Select a teacher first.");
         
-        const salaries = DB.getSalaries();
+        const salaries = await DB.getSalaries();
         const newId = salaries.length > 0 ? Math.max(...salaries.map(s => s.id)) + 1 : 1;
 
         salaries.push({
@@ -162,18 +162,19 @@ document.addEventListener('DOMContentLoaded', () => {
             dateIssued: new Date().toISOString().split('T')[0]
         });
 
-        DB.setSalaries(salaries);
+        await DB.setSalaries(salaries);
         addSalaryForm.reset();
-        renderSalaries();
+        await renderSalaries();
         alert(`Salary issued!`);
     });
 
     const updateAdminForm = document.getElementById('update-admin-form');
     if (updateAdminForm) {
         // Pre-fill the admin id input
-        document.getElementById('adminIdInput').value = DB.getAdmin().id;
+        const currentAdmin = await DB.getAdmin();
+        document.getElementById('adminIdInput').value = currentAdmin.id;
         
-        updateAdminForm.addEventListener('submit', (e) => {
+        updateAdminForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const newId = document.getElementById('adminIdInput').value.trim();
             const newPassword = document.getElementById('adminPasswordInput').value.trim();
@@ -182,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return alert("ID and Password cannot be empty.");
             }
             
-            DB.setAdmin({ id: newId, password: newPassword });
+            await DB.setAdmin({ id: newId, password: newPassword });
             
             // Also update the current session so the user doesn't get kicked out immediately
             // but we'll force a re-login to be safe
@@ -198,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Initial render
-    renderStudents();
-    renderTeachers();
-    renderSalaries();
+    await renderStudents();
+    await renderTeachers();
+    await renderSalaries();
 });

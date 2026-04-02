@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     // Auth Check
     const user = Auth.checkAuth('student');
     if (!user) return;
@@ -8,8 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultsTableBody = document.querySelector('#resultsTable tbody');
     const cumulativeScoreEl = document.getElementById('cumulativeScore');
 
-    function renderResults() {
-        const tests = DB.getTests();
+    async function renderResults() {
+        const tests = await DB.getTests();
         // Only show published tests
         const publishedTests = tests.filter(t => t.published);
         
@@ -61,16 +61,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const changePasswordForm = document.getElementById('change-password-form');
     if (changePasswordForm) {
-        changePasswordForm.addEventListener('submit', (e) => {
+        changePasswordForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const newPassword = document.getElementById('newPassword').value.trim();
             if(!newPassword) return;
 
-            let students = DB.getStudents();
+            let students = await DB.getStudents();
             let idx = students.findIndex(s => s.id === user.id);
             if(idx !== -1) {
                 students[idx].password = newPassword;
-                DB.setStudents(students);
+                await DB.setStudents(students);
                 alert("Password updated successfully! Please log in again.");
                 DB.logout();
                 window.location.href = 'login.html';
@@ -78,5 +78,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    renderResults();
+    await renderResults();
 });

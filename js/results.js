@@ -1,9 +1,9 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const resultsContainer = document.getElementById('resultsContainer');
     
-    function renderPublicResults() {
-        const tests = DB.getTests();
-        const students = DB.getStudents();
+    async function renderPublicResults() {
+        const tests = await DB.getTests();
+        const students = await DB.getStudents();
         const publishedTests = tests.filter(t => t.published);
 
         if (publishedTests.length === 0) {
@@ -116,5 +116,5 @@ document.addEventListener('DOMContentLoaded', () => {
         resultsContainer.appendChild(testCard);
     }
 
-    renderPublicResults();
+    await renderPublicResults();
 });

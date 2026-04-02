@@ -1,56 +1,101 @@
+// Firebase Configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyB5iGfkr0hMNEgXjLruxQg-LM1Igu41gBU",
+  authDomain: "paradigm-classes.firebaseapp.com",
+  projectId: "paradigm-classes",
+  storageBucket: "paradigm-classes.firebasestorage.app",
+  messagingSenderId: "999886632912",
+  appId: "1:999886632912:web:eb991af6f847f20142ebd5",
+  measurementId: "G-4G99FH33J4"
+};
+
+// Initialize Firebase using global window.firebase from compat imports
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+const db = firebase.firestore();
+
+// Helper to fetch list from a specific document
+async function getList(docId) {
+    try {
+        const snapshot = await db.collection('appData').doc(docId).get();
+        if (snapshot.exists) {
+            return snapshot.data().list || [];
+        }
+        return [];
+    } catch (error) {
+        console.error(`Error getting ${docId}:`, error);
+        return [];
+    }
+}
+
+// Helper to save list to a specific document
+async function setList(docId, list) {
+    try {
+        await db.collection('appData').doc(docId).set({ list });
+    } catch (error) {
+        console.error(`Error setting ${docId}:`, error);
+    }
+}
+
 const DB = {
-    getStudents: () => JSON.parse(localStorage.getItem('pc_students') || '[]'),
-    setStudents: (students) => localStorage.setItem('pc_students', JSON.stringify(students)),
+    getStudents: async () => await getList('students'),
+    setStudents: async (students) => await setList('students', students),
     
-    getTeachers: () => JSON.parse(localStorage.getItem('pc_teachers') || '[]'),
-    setTeachers: (teachers) => localStorage.setItem('pc_teachers', JSON.stringify(teachers)),
+    getTeachers: async () => await getList('teachers'),
+    setTeachers: async (teachers) => await setList('teachers', teachers),
     
-    getSalaries: () => JSON.parse(localStorage.getItem('pc_salaries') || '[]'),
-    setSalaries: (salaries) => localStorage.setItem('pc_salaries', JSON.stringify(salaries)),
+    getSalaries: async () => await getList('salaries'),
+    setSalaries: async (salaries) => await setList('salaries', salaries),
     
-    getAdmin: () => JSON.parse(localStorage.getItem('pc_admin') || '{"id":"admin", "password":"admin123"}'),
-    setAdmin: (admin) => localStorage.setItem('pc_admin', JSON.stringify(admin)),
+    getAdmin: async () => {
+        try {
+            const snapshot = await db.collection('appData').doc('admin').get();
+            if (snapshot.exists) {
+                return snapshot.data();
+            }
+            return { id: "admin", password: "admin123" };
+        } catch (e) {
+            return { id: "admin", password: "admin123" };
+        }
+    },
+    setAdmin: async (admin) => {
+        await db.collection('appData').doc('admin').set(admin);
+    },
 
-    getTests: () => JSON.parse(localStorage.getItem('pc_tests') || '[]'),
-    setTests: (tests) => localStorage.setItem('pc_tests', JSON.stringify(tests)),
+    getTests: async () => await getList('tests'),
+    setTests: async (tests) => await setList('tests', tests),
 
+    // currentUser remains in localStorage since it's session-based per physical device
     getCurrentUser: () => JSON.parse(localStorage.getItem('pc_currentUser') || 'null'),
     setCurrentUser: (user) => localStorage.setItem('pc_currentUser', JSON.stringify(user)),
     logout: () => localStorage.removeItem('pc_currentUser'),
     
-    initData: () => {
-        if (!localStorage.getItem('pc_students')) {
-            DB.setStudents([
+    initData: async () => {
+        // Initialize default data only if it completely doesn't exist in Firestore
+        const students = await DB.getStudents();
+        if (students.length === 0) {
+            await DB.setStudents([
                 { id: 's101', name: 'Ananya Sharma', password: 'password123' },
                 { id: 's102', name: 'Rahul Verma', password: 'password123' },
                 { id: 's103', name: 'Priya Patel', password: 'password123' }
             ]);
         }
-        if (!localStorage.getItem('pc_teachers')) {
-            DB.setTeachers([
+        
+        const teachers = await DB.getTeachers();
+        if (teachers.length === 0) {
+            await DB.setTeachers([
                 { id: 't201', name: 'Dr. R.K. Singh', password: 'password123' }
             ]);
         }
-        // Schema Migration v2: Wipes old cache layout so passwords inject correctly
-        if (localStorage.getItem('db_schema_v2') !== 'true') {
-            localStorage.removeItem('pc_students');
-            localStorage.removeItem('pc_teachers');
-            localStorage.removeItem('pc_salaries');
-            localStorage.removeItem('pc_tests');
-            localStorage.removeItem('pc_admin');
-            localStorage.removeItem('pc_currentUser');
-            localStorage.setItem('db_schema_v2', 'true');
-        }
 
-        if (!localStorage.getItem('pc_salaries')) {
-            DB.setSalaries([]);
-        }
-        if (!localStorage.getItem('pc_tests')) {
-            DB.setTests([]);
+        const admin = await DB.getAdmin();
+        if (admin.id === 'admin' && admin.password === 'admin123') {
+            await DB.setAdmin(admin);
         }
     }
 };
 
-// Initialize mock data when the script loads
+// Fire initialization payload
 DB.initData();
 
