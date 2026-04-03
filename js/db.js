@@ -70,6 +70,16 @@ const DB = {
     getTests: async () => await getList('tests'),
     setTests: async (tests) => await setList('tests', tests),
 
+    formatDate: (dateStr) => {
+        if (!dateStr) return '';
+        const d = new Date(dateStr);
+        if (isNaN(d)) return dateStr;
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = d.toLocaleString('en-US', { month: 'long' }).toUpperCase();
+        const year = d.getFullYear();
+        return `${day} ${month} ${year}`;
+    },
+
     // currentUser remains in localStorage since it's session-based per physical device
     getCurrentUser: () => JSON.parse(localStorage.getItem('pc_currentUser') || 'null'),
     setCurrentUser: (user) => localStorage.setItem('pc_currentUser', JSON.stringify(user)),
@@ -79,10 +89,11 @@ const DB = {
         // Initialize default data only if it completely doesn't exist in Firestore
         const students = await DB.getStudents();
         if (students.length === 0) {
+            const defaultDate = new Date().toISOString().split('T')[0];
             await DB.setStudents([
-                { id: 's101', name: 'Ananya Sharma', class: 'XII', password: 'password123' },
-                { id: 's102', name: 'Rahul Verma', class: 'XI', password: 'password123' },
-                { id: 's103', name: 'Priya Patel', class: 'NDA', password: 'password123' }
+                { id: 's101', name: 'Ananya Sharma', class: 'XII', password: 'password123', dateOfJoining: defaultDate, fees: 5000, feePayments: [] },
+                { id: 's102', name: 'Rahul Verma', class: 'XI', password: 'password123', dateOfJoining: defaultDate, fees: 4500, feePayments: [] },
+                { id: 's103', name: 'Priya Patel', class: 'NDA', password: 'password123', dateOfJoining: defaultDate, fees: 6000, feePayments: [] }
             ]);
         }
         

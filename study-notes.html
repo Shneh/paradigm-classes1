@@ -401,6 +401,32 @@
             once: true,
         });
     </script>
+<script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
+<script src="js/db.js"></script>
+<script src="js/auth.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const user = typeof DB !== 'undefined' ? DB.getCurrentUser() : null;
+        if (!user || (user.role !== 'student' && user.role !== 'teacher' && user.role !== 'admin')) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        const navCta = document.querySelector('.nav-cta a');
+        const mobileCta = document.querySelector('.mobile-cta');
+        const dashboardUrl = user.role === 'teacher' ? 'teacher-dashboard.html' : 
+                             (user.role === 'admin' ? 'admin-dashboard.html' : 'student-dashboard.html');
+        if (navCta) {
+            navCta.textContent = "DASHBOARD";
+            navCta.href = dashboardUrl;
+        }
+        if (mobileCta) {
+            mobileCta.textContent = "DASHBOARD";
+            mobileCta.href = dashboardUrl;
+        }
+    });
+</script>
 <script src="js/script.js"></script>
 </body>
 </html>

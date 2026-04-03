@@ -7,6 +7,61 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const resultsTableBody = document.querySelector('#resultsTable tbody');
     const cumulativeScoreEl = document.getElementById('cumulativeScore');
+    const feeCyclesTableBody = document.querySelector('#feeCyclesTable tbody');
+
+    async function renderFees() {
+        const students = await DB.getStudents();
+        const student = students.find(s => s.id === user.id);
+        if(!student || !student.dateOfJoining) {
+            if(feeCyclesTableBody) {
+                feeCyclesTableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No joining date recorded. Please contact Admin.</td></tr>';
+            }
+            return;
+        }
+
+        const payments = student.feePayments || [];
+        const baseFees = student.fees || 0;
+
+        let cycleStartDate = new Date(student.dateOfJoining);
+        let cycleNum = 1;
+        const today = new Date();
+        
+        if(feeCyclesTableBody) feeCyclesTableBody.innerHTML = '';
+        
+        while (cycleStartDate <= today || cycleNum === 1) { 
+            const startStr = cycleStartDate.toISOString().split('T')[0];
+            const endCycle = new Date(cycleStartDate);
+            endCycle.setDate(endCycle.getDate() + 30);
+            const endStr = endCycle.toISOString().split('T')[0];
+
+            let rowHtml = `<td>Cycle ${cycleNum}</td><td>${DB.formatDate(startStr)}</td><td>${DB.formatDate(endStr)}</td><td class="text-right">₹${baseFees.toLocaleString('en-IN')}</td>`;
+            
+            const paymentRecord = payments.find(p => p.cycleStart === startStr);
+            if (paymentRecord) {
+                rowHtml += `
+                    <td class="text-right" style="color:var(--text-light);">₹${paymentRecord.finePaid || 0}</td>
+                    <td><span class="badge badge-success" style="background:#dcfce7;color:#166534;padding:0.25rem 0.5rem;border-radius:99px;font-weight:700;">Paid</span><br><small>by ${paymentRecord.markedBy}</small><br><small>on ${DB.formatDate(paymentRecord.paidOn)}</small></td>
+                `;
+            } else {
+                const dueDate = new Date(cycleStartDate);
+                dueDate.setDate(dueDate.getDate() + 5);
+                const delayDays = Math.max(0, Math.floor((today - dueDate) / (1000 * 60 * 60 * 24)));
+                const currentFine = delayDays * 30;
+                
+                rowHtml += `
+                    <td class="text-right" style="color: #b91c1c;">₹${currentFine}</td>
+                    <td><span class="badge badge-warning" style="background:#fef08a;color:#854d0e;padding:0.25rem 0.5rem;border-radius:99px;font-weight:700;">Unpaid</span></td>
+                `;
+            }
+            
+            const tr = document.createElement('tr');
+            tr.innerHTML = rowHtml;
+            if(feeCyclesTableBody) feeCyclesTableBody.appendChild(tr);
+
+            cycleStartDate = endCycle;
+            cycleNum++;
+        }
+    }
 
     async function renderResults() {
         const tests = await DB.getTests();
@@ -33,7 +88,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td>${test.date}</td>
+                    <td>${DB.formatDate(test.date)}</td>
                     <td>${test.subject}</td>
                     <td class="text-right">${max}</td>
                     <td class="text-right" style="font-weight:700;">${mark}</td>
@@ -78,5 +133,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    await renderFees();
     await renderResults();
 });

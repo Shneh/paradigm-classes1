@@ -36,7 +36,6 @@
                 </div>
                 <div class="nav-links">
                     <a class="nav-link" href="index.html">Home</a>
-                    <a class="nav-link" href="study-notes.html">Notes</a>
                     <a class="nav-link" href="video-lectures.html">Videos</a>
                     <a class="nav-link" href="gallery.html">Gallery</a>
                     <a class="nav-link" href="results.html">Results</a>
@@ -53,7 +52,6 @@
             </div>
             <div class="mobile-menu" id="mobileMenu">
                 <a class="mobile-link" href="index.html">Home</a>
-                <a class="mobile-link" href="study-notes.html">Notes</a>
                 <a class="mobile-link" href="video-lectures.html">Videos</a>
                 <a class="mobile-link" href="gallery.html">Gallery</a>
                 <a class="mobile-link" href="results.html">Results</a>
@@ -861,10 +859,28 @@
         <div class="container">
             <h2 class="section-title">Watch a Demo Class</h2>
             <div class="video-wrapper" 
-                style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
+                style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
                 <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowfullscreen="" frameborder="0" src="https://www.youtube.com/embed/w28b1GhU5vM" 
                     style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Demo Class" ></iframe>
+            </div>
+
+            <div style="margin-top: 5rem; display: flex; justify-content: center;" data-aos="fade-up">
+                <div style="background: white; border: 1px solid var(--gray-200, #e2e8f0); padding: 3rem 4.5rem; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.06); text-align: center; position: relative; overflow: hidden; max-width: 450px; width: 100%;">
+                    
+                    <div style="position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; background: var(--primary-light, #bfdbfe); opacity: 0.3; border-radius: 50%; pointer-events: none; filter: blur(30px);"></div>
+                    <div style="position: absolute; bottom: -60px; left: -60px; width: 200px; height: 200px; background: var(--secondary-color, #f59e0b); opacity: 0.15; border-radius: 50%; pointer-events: none; filter: blur(30px);"></div>
+                    
+                    <svg style="position: relative; width: 64px; height: 64px; color: var(--primary-color); margin-bottom: 1.2rem; filter: drop-shadow(0 4px 6px rgba(37,99,235,0.2));" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                    
+                    <h3 style="position: relative; font-size: 1.1rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.15em; margin: 0; font-weight: 700;">Community Growing</h3>
+                    <div style="position: relative; font-size: 5rem; font-weight: 900; color: var(--primary-color); line-height: 1; margin-top: 0.5rem; letter-spacing: -2px;">
+                        <span id="visitorCountVal">...</span>
+                    </div>
+                    <p style="position: relative; margin: 1rem 0 0 0; font-size: 0.95rem; color: var(--text-light); font-weight: 500;">Lifetime Visitors Enrolled</p>
+                </div>
             </div>
         </div>
     </section>
@@ -1044,6 +1060,41 @@
     </footer>
     
     <script src="js/script.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const firebaseConfig = {
+              apiKey: "AIzaSyB5iGfkr0hMNEgXjLruxQg-LM1Igu41gBU",
+              authDomain: "paradigm-classes.firebaseapp.com",
+              projectId: "paradigm-classes",
+              storageBucket: "paradigm-classes.firebasestorage.app",
+              messagingSenderId: "999886632912",
+              appId: "1:999886632912:web:eb991af6f847f20142ebd5",
+              measurementId: "G-4G99FH33J4"
+            };
+            if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+            const db = firebase.firestore();
+            const counterRef = db.collection('appData').doc('visitors');
+            
+            try {
+                if(!sessionStorage.getItem('pc_visited')) {
+                    await counterRef.set({ count: firebase.firestore.FieldValue.increment(1) }, { merge: true });
+                    sessionStorage.setItem('pc_visited', 'true');
+                }
+                const doc = await counterRef.get();
+                if(doc.exists) {
+                    const count = doc.data().count || 0;
+                    document.getElementById('visitorCountVal').textContent = count.toLocaleString('en-IN');
+                } else {
+                    document.getElementById('visitorCountVal').textContent = "1";
+                }
+            } catch(e) {
+                console.error("Counter error:", e);
+                document.getElementById('visitorCountVal').textContent = "Unavailable";
+            }
+        });
+    </script>
 </body>
 
 </html>

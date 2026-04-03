@@ -90,6 +90,16 @@
                                 <input class="form-input" id="studentPassword" type="text" required>
                             </div>
                         </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Date of Joining</label>
+                                <input class="form-input" id="studentDoj" type="date" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Monthly Fees (₹)</label>
+                                <input class="form-input" id="studentFees" type="number" min="0" required>
+                            </div>
+                        </div>
                         <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 1rem; background:#b91c1c; border-color:#b91c1c;">Add Student</button>
                     </form>
                     <div style="overflow-x: auto;">
@@ -108,6 +118,58 @@
                     </div>
                 </div>
                 
+                <div class="card">
+                    <h2 class="card-header">Update Student Profile</h2>
+                    <form id="update-student-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Select Student</label>
+                                <select class="form-input" id="updateStudentId" required style="border-color: var(--gray-300); background: white;">
+                                    <option value="" disabled selected>-- Select Student --</option>
+                                    <!-- Filled by JS -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Date of Joining</label>
+                                <input class="form-input" id="updateStudentDoj" type="date" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Monthly Fees (₹)</label>
+                                <input class="form-input" id="updateStudentFees" type="number" min="0" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="height: 44px; background:#b91c1c; border-color:#b91c1c;">Update</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="card">
+                    <h2 class="card-header">Manage Student Fees</h2>
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label>Select Student</label>
+                        <select class="form-input" id="feeStudentId" style="border-color: var(--gray-300); background: white;">
+                            <option value="" disabled selected>-- Select Student --</option>
+                            <!-- Filled by JS -->
+                        </select>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="table" id="feeCyclesTable" style="min-width: 600px;">
+                            <thead>
+                                <tr>
+                                    <th>Cycle</th>
+                                    <th>Start</th>
+                                    <th>End</th>
+                                    <th class="text-right">Fees + Fine</th>
+                                    <th>Status</th>
+                                    <th style="width: 80px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td colspan="6" style="text-align:center; color:var(--text-light);">Select a student to view fees.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
                 <div class="card">
                     <h2 class="card-header">Teacher Management</h2>
                     <form id="add-teacher-form">
@@ -130,12 +192,32 @@
                                     <th>ID</th>
                                     <th>Name</th>
                                     <th>Password</th>
+                                    <th>Salary</th>
                                     <th style="width: 80px;">Action</th>
                                 </tr>
                             </thead>
                             <tbody><!-- Filled by JS --></tbody>
                         </table>
                     </div>
+                </div>
+                <div class="card">
+                    <h2 class="card-header">Update Teacher Salary</h2>
+                    <form id="update-teacher-salary-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Select Teacher</label>
+                                <select class="form-input" id="updateSalaryTeacherId" required style="border-color: var(--gray-300); background: white;">
+                                    <option value="" disabled selected>-- Select Teacher --</option>
+                                    <!-- Filled by JS -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Current Salary (₹)</label>
+                                <input class="form-input" id="updateSalaryAmount" type="number" min="0" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="height: 44px; background:#b91c1c; border-color:#b91c1c;">Update</button>
+                        </div>
+                    </form>
                 </div>
                 <div class="card">
                     <h2 class="card-header">Change Admin Credentials</h2>
