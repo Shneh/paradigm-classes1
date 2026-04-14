@@ -86,7 +86,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             testsList.appendChild(div);
         });
 
-        // Also populate feeStudents
+    }
+
+    async function renderFeeStudents() {
         if (feeStudentIdSelect) {
             const students = await DB.getStudents();
             feeStudentIdSelect.innerHTML = '<option value="" disabled selected>-- Select Student --</option>';
@@ -322,4 +324,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initial render
     await renderSalaries();
     await renderTests();
+    await renderFeeStudents();
 });
