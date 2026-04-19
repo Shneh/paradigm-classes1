@@ -163,25 +163,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    window.markFeePaid = async (studentId, cycleStart) => {
+    window.markFeePaid = async (studentId, cycleStart, payDate) => {
         const students = await DB.getStudents();
         const studentIndex = students.findIndex(s => s.id === studentId);
         if(studentIndex === -1) return;
         const student = students[studentIndex];
         if(!student.feePayments) student.feePayments = [];
         
+        const paymentDateStr = payDate || new Date().toISOString().split('T')[0];
+        const payDateObj = new Date(paymentDateStr);
+
         // Compute the fine locked in at the time of payment
         const startDate = new Date(cycleStart);
         const dueDate = new Date(startDate);
         dueDate.setDate(dueDate.getDate() + 5);
-        const today = new Date();
-        const delayDays = Math.max(0, Math.floor((today - dueDate) / (1000 * 60 * 60 * 24)));
+        const delayDays = Math.max(0, Math.floor((payDateObj - dueDate) / (1000 * 60 * 60 * 24)));
         const fineLock = delayDays * 30;
 
         student.feePayments.push({
             cycleStart,
             finePaid: fineLock,
-            paidOn: new Date().toISOString().split('T')[0],
+            paidOn: paymentDateStr,
             markedBy: user.name
         });
 
@@ -235,7 +237,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 rowHtml += `
                     <td class="text-right" style="color: #b91c1c;">₹${totalDue.toLocaleString('en-IN')} <br><small style="color:var(--text-light);">(Fine: ₹${currentFine})</small></td>
                     <td><span class="badge badge-warning" style="background:#fef08a;color:#854d0e;">Unpaid</span></td>
-                    <td><button class="btn btn-primary" style="padding: 0.2rem 0.6rem; font-size: 0.85rem;" onclick="markFeePaid('${student.id}', '${startStr}')">Mark Paid</button></td>
+                    <td style="display: flex; flex-direction: column; gap: 0.3rem;">
+                        <input type="date" id="payDate-${startStr}" class="form-input" style="padding: 0.2rem; font-size: 0.85rem;" value="${today.toISOString().split('T')[0]}">
+                        <button class="btn btn-primary" style="padding: 0.2rem 0.6rem; font-size: 0.85rem;" onclick="markFeePaid('${student.id}', '${startStr}', document.getElementById('payDate-${startStr}').value)">Mark Paid</button>
+                    </td>
                 `;
             }
             
