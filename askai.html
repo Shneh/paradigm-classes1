@@ -1,105 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ask AI | Paradigm Classes</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask AI | Paradigm Classes</title>
 
-<link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/styles.css">
 
-<style>
+    <style>
+        /* Chat layout */
+        .chat-container {
+            max-width: 900px;
+            margin: 120px auto 40px;
+            padding: 20px;
+        }
 
-/* Chat layout */
-.chat-container {
-    max-width: 900px;
-    margin: 120px auto 40px;
-    padding: 20px;
-}
+        .chat-box {
+            height: 500px;
+            overflow-y: auto;
+            border-radius: 12px;
+            padding: 20px;
+            background: #f5f7fb;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
 
-.chat-box {
-    height: 500px;
-    overflow-y: auto;
-    border-radius: 12px;
-    padding: 20px;
-    background: #f5f7fb;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
+        /* Messages */
+        .message {
+            margin-bottom: 15px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            max-width: 75%;
+            line-height: 1.5;
+        }
 
-/* Messages */
-.message {
-    margin-bottom: 15px;
-    padding: 12px 16px;
-    border-radius: 10px;
-    max-width: 75%;
-    line-height: 1.5;
-}
+        .user-message {
+            background: #2563eb;
+            color: white;
+            margin-left: auto;
+        }
 
-.user-message {
-    background: #2563eb;
-    color: white;
-    margin-left: auto;
-}
+        .ai-message {
+            background: white;
+            border: 1px solid #ddd;
+        }
 
-.ai-message {
-    background: white;
-    border: 1px solid #ddd;
-}
+        /* Input */
+        .chat-input-container {
+            display: flex;
+            margin-top: 15px;
+            gap: 10px;
+        }
 
-/* Input */
-.chat-input-container {
-    display: flex;
-    margin-top: 15px;
-    gap: 10px;
-}
+        .chat-input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
 
-.chat-input {
-    flex: 1;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-}
+        .send-btn {
+            padding: 12px 20px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
 
-.send-btn {
-    padding: 12px 20px;
-    background: #2563eb;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-}
+        .send-btn:hover {
+            background: #1d4ed8;
+        }
 
-.send-btn:hover {
-    background: #1d4ed8;
-}
-
-/* typing */
-.typing {
-    font-style: italic;
-    color: gray;
-}
-
-</style>
+        /* typing */
+        .typing {
+            font-style: italic;
+            color: gray;
+        }
+    </style>
 
 </head>
+
 <body>
-<!-- Spacing after fixed navbar -->
+    <!-- Spacing after fixed navbar -->
     <div style="margin-top: 80px;"></div>
     <!-- Navigation -->
     <nav class="navbar">
         <div class="container">
             <div class="nav-wrapper">
-                
+
                 <div class="logo">
                     <img alt="Paradigm Classes Logo" class="logo-img" src="images/logo.png" />
                     <div>
                         <div class="logo-primary">PARADIGM</div>
                         <div class="logo-secondary">CLASSES</div>
-                        <div style="background-color: red; color: black;"><strong>THIS PAGE IS UNDER CONSTRUCTION...</strong></div>
                     </div>
                 </div>
                 <div class="nav-links">
                     <a class="nav-link" href="index.html">Home</a>
-                    <a class="nav-link" href="video-lectures.html">Videos</a>
                     <a class="nav-link" href="gallery.html">Gallery</a>
                     <a class="nav-link" href="results.html">Results</a>
                     <a class="nav-link" href="askai.html">Ask AI</a>
@@ -115,7 +113,6 @@
             </div>
             <div class="mobile-menu" id="mobileMenu">
                 <a class="mobile-link" href="index.html">Home</a>
-                <a class="mobile-link" href="video-lectures.html">Videos</a>
                 <a class="mobile-link" href="gallery.html">Gallery</a>
                 <a class="mobile-link" href="results.html">Results</a>
                 <a class="mobile-link" href="askai.html">Ask AI</a>
@@ -127,196 +124,161 @@
     </nav>
 
 
-<!-- Chat -->
-<section class="ai-section">
+    <!-- Chat -->
+    <section class="ai-section">
 
-    <div class="ai-wrapper">
+        <div class="ai-wrapper">
 
-        <!-- Left Info Panel -->
-         
-        <div class="ai-info">
+            <!-- Left Info Panel -->
 
-            <h2>Paradigm AI Doubt Solver</h2>
+            <div class="ai-info">
 
-            <p>
-                Ask doubts in Physics, Chemistry, Mathematics,
-                NDA, GATE, or Computer Science.
-            </p>
+                <h2>Paradigm AI Doubt Solver</h2>
 
-            <div class="ai-tags">
-                <span>Physics</span>
-                <span>Chemistry</span>
-                <span>Mathematics</span>
-                <span>NDA</span>
-                <span>GATE</span>
-                <span>Computer Science</span>
+                <p>
+                    Ask doubts in Physics, Chemistry, Mathematics,
+                    NDA, GATE, or Computer Science.
+                </p>
+
+                <div class="ai-tags">
+                    <span>Physics</span>
+                    <span>Chemistry</span>
+                    <span>Mathematics</span>
+                    <span>NDA</span>
+                    <span>GATE</span>
+                    <span>Computer Science</span>
+                </div>
+
+            </div>
+
+            <!-- Chat Panel -->
+            <div class="ai-chat">
+
+                <div class="chat-header">
+                    <div class="ai-status">
+                        <span class="dot"></span>
+                        AI Online
+                    </div>
+                </div>
+
+                <div id="chat-box" class="chat-box">
+                    <div class="message ai-message">
+
+                        Welcome to Paradigm AI 🎓
+
+                        You can ask:
+                        • Numerical problems
+                        • Theory doubts
+                        • NDA questions
+                        • Programming doubts
+
+                    </div>
+                </div>
+
+                <div class="chat-input-area">
+
+                    <select id="subject-select">
+                        <option value="general">General</option>
+                        <option value="physics">Physics</option>
+                        <option value="chemistry">Chemistry</option>
+                        <option value="math">Mathematics</option>
+                        <option value="cs">Computer Science</option>
+                        <option value="nda">NDA</option>
+                        <option value="gate">GATE</option>
+                    </select>
+
+                    <input type="text" id="chat-input" placeholder="Type your doubt here...">
+
+                    <button onclick="sendMessage()">Send</button>
+
+                </div>
+
             </div>
 
         </div>
 
-        <!-- Chat Panel -->
-        <div class="ai-chat">
+    </section>
 
-            <div class="chat-header">
-                <div class="ai-status">
-                    <span class="dot"></span>
-                    AI Online
-                </div>
-            </div>
+    <script>
 
-            <div id="chat-box" class="chat-box">
-            <div class="message ai-message">
+        const API_URL = "https://text.pollinations.ai/"; // Changed to use free AI agent
 
-                Welcome to Paradigm AI 🎓  
+        const chatBox = document.getElementById("chat-box");
+        const input = document.getElementById("chat-input");
 
-                You can ask:  
-                • Numerical problems  
-                • Theory doubts  
-                • NDA questions  
-                • Programming doubts  
+        function addMessage(text, type) {
 
-                </div>
-            </div>
+            const msg = document.createElement("div");
 
-            <div class="chat-input-area">
+            msg.classList.add("message");
 
-    <select id="subject-select">
-        <option value="general">General</option>
-        <option value="physics">Physics</option>
-        <option value="chemistry">Chemistry</option>
-        <option value="math">Mathematics</option>
-        <option value="cs">Computer Science</option>
-        <option value="nda">NDA</option>
-        <option value="gate">GATE</option>
-    </select>
+            if (type === "user")
+                msg.classList.add("user-message");
+            else
+                msg.classList.add("ai-message");
 
-    <input 
-        type="text" 
-        id="chat-input"
-        placeholder="Type your doubt here..."
-    >
+            msg.innerText = text;
 
-    <button onclick="sendMessage()">Send</button>
+            chatBox.appendChild(msg);
 
-</div>
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
 
-        </div>
+        function showTyping() {
+            const typing = document.createElement("div");
+            typing.className = "message ai-message typing";
+            typing.id = "typing";
+            typing.innerHTML = `AI is typing...`;
+            chatBox.appendChild(typing);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
 
-    </div>
+        function removeTyping() {
+            const typing = document.getElementById("typing");
+            if (typing) typing.remove();
+        }
 
-</section>
+        async function sendMessage() {
+            const input = document.getElementById("chat-input");
+            const subjectSelect = document.getElementById("subject-select");
+            const subject = subjectSelect.options[subjectSelect.selectedIndex].text;
+            const message = input.value.trim();
 
-<script>
+            if (!message) return;
 
-const API_URL = "http://localhost:5000/api/chat"; // change after deployment
+            addMessage(message, "user");
+            input.value = "";
+            showTyping();
 
-const chatBox = document.getElementById("chat-box");
-const input = document.getElementById("chat-input");
+            try {
+                // Compose prompt instructing the AI
+                const promptContext = `You are Paradigm AI, an expert and helpful tutor. A student is asking a doubt regarding ${subject}. Please answer clearly, concisely and directly. Avoid formatting your answer with markdown if possible. Here is the student's question: ${message}`;
+                const encodedPrompt = encodeURIComponent(promptContext);
 
-function addMessage(text, type) {
+                // Using Pollinations AI as a free open endpoint
+                const res = await fetch(`https://text.pollinations.ai/prompt/${encodedPrompt}`);
 
-    const msg = document.createElement("div");
+                if (!res.ok) throw new Error("API response was not ok");
 
-    msg.classList.add("message");
+                const replyText = await res.text();
 
-    if(type === "user")
-        msg.classList.add("user-message");
-    else
-        msg.classList.add("ai-message");
+                removeTyping();
+                addMessage(replyText, "ai");
 
-    msg.innerText = text;
+            } catch (e) {
+                console.error("Error fetching from AI agent:", e);
+                removeTyping();
+                addMessage("Apologies, I am facing technical difficulties. Please try re-formulating your question.", "ai");
+            }
+        }
 
-    chatBox.appendChild(msg);
+        input.addEventListener("keypress", function (e) {
+            if (e.key === "Enter")
+                sendMessage();
+        });
+    </script>
 
-    chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-function showTyping() {
-
-    const typing = document.createElement("div");
-
-    typing.classList.add("message","ai-message","typing");
-
-    typing.id = "typing";
-
-    typing.innerText = "AI is typing...";
-
-    chatBox.appendChild(typing);
-
-}
-
-function removeTyping() {
-
-    const typing = document.getElementById("typing");
-
-    if(typing) typing.remove();
-}
-
-async function sendMessage(){
-
-    const input = document.getElementById("chat-input");
-
-    const subject = document.getElementById("subject-select").value;
-
-    const message = input.value.trim();
-
-    if(!message) return;
-
-    addMessage(message,"user");
-
-    input.value = "";
-
-    showTyping();
-
-    const res = await fetch("http://localhost:5000/api/chat",{
-
-        method:"POST",
-
-        headers:{
-            "Content-Type":"application/json"
-        },
-
-        body:JSON.stringify({
-            message: message,
-            subject: subject
-        })
-
-    });
-
-    const data = await res.json();
-
-    document.getElementById("typing").remove();
-
-    addMessage(data.reply,"ai");
-
-}
-
-input.addEventListener("keypress",function(e){
-
-    if(e.key === "Enter")
-        sendMessage();
-
-});
-function showTyping(){
-
-    const typing = document.createElement("div");
-
-    typing.className = "message ai-message";
-
-    typing.id = "typing";
-
-    typing.innerHTML = `
-        <span class="typing-dot"></span>
-        <span class="typing-dot"></span>
-        <span class="typing-dot"></span>
-    `;
-
-    chatBox.appendChild(typing);
-
-}
-
-</script>
-
-<script src="js/script.js"></script>
+    <script src="js/script.js"></script>
 </body>
+
 </html>
