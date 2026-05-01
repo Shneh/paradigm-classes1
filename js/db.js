@@ -26,9 +26,9 @@ async function getList(docId) {
     } catch (error) {
         console.error(`🔥 Firebase Permission Error getting ${docId}:`, error.message);
         if(docId !== 'admin') {
-            alert(`Database Read Error: Firebase is blocking data access. Please set Firestore Security Rules to 'true'.\n\n${error.message}`);
+            alert(`Database Read Error: Firebase is blocking data access. Please check your internet connection or Firestore rules.\n\n${error.message}`);
         }
-        return [];
+        throw error; // Stop execution to prevent empty arrays from overwriting existing data
     }
 }
 
@@ -60,7 +60,7 @@ const DB = {
             }
             return { id: "admin", password: "admin123" };
         } catch (e) {
-            return { id: "admin", password: "admin123" };
+            throw e;
         }
     },
     setAdmin: async (admin) => {
@@ -86,27 +86,15 @@ const DB = {
     logout: () => localStorage.removeItem('pc_currentUser'),
     
     initData: async () => {
-        // Initialize default data only if it completely doesn't exist in Firestore
-        const students = await DB.getStudents();
-        if (students.length === 0) {
-            const defaultDate = new Date().toISOString().split('T')[0];
-            await DB.setStudents([
-                { id: 's101', name: 'Ananya Sharma', class: 'XII', password: 'password123', dateOfJoining: defaultDate, fees: 5000, feePayments: [] },
-                { id: 's102', name: 'Rahul Verma', class: 'XI', password: 'password123', dateOfJoining: defaultDate, fees: 4500, feePayments: [] },
-                { id: 's103', name: 'Priya Patel', class: 'NDA', password: 'password123', dateOfJoining: defaultDate, fees: 6000, feePayments: [] }
-            ]);
-        }
-        
-        const teachers = await DB.getTeachers();
-        if (teachers.length === 0) {
-            await DB.setTeachers([
-                { id: 't201', name: 'Dr. R.K. Singh', password: 'password123' }
-            ]);
-        }
-
-        const admin = await DB.getAdmin();
-        if (admin.id === 'admin' && admin.password === 'admin123') {
-            await DB.setAdmin(admin);
+        try {
+            // Only set default admin if the admin doc truly doesn't exist
+            const snapshot = await db.collection('appData').doc('admin').get();
+            if (!snapshot.exists) {
+                await DB.setAdmin({ id: "admin", password: "admin123" });
+            }
+        } catch (e) {
+            console.error("Firebase init check failed:", e.message);
+            // Do not seed any dummy data to prevent accidental overwrites
         }
     }
 };
