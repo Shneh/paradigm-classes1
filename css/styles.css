@@ -755,7 +755,7 @@ label {
 }
 
 .faq-item.active .faq-answer {
-    max-height: 300px;
+    max-height: 1000px;
     padding: 1rem 1.25rem;
 }
 
