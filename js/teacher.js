@@ -42,20 +42,64 @@ document.addEventListener('DOMContentLoaded', async () => {
         const salaries = allSalaries.filter(s => s.teacherId === user.id);
         salariesTableBody.innerHTML = '';
         
-        if (salaries.length === 0) {
-            salariesTableBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--text-light);">No salary records found.</td></tr>';
-            return;
+        // Month Selector logic
+        const monthSelector = document.getElementById('salaryMonthSelector');
+        const monthNamesFull = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        
+        if (monthSelector && monthSelector.options.length === 0) {
+            const today = new Date();
+            const currentMonthStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
+            const uniqueMonths = new Set();
+            uniqueMonths.add(currentMonthStr);
+            salaries.forEach(s => uniqueMonths.add(s.month));
+            
+            const sortedMonths = Array.from(uniqueMonths).sort().reverse();
+            
+            sortedMonths.forEach(mStr => {
+                const [yyyy, mm] = mStr.split('-');
+                const opt = document.createElement('option');
+                opt.value = mStr;
+                opt.textContent = `${monthNamesFull[parseInt(mm) - 1]} ${yyyy}`;
+                monthSelector.appendChild(opt);
+            });
+            monthSelector.value = currentMonthStr;
         }
 
-        salaries.forEach(salary => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${salary.month}</td>
-                <td>${DB.formatDate(salary.dateIssued)}</td>
-                <td class="text-right" style="text-align: right; font-weight: 700; color: var(--primary-color);">₹${salary.amount.toLocaleString('en-IN')}</td>
-            `;
-            salariesTableBody.appendChild(tr);
-        });
+        let selectedMonthStr = monthSelector ? monthSelector.value : '';
+        if (!selectedMonthStr) {
+            const today = new Date();
+            selectedMonthStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
+        }
+        
+        let totalReceivedForMonth = 0;
+        salariesTableBody.innerHTML = '';
+        
+        if (salaries.length === 0) {
+            salariesTableBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--text-light);">No salary records found.</td></tr>';
+        } else {
+            salaries.forEach(salary => {
+                if (salary.month === selectedMonthStr) {
+                    totalReceivedForMonth += salary.amount;
+                }
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${salary.month}</td>
+                    <td>${DB.formatDate(salary.dateIssued)}</td>
+                    <td class="text-right" style="text-align: right; font-weight: 700; color: var(--primary-color);">₹${salary.amount.toLocaleString('en-IN')}</td>
+                `;
+                salariesTableBody.appendChild(tr);
+            });
+        }
+        
+        const monthlyReceivedEl = document.getElementById('teacherMonthlyReceived');
+        if (monthlyReceivedEl) {
+            monthlyReceivedEl.textContent = `₹${totalReceivedForMonth.toLocaleString('en-IN')}`;
+        }
+        const monthlyReceivedLabel = document.getElementById('teacherMonthlyReceivedLabel');
+        if (monthlyReceivedLabel) {
+            const [yyyy, mm] = selectedMonthStr.split('-');
+            monthlyReceivedLabel.textContent = `For ${monthNamesFull[parseInt(mm) - 1]} ${yyyy}`;
+        }
     }
 
     async function renderTests() {
@@ -330,4 +374,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     await renderSalaries();
     await renderTests();
     await renderFeeStudents();
+
+    const salaryMonthSelector = document.getElementById('salaryMonthSelector');
+    if (salaryMonthSelector) {
+        salaryMonthSelector.addEventListener('change', renderSalaries);
+    }
 });

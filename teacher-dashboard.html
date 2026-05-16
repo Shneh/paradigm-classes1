@@ -89,9 +89,20 @@
         <div class="dashboard-grid">
             <!-- Left Column -->
             <div>
-                <div class="card">
-                    <h2 class="card-header">Current Salary</h2>
-                    <div style="font-size: 2.5rem; font-weight: 700; color: #166534;" id="teacherCurrentSalary">₹0</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
+                    <div class="card" style="margin-bottom: 0; padding: 1.5rem;">
+                        <h2 class="card-header" style="font-size: 1.1rem; margin-bottom: 0.5rem; padding-bottom: 0.5rem;">Base Salary</h2>
+                        <div style="font-size: 1.8rem; font-weight: 700; color: #166534;" id="teacherCurrentSalary">₹0</div>
+                        <div style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.2rem;">Per month</div>
+                    </div>
+                    <div class="card" style="margin-bottom: 0; padding: 1.5rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                            <h2 class="card-header" style="font-size: 1.1rem; border: none; padding: 0; margin: 0;">Received in Month</h2>
+                            <select id="salaryMonthSelector" class="form-input" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; width: auto; min-width: 120px;"></select>
+                        </div>
+                        <div style="font-size: 1.8rem; font-weight: 700; color: var(--primary-light);" id="teacherMonthlyReceived">₹0</div>
+                        <div style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.2rem;" id="teacherMonthlyReceivedLabel">Selected Month</div>
+                    </div>
                 </div>
 
                 <div class="card">

@@ -22,6 +22,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     const addSalaryForm = document.getElementById('add-salary-form');
     const salaryTeacherIdSelect = document.getElementById('salaryTeacherId');
 
+    const totalExpectedFeesEl = document.getElementById('totalExpectedFees');
+
+    // Total Expected Fees Calculation
+    async function calculateTotalExpectedFees() {
+        const students = await DB.getStudents();
+        let totalFees = 0;
+        students.forEach(student => {
+            totalFees += (student.fees || 0);
+        });
+
+        if (totalExpectedFeesEl) {
+            totalExpectedFeesEl.textContent = `₹${totalFees.toLocaleString('en-IN')}`;
+        }
+    }
+
     // Render Functions
     async function renderStudents() {
         const students = await DB.getStudents();
@@ -35,7 +50,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <td>${student.id}</td>
                 <td>${student.name}</td>
                 <td><span class="badge" style="background:#e2e8f0; color:#475569;">${student.class || 'N/A'}</span></td>
-                <td style="font-family: monospace; color: var(--primary-light);">${student.password}</td>
+                <td><div style="font-size:0.85rem; color:var(--text-light); line-height:1.4;">
+                    M: ${student.motherPhone ? `<a href="tel:${student.motherPhone}" style="color: var(--primary-light); text-decoration: none;" title="Call Mother">📞 ${student.motherPhone}</a>` : 'N/A'}<br>
+                    F: ${student.fatherPhone ? `<a href="tel:${student.fatherPhone}" style="color: var(--primary-light); text-decoration: none;" title="Call Father">📞 ${student.fatherPhone}</a>` : 'N/A'}<br>
+                    P: ${student.personalPhone ? `<a href="tel:${student.personalPhone}" style="color: var(--primary-light); text-decoration: none;" title="Call Student">📞 ${student.personalPhone}</a>` : 'N/A'}
+                </div></td>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span id="pwd-${student.id}" style="font-family: monospace; color: var(--primary-light); display: none;">${student.password}</span>
+                        <span id="pwd-mask-${student.id}" style="font-family: monospace; color: var(--text-light);">••••••••</span>
+                        <button type="button" class="btn btn-outline" style="padding: 0.2rem; font-size: 0; line-height: 0; border: none; background: transparent; color: var(--text-light); cursor: pointer;" onclick="toggleStudentPassword('${student.id}', this)" title="Toggle Visibility">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </button>
+                    </div>
+                </td>
                 <td><button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #dc2626; border-color: #dc2626;" onclick="removeStudent('${student.id}')">Remove</button></td>
             `;
             studentsTableBody.appendChild(tr);
@@ -113,6 +141,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    // Toggle Password Visibility
+    const eyeIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+    const eyeOffIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
+
+    window.toggleStudentPassword = (id, btn) => {
+        const p = document.getElementById(`pwd-${id}`);
+        const m = document.getElementById(`pwd-mask-${id}`);
+        if(p.style.display === 'none') {
+            p.style.display = 'inline';
+            m.style.display = 'none';
+            btn.innerHTML = eyeOffIcon;
+        } else {
+            p.style.display = 'none';
+            m.style.display = 'inline';
+            btn.innerHTML = eyeIcon;
+        }
+    };
+
     // Removal Logic
     window.removeStudent = async (id) => {
         if(confirm(`Are you sure you want to completely remove student ${id}?`)) {
@@ -120,6 +166,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             students = students.filter(s => s.id !== id);
             await DB.setStudents(students);
             renderStudents();
+            await calculateTotalExpectedFees();
         }
     };
 
@@ -149,6 +196,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         const password = document.getElementById('studentPassword').value.trim();
         const doj = document.getElementById('studentDoj').value;
         const fees = parseFloat(document.getElementById('studentFees').value);
+        const motherPhone = document.getElementById('studentMotherPhone').value.trim();
+        const fatherPhone = document.getElementById('studentFatherPhone').value.trim();
+        const personalPhone = document.getElementById('studentPersonalPhone').value.trim();
         
         const students = await DB.getStudents();
         
@@ -164,12 +214,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             password,
             dateOfJoining: doj,
             fees: fees || 0,
-            feePayments: []
+            feePayments: [],
+            motherPhone,
+            fatherPhone,
+            personalPhone
         });
         await DB.setStudents(students);
         
         addStudentForm.reset();
         renderStudents();
+        await calculateTotalExpectedFees();
         alert(`Successfully added ${name}. Logic ID assigned: ${newId}`);
     });
 
@@ -225,6 +279,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (student) {
                 updateStudentDojInput.value = student.dateOfJoining || '';
                 updateStudentFeesInput.value = student.fees || 0;
+                document.getElementById('updateStudentMotherPhone').value = student.motherPhone || '';
+                document.getElementById('updateStudentFatherPhone').value = student.fatherPhone || '';
+                document.getElementById('updateStudentPersonalPhone').value = student.personalPhone || '';
             }
         });
 
@@ -237,9 +294,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (idx !== -1) {
                 students[idx].dateOfJoining = updateStudentDojInput.value;
                 students[idx].fees = parseFloat(updateStudentFeesInput.value) || 0;
+                students[idx].motherPhone = document.getElementById('updateStudentMotherPhone').value.trim();
+                students[idx].fatherPhone = document.getElementById('updateStudentFatherPhone').value.trim();
+                students[idx].personalPhone = document.getElementById('updateStudentPersonalPhone').value.trim();
                 if(!students[idx].feePayments) students[idx].feePayments = [];
                 await DB.setStudents(students);
                 alert('Student profile updated successfully!');
+                await calculateTotalExpectedFees();
                 if (feeStudentIdSelect && feeStudentIdSelect.value === studentId) {
                     renderFeeCycles(studentId);
                 }
@@ -405,4 +466,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     await renderStudents();
     await renderTeachers();
     await renderSalaries();
+    await calculateTotalExpectedFees();
 });
