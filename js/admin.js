@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // DOM Elements
     const studentsTableBody = document.querySelector('#studentsTable tbody');
+    const alumniTableBody = document.querySelector('#alumniTable tbody');
     const teachersTableBody = document.querySelector('#teachersTable tbody');
     const salariesTableBody = document.querySelector('#salariesTable tbody');
     
@@ -64,7 +65,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                         </button>
                     </div>
                 </td>
-                <td><button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #dc2626; border-color: #dc2626;" onclick="removeStudent('${student.id}')">Remove</button></td>
+                <td>
+                    <div class="action-buttons" style="display: flex; gap: 0.3rem;">
+                        <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #1e3a8a; border-color: #1e3a8a; font-size: 0.8rem;" onclick="makeAlumni('${student.id}')" title="Move to Alumni">Alumni</button>
+                        <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #dc2626; border-color: #dc2626; font-size: 0.8rem;" onclick="removeStudent('${student.id}')" title="Permanently Remove">Remove</button>
+                    </div>
+                </td>
             `;
             studentsTableBody.appendChild(tr);
 
@@ -83,6 +89,36 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    async function renderAlumni() {
+        if (!alumniTableBody) return;
+        const alumniList = await DB.getAlumni();
+        alumniTableBody.innerHTML = '';
+        
+        // Sort by convertedOn date descending
+        const sortedAlumni = [...alumniList].sort((a,b) => new Date(b.convertedOn || 0) - new Date(a.convertedOn || 0));
+
+        if (sortedAlumni.length === 0) {
+            alumniTableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-light);">No alumni records found.</td></tr>';
+            return;
+        }
+
+        sortedAlumni.forEach(student => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${student.id}</td>
+                <td>${student.name}</td>
+                <td><span class="badge" style="background:#e2e8f0; color:#475569;">${student.class || 'N/A'}</span></td>
+                <td><div style="font-size:0.85rem; color:var(--text-light); line-height:1.4;">
+                    M: ${student.motherPhone ? `<a href="tel:${student.motherPhone}" style="color: var(--primary-light); text-decoration: none;" title="Call Mother">📞 ${student.motherPhone}</a>` : 'N/A'}<br>
+                    F: ${student.fatherPhone ? `<a href="tel:${student.fatherPhone}" style="color: var(--primary-light); text-decoration: none;" title="Call Father">📞 ${student.fatherPhone}</a>` : 'N/A'}<br>
+                    P: ${student.personalPhone ? `<a href="tel:${student.personalPhone}" style="color: var(--primary-light); text-decoration: none;" title="Call Student">📞 ${student.personalPhone}</a>` : 'N/A'}
+                </div></td>
+                <td>${DB.formatDate(student.convertedOn) || 'Unknown'}</td>
+            `;
+            alumniTableBody.appendChild(tr);
+        });
+    }
+
     async function renderTeachers() {
         const teachers = await DB.getTeachers();
         teachersTableBody.innerHTML = '';
@@ -97,7 +133,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             tr.innerHTML = `
                 <td>${teacher.id}</td>
                 <td>${teacher.name}</td>
-                <td style="font-family: monospace; color: var(--primary-light);">${teacher.password}</td>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span id="tpwd-${teacher.id}" style="font-family: monospace; color: var(--primary-light); display: none;">${teacher.password}</span>
+                        <span id="tpwd-mask-${teacher.id}" style="font-family: monospace; color: var(--text-light);">••••••••</span>
+                        <button type="button" class="btn btn-outline" style="padding: 0.2rem; font-size: 0; line-height: 0; border: none; background: transparent; color: var(--text-light); cursor: pointer;" onclick="toggleTeacherPassword('${teacher.id}', this)" title="Toggle Visibility">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </button>
+                    </div>
+                </td>
                 <td style="font-weight: bold; color: #166534;">₹${(teacher.currentSalary || 0).toLocaleString('en-IN')}</td>
                 <td><button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #dc2626; border-color: #dc2626;" onclick="removeTeacher('${teacher.id}')">Remove</button></td>
             `;
@@ -156,6 +200,50 @@ document.addEventListener('DOMContentLoaded', async () => {
             p.style.display = 'none';
             m.style.display = 'inline';
             btn.innerHTML = eyeIcon;
+        }
+    };
+
+    window.toggleTeacherPassword = function(id, btn) {
+        const pwdSpan = document.getElementById(`tpwd-${id}`);
+        const maskSpan = document.getElementById(`tpwd-mask-${id}`);
+        if(pwdSpan.style.display === 'none') {
+            pwdSpan.style.display = 'inline';
+            maskSpan.style.display = 'none';
+            btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>';
+        } else {
+            pwdSpan.style.display = 'none';
+            maskSpan.style.display = 'inline';
+            btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
+        }
+    };
+
+    // Convert to Alumni Logic
+    window.makeAlumni = async (id) => {
+        if(confirm(`Are you sure you want to convert student ${id} to Alumni? This will move their data out of active students.`)) {
+            let students = await DB.getStudents();
+            const studentIdx = students.findIndex(s => s.id === id);
+            
+            if (studentIdx !== -1) {
+                const studentData = students[studentIdx];
+                
+                // Add to alumni
+                let alumniList = await DB.getAlumni();
+                alumniList.push({
+                    ...studentData,
+                    convertedOn: new Date().toISOString().split('T')[0]
+                });
+                await DB.setAlumni(alumniList);
+                
+                // Remove from active students
+                students.splice(studentIdx, 1);
+                await DB.setStudents(students);
+                
+                // Refresh UI
+                renderStudents();
+                renderAlumni();
+                await calculateTotalExpectedFees();
+                alert(`Student ${id} has been successfully moved to the Alumni database!`);
+            }
         }
     };
 
@@ -464,6 +552,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Initial render
     await renderStudents();
+    await renderAlumni();
     await renderTeachers();
     await renderSalaries();
     await calculateTotalExpectedFees();

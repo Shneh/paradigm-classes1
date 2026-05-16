@@ -32,8 +32,11 @@
             .dashboard-grid { grid-template-columns: 1fr; gap: 1rem; }
             .dashboard-container { padding: 6rem 1rem 2rem; }
             .card { padding: 1.5rem 1rem; }
-            .form-row { flex-direction: column; align-items: flex-start; }
-            .form-row .form-group { width: 100%; }
+            .form-row { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+            .form-row .form-group { width: 100%; margin: 0; }
+            .stat-box { padding: 1.5rem 1rem !important; width: 100% !important; }
+            .stat-value { font-size: 2rem !important; }
+            .action-buttons { flex-direction: column; }
         }
     </style>
 </head>
@@ -127,7 +130,7 @@
                                     <th>Class</th>
                                     <th>Phone Numbers</th>
                                     <th>Password</th>
-                                    <th style="width: 80px;">Action</th>
+                                    <th style="width: 160px;">Action</th>
                                 </tr>
                             </thead>
                             <tbody><!-- Filled by JS --></tbody>
@@ -196,6 +199,26 @@
                             </thead>
                             <tbody>
                                 <tr><td colspan="6" style="text-align:center; color:var(--text-light);">Select a student to view fees.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-header">Alumni Directory</h2>
+                    <div style="overflow-x: auto;">
+                        <table class="table" id="alumniTable" style="min-width: 500px;">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Class</th>
+                                    <th>Phone Numbers</th>
+                                    <th>Converted On</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td colspan="5" style="text-align:center; color:var(--text-light);">Loading...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -314,10 +337,10 @@
         <!-- Financial Overview Card -->
         <div class="card" style="margin-top: 2rem; margin-bottom: 2rem;">
             <h2 class="card-header">Total Monthly Fees</h2>
-            <div class="form-row" style="align-items: center; justify-content: center;">
-                <div style="text-align: center; background: #f8fafc; padding: 2rem 4rem; border-radius: var(--radius-md); border: 1px solid var(--gray-200);">
+            <div style="display: flex; align-items: center; justify-content: center; width: 100%;">
+                <div class="stat-box" style="text-align: center; background: #f8fafc; padding: 2rem; border-radius: var(--radius-md); border: 1px solid var(--gray-200); width: 100%; max-width: 500px;">
                     <h3 style="color: var(--text-light); font-size: 1rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Total Expected Student Fees</h3>
-                    <div id="totalExpectedFees" style="font-size: 2.5rem; font-weight: 700; color: #1e3a8a;">₹0</div>
+                    <div id="totalExpectedFees" class="stat-value" style="font-size: 2.5rem; font-weight: 700; color: #1e3a8a;">₹0</div>
                 </div>
             </div>
         </div>

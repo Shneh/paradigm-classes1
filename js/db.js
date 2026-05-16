@@ -46,6 +46,9 @@ const DB = {
     getStudents: async () => await getList('students'),
     setStudents: async (students) => await setList('students', students),
     
+    getAlumni: async () => await getList('alumni'),
+    setAlumni: async (alumni) => await setList('alumni', alumni),
+    
     getTeachers: async () => await getList('teachers'),
     setTeachers: async (teachers) => await setList('teachers', teachers),
     
