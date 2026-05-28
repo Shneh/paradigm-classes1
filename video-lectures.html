@@ -6,6 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Video Lectures | Paradigm Classes</title>
     <link rel="stylesheet" href="css/styles.css" />
+    <style id="anti-flash-style">
+        body { display: none !important; }
+    </style>
+    <script>
+        // Immediate sync check with fallback try-catch to prevent restricted content flash
+        (function() {
+            try {
+                const user = JSON.parse(localStorage.getItem('pc_currentUser') || 'null');
+                if (user && (user.role === 'student' || user.role === 'teacher' || user.role === 'admin')) {
+                    // User is authenticated, remove the anti-flash style to display the body
+                    const style = document.getElementById('anti-flash-style');
+                    if (style) style.remove();
+                } else {
+                    window.location.href = 'login.html';
+                }
+            } catch (e) {
+                // If localStorage is blocked or unavailable, redirect to login page
+                window.location.href = 'login.html';
+            }
+        })();
+    </script>
 </head>
 
 <body>
@@ -498,6 +519,36 @@
             </div>
         </div>
     </footer>
+    <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                const user = typeof DB !== 'undefined' ? DB.getCurrentUser() : null;
+                if (!user || (user.role !== 'student' && user.role !== 'teacher' && user.role !== 'admin')) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                const navCta = document.querySelector('.nav-cta a');
+                const mobileCta = document.querySelector('.mobile-cta');
+                const dashboardUrl = user.role === 'teacher' ? 'teacher-dashboard.html' : 
+                                     (user.role === 'admin' ? 'admin-dashboard.html' : 'student-dashboard.html');
+                if (navCta) {
+                    navCta.textContent = "DASHBOARD";
+                    navCta.href = dashboardUrl;
+                }
+                if (mobileCta) {
+                    mobileCta.textContent = "DASHBOARD";
+                    mobileCta.href = dashboardUrl;
+                }
+            } catch (e) {
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
     <script src="js/script.js"></script>
 </body>
 
