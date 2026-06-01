@@ -144,26 +144,37 @@ async function initAnnouncementBanner() {
                     font-weight: 600;
                     letter-spacing: 0.03em;
                     position: fixed;
-                    top: 0;
+                    top: 80px; /* Sticks right below the 80px fixed navigation bar */
                     left: 0;
                     right: 0;
-                    z-index: 9999;
-                    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+                    z-index: 999; /* Positioned just below fixed navbar */
+                    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
                     border-bottom: 2px solid #b45309;
                     height: 36px;
                     display: flex;
                     align-items: center;
+                    overflow: hidden;
+                    white-space: nowrap;
                 }
-                .pc-marquee-banner marquee {
-                    margin: 0;
-                    padding: 0;
-                    vertical-align: middle;
+                
+                @keyframes pcMarqueeSmooth {
+                    0% { transform: translate3d(100vw, 0, 0); }
+                    100% { transform: translate3d(-100%, 0, 0); }
                 }
+                
+                .pc-marquee-track {
+                    display: inline-block;
+                    white-space: nowrap;
+                    animation: pcMarqueeSmooth 25s linear infinite;
+                    will-change: transform;
+                }
+                
+                .pc-marquee-banner:hover .pc-marquee-track {
+                    animation-play-state: paused;
+                }
+                
                 body.has-marquee {
-                    padding-top: 36px !important;
-                }
-                body.has-marquee .navbar {
-                    top: 36px !important;
+                    margin-top: 36px !important; /* Shifts the non-fixed body content down below banner */
                 }
             `;
             document.head.appendChild(style);
@@ -171,9 +182,7 @@ async function initAnnouncementBanner() {
             const banner = document.createElement('div');
             banner.className = 'pc-marquee-banner';
             banner.innerHTML = `
-                <marquee behavior="scroll" direction="left" scrollamount="6" onmouseover="this.stop()" onmouseout="this.start()">
-                    <span style="margin-right: 50px;">📢 ${ann.text}</span>
-                </marquee>
+                <div class="pc-marquee-track">📢 ${ann.text}</div>
             `;
 
             document.body.prepend(banner);
