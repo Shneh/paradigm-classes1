@@ -130,6 +130,7 @@
                                     <th>Class</th>
                                     <th>Phone Numbers</th>
                                     <th>Password</th>
+                                    <th>Fee Splits</th>
                                     <th style="width: 160px;">Action</th>
                                 </tr>
                             </thead>
@@ -172,8 +173,67 @@
                                 <input class="form-input" id="updateStudentPersonalPhone" type="tel" pattern="[0-9]{10}" placeholder="Optional">
                             </div>
                         </div>
+                        <div id="updateStudentSplitsWrapper" style="display: none; margin-top: 1.5rem; margin-bottom: 1.5rem; border-top: 1px solid var(--gray-200); padding-top: 1rem;">
+                            <h4 style="margin-top: 0; margin-bottom: 0.75rem; color: var(--text-dark); font-size: 1.1rem; font-weight: 700;">Teacher Fee Share Percentages</h4>
+                            <div id="updateStudentSplitsList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(185px, 1fr)); gap: 1rem;">
+                                <!-- Dynamically populated list of teachers and percentage inputs -->
+                            </div>
+                        </div>
                         <button type="submit" class="btn btn-primary" style="width: 100%; height: 44px; background:#b91c1c; border-color:#b91c1c;">Update Profile</button>
                     </form>
+                </div>
+
+                <div class="card" id="manage-splits-card">
+                    <h2 class="card-header" style="color: #b91c1c;">Manage Student Fee Splits</h2>
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label>Select Student</label>
+                        <select class="form-input" id="splitStudentId" style="border-color: var(--gray-300); background: white;">
+                            <option value="" disabled selected>-- Select Student --</option>
+                            <!-- Filled by JS -->
+                        </select>
+                    </div>
+                    <div id="studentSplitsContainer" style="display: none;">
+                        <div style="margin-bottom: 1rem; padding: 0.75rem; background: #f8fafc; border-radius: var(--radius-md); border: 1px solid var(--gray-200);">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                                <span style="font-weight: 500; color: var(--text-dark);">Total Monthly Fee:</span>
+                                <span id="splitStudentTotalFees" style="font-weight: bold; color: #1e3a8a;">₹0</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="font-weight: 500; color: var(--text-dark);">Assigned Share:</span>
+                                <span id="splitStudentAssignedTotal" style="font-weight: bold; color: #166534;">0%</span>
+                            </div>
+                        </div>
+
+                        <table class="table" id="studentSplitsTable" style="margin-bottom: 1rem;">
+                            <thead>
+                                <tr>
+                                    <th>Teacher</th>
+                                    <th>Share %</th>
+                                    <th class="text-right" style="text-align: right;">Amount</th>
+                                    <th style="width: 60px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody><!-- Filled by JS --></tbody>
+                        </table>
+
+                        <h4 style="margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--text-dark);">Add/Update Teacher Share</h4>
+                        <form id="add-split-form">
+                            <div class="form-row">
+                                <div class="form-group" style="flex: 2;">
+                                    <label>Select Teacher</label>
+                                    <select class="form-input" id="splitTeacherId" required style="border-color: var(--gray-300); background: white;">
+                                        <option value="" disabled selected>-- Select Teacher --</option>
+                                        <!-- Filled by JS -->
+                                    </select>
+                                </div>
+                                <div class="form-group" style="flex: 1;">
+                                    <label>Share (%)</label>
+                                    <input class="form-input" id="splitPercentage" type="number" min="1" max="100" required placeholder="e.g. 40">
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="height: 44px; background:#b91c1c; border-color:#b91c1c; min-width: 80px;">Save</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
                 
                 <div class="card">
@@ -258,23 +318,34 @@
                     </div>
                 </div>
                 <div class="card">
-                    <h2 class="card-header">Update Teacher Salary</h2>
-                    <form id="update-teacher-salary-form">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Select Teacher</label>
-                                <select class="form-input" id="updateSalaryTeacherId" required style="border-color: var(--gray-300); background: white;">
-                                    <option value="" disabled selected>-- Select Teacher --</option>
-                                    <!-- Filled by JS -->
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Current Salary (₹)</label>
-                                <input class="form-input" id="updateSalaryAmount" type="number" min="0" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary" style="height: 44px; background:#b91c1c; border-color:#b91c1c;">Update</button>
+                    <h2 class="card-header" style="color: #b91c1c;">Teacher Salary Breakdown</h2>
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label>Select Teacher</label>
+                        <select class="form-input" id="breakdownTeacherId" style="border-color: var(--gray-300); background: white;">
+                            <option value="" disabled selected>-- Select Teacher --</option>
+                            <!-- Filled by JS -->
+                        </select>
+                    </div>
+                    <div id="teacherBreakdownContainer" style="display: none;">
+                        <h4 style="margin-top: 1rem; margin-bottom: 0.5rem; color: var(--text-dark);">Monthly Salary Breakdown:</h4>
+                        <div style="overflow-x: auto;">
+                            <table class="table" id="teacherBreakdownTable" style="margin-bottom: 1rem;">
+                                <thead>
+                                    <tr>
+                                        <th>Student Name (ID)</th>
+                                        <th>Student Fees</th>
+                                        <th>Share %</th>
+                                        <th style="text-align: right;">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody><!-- Filled by JS --></tbody>
+                            </table>
                         </div>
-                    </form>
+                        <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.1rem; color: #166534; padding: 0.5rem; border-top: 2px solid var(--gray-200);">
+                            <span>Total Dynamic Salary:</span>
+                            <span id="teacherBreakdownTotal">₹0</span>
+                        </div>
+                    </div>
                 </div>
                 <div class="card">
                     <h2 class="card-header">Change Admin Credentials</h2>
@@ -336,11 +407,26 @@
 
         <!-- Financial Overview Card -->
         <div class="card" style="margin-top: 2rem; margin-bottom: 2rem;">
-            <h2 class="card-header">Total Monthly Fees</h2>
-            <div style="display: flex; align-items: center; justify-content: center; width: 100%;">
-                <div class="stat-box" style="text-align: center; background: #f8fafc; padding: 2rem; border-radius: var(--radius-md); border: 1px solid var(--gray-200); width: 100%; max-width: 500px;">
-                    <h3 style="color: var(--text-light); font-size: 1rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Total Expected Student Fees</h3>
-                    <div id="totalExpectedFees" class="stat-value" style="font-size: 2.5rem; font-weight: 700; color: #1e3a8a;">₹0</div>
+            <h2 class="card-header" style="color: #b91c1c;">Tuition Financial Overview</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; width: 100%;">
+                <div class="stat-box" style="text-align: center; background: #f8fafc; padding: 1.5rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--gray-200);">
+                    <h3 style="color: var(--text-light); font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Expected Monthly Income</h3>
+                    <div id="totalExpectedFees" class="stat-value" style="font-size: 2rem; font-weight: 700; color: #1e3a8a;">₹0</div>
+                </div>
+                <div class="stat-box" style="text-align: center; background: #f8fafc; padding: 1.5rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--gray-200);">
+                    <h3 style="color: var(--text-light); font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Total Collected Income</h3>
+                    <div id="totalActualCollected" class="stat-value" style="font-size: 2rem; font-weight: 700; color: #166534;">₹0</div>
+                    <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 0.2rem;">All-Time Fees + Fines Paid</div>
+                </div>
+                <div class="stat-box" style="text-align: center; background: #f8fafc; padding: 1.5rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--gray-200);">
+                    <h3 style="color: var(--text-light); font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Monthly Teacher Payouts</h3>
+                    <div id="totalTeacherSalaries" class="stat-value" style="font-size: 2rem; font-weight: 700; color: #b91c1c;">₹0</div>
+                    <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 0.2rem;">Total dynamic monthly salary</div>
+                </div>
+                <div class="stat-box" style="text-align: center; background: #f8fafc; padding: 1.5rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--gray-200);">
+                    <h3 style="color: var(--text-light); font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Tuition Net Monthly Margin</h3>
+                    <div id="tuitionNetMargin" class="stat-value" style="font-size: 2rem; font-weight: 700; color: #0284c7;">₹0</div>
+                    <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 0.2rem;">Expected Fees - Payouts</div>
                 </div>
             </div>
         </div>

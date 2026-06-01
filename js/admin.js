@@ -17,35 +17,114 @@ document.addEventListener('DOMContentLoaded', async () => {
     const feeStudentIdSelect = document.getElementById('feeStudentId');
     const feeCyclesTableBody = document.querySelector('#feeCyclesTable tbody');
     const addTeacherForm = document.getElementById('add-teacher-form');
-    const updateTeacherSalaryForm = document.getElementById('update-teacher-salary-form');
-    const updateSalaryTeacherIdSelect = document.getElementById('updateSalaryTeacherId');
-    const updateSalaryAmountInput = document.getElementById('updateSalaryAmount');
     const addSalaryForm = document.getElementById('add-salary-form');
     const salaryTeacherIdSelect = document.getElementById('salaryTeacherId');
 
     const totalExpectedFeesEl = document.getElementById('totalExpectedFees');
+    const totalActualCollectedEl = document.getElementById('totalActualCollected');
+    const totalTeacherSalariesEl = document.getElementById('totalTeacherSalaries');
+    const tuitionNetMarginEl = document.getElementById('tuitionNetMargin');
 
-    // Total Expected Fees Calculation
-    async function calculateTotalExpectedFees() {
+    // DOM Elements for dynamic splits and breakdowns
+    const splitStudentIdSelect = document.getElementById('splitStudentId');
+    const studentSplitsContainer = document.getElementById('studentSplitsContainer');
+    const splitStudentTotalFeesEl = document.getElementById('splitStudentTotalFees');
+    const splitStudentAssignedTotalEl = document.getElementById('splitStudentAssignedTotal');
+    const studentSplitsTableBody = document.querySelector('#studentSplitsTable tbody');
+    const splitTeacherIdSelect = document.getElementById('splitTeacherId');
+    const splitPercentageInput = document.getElementById('splitPercentage');
+    const addSplitForm = document.getElementById('add-split-form');
+
+    const breakdownTeacherIdSelect = document.getElementById('breakdownTeacherId');
+    const teacherBreakdownContainer = document.getElementById('teacherBreakdownContainer');
+    const teacherBreakdownTableBody = document.querySelector('#teacherBreakdownTable tbody');
+    const teacherBreakdownTotalEl = document.getElementById('teacherBreakdownTotal');
+
+    // Helper to calculate teacher dynamic salary
+    function calculateTeacherDynamicSalary(teacherId, studentsList) {
+        let total = 0;
+        studentsList.forEach(student => {
+            const splits = student.feeSplits || [];
+            const split = splits.find(s => s.teacherId.toLowerCase() === teacherId.toLowerCase());
+            if (split) {
+                total += (student.fees || 0) * (split.percentage || 0) / 100;
+            }
+        });
+        return total;
+    }
+
+    // Financial Overview Calculation
+    async function calculateFinancials() {
         const students = await DB.getStudents();
-        let totalFees = 0;
+        const alumni = await DB.getAlumni();
+        const teachers = await DB.getTeachers();
+
+        let totalExpected = 0;
+        let totalCollected = 0;
+        let totalTeacherPayout = 0;
+
+        // Calculate expected monthly income & collected from active students
         students.forEach(student => {
-            totalFees += (student.fees || 0);
+            totalExpected += (student.fees || 0);
+            const payments = student.feePayments || [];
+            payments.forEach(payment => {
+                totalCollected += (student.fees || 0) + (payment.finePaid || 0);
+            });
         });
 
+        // Calculate collected from alumni
+        alumni.forEach(alumnus => {
+            const payments = alumnus.feePayments || [];
+            payments.forEach(payment => {
+                totalCollected += (alumnus.fees || 0) + (payment.finePaid || 0);
+            });
+        });
+
+        // Calculate dynamic teacher salaries
+        teachers.forEach(teacher => {
+            totalTeacherPayout += calculateTeacherDynamicSalary(teacher.id, students);
+        });
+
+        const netMargin = totalExpected - totalTeacherPayout;
+
         if (totalExpectedFeesEl) {
-            totalExpectedFeesEl.textContent = `₹${totalFees.toLocaleString('en-IN')}`;
+            totalExpectedFeesEl.textContent = `₹${totalExpected.toLocaleString('en-IN')}`;
+        }
+        if (totalActualCollectedEl) {
+            totalActualCollectedEl.textContent = `₹${totalCollected.toLocaleString('en-IN')}`;
+        }
+        if (totalTeacherSalariesEl) {
+            totalTeacherSalariesEl.textContent = `₹${totalTeacherPayout.toLocaleString('en-IN')}`;
+        }
+        if (tuitionNetMarginEl) {
+            tuitionNetMarginEl.textContent = `₹${netMargin.toLocaleString('en-IN')}`;
         }
     }
 
     // Render Functions
     async function renderStudents() {
         const students = await DB.getStudents();
+        const teachers = await DB.getTeachers();
         studentsTableBody.innerHTML = '';
         if(updateStudentIdSelect) updateStudentIdSelect.innerHTML = '<option value="" disabled selected>-- Select Student --</option>';
         if(feeStudentIdSelect) feeStudentIdSelect.innerHTML = '<option value="" disabled selected>-- Select Student --</option>';
+        if(splitStudentIdSelect) splitStudentIdSelect.innerHTML = '<option value="" disabled selected>-- Select Student --</option>';
         
         students.forEach(student => {
+            const splits = student.feeSplits || [];
+            let splitsHtml = '<div style="font-size:0.85rem; line-height:1.4;">';
+            if (splits.length === 0) {
+                splitsHtml += '<span style="color:var(--text-light); font-style:italic;">None (0%)</span>';
+            } else {
+                splits.forEach(split => {
+                    const teacher = teachers.find(t => t.id.toLowerCase() === split.teacherId.toLowerCase());
+                    const teacherName = teacher ? teacher.name : 'Unknown';
+                    const amount = (student.fees || 0) * split.percentage / 100;
+                    splitsHtml += `<div style="margin-bottom:0.15rem;"><strong>${teacherName}</strong>: ${split.percentage}% (<span style="color:#166534; font-weight:600;">₹${amount.toLocaleString('en-IN')}</span>)</div>`;
+                });
+            }
+            splitsHtml += '</div>';
+
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>${student.id}</td>
@@ -65,6 +144,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         </button>
                     </div>
                 </td>
+                <td>${splitsHtml}</td>
                 <td>
                     <div class="action-buttons" style="display: flex; gap: 0.3rem;">
                         <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #1e3a8a; border-color: #1e3a8a; font-size: 0.8rem;" onclick="makeAlumni('${student.id}')" title="Move to Alumni">Alumni</button>
@@ -85,6 +165,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 opt.value = student.id;
                 opt.textContent = `${student.name} (${student.id})`;
                 feeStudentIdSelect.appendChild(opt);
+            }
+            if(splitStudentIdSelect) {
+                const opt = document.createElement('option');
+                opt.value = student.id;
+                opt.textContent = `${student.name} (${student.id})`;
+                splitStudentIdSelect.appendChild(opt);
             }
         });
     }
@@ -121,13 +207,19 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function renderTeachers() {
         const teachers = await DB.getTeachers();
+        const students = await DB.getStudents();
         teachersTableBody.innerHTML = '';
         salaryTeacherIdSelect.innerHTML = '<option value="" disabled selected>-- Select Teacher --</option>';
-        if (updateSalaryTeacherIdSelect) {
-            updateSalaryTeacherIdSelect.innerHTML = '<option value="" disabled selected>-- Select Teacher --</option>';
+        if (breakdownTeacherIdSelect) {
+            breakdownTeacherIdSelect.innerHTML = '<option value="" disabled selected>-- Select Teacher --</option>';
+        }
+        if (splitTeacherIdSelect) {
+            splitTeacherIdSelect.innerHTML = '<option value="" disabled selected>-- Select Teacher --</option>';
         }
 
         teachers.forEach(teacher => {
+            const dynamicSalary = calculateTeacherDynamicSalary(teacher.id, students);
+            
             // Populate table
             const tr = document.createElement('tr');
             tr.innerHTML = `
@@ -142,7 +234,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         </button>
                     </div>
                 </td>
-                <td style="font-weight: bold; color: #166534;">₹${(teacher.currentSalary || 0).toLocaleString('en-IN')}</td>
+                <td style="font-weight: bold; color: #166534;">₹${dynamicSalary.toLocaleString('en-IN')}</td>
                 <td><button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #dc2626; border-color: #dc2626;" onclick="removeTeacher('${teacher.id}')">Remove</button></td>
             `;
             teachersTableBody.appendChild(tr);
@@ -153,13 +245,128 @@ document.addEventListener('DOMContentLoaded', async () => {
             option.textContent = `${teacher.name} (${teacher.id})`;
             salaryTeacherIdSelect.appendChild(option);
             
-            if (updateSalaryTeacherIdSelect) {
+            if (breakdownTeacherIdSelect) {
                 const opt2 = document.createElement('option');
                 opt2.value = teacher.id;
                 opt2.textContent = `${teacher.name} (${teacher.id})`;
-                updateSalaryTeacherIdSelect.appendChild(opt2);
+                breakdownTeacherIdSelect.appendChild(opt2);
+            }
+
+            if (splitTeacherIdSelect) {
+                const opt3 = document.createElement('option');
+                opt3.value = teacher.id;
+                opt3.textContent = `${teacher.name} (${teacher.id})`;
+                splitTeacherIdSelect.appendChild(opt3);
             }
         });
+    }
+
+    // Render student fee splits list in the splits management container
+    async function renderStudentFeeSplits(studentId) {
+        if (!studentSplitsContainer) return;
+        
+        const students = await DB.getStudents();
+        const student = students.find(s => s.id === studentId);
+        if (!student) {
+            studentSplitsContainer.style.display = 'none';
+            return;
+        }
+
+        const teachers = await DB.getTeachers();
+
+        studentSplitsContainer.style.display = 'block';
+        splitStudentTotalFeesEl.textContent = `₹${(student.fees || 0).toLocaleString('en-IN')}`;
+
+        const splits = student.feeSplits || [];
+        studentSplitsTableBody.innerHTML = '';
+
+        let totalAssigned = 0;
+
+        if (splits.length === 0) {
+            studentSplitsTableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-light);">No fee shares configured.</td></tr>';
+        } else {
+            splits.forEach(split => {
+                const teacher = teachers.find(t => t.id.toLowerCase() === split.teacherId.toLowerCase());
+                const teacherName = teacher ? teacher.name : 'Unknown';
+                const shareAmount = (student.fees || 0) * (split.percentage || 0) / 100;
+                totalAssigned += split.percentage;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${teacherName} <span style="font-size:0.8rem; color:var(--text-light);">(${split.teacherId})</span></td>
+                    <td>${split.percentage}%</td>
+                    <td class="text-right" style="text-align: right; font-weight:600;">₹${shareAmount.toLocaleString('en-IN')}</td>
+                    <td style="text-align: center;"><button type="button" class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #dc2626; border-color: #dc2626; font-size: 0.85rem;" onclick="removeFeeSplit('${student.id}', '${split.teacherId}')">Remove</button></td>
+                `;
+                studentSplitsTableBody.appendChild(tr);
+            });
+        }
+
+        splitStudentAssignedTotalEl.textContent = `${totalAssigned}%`;
+        if (totalAssigned >= 100) {
+            splitStudentAssignedTotalEl.style.color = '#dc2626'; // Red if 100% or over
+        } else {
+            splitStudentAssignedTotalEl.style.color = '#166534'; // Green if under
+        }
+    }
+
+    // Window handler to remove a fee split
+    window.removeFeeSplit = async (studentId, teacherId) => {
+        const students = await DB.getStudents();
+        const idx = students.findIndex(s => s.id === studentId);
+        if (idx !== -1) {
+            const splits = students[idx].feeSplits || [];
+            students[idx].feeSplits = splits.filter(s => s.teacherId.toLowerCase() !== teacherId.toLowerCase());
+            await DB.setStudents(students);
+            await renderStudentFeeSplits(studentId);
+            await renderStudents();
+            await renderTeachers();
+            await calculateFinancials();
+            
+            // Refresh breakdown if active
+            if (breakdownTeacherIdSelect && breakdownTeacherIdSelect.value) {
+                renderTeacherBreakdown(breakdownTeacherIdSelect.value);
+            }
+        }
+    };
+
+    // Render dynamic salary breakdown for selected teacher
+    async function renderTeacherBreakdown(teacherId) {
+        if (!teacherBreakdownContainer) return;
+
+        const students = await DB.getStudents();
+        teacherBreakdownTableBody.innerHTML = '';
+
+        let totalSalary = 0;
+        let count = 0;
+
+        students.forEach(student => {
+            const splits = student.feeSplits || [];
+            const split = splits.find(s => s.teacherId.toLowerCase() === teacherId.toLowerCase());
+            if (split) {
+                count++;
+                const shareAmount = (student.fees || 0) * (split.percentage || 0) / 100;
+                totalSalary += shareAmount;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${student.name} <span style="font-size:0.8rem; color:var(--text-light);">(${student.id})</span></td>
+                    <td>₹${(student.fees || 0).toLocaleString('en-IN')}</td>
+                    <td>${split.percentage}%</td>
+                    <td style="text-align: right; font-weight: 600; color: #166534;">₹${shareAmount.toLocaleString('en-IN')}</td>
+                `;
+                teacherBreakdownTableBody.appendChild(tr);
+            }
+        });
+
+        if (count === 0) {
+            teacherBreakdownTableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-light);">This teacher is not assigned to any student fee shares.</td></tr>';
+            teacherBreakdownContainer.style.display = 'block';
+        } else {
+            teacherBreakdownContainer.style.display = 'block';
+        }
+
+        teacherBreakdownTotalEl.textContent = `₹${totalSalary.toLocaleString('en-IN')}`;
     }
 
     async function renderSalaries() {
@@ -171,7 +378,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const sortedSalaries = [...salaries].sort((a,b) => b.id - a.id);
 
         sortedSalaries.forEach(salary => {
-            const teacher = teachers.find(t => t.id === salary.teacherId);
+            const teacher = teachers.find(t => t.id.toLowerCase() === salary.teacherId.toLowerCase());
             const teacherName = teacher ? teacher.name : 'Unknown';
 
             const tr = document.createElement('tr');
@@ -241,7 +448,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 // Refresh UI
                 renderStudents();
                 renderAlumni();
-                await calculateTotalExpectedFees();
+                await calculateFinancials();
                 alert(`Student ${id} has been successfully moved to the Alumni database!`);
             }
         }
@@ -254,7 +461,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             students = students.filter(s => s.id !== id);
             await DB.setStudents(students);
             renderStudents();
-            await calculateTotalExpectedFees();
+            await calculateFinancials();
         }
     };
 
@@ -264,6 +471,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             teachers = teachers.filter(t => t.id !== id);
             await DB.setTeachers(teachers);
             renderTeachers();
+            await calculateFinancials();
+            
+            // Refresh breakdown if active
+            if (breakdownTeacherIdSelect && breakdownTeacherIdSelect.value === id) {
+                renderTeacherBreakdown('');
+            }
         }
     };
 
@@ -305,13 +518,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             feePayments: [],
             motherPhone,
             fatherPhone,
-            personalPhone
+            personalPhone,
+            feeSplits: []
         });
         await DB.setStudents(students);
         
         addStudentForm.reset();
         renderStudents();
-        await calculateTotalExpectedFees();
+        await calculateFinancials();
         alert(`Successfully added ${name}. Logic ID assigned: ${newId}`);
     });
 
@@ -356,6 +570,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         await DB.setSalaries(salaries);
         addSalaryForm.reset();
         await renderSalaries();
+        await calculateFinancials();
         alert(`Salary issued!`);
     });
 
@@ -370,6 +585,36 @@ document.addEventListener('DOMContentLoaded', async () => {
                 document.getElementById('updateStudentMotherPhone').value = student.motherPhone || '';
                 document.getElementById('updateStudentFatherPhone').value = student.fatherPhone || '';
                 document.getElementById('updateStudentPersonalPhone').value = student.personalPhone || '';
+                
+                // Load teacher splits dynamically
+                const teachers = await DB.getTeachers();
+                const splitsWrapper = document.getElementById('updateStudentSplitsWrapper');
+                const splitsList = document.getElementById('updateStudentSplitsList');
+                
+                if (splitsWrapper && splitsList) {
+                    splitsList.innerHTML = '';
+                    if (teachers.length === 0) {
+                        splitsList.innerHTML = '<div style="grid-column: 1/-1; color: var(--text-light); font-style: italic;">No teachers created yet.</div>';
+                    } else {
+                        teachers.forEach(teacher => {
+                            const split = (student.feeSplits || []).find(s => s.teacherId.toLowerCase() === teacher.id.toLowerCase());
+                            const currentVal = split ? split.percentage : 0;
+                            
+                            const div = document.createElement('div');
+                            div.className = 'form-group';
+                            div.style.margin = '0';
+                            div.innerHTML = `
+                                <label style="font-weight: 500; font-size: 0.85rem; color: var(--text-dark); margin-bottom: 0.25rem; display: block;">${teacher.name} (${teacher.id})</label>
+                                <input type="number" class="form-input update-split-percent-input" data-teacher-id="${teacher.id}" min="0" max="100" style="padding: 0.4rem; font-size: 0.9rem;" value="${currentVal}">
+                            `;
+                            splitsList.appendChild(div);
+                        });
+                    }
+                    splitsWrapper.style.display = 'block';
+                }
+            } else {
+                const splitsWrapper = document.getElementById('updateStudentSplitsWrapper');
+                if (splitsWrapper) splitsWrapper.style.display = 'none';
             }
         });
 
@@ -377,6 +622,24 @@ document.addEventListener('DOMContentLoaded', async () => {
             e.preventDefault();
             const studentId = updateStudentIdSelect.value;
             if(!studentId) return alert('Select student');
+            
+            const percentInputs = document.querySelectorAll('.update-split-percent-input');
+            let newFeeSplits = [];
+            let totalPercentage = 0;
+            
+            percentInputs.forEach(input => {
+                const percentage = parseInt(input.value) || 0;
+                const teacherId = input.dataset.teacherId;
+                if (percentage > 0) {
+                    newFeeSplits.push({ teacherId, percentage });
+                    totalPercentage += percentage;
+                }
+            });
+
+            if (totalPercentage > 100) {
+                return alert(`Cannot update profile. Total fee share percentage among teachers (${totalPercentage}%) cannot exceed 100%.`);
+            }
+
             const students = await DB.getStudents();
             const idx = students.findIndex(s => s.id === studentId);
             if (idx !== -1) {
@@ -385,12 +648,22 @@ document.addEventListener('DOMContentLoaded', async () => {
                 students[idx].motherPhone = document.getElementById('updateStudentMotherPhone').value.trim();
                 students[idx].fatherPhone = document.getElementById('updateStudentFatherPhone').value.trim();
                 students[idx].personalPhone = document.getElementById('updateStudentPersonalPhone').value.trim();
+                students[idx].feeSplits = newFeeSplits; // update the splits
+
                 if(!students[idx].feePayments) students[idx].feePayments = [];
                 await DB.setStudents(students);
                 alert('Student profile updated successfully!');
-                await calculateTotalExpectedFees();
+                await calculateFinancials();
                 if (feeStudentIdSelect && feeStudentIdSelect.value === studentId) {
                     renderFeeCycles(studentId);
+                }
+                if (splitStudentIdSelect && splitStudentIdSelect.value === studentId) {
+                    renderStudentFeeSplits(studentId);
+                }
+                renderStudents();
+                renderTeachers();
+                if (breakdownTeacherIdSelect && breakdownTeacherIdSelect.value) {
+                    renderTeacherBreakdown(breakdownTeacherIdSelect.value);
                 }
             }
         });
@@ -427,6 +700,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         await DB.setStudents(students);
+        await calculateFinancials();
         renderFeeCycles(studentId);
         alert('Fees marked as paid.');
     };
@@ -492,30 +766,81 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    if (updateTeacherSalaryForm) {
-        updateSalaryTeacherIdSelect.addEventListener('change', async (e) => {
-            const teacherId = e.target.value;
-            const teachers = await DB.getTeachers();
-            const teacher = teachers.find(t => t.id === teacherId);
-            if (teacher) {
-                updateSalaryAmountInput.value = teacher.currentSalary || 0;
-            }
+    // Dynamic fee splits and breakdown listeners
+    if (splitStudentIdSelect) {
+        splitStudentIdSelect.addEventListener('change', (e) => {
+            renderStudentFeeSplits(e.target.value);
         });
+    }
 
-        updateTeacherSalaryForm.addEventListener('submit', async (e) => {
+    if (addSplitForm) {
+        addSplitForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const teacherId = updateSalaryTeacherIdSelect.value;
-            const amount = parseFloat(updateSalaryAmountInput.value);
+            const studentId = splitStudentIdSelect.value;
+            const teacherId = document.getElementById('splitTeacherId').value;
+            const percentage = parseInt(document.getElementById('splitPercentage').value);
 
-            if (!teacherId || isNaN(amount)) return alert("Invalid inputs.");
+            if (!studentId || !teacherId || isNaN(percentage) || percentage <= 0) {
+                return alert("Please select a student, a teacher, and a valid percentage.");
+            }
+
+            const students = await DB.getStudents();
+            const idx = students.findIndex(s => s.id === studentId);
+            if (idx === -1) return alert("Student not found.");
+
+            const student = students[idx];
+            const splits = student.feeSplits || [];
+
+            // Calculate total existing percentage excluding this teacher if they already have a split
+            const existingSplitsFiltered = splits.filter(s => s.teacherId.toLowerCase() !== teacherId.toLowerCase());
+            const totalAssignedOther = existingSplitsFiltered.reduce((sum, s) => sum + (s.percentage || 0), 0);
+
+            if (totalAssignedOther + percentage > 100) {
+                return alert(`Cannot add split. Total share for student would exceed 100%. Remaining allowed share: ${100 - totalAssignedOther}%`);
+            }
+
+            // Update or add
+            const splitIndex = splits.findIndex(s => s.teacherId.toLowerCase() === teacherId.toLowerCase());
+            if (splitIndex !== -1) {
+                splits[splitIndex].percentage = percentage;
+            } else {
+                splits.push({ teacherId, percentage });
+            }
+
+            students[idx].feeSplits = splits;
+            await DB.setStudents(students);
             
-            const teachers = await DB.getTeachers();
-            const idx = teachers.findIndex(t => t.id === teacherId);
-            if (idx !== -1) {
-                teachers[idx].currentSalary = amount;
-                await DB.setTeachers(teachers);
-                await renderTeachers();
-                alert('Teacher salary updated successfully!');
+            // Reset input and refresh UI
+            document.getElementById('splitPercentage').value = '';
+            document.getElementById('splitTeacherId').value = '';
+            await renderStudentFeeSplits(studentId);
+            await renderStudents();
+            await renderTeachers();
+            await calculateFinancials();
+
+            // Refresh breakdown if active
+            if (breakdownTeacherIdSelect && breakdownTeacherIdSelect.value === teacherId) {
+                renderTeacherBreakdown(teacherId);
+            }
+
+            alert("Fee share split successfully saved!");
+        });
+    }
+
+    if (breakdownTeacherIdSelect) {
+        breakdownTeacherIdSelect.addEventListener('change', (e) => {
+            renderTeacherBreakdown(e.target.value);
+        });
+    }
+
+    if (salaryTeacherIdSelect) {
+        salaryTeacherIdSelect.addEventListener('change', async (e) => {
+            const teacherId = e.target.value;
+            const students = await DB.getStudents();
+            const dynamicSalary = calculateTeacherDynamicSalary(teacherId, students);
+            const salaryAmountInput = document.getElementById('salaryAmount');
+            if (salaryAmountInput) {
+                salaryAmountInput.value = dynamicSalary;
             }
         });
     }
@@ -555,5 +880,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     await renderAlumni();
     await renderTeachers();
     await renderSalaries();
-    await calculateTotalExpectedFees();
+    await calculateFinancials();
 });

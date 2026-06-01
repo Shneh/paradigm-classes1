@@ -8,14 +8,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         welcomeMessage.textContent = `Welcome, ${user.name}`;
     }
 
-    // Load dynamic current salary
-    const teachers = await DB.getTeachers();
-    const currentTeacher = teachers.find(t => t.id === user.id);
-    if (currentTeacher) {
-        const salaryEl = document.getElementById('teacherCurrentSalary');
-        if (salaryEl) {
-            salaryEl.textContent = `₹${(currentTeacher.currentSalary || 0).toLocaleString('en-IN')}`;
+    // Load dynamic current salary from student fee splits
+    const students = await DB.getStudents();
+    let dynamicSalary = 0;
+    students.forEach(student => {
+        const splits = student.feeSplits || [];
+        const split = splits.find(s => s.teacherId.toLowerCase() === user.id.toLowerCase());
+        if (split) {
+            dynamicSalary += (student.fees || 0) * (split.percentage || 0) / 100;
         }
+    });
+
+    const salaryEl = document.getElementById('teacherCurrentSalary');
+    if (salaryEl) {
+        salaryEl.textContent = `₹${dynamicSalary.toLocaleString('en-IN')}`;
     }
 
     // DOM Elements
@@ -39,7 +45,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if(!salariesTableBody) return;
         
         const allSalaries = await DB.getSalaries();
-        const salaries = allSalaries.filter(s => s.teacherId === user.id);
+        const salaries = allSalaries.filter(s => s.teacherId.toLowerCase() === user.id.toLowerCase());
         salariesTableBody.innerHTML = '';
         
         // Month Selector logic
@@ -359,7 +365,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if(!newPassword) return;
 
             let teachers = await DB.getTeachers();
-            let idx = teachers.findIndex(t => t.id === user.id);
+            let idx = teachers.findIndex(t => t.id.toLowerCase() === user.id.toLowerCase());
             if(idx !== -1) {
                 teachers[idx].password = newPassword;
                 await DB.setTeachers(teachers);
