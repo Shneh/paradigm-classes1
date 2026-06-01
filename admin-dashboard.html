@@ -326,6 +326,21 @@
                     </div>
                 </div>
                 <div class="card">
+                    <h2 class="card-header" style="color: #b91c1c;">Tuition Announcement &amp; Alert (Marquee)</h2>
+                    <form id="update-announcement-form">
+                        <div class="form-group">
+                            <label>Announcement Ticker Message</label>
+                            <textarea class="form-input" id="announcementText" rows="3" placeholder="Enter scrolling alert message for all pages..." required style="resize: vertical; font-family: inherit; padding: 0.5rem;"></textarea>
+                        </div>
+                        <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 1rem; margin-bottom: 1.5rem;">
+                            <input type="checkbox" id="announcementEnabled" style="width: 18px; height: 18px; cursor: pointer;">
+                            <label for="announcementEnabled" style="font-weight: 600; cursor: pointer; margin: 0; user-select: none;">Enable Marquee Banner across ALL pages</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; background:#b91c1c; border-color:#b91c1c;">Publish Announcement</button>
+                    </form>
+                </div>
+
+                <div class="card">
                     <h2 class="card-header">Change Admin Credentials</h2>
                     <form id="update-admin-form">
                         <div class="form-row">

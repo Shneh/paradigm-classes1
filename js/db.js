@@ -90,6 +90,27 @@ const DB = {
     getCurrentUser: () => JSON.parse(localStorage.getItem('pc_currentUser') || 'null'),
     setCurrentUser: (user) => localStorage.setItem('pc_currentUser', JSON.stringify(user)),
     logout: () => localStorage.removeItem('pc_currentUser'),
+
+    getAnnouncement: async () => {
+        try {
+            const snapshot = await db.collection('appData').doc('announcement').get();
+            if (snapshot.exists) {
+                return snapshot.data() || { text: "", enabled: false };
+            }
+            return { text: "Welcome to Paradigm Classes! Admissions are now open for the academic session 2026-2027. Enroll today!", enabled: true };
+        } catch (e) {
+            console.error("Error getting announcement:", e.message);
+            return { text: "", enabled: false };
+        }
+    },
+    setAnnouncement: async (announcement) => {
+        try {
+            await db.collection('appData').doc('announcement').set(announcement);
+        } catch (e) {
+            console.error("Error setting announcement:", e.message);
+            alert("Database Error setting announcement: " + e.message);
+        }
+    },
     
     initData: async () => {
         try {
@@ -105,6 +126,70 @@ const DB = {
     }
 };
 
+// Dynamic Announcement Marquee Injector
+async function initAnnouncementBanner() {
+    try {
+        const ann = await DB.getAnnouncement();
+        if (ann && ann.enabled && ann.text && ann.text.trim().length > 0) {
+            if (document.querySelector('.pc-marquee-banner')) return;
+
+            const style = document.createElement('style');
+            style.textContent = `
+                .pc-marquee-banner {
+                    background: linear-gradient(90deg, #1e3a8a 0%, #d97706 50%, #1e3a8a 100%);
+                    color: white;
+                    padding: 0.5rem 0;
+                    font-family: 'Outfit', 'Inter', sans-serif;
+                    font-size: 0.95rem;
+                    font-weight: 600;
+                    letter-spacing: 0.03em;
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    z-index: 9999;
+                    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+                    border-bottom: 2px solid #b45309;
+                    height: 36px;
+                    display: flex;
+                    align-items: center;
+                }
+                .pc-marquee-banner marquee {
+                    margin: 0;
+                    padding: 0;
+                    vertical-align: middle;
+                }
+                body.has-marquee {
+                    padding-top: 36px !important;
+                }
+                body.has-marquee .navbar {
+                    top: 36px !important;
+                }
+            `;
+            document.head.appendChild(style);
+
+            const banner = document.createElement('div');
+            banner.className = 'pc-marquee-banner';
+            banner.innerHTML = `
+                <marquee behavior="scroll" direction="left" scrollamount="6" onmouseover="this.stop()" onmouseout="this.start()">
+                    <span style="margin-right: 50px;">📢 ${ann.text}</span>
+                </marquee>
+            `;
+
+            document.body.prepend(banner);
+            document.body.classList.add('has-marquee');
+        }
+    } catch (e) {
+        console.error("Announcement banner failed to load:", e);
+    }
+}
+
 // Fire initialization payload
 DB.initData();
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAnnouncementBanner);
+} else {
+    initAnnouncementBanner();
+}
 

@@ -24,6 +24,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const addCourseForm = document.getElementById('add-course-form');
     const coursesTableBody = document.querySelector('#coursesTable tbody');
 
+    // Announcement Marquee Elements
+    const updateAnnouncementForm = document.getElementById('update-announcement-form');
+    const announcementTextInput = document.getElementById('announcementText');
+    const announcementEnabledCheckbox = document.getElementById('announcementEnabled');
+
     const totalExpectedFeesEl = document.getElementById('totalExpectedFees');
     const totalActualCollectedEl = document.getElementById('totalActualCollected');
     const totalTeacherSalariesEl = document.getElementById('totalTeacherSalaries');
@@ -946,6 +951,43 @@ document.addEventListener('DOMContentLoaded', async () => {
             const salaryAmountInput = document.getElementById('salaryAmount');
             if (salaryAmountInput) {
                 salaryAmountInput.value = dynamicSalary;
+            }
+        });
+    }
+
+    // Load and manage Tuition Announcement & Alert
+    if (updateAnnouncementForm) {
+        // Pre-fill the announcement inputs
+        const currentAnn = await DB.getAnnouncement();
+        if (announcementTextInput) announcementTextInput.value = currentAnn.text || '';
+        if (announcementEnabledCheckbox) announcementEnabledCheckbox.checked = !!currentAnn.enabled;
+
+        updateAnnouncementForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const text = announcementTextInput.value.trim();
+            const enabled = announcementEnabledCheckbox.checked;
+
+            if (text === '') {
+                return alert("Announcement text cannot be empty.");
+            }
+
+            try {
+                await DB.setAnnouncement({ text, enabled });
+                alert("Tuition announcement successfully updated! Refresh to see the changes.");
+                
+                // Instantly update marquee locally on current page
+                const existingBanner = document.querySelector('.pc-marquee-banner');
+                if (existingBanner) existingBanner.remove();
+                document.body.classList.remove('has-marquee');
+                
+                if (enabled) {
+                    if (typeof initAnnouncementBanner === 'function') {
+                        await initAnnouncementBanner();
+                    }
+                }
+            } catch (err) {
+                console.error("Error updating announcement:", err);
+                alert("Error updating announcement: " + err.message);
             }
         });
     }
