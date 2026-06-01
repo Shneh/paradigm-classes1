@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Fees Chart | Paradigm Classes</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Custom Premium Fees Page Styles */
+        .fees-hero {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            padding: 8rem 2rem 5rem 2rem;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .fees-hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 70% 30%, rgba(245, 158, 11, 0.15) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .fees-hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #ffffff, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+        }
+
+        .fees-hero-subtitle {
+            font-size: 1.25rem;
+            color: #94a3b8;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .fees-section {
+            padding: 5rem 2rem;
+            background: #f8fafc;
+        }
+
+        .fees-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            max-width: 1200px;
+            margin: 0 auto 5rem auto;
+        }
+
+        /* Glassmorphism course cards */
+        .fee-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .fee-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        .fee-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 6px;
+            background: linear-gradient(to right, #1e3a8a, #f59e0b);
+        }
+
+        .fee-card-header {
+            padding: 2.5rem 2rem 1.5rem 2rem;
+            text-align: center;
+            background: #fafafa;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .fee-card-title {
+            font-size: 1.5rem;
+            font-weight: 750;
+            color: #0f172a;
+            margin-bottom: 1rem;
+        }
+
+        .fee-amount-box {
+            margin: 1.5rem 0 0.5rem 0;
+        }
+
+        .fee-currency {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3a8a;
+            vertical-align: super;
+        }
+
+        .fee-amount {
+            font-size: 3rem;
+            font-weight: 850;
+            color: #1e3a8a;
+            letter-spacing: -0.03em;
+        }
+
+        .fee-period {
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .fee-card-body {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .fee-card-description {
+            color: #475569;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .fee-features-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #0f172a;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+
+        .fee-features-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 2.5rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .fee-feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            font-size: 0.95rem;
+            color: #334155;
+            line-height: 1.4;
+        }
+
+        .fee-check-icon {
+            width: 18px;
+            height: 18px;
+            color: #16a34a;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .fee-card-btn {
+            margin-top: auto;
+            display: block;
+            text-align: center;
+            background: #1e3a8a;
+            color: white;
+            text-decoration: none;
+            padding: 1rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(30, 58, 138, 0.15);
+        }
+
+        .fee-card-btn:hover {
+            background: #f59e0b;
+            box-shadow: 0 6px 15px rgba(245, 158, 11, 0.25);
+            transform: translateY(-2px);
+        }
+
+        /* Detailed Comparison Chart */
+        .chart-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .chart-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .chart-title {
+            font-size: 1.85rem;
+            font-weight: 750;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+
+        .chart-subtitle {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        .fees-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .fees-table th {
+            padding: 1.25rem 1.5rem;
+            font-weight: 700;
+            color: #0f172a;
+            border-bottom: 2px solid #e2e8f0;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .fees-table td {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #f1f5f9;
+            color: #475569;
+            font-size: 1rem;
+            vertical-align: middle;
+        }
+
+        .fees-table tr:hover td {
+            background-color: #fafbfc;
+        }
+
+        .fees-table td.fee-val {
+            font-weight: 700;
+            color: #166534;
+            font-size: 1.1rem;
+        }
+
+        /* Responsive styling adjustments */
+        @media (max-width: 768px) {
+            .fees-hero-title { font-size: 2.25rem; }
+            .chart-container { padding: 1.5rem; }
+            .fees-table th, .fees-table td { padding: 1rem 0.75rem; font-size: 0.9rem; }
+            .fees-table td.fee-val { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Spacing after fixed navbar -->
+    <div style="margin-top: 80px;"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo">
+                    <img alt="Paradigm Classes Logo" class="logo-img" src="images/logo.png" />
+                    <div>
+                        <div class="logo-primary">PARADIGM</div>
+                        <div class="logo-secondary">CLASSES</div>
+                    </div>
+                </div>
+                <div class="nav-links">
+                    <a class="nav-link" href="index.html">Home</a>
+                    <a class="nav-link" href="gallery.html">Gallery</a>
+                    <a class="nav-link" href="results.html">Results</a>
+                    <a class="nav-link" href="askai.html">Ask AI</a>
+                    <a class="nav-link" href="faculty.html">Faculty</a>
+                    <a class="nav-link" href="index.html#contact">Contact</a>
+                </div>
+
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open Menu">☰</button>
+
+                <div class="nav-cta">
+                    <a class="btn btn-primary" href="login.html">LOGIN</a>
+                </div>
+            </div>
+            <div class="mobile-menu" id="mobileMenu">
+                <a class="mobile-link" href="index.html">Home</a>
+                <a class="mobile-link" href="gallery.html">Gallery</a>
+                <a class="mobile-link" href="results.html">Results</a>
+                <a class="mobile-link" href="askai.html">Ask AI</a>
+                <a class="mobile-link" href="faculty.html">Faculty</a>
+                <a class="mobile-link" href="index.html#contact">Contact</a>
+                <a class="mobile-cta" href="login.html">LOGIN</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="fees-hero">
+        <div class="container">
+            <h1 class="fees-hero-title">Course Fee Structure</h1>
+            <p class="fees-hero-subtitle">Premium conceptual education in Physics, Chemistry, and Mathematics, made fully transparent and accessible.</p>
+        </div>
+    </header>
+
+    <!-- Main Pricing Cards & Chart Grid -->
+    <section class="fees-section">
+        <div class="container">
+            <!-- Dynamic Grid Loaded by Firebase -->
+            <div class="fees-grid" id="coursesPricingGrid">
+                <div style="grid-column: 1/-1; text-align: center; color: var(--text-light); padding: 3rem 0;">
+                    <h3>Loading courses data...</h3>
+                </div>
+            </div>
+
+            <!-- Detailed Table Chart -->
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h2 class="chart-title">Side-by-Side Fee Comparison</h2>
+                    <p class="chart-subtitle">Quick overview of academic coaching programs &amp; structures</p>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="fees-table" id="coursesComparisonTable">
+                        <thead>
+                            <tr>
+                                <th>Course Title</th>
+                                <th>Brief Description</th>
+                                <th style="text-align: right; width: 150px;">Monthly Fee</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="3" style="text-align: center; color: var(--text-light); padding: 2rem 0;">Loading chart data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo-primary">PARADIGM</div>
+                    <div class="logo-secondary">CLASSES</div>
+                    <p class="footer-tagline">Excellence in PCM Education</p>
+                </div>
+
+                <div class="footer-links">
+                    <h4 class="footer-title">Quick Links</h4>
+                    <ul class="footer-menu">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="gallery.html">Gallery</a></li>
+                        <li><a href="faculty.html">Faculty</a></li>
+                        <li><a href="fees.html" style="font-weight: bold; color: #f59e0b;">Course Fees Chart</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-contact">
+                    <h4 class="footer-title">Contact</h4>
+                    <p class="footer-contact-item">+91 9627242349</p>
+                    <p class="footer-contact-item">paradigm.pcm@gmail.com</p>
+                    <p class="footer-contact-item">Arcadia Grant, Uttarakhand</p>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p class="copyright">© 2025 Paradigm Classes. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase Script Imports -->
+    <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/script.js"></script>
+    
+    <!-- Dynamic Loading and Navigation CTA update logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Update Navigation Button if Session exists
+            const user = typeof DB !== 'undefined' ? DB.getCurrentUser() : null;
+            if (user && (user.role === 'student' || user.role === 'teacher' || user.role === 'admin')) {
+                const navCta = document.querySelector('.nav-cta a');
+                const mobileCta = document.querySelector('.mobile-cta');
+                const dashboardUrl = user.role === 'teacher' ? 'teacher-dashboard.html' : 
+                                     (user.role === 'admin' ? 'admin-dashboard.html' : 'student-dashboard.html');
+                if (navCta) {
+                    navCta.textContent = "DASHBOARD";
+                    navCta.href = dashboardUrl;
+                }
+                if (mobileCta) {
+                    mobileCta.textContent = "DASHBOARD";
+                    mobileCta.href = dashboardUrl;
+                }
+            }
+
+            // Fetch and render courses
+            try {
+                let courses = await DB.getCourses();
+                if (courses.length === 0) {
+                    // Seed fallback default courses
+                    courses = [
+                        {
+                            id: "course-ix-x",
+                            title: "Class IX-X Foundation",
+                            fees: 2000,
+                            description: "Build a strong foundation in Physics, Chemistry, and Mathematics for board exams and future competitive preparations.",
+                            features: ["RD Sharma-based curriculum", "Regular practice tests", "Board exam preparation"]
+                        },
+                        {
+                            id: "course-xi-xii",
+                            title: "Class XI-XII (PCM)",
+                            fees: 3500,
+                            description: "Comprehensive coaching for board exams with special focus on building concepts for competitive exams.",
+                            features: ["Board + Competitive focus", "Advanced problem solving", "Regular mock tests"]
+                        },
+                        {
+                            id: "course-jee",
+                            title: "JEE (Main & Advanced)",
+                            fees: 5000,
+                            description: "Specialized coaching for JEE aspirants with focus on conceptual clarity and problem-solving skills.",
+                            features: ["Topic-wise tests", "Previous year papers", "Full-length mock tests"]
+                        },
+                        {
+                            id: "course-neet",
+                            title: "NEET Preparation",
+                            fees: 5000,
+                            description: "Comprehensive coaching for NEET aspirants with focus on Physics and Chemistry.",
+                            features: ["NCERT-focused approach", "Chapter-wise tests", "Regular doubt sessions"]
+                        },
+                        {
+                            id: "course-nda",
+                            title: "NDA Preparation",
+                            fees: 4500,
+                            description: "Specialized coaching for NDA aspirants with focus on Mathematics and General Ability Test.",
+                            features: ["Mathematics mastery", "GAT preparation", "SSB interview guidance"]
+                        },
+                        {
+                            id: "course-cuet",
+                            title: "CUET Preparation",
+                            fees: 3000,
+                            description: "Comprehensive coaching for CUET with focus on domain subjects in Physics, Chemistry, and Mathematics.",
+                            features: ["Domain subject focus", "General test prep", "Language test prep"]
+                        }
+                    ];
+                    await DB.setCourses(courses);
+                }
+
+                // Render Cards Grid
+                const gridContainer = document.getElementById('coursesPricingGrid');
+                gridContainer.innerHTML = '';
+                
+                // Render Side-by-Side Chart Table
+                const tableBody = document.querySelector('#coursesComparisonTable tbody');
+                tableBody.innerHTML = '';
+
+                courses.forEach(course => {
+                    // Feature List HTML
+                    const featuresHtml = (course.features || []).map(feature => `
+                        <li class="fee-feature-item">
+                            <svg class="fee-check-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            ${feature}
+                        </li>
+                    `).join('');
+
+                    // Card DOM element
+                    const card = document.createElement('div');
+                    card.className = 'fee-card';
+                    card.innerHTML = `
+                        <div class="fee-card-header">
+                            <h3 class="fee-card-title">${course.title}</h3>
+                            <div class="fee-amount-box">
+                                <span class="fee-currency">₹</span>
+                                <span class="fee-amount">${(course.fees || 0).toLocaleString('en-IN')}</span>
+                                <span class="fee-period">/ month</span>
+                            </div>
+                        </div>
+                        <div class="fee-card-body">
+                            <p class="fee-card-description">${course.description || ''}</p>
+                            <h4 class="fee-features-title">What's Included</h4>
+                            <ul class="fee-features-list">
+                                ${featuresHtml}
+                            </ul>
+                            <a href="index.html#contact" class="fee-card-btn">Enroll Now</a>
+                        </div>
+                    `;
+                    gridContainer.appendChild(card);
+
+                    // Table Row
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td style="font-weight: 600; color: #0f172a;">${course.title}</td>
+                        <td>${course.description || ''}</td>
+                        <td class="fee-val" style="text-align: right;">₹${(course.fees || 0).toLocaleString('en-IN')}</td>
+                    `;
+                    tableBody.appendChild(tr);
+                });
+
+            } catch (err) {
+                console.error("Error fetching courses for public fees page:", err);
+                const gridContainer = document.getElementById('coursesPricingGrid');
+                gridContainer.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:#dc2626; padding: 2rem;"><h3>Error loading pricing data. Please try again later.</h3><p>${err.message}</p></div>`;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -380,6 +380,48 @@
                         </table>
                     </div>
                 </div>
+
+                <div class="card">
+                    <h2 class="card-header" style="color: #b91c1c;">Course &amp; Fee Structure Management</h2>
+                    <form id="add-course-form" style="margin-bottom: 2rem;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Course Title</label>
+                                <input class="form-input" id="courseTitle" type="text" placeholder="e.g. Class IX-X Foundation" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Monthly Fees (₹)</label>
+                                <input class="form-input" id="courseFees" type="number" min="0" placeholder="e.g. 2000" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Course Description</label>
+                            <textarea class="form-input" id="courseDescription" rows="2" placeholder="Brief summary of what the course covers..." required style="resize: vertical; font-family: inherit; padding: 0.5rem;"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Key Features (Comma-separated)</label>
+                            <input class="form-input" id="courseFeatures" type="text" placeholder="e.g. RD Sharma-based curriculum, Regular practice tests, Mock exams" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem; background:#b91c1c; border-color:#b91c1c;">Add Course</button>
+                    </form>
+
+                    <h3 style="margin-top: 1.5rem; margin-bottom: 1rem;">Active Courses &amp; Fee Chart</h3>
+                    <div style="overflow-x: auto;">
+                        <table class="table" id="coursesTable" style="min-width: 450px;">
+                            <thead>
+                                <tr>
+                                    <th>Course Title</th>
+                                    <th class="text-right" style="text-align: right; width: 100px;">Monthly Fee</th>
+                                    <th>Features</th>
+                                    <th class="text-right" style="text-align: right; width: 80px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Filled dynamically by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
 

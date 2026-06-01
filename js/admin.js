@@ -19,6 +19,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const addTeacherForm = document.getElementById('add-teacher-form');
     const addSalaryForm = document.getElementById('add-salary-form');
     const salaryTeacherIdSelect = document.getElementById('salaryTeacherId');
+    
+    // Course Management Elements
+    const addCourseForm = document.getElementById('add-course-form');
+    const coursesTableBody = document.querySelector('#coursesTable tbody');
 
     const totalExpectedFeesEl = document.getElementById('totalExpectedFees');
     const totalActualCollectedEl = document.getElementById('totalActualCollected');
@@ -202,6 +206,95 @@ document.addEventListener('DOMContentLoaded', async () => {
             alumniTableBody.appendChild(tr);
         });
     }
+
+    async function renderCourses() {
+        if (!coursesTableBody) return;
+        let courses = await DB.getCourses();
+        if (courses.length === 0) {
+            // Seed default courses
+            courses = [
+                {
+                    id: "course-ix-x",
+                    title: "Class IX-X Foundation",
+                    fees: 2000,
+                    description: "Build a strong foundation in Physics, Chemistry, and Mathematics for board exams and future competitive preparations.",
+                    features: ["RD Sharma-based curriculum", "Regular practice tests", "Board exam preparation"]
+                },
+                {
+                    id: "course-xi-xii",
+                    title: "Class XI-XII (PCM)",
+                    fees: 3500,
+                    description: "Comprehensive coaching for board exams with special focus on building concepts for competitive exams.",
+                    features: ["Board + Competitive focus", "Advanced problem solving", "Regular mock tests"]
+                },
+                {
+                    id: "course-jee",
+                    title: "JEE (Main & Advanced)",
+                    fees: 5000,
+                    description: "Specialized coaching for JEE aspirants with focus on conceptual clarity and problem-solving skills.",
+                    features: ["Topic-wise tests", "Previous year papers", "Full-length mock tests"]
+                },
+                {
+                    id: "course-neet",
+                    title: "NEET Preparation",
+                    fees: 5000,
+                    description: "Comprehensive coaching for NEET aspirants with focus on Physics and Chemistry.",
+                    features: ["NCERT-focused approach", "Chapter-wise tests", "Regular doubt sessions"]
+                },
+                {
+                    id: "course-nda",
+                    title: "NDA Preparation",
+                    fees: 4500,
+                    description: "Specialized coaching for NDA aspirants with focus on Mathematics and General Ability Test.",
+                    features: ["Mathematics mastery", "GAT preparation", "SSB interview guidance"]
+                },
+                {
+                    id: "course-cuet",
+                    title: "CUET Preparation",
+                    fees: 3000,
+                    description: "Comprehensive coaching for CUET with focus on domain subjects in Physics, Chemistry, and Mathematics.",
+                    features: ["Domain subject focus", "General test prep", "Language test prep"]
+                }
+            ];
+            await DB.setCourses(courses);
+        }
+
+        coursesTableBody.innerHTML = '';
+        courses.forEach(course => {
+            const tr = document.createElement('tr');
+            
+            // Format features list
+            const featuresHtml = (course.features || []).map(f => `<span class="badge" style="background:#f1f5f9; color:#475569; margin: 0.15rem 0.15rem 0.15rem 0; display: inline-block;">${f}</span>`).join('');
+            
+            tr.innerHTML = `
+                <td style="font-weight: 600; color: #1e3a8a;">${course.title}</td>
+                <td class="text-right" style="text-align: right; font-weight: bold; color: #166534;">₹${(course.fees || 0).toLocaleString('en-IN')}</td>
+                <td>
+                    <div style="font-size:0.85rem; color:var(--text-light); margin-bottom:0.3rem;">${course.description || ''}</div>
+                    <div>${featuresHtml}</div>
+                </td>
+                <td class="text-right" style="text-align: right;">
+                    <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #dc2626; border-color: #dc2626; font-size: 0.8rem;" onclick="removeCourse('${course.id}')" title="Delete Course">Delete</button>
+                </td>
+            `;
+            coursesTableBody.appendChild(tr);
+        });
+    }
+
+    // Expose removeCourse to window so HTML buttons can click it
+    window.removeCourse = async (courseId) => {
+        if (!confirm("Are you sure you want to delete this course and its fee structure?")) return;
+        try {
+            const courses = await DB.getCourses();
+            const updated = courses.filter(c => c.id !== courseId);
+            await DB.setCourses(updated);
+            await renderCourses();
+            alert("Course deleted successfully!");
+        } catch (err) {
+            console.error("Error deleting course:", err);
+            alert("Error deleting course: " + err.message);
+        }
+    };
 
     async function renderTeachers() {
         const teachers = await DB.getTeachers();
@@ -534,6 +627,42 @@ document.addEventListener('DOMContentLoaded', async () => {
         alert(`Successfully added ${name}. Logic ID assigned: ${newId}`);
     });
 
+    if (addCourseForm) {
+        addCourseForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('courseTitle').value.trim();
+            const fees = parseInt(document.getElementById('courseFees').value) || 0;
+            const description = document.getElementById('courseDescription').value.trim();
+            const featuresInput = document.getElementById('courseFeatures').value.trim();
+
+            if (!title || !description || !featuresInput) {
+                return alert("All fields are required.");
+            }
+
+            const features = featuresInput.split(',').map(f => f.trim()).filter(f => f.length > 0);
+            
+            try {
+                const courses = await DB.getCourses();
+                const newCourse = {
+                    id: "course-" + Date.now().toString(36),
+                    title,
+                    fees,
+                    description,
+                    features
+                };
+                courses.push(newCourse);
+                await DB.setCourses(courses);
+                
+                addCourseForm.reset();
+                await renderCourses();
+                alert(`Successfully added course: ${title}!`);
+            } catch (err) {
+                console.error("Error adding course:", err);
+                alert("Error adding course: " + err.message);
+            }
+        });
+    }
+
     addSalaryForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const teacherId = document.getElementById('salaryTeacherId').value;
@@ -856,5 +985,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     await renderAlumni();
     await renderTeachers();
     await renderSalaries();
+    await renderCourses();
     await calculateFinancials();
 });
