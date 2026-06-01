@@ -128,9 +128,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </div>
                 </div>
                 <div class="test-actions">
-                    <button class="btn btn-outline" style="color: #dc2626; border-color: #dc2626;" onclick="removeTest(${test.id})">Remove</button>
-                    <button class="btn btn-outline" onclick="openMarkEntry(${test.id})">Feed Marks</button>
-                    ${!test.published ? `<button class="btn btn-primary" onclick="publishTest(${test.id})">Publish</button>` : ''}
+                    <button class="btn btn-outline" style="color: #dc2626; border-color: #dc2626; padding: 0.5rem 1rem; font-weight: 600;" onclick="removeTest(${test.id})">Remove</button>
+                    <button class="btn btn-outline" style="color: #1e3a8a; border-color: #1e3a8a; background-color: #eff6ff; padding: 0.5rem 1rem; font-weight: 600;" onclick="openMarkEntry(${test.id})">Feed Marks</button>
+                    ${!test.published ? `<button class="btn btn-primary" style="background-color: #166534; border-color: #166534; color: white; padding: 0.5rem 1rem; font-weight: 600;" onclick="publishTest(${test.id})">Publish</button>` : ''}
                 </div>
             `;
             testsList.appendChild(div);
