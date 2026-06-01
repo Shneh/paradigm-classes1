@@ -144,10 +144,9 @@ async function initAnnouncementBanner() {
                     font-weight: 600;
                     letter-spacing: 0.03em;
                     position: fixed;
-                    top: 80px; /* Sticks right below the 80px fixed navigation bar */
                     left: 0;
                     right: 0;
-                    z-index: 999; /* Positioned just below fixed navbar */
+                    z-index: 1001; /* Set above the navbar z-index of 1000 so it is never covered */
                     box-shadow: 0 4px 10px rgba(0,0,0,0.12);
                     border-bottom: 2px solid #b45309;
                     height: 36px;
@@ -174,7 +173,7 @@ async function initAnnouncementBanner() {
                 }
                 
                 body.has-marquee {
-                    margin-top: 36px !important; /* Shifts the non-fixed body content down below banner */
+                    padding-top: 36px !important; /* Safer body shift down using padding-top */
                 }
             `;
             document.head.appendChild(style);
@@ -187,6 +186,24 @@ async function initAnnouncementBanner() {
 
             document.body.prepend(banner);
             document.body.classList.add('has-marquee');
+
+            // Dynamic Positioning Adjustment Logic based on real-time navbar height
+            function adjustMarqueePosition() {
+                const navbar = document.querySelector('.navbar');
+                if (navbar) {
+                    banner.style.top = `${navbar.offsetHeight}px`;
+                } else {
+                    banner.style.top = '80px'; // Fallback
+                }
+            }
+
+            // Run alignment instantly and on resize
+            adjustMarqueePosition();
+            window.addEventListener('resize', adjustMarqueePosition);
+            
+            // Re-verify after load/render cycles
+            setTimeout(adjustMarqueePosition, 100);
+            setTimeout(adjustMarqueePosition, 500);
         }
     } catch (e) {
         console.error("Announcement banner failed to load:", e);
@@ -197,8 +214,14 @@ async function initAnnouncementBanner() {
 DB.initData();
 
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initAnnouncementBanner);
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(initAnnouncementBanner, 0);
+    });
 } else {
-    initAnnouncementBanner();
+    if (document.body) {
+        setTimeout(initAnnouncementBanner, 0);
+    } else {
+        window.addEventListener('load', initAnnouncementBanner);
+    }
 }
 
