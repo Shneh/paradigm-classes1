@@ -199,39 +199,17 @@
                                 <span id="splitStudentTotalFees" style="font-weight: bold; color: #1e3a8a;">₹0</span>
                             </div>
                             <div style="display: flex; justify-content: space-between;">
-                                <span style="font-weight: 500; color: var(--text-dark);">Assigned Share:</span>
+                                <span style="font-weight: 500; color: var(--text-dark);">Total Assigned Share:</span>
                                 <span id="splitStudentAssignedTotal" style="font-weight: bold; color: #166534;">0%</span>
                             </div>
                         </div>
 
-                        <table class="table" id="studentSplitsTable" style="margin-bottom: 1rem;">
-                            <thead>
-                                <tr>
-                                    <th>Teacher</th>
-                                    <th>Share %</th>
-                                    <th class="text-right" style="text-align: right;">Amount</th>
-                                    <th style="width: 60px;">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody><!-- Filled by JS --></tbody>
-                        </table>
-
-                        <h4 style="margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--text-dark);">Add/Update Teacher Share</h4>
-                        <form id="add-split-form">
-                            <div class="form-row">
-                                <div class="form-group" style="flex: 2;">
-                                    <label>Select Teacher</label>
-                                    <select class="form-input" id="splitTeacherId" required style="border-color: var(--gray-300); background: white;">
-                                        <option value="" disabled selected>-- Select Teacher --</option>
-                                        <!-- Filled by JS -->
-                                    </select>
-                                </div>
-                                <div class="form-group" style="flex: 1;">
-                                    <label>Share (%)</label>
-                                    <input class="form-input" id="splitPercentage" type="number" min="1" max="100" required placeholder="e.g. 40">
-                                </div>
-                                <button type="submit" class="btn btn-primary" style="height: 44px; background:#b91c1c; border-color:#b91c1c; min-width: 80px;">Save</button>
+                        <form id="save-all-splits-form">
+                            <h4 style="margin-top: 1rem; margin-bottom: 0.75rem; color: var(--text-dark); font-size: 1.1rem; font-weight: 700;">Allocate Fee Share Percentages (%)</h4>
+                            <div id="studentSplitsInputsList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(185px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                                <!-- Dynamically populated list of teachers and percentage inputs -->
                             </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%; height: 44px; background:#b91c1c; border-color:#b91c1c;">Save Splits in a Single Go</button>
                         </form>
                     </div>
                 </div>

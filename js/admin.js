@@ -30,10 +30,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const studentSplitsContainer = document.getElementById('studentSplitsContainer');
     const splitStudentTotalFeesEl = document.getElementById('splitStudentTotalFees');
     const splitStudentAssignedTotalEl = document.getElementById('splitStudentAssignedTotal');
-    const studentSplitsTableBody = document.querySelector('#studentSplitsTable tbody');
-    const splitTeacherIdSelect = document.getElementById('splitTeacherId');
-    const splitPercentageInput = document.getElementById('splitPercentage');
-    const addSplitForm = document.getElementById('add-split-form');
+    const saveAllSplitsForm = document.getElementById('save-all-splits-form');
+    const studentSplitsInputsList = document.getElementById('studentSplitsInputsList');
 
     const breakdownTeacherIdSelect = document.getElementById('breakdownTeacherId');
     const teacherBreakdownContainer = document.getElementById('teacherBreakdownContainer');
@@ -213,9 +211,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (breakdownTeacherIdSelect) {
             breakdownTeacherIdSelect.innerHTML = '<option value="" disabled selected>-- Select Teacher --</option>';
         }
-        if (splitTeacherIdSelect) {
-            splitTeacherIdSelect.innerHTML = '<option value="" disabled selected>-- Select Teacher --</option>';
-        }
 
         teachers.forEach(teacher => {
             const dynamicSalary = calculateTeacherDynamicSalary(teacher.id, students);
@@ -251,17 +246,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 opt2.textContent = `${teacher.name} (${teacher.id})`;
                 breakdownTeacherIdSelect.appendChild(opt2);
             }
-
-            if (splitTeacherIdSelect) {
-                const opt3 = document.createElement('option');
-                opt3.value = teacher.id;
-                opt3.textContent = `${teacher.name} (${teacher.id})`;
-                splitTeacherIdSelect.appendChild(opt3);
-            }
         });
     }
 
-    // Render student fee splits list in the splits management container
+    // Render student fee splits list as input fields for ALL teachers
     async function renderStudentFeeSplits(studentId) {
         if (!studentSplitsContainer) return;
         
@@ -278,54 +266,52 @@ document.addEventListener('DOMContentLoaded', async () => {
         splitStudentTotalFeesEl.textContent = `₹${(student.fees || 0).toLocaleString('en-IN')}`;
 
         const splits = student.feeSplits || [];
-        studentSplitsTableBody.innerHTML = '';
+        const splitsInputsList = document.getElementById('studentSplitsInputsList');
+        splitsInputsList.innerHTML = '';
 
         let totalAssigned = 0;
 
-        if (splits.length === 0) {
-            studentSplitsTableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-light);">No fee shares configured.</td></tr>';
+        if (teachers.length === 0) {
+            splitsInputsList.innerHTML = '<div style="grid-column: 1/-1; color: var(--text-light); font-style: italic;">No teachers created yet.</div>';
         } else {
-            splits.forEach(split => {
-                const teacher = teachers.find(t => t.id.toLowerCase() === split.teacherId.toLowerCase());
-                const teacherName = teacher ? teacher.name : 'Unknown';
-                const shareAmount = (student.fees || 0) * (split.percentage || 0) / 100;
-                totalAssigned += split.percentage;
+            teachers.forEach(teacher => {
+                const split = splits.find(s => s.teacherId.toLowerCase() === teacher.id.toLowerCase());
+                const currentVal = split ? split.percentage : 0;
+                totalAssigned += currentVal;
 
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${teacherName} <span style="font-size:0.8rem; color:var(--text-light);">(${split.teacherId})</span></td>
-                    <td>${split.percentage}%</td>
-                    <td class="text-right" style="text-align: right; font-weight:600;">₹${shareAmount.toLocaleString('en-IN')}</td>
-                    <td style="text-align: center;"><button type="button" class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #dc2626; border-color: #dc2626; font-size: 0.85rem;" onclick="removeFeeSplit('${student.id}', '${split.teacherId}')">Remove</button></td>
+                const div = document.createElement('div');
+                div.className = 'form-group';
+                div.style.margin = '0';
+                div.innerHTML = `
+                    <label style="font-weight: 500; font-size: 0.85rem; color: var(--text-dark); margin-bottom: 0.25rem; display: block;">${teacher.name} (${teacher.id})</label>
+                    <input type="number" class="form-input all-splits-percent-input" data-teacher-id="${teacher.id}" min="0" max="100" style="padding: 0.4rem; font-size: 0.9rem;" value="${currentVal}" oninput="updateLiveSplitsSum()">
                 `;
-                studentSplitsTableBody.appendChild(tr);
+                splitsInputsList.appendChild(div);
             });
         }
 
         splitStudentAssignedTotalEl.textContent = `${totalAssigned}%`;
-        if (totalAssigned >= 100) {
-            splitStudentAssignedTotalEl.style.color = '#dc2626'; // Red if 100% or over
+        if (totalAssigned > 100) {
+            splitStudentAssignedTotalEl.style.color = '#dc2626';
         } else {
-            splitStudentAssignedTotalEl.style.color = '#166534'; // Green if under
+            splitStudentAssignedTotalEl.style.color = '#166534';
         }
     }
 
-    // Window handler to remove a fee split
-    window.removeFeeSplit = async (studentId, teacherId) => {
-        const students = await DB.getStudents();
-        const idx = students.findIndex(s => s.id === studentId);
-        if (idx !== -1) {
-            const splits = students[idx].feeSplits || [];
-            students[idx].feeSplits = splits.filter(s => s.teacherId.toLowerCase() !== teacherId.toLowerCase());
-            await DB.setStudents(students);
-            await renderStudentFeeSplits(studentId);
-            await renderStudents();
-            await renderTeachers();
-            await calculateFinancials();
-            
-            // Refresh breakdown if active
-            if (breakdownTeacherIdSelect && breakdownTeacherIdSelect.value) {
-                renderTeacherBreakdown(breakdownTeacherIdSelect.value);
+    window.updateLiveSplitsSum = () => {
+        const percentInputs = document.querySelectorAll('.all-splits-percent-input');
+        let totalAssigned = 0;
+        percentInputs.forEach(input => {
+            totalAssigned += parseInt(input.value) || 0;
+        });
+        
+        const splitStudentAssignedTotalEl = document.getElementById('splitStudentAssignedTotal');
+        if (splitStudentAssignedTotalEl) {
+            splitStudentAssignedTotalEl.textContent = `${totalAssigned}%`;
+            if (totalAssigned > 100) {
+                splitStudentAssignedTotalEl.style.color = '#dc2626';
+            } else {
+                splitStudentAssignedTotalEl.style.color = '#166534';
             }
         }
     };
@@ -773,57 +759,47 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    if (addSplitForm) {
-        addSplitForm.addEventListener('submit', async (e) => {
+    if (saveAllSplitsForm) {
+        saveAllSplitsForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const studentId = splitStudentIdSelect.value;
-            const teacherId = document.getElementById('splitTeacherId').value;
-            const percentage = parseInt(document.getElementById('splitPercentage').value);
+            if (!studentId) return alert("Select student first.");
 
-            if (!studentId || !teacherId || isNaN(percentage) || percentage <= 0) {
-                return alert("Please select a student, a teacher, and a valid percentage.");
+            const percentInputs = document.querySelectorAll('.all-splits-percent-input');
+            let newFeeSplits = [];
+            let totalPercentage = 0;
+
+            percentInputs.forEach(input => {
+                const percentage = parseInt(input.value) || 0;
+                const teacherId = input.dataset.teacherId;
+                if (percentage > 0) {
+                    newFeeSplits.push({ teacherId, percentage });
+                    totalPercentage += percentage;
+                }
+            });
+
+            if (totalPercentage > 100) {
+                return alert(`Cannot save splits. Total fee share percentage among teachers (${totalPercentage}%) cannot exceed 100%.`);
             }
 
             const students = await DB.getStudents();
             const idx = students.findIndex(s => s.id === studentId);
-            if (idx === -1) return alert("Student not found.");
+            if (idx !== -1) {
+                students[idx].feeSplits = newFeeSplits;
+                await DB.setStudents(students);
+                
+                await renderStudentFeeSplits(studentId);
+                await renderStudents();
+                await renderTeachers();
+                await calculateFinancials();
 
-            const student = students[idx];
-            const splits = student.feeSplits || [];
+                // Refresh breakdown if active
+                if (breakdownTeacherIdSelect && breakdownTeacherIdSelect.value) {
+                    renderTeacherBreakdown(breakdownTeacherIdSelect.value);
+                }
 
-            // Calculate total existing percentage excluding this teacher if they already have a split
-            const existingSplitsFiltered = splits.filter(s => s.teacherId.toLowerCase() !== teacherId.toLowerCase());
-            const totalAssignedOther = existingSplitsFiltered.reduce((sum, s) => sum + (s.percentage || 0), 0);
-
-            if (totalAssignedOther + percentage > 100) {
-                return alert(`Cannot add split. Total share for student would exceed 100%. Remaining allowed share: ${100 - totalAssignedOther}%`);
+                alert("Fee share splits successfully updated in a single go!");
             }
-
-            // Update or add
-            const splitIndex = splits.findIndex(s => s.teacherId.toLowerCase() === teacherId.toLowerCase());
-            if (splitIndex !== -1) {
-                splits[splitIndex].percentage = percentage;
-            } else {
-                splits.push({ teacherId, percentage });
-            }
-
-            students[idx].feeSplits = splits;
-            await DB.setStudents(students);
-            
-            // Reset input and refresh UI
-            document.getElementById('splitPercentage').value = '';
-            document.getElementById('splitTeacherId').value = '';
-            await renderStudentFeeSplits(studentId);
-            await renderStudents();
-            await renderTeachers();
-            await calculateFinancials();
-
-            // Refresh breakdown if active
-            if (breakdownTeacherIdSelect && breakdownTeacherIdSelect.value === teacherId) {
-                renderTeacherBreakdown(teacherId);
-            }
-
-            alert("Fee share split successfully saved!");
         });
     }
 
