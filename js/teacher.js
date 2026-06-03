@@ -39,6 +39,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const feeStudentIdSelect = document.getElementById('feeStudentId');
     const feeCyclesTableBody = document.querySelector('#feeCyclesTable tbody');
 
+    // Attendance DOM Elements
+    const attendanceDateInput = document.getElementById('attendanceDate');
+    const attendanceTableBody = document.querySelector('#attendanceTable tbody');
+    const saveAttendanceBtn = document.getElementById('saveAttendanceBtn');
+    const attendanceOverviewTableBody = document.querySelector('#attendanceOverviewTable tbody');
+
     // Render Data functions
     async function renderSalaries() {
         const salariesTableBody = document.querySelector('#salariesTable tbody');
@@ -376,10 +382,186 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    // Attendance Logic implementation
+    const tzOffset = (new Date()).getTimezoneOffset() * 60000;
+    const todayStr = (new Date(Date.now() - tzOffset)).toISOString().split('T')[0];
+
+    if (attendanceDateInput) {
+        attendanceDateInput.value = todayStr;
+        attendanceDateInput.min = todayStr;
+        attendanceDateInput.addEventListener('change', renderAttendanceForm);
+    }
+
+    async function renderAttendanceForm() {
+        if (!attendanceTableBody || !attendanceDateInput) return;
+        const selectedDate = attendanceDateInput.value;
+        if (!selectedDate) return;
+
+        const students = await DB.getStudents();
+        const attendanceList = await DB.getAttendance();
+        const dayRecord = attendanceList.find(r => r.date === selectedDate);
+        
+        attendanceTableBody.innerHTML = '';
+        
+        if (students.length === 0) {
+            attendanceTableBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--text-light);">No active students found.</td></tr>';
+            return;
+        }
+
+        students.forEach(student => {
+            let status = 'present';
+            if (dayRecord && dayRecord.records && dayRecord.records[student.id]) {
+                status = dayRecord.records[student.id];
+            }
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${student.id}</td>
+                <td><strong>${student.name}</strong></td>
+                <td style="text-align: center;">
+                    <div class="attendance-toggle-group" style="display: flex; border: 1px solid var(--gray-300); border-radius: var(--radius-md); overflow: hidden; width: 120px; margin: 0 auto;" data-student-id="${student.id}" data-status="${status}">
+                        <button type="button" class="toggle-btn present-btn" style="flex: 1; border: none; padding: 0.35rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s;">P</button>
+                        <button type="button" class="toggle-btn absent-btn" style="flex: 1; border: none; padding: 0.35rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s;">A</button>
+                    </div>
+                </td>
+            `;
+            attendanceTableBody.appendChild(tr);
+
+            const toggleGroup = tr.querySelector('.attendance-toggle-group');
+            const pBtn = toggleGroup.querySelector('.present-btn');
+            const aBtn = toggleGroup.querySelector('.absent-btn');
+
+            function setUIStatus(newStatus) {
+                toggleGroup.dataset.status = newStatus;
+                if (newStatus === 'present') {
+                    pBtn.style.backgroundColor = '#22c55e';
+                    pBtn.style.color = 'white';
+                    aBtn.style.backgroundColor = '#f1f5f9';
+                    aBtn.style.color = 'var(--text-light)';
+                } else {
+                    aBtn.style.backgroundColor = '#ef4444';
+                    aBtn.style.color = 'white';
+                    pBtn.style.backgroundColor = '#f1f5f9';
+                    pBtn.style.color = 'var(--text-light)';
+                }
+            }
+
+            setUIStatus(status);
+
+            pBtn.addEventListener('click', () => setUIStatus('present'));
+            aBtn.addEventListener('click', () => setUIStatus('absent'));
+        });
+    }
+
+    async function renderAttendanceOverview() {
+        if (!attendanceOverviewTableBody) return;
+
+        const students = await DB.getStudents();
+        const attendanceList = await DB.getAttendance();
+
+        attendanceOverviewTableBody.innerHTML = '';
+
+        if (students.length === 0) {
+            attendanceOverviewTableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-light);">No active students.</td></tr>';
+            return;
+        }
+
+        students.forEach(student => {
+            let totalDays = 0;
+            let presentDays = 0;
+
+            attendanceList.forEach(day => {
+                if (day.records && day.records[student.id]) {
+                    totalDays++;
+                    if (day.records[student.id] === 'present') {
+                        presentDays++;
+                    }
+                }
+            });
+
+            const percentage = totalDays > 0 ? ((presentDays / totalDays) * 100).toFixed(1) : null;
+            const percentageText = percentage !== null ? `${percentage}%` : 'N/A';
+            const detailsText = totalDays > 0 ? `<small style="display:block; color:var(--text-light); font-size:0.75rem;">(${presentDays}/${totalDays} days)</small>` : '';
+
+            let color = '#64748b';
+            if (percentage !== null) {
+                const pct = parseFloat(percentage);
+                if (pct >= 85) {
+                    color = '#166534';
+                } else if (pct >= 75) {
+                    color = '#b45309';
+                } else {
+                    color = '#b91c1c';
+                }
+            }
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${student.id}</td>
+                <td><strong>${student.name}</strong></td>
+                <td><span class="badge" style="background:#e2e8f0; color:#475569;">${student.class || 'N/A'}</span></td>
+                <td style="text-align: right;">
+                    <span style="font-weight: 700; color: ${color};">${percentageText}</span>
+                    ${detailsText}
+                </td>
+            `;
+            attendanceOverviewTableBody.appendChild(tr);
+        });
+    }
+
+    if (saveAttendanceBtn) {
+        saveAttendanceBtn.addEventListener('click', async () => {
+            const selectedDate = attendanceDateInput.value;
+            if (!selectedDate) {
+                alert('Please select a valid date.');
+                return;
+            }
+
+            if (selectedDate < todayStr) {
+                alert('You can only take attendance from today onward.');
+                return;
+            }
+
+            const toggleGroups = document.querySelectorAll('.attendance-toggle-group');
+            const records = {};
+            toggleGroups.forEach(group => {
+                const studentId = group.dataset.studentId;
+                const status = group.dataset.status;
+                records[studentId] = status;
+            });
+
+            try {
+                const attendanceList = await DB.getAttendance();
+                const existingIdx = attendanceList.findIndex(r => r.date === selectedDate);
+                
+                const newRecord = {
+                    date: selectedDate,
+                    records: records,
+                    takenBy: user.id
+                };
+
+                if (existingIdx !== -1) {
+                    attendanceList[existingIdx] = newRecord;
+                } else {
+                    attendanceList.push(newRecord);
+                }
+
+                await DB.setAttendance(attendanceList);
+                alert('Attendance saved successfully!');
+                await renderAttendanceOverview();
+            } catch (err) {
+                console.error("Error saving attendance:", err);
+                alert("Error saving attendance: " + err.message);
+            }
+        });
+    }
+
     // Initial render
     await renderSalaries();
     await renderTests();
     await renderFeeStudents();
+    await renderAttendanceForm();
+    await renderAttendanceOverview();
 
     const salaryMonthSelector = document.getElementById('salaryMonthSelector');
     if (salaryMonthSelector) {

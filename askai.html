@@ -177,7 +177,12 @@
 
                 <div class="chat-input-area">
 
-                    <select id="subject-select">
+                    <select id="model-select" style="background: white; border-color: var(--gray-300); border-radius: 8px; font-weight: 600; padding: 0.5rem; outline: none; cursor: pointer; color: #1e3a8a;">
+                        <option value="api">☁️ Remote AI Agent</option>
+                        <option value="local">💻 Local ML/GenAI Model</option>
+                    </select>
+
+                    <select id="subject-select" style="color: #475569;">
                         <option value="general">General</option>
                         <option value="physics">Physics</option>
                         <option value="chemistry">Chemistry</option>
@@ -202,6 +207,232 @@
     <script>
 
         const API_URL = "https://text.pollinations.ai/"; // Changed to use free AI agent
+
+        // Core AI, ML, DL, and GenAI Concept Training Data
+        const localCorpus = [
+            {
+                intent: "physics_gravity",
+                keywords: ["gravity", "gravitation", "attraction", "mass", "earth", "force"],
+                text: "Gravity is a fundamental force of attraction acting between all matter with mass. Sir Isaac Newton formulated the Law of Universal Gravitation, stating that every mass exerts a gravitational pull proportional to its mass and inversely proportional to the square of the distance between them. In Einstein's General Relativity, gravity is described as the curvature of spacetime caused by mass and energy."
+            },
+            {
+                intent: "physics_energy",
+                keywords: ["energy", "work", "power", "kinetic", "potential", "conservation"],
+                text: "Energy is defined as the capacity to do work. It exists in various forms including kinetic energy (energy of motion: 1/2 * m * v²), potential energy (stored energy: m * g * h), thermal, chemical, and nuclear. The Law of Conservation of Energy states that energy can neither be created nor destroyed, only transformed from one form to another."
+            },
+            {
+                intent: "chemistry_atom",
+                keywords: ["atom", "atomic", "electron", "proton", "neutron", "nucleus", "matter"],
+                text: "An atom is the basic unit of a chemical element. It consists of a dense central nucleus containing positively charged protons and neutral neutrons, surrounded by a cloud of negatively charged electrons. Protons and neutrons are made of quarks, held together by the strong nuclear force."
+            },
+            {
+                intent: "chemistry_reaction",
+                keywords: ["reaction", "bond", "molecule", "compound", "reactant", "product", "equation"],
+                text: "A chemical reaction is a process where reactants are transformed into products by breaking and forming chemical bonds. Atoms are rearranged, but mass is conserved (Law of Conservation of Mass). Reactions are classified as synthesis, decomposition, combustion, single-displacement, or double-displacement."
+            },
+            {
+                intent: "math_calculus",
+                keywords: ["calculus", "derivative", "integration", "limit", "rate", "change", "area"],
+                text: "Calculus is the mathematical study of continuous change. It has two main branches: Differential Calculus, which deals with rates of change (derivatives: the slope of a curve), and Integral Calculus, which deals with accumulation of quantities (integrals: the area under a curve). They are connected by the Fundamental Theorem of Calculus."
+            },
+            {
+                intent: "math_algebra",
+                keywords: ["algebra", "equation", "variable", "formula", "solve", "matrix", "linear"],
+                text: "Algebra is a branch of mathematics dealing with symbols and the rules for manipulating them. Variables represent unknown quantities in equations, which are solved using arithmetic properties. Linear algebra extends this to systems of linear equations, vectors, and matrices, essential for machine learning."
+            },
+            {
+                intent: "admissions_fees",
+                keywords: ["fee", "fees", "cost", "price", "admission", "enroll", "join"],
+                text: "At Paradigm Classes, we offer dynamic, highly competitive fee structures for our PCM, boards, JEE, and NEET courses. For exact current structures and comparative course charts, please check our dynamic Course Fees Chart linked at the very footer of our pages!"
+            }
+        ];
+
+        const markovTrainingSentences = [
+            "Physics is the fundamental science that studies matter and energy through space and time.",
+            "Chemistry studies the composition structure properties and changes of chemical matter.",
+            "Mathematics is the language of science that uses numbers formulas and shapes to solve complex real-world equations.",
+            "Force equals mass times acceleration which is Newton's second law of motion.",
+            "An atom is the basic unit of an element consisting of protons neutrons and electrons.",
+            "Calculus measures rates of continuous change through derivatives and integration.",
+            "Linear algebra solves vector spaces and matrix equations which are core to artificial intelligence.",
+            "Gravity curves spacetime around massive objects causing gravitational attraction.",
+            "Chemical bonds form when atoms share or transfer valence electrons to achieve stability.",
+            "Energy is conserved and can only be transformed from potential to kinetic forms."
+        ];
+
+        // Custom Offline AI/ML Model Engine
+        class ParadigmNLPModel {
+            constructor() {
+                this.corpus = localCorpus;
+                this.stopwords = new Set(["the", "is", "a", "of", "to", "how", "what", "when", "why", "who", "which", "where", "and", "in", "on", "for", "with", "an", "at", "by", "from", "about", "are", "do", "does", "did", "can", "could", "will", "would", "should", "your", "my", "me", "you"]);
+                this.vocab = this.buildVocab();
+                this.docVectors = this.vectorizeCorpus();
+                this.markovModel = this.trainMarkovChain();
+            }
+
+            // NLP concept: Tokenization
+            tokenize(text) {
+                return text.toLowerCase()
+                    .replace(/[^\w\s]/g, ' ')
+                    .split(/\s+/)
+                    .filter(token => token.length > 0);
+            }
+
+            // NLP concept: Vocabulary assembly
+            buildVocab() {
+                const vocabSet = new Set();
+                this.corpus.forEach(doc => {
+                    doc.keywords.forEach(kw => vocabSet.add(kw));
+                    this.tokenize(doc.text).forEach(t => {
+                        if (!this.stopwords.has(t)) vocabSet.add(t);
+                    });
+                });
+                return Array.from(vocabSet);
+            }
+
+            // NLP/ML concept: Vector space feature extraction (TF representation)
+            vectorize(text) {
+                const tokens = this.tokenize(text);
+                const vector = new Array(this.vocab.length).fill(0);
+                
+                tokens.forEach(token => {
+                    const idx = this.vocab.indexOf(token);
+                    if (idx !== -1) {
+                        vector[idx] += 1;
+                    }
+                });
+                return vector;
+            }
+
+            vectorizeCorpus() {
+                return this.corpus.map(doc => {
+                    const vector = this.vectorize(doc.text);
+                    doc.keywords.forEach(kw => {
+                        const idx = this.vocab.indexOf(kw);
+                        if (idx !== -1) {
+                            vector[idx] += 5; // Extra weight to core key concepts
+                        }
+                    });
+                    return vector;
+                });
+            }
+
+            // ML/DL mathematical concept: Cosine Similarity
+            cosineSimilarity(vecA, vecB) {
+                let dotProduct = 0;
+                let normA = 0;
+                let normB = 0;
+                for (let i = 0; i < vecA.length; i++) {
+                    dotProduct += vecA[i] * vecB[i];
+                    normA += vecA[i] * vecA[i];
+                    normB += vecB[i] * vecB[i];
+                }
+                if (normA === 0 || normB === 0) return 0;
+                return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+            }
+
+            // ML concept: 1-NN Vector Space Similarity Classifier
+            classify(query) {
+                const queryVec = this.vectorize(query);
+                let bestIdx = -1;
+                let bestScore = 0;
+
+                for (let i = 0; i < this.docVectors.length; i++) {
+                    const score = this.cosineSimilarity(queryVec, this.docVectors[i]);
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestIdx = i;
+                    }
+                }
+                return { index: bestIdx, score: bestScore };
+            }
+
+            // GenAI concept: Autoregressive word transition training (Markov Chain)
+            trainMarkovChain() {
+                const model = {};
+                markovTrainingSentences.forEach(sentence => {
+                    const words = sentence.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").split(/\s+/).filter(w => w.length > 0);
+                    for (let i = 0; i < words.length - 1; i++) {
+                        const currentWord = words[i].toLowerCase();
+                        const nextWord = words[i + 1].toLowerCase();
+                        if (!model[currentWord]) {
+                            model[currentWord] = [];
+                        }
+                        model[currentWord].push(nextWord);
+                    }
+                });
+                return model;
+            }
+
+            // GenAI concept: Autoregressive text generation with greedy/probabilistic temperature sampling
+            generateText(seedWord, maxLength = 25, temperature = 0.7) {
+                let current = seedWord.toLowerCase();
+                let result = [seedWord];
+                
+                for (let i = 0; i < maxLength; i++) {
+                    const transitions = this.markovModel[current];
+                    if (!transitions || transitions.length === 0) {
+                        // Fallback transition
+                        const randomWords = Object.keys(this.markovModel);
+                        current = randomWords[Math.floor(Math.random() * randomWords.length)];
+                        result.push(current);
+                        continue;
+                    }
+
+                    let nextWord;
+                    if (temperature < 0.3) {
+                        // Low Temperature: greedy search (deterministic)
+                        const counts = {};
+                        let maxWord = transitions[0];
+                        let maxCount = 0;
+                        transitions.forEach(w => {
+                            counts[w] = (counts[w] || 0) + 1;
+                            if (counts[w] > maxCount) {
+                                maxCount = counts[w];
+                                maxWord = w;
+                            }
+                        });
+                        nextWord = maxWord;
+                    } else {
+                        // High Temperature: probabilistic transition search
+                        nextWord = transitions[Math.floor(Math.random() * transitions.length)];
+                    }
+
+                    result.push(nextWord);
+                    current = nextWord;
+                    
+                    if (["equations", "stability", "forms", "electrons", "time", "motion", "energy"].includes(nextWord)) {
+                        break;
+                    }
+                }
+                
+                let sentence = result.join(' ');
+                sentence = sentence.charAt(0).toUpperCase() + sentence.slice(1) + ".";
+                return sentence;
+            }
+
+            // Main inference trigger
+            predict(queryText) {
+                const { index, score } = this.classify(queryText);
+                
+                if (score >= 0.12 && index !== -1) {
+                    return `[💻 Custom Vector-Space Similarity ML Classifier (Similarity: ${(score * 100).toFixed(1)}%)]\n\n${this.corpus[index].text}`;
+                }
+                
+                // GenAI Autoregressive fallback
+                const tokens = this.tokenize(queryText).filter(t => !this.stopwords.has(t));
+                let seed = "physics";
+                if (tokens.length > 0) {
+                    const match = tokens.find(t => this.markovModel[t]);
+                    if (match) seed = match;
+                }
+
+                const generated = this.generateText(seed, 20, 0.7);
+                return `[💻 Custom Autoregressive GenAI Model (Markov Chain seed: '${seed}')]\n\nI could not find an exact match in my vector space, so I dynamically generated a PCM explanation for you: "${generated}"`;
+            }
+        }
+
+        const localModel = new ParadigmNLPModel();
 
         const chatBox = document.getElementById("chat-box");
         const input = document.getElementById("chat-input");
@@ -249,6 +480,19 @@
             addMessage(message, "user");
             input.value = "";
             showTyping();
+
+            // Intercept and route offline to local custom AI/ML model if selected
+            const modelSelect = document.getElementById("model-select");
+            const modelVal = modelSelect ? modelSelect.value : "api";
+
+            if (modelVal === "local") {
+                setTimeout(() => {
+                    const reply = localModel.predict(message);
+                    removeTyping();
+                    addMessage(reply, "ai");
+                }, 500); // Premium interactive delay
+                return;
+            }
 
             try {
                 // Compose prompt instructing the AI

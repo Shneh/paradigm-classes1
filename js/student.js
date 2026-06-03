@@ -9,6 +9,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const cumulativeScoreEl = document.getElementById('cumulativeScore');
     const feeCyclesTableBody = document.querySelector('#feeCyclesTable tbody');
 
+    // Attendance DOM Elements
+    const attendanceRateEl = document.getElementById('attendanceRate');
+    const attendanceTableBody = document.querySelector('#attendanceTable tbody');
+
     async function renderFees() {
         const students = await DB.getStudents();
         const student = students.find(s => s.id === user.id);
@@ -133,6 +137,70 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    async function renderAttendance() {
+        if (!attendanceTableBody || !attendanceRateEl) return;
+
+        const attendanceList = await DB.getAttendance();
+        
+        let totalDays = 0;
+        let presentDays = 0;
+        const records = [];
+
+        const sortedAttendance = [...attendanceList].sort((a, b) => b.date.localeCompare(a.date));
+
+        sortedAttendance.forEach(day => {
+            if (day.records && day.records[user.id]) {
+                totalDays++;
+                const status = day.records[user.id];
+                if (status === 'present') {
+                    presentDays++;
+                }
+                records.push({
+                    date: day.date,
+                    status: status,
+                    takenBy: day.takenBy || 'Teacher'
+                });
+            }
+        });
+
+        if (totalDays === 0) {
+            attendanceRateEl.textContent = 'N/A';
+            attendanceTableBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--text-light);">No attendance records found.</td></tr>';
+        } else {
+            const percentage = ((presentDays / totalDays) * 100).toFixed(1);
+            attendanceRateEl.textContent = `${percentage}%`;
+
+            let color = '#64748b';
+            if (percentage >= 85) {
+                color = '#166534';
+            } else if (percentage >= 75) {
+                color = '#b45309';
+            } else {
+                color = '#b91c1c';
+            }
+            attendanceRateEl.style.color = color;
+
+            attendanceTableBody.innerHTML = '';
+            records.forEach(rec => {
+                const tr = document.createElement('tr');
+                const badgeStyle = rec.status === 'present' 
+                    ? 'background: #dcfce7; color: #166534;' 
+                    : 'background: #fee2e2; color: #991b1b;';
+                const statusText = rec.status.toUpperCase();
+
+                tr.innerHTML = `
+                    <td>${DB.formatDate(rec.date)}</td>
+                    <td>
+                        <span class="badge" style="padding: 0.25rem 0.5rem; border-radius: 99px; font-weight: 700; font-size: 0.8rem; ${badgeStyle}">${statusText}</span>
+                    </td>
+                    <td>${rec.takenBy}</td>
+                `;
+                attendanceTableBody.appendChild(tr);
+            });
+        }
+    }
+
     await renderFees();
     await renderResults();
+    await renderAttendance();
 });

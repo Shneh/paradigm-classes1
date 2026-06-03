@@ -55,6 +55,9 @@ const DB = {
     getSalaries: async () => await getList('salaries'),
     setSalaries: async (salaries) => await setList('salaries', salaries),
 
+    getAttendance: async () => await getList('attendance'),
+    setAttendance: async (attendance) => await setList('attendance', attendance),
+
     getCourses: async () => await getList('courses'),
     setCourses: async (courses) => await setList('courses', courses),
     

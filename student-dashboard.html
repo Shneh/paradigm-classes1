@@ -76,9 +76,15 @@
                 <h1 class="section-title" style="margin: 0;" id="welcomeMessage">Welcome, Student</h1>
                 <p class="section-subtitle" style="margin-top:0.5rem;">View your performance records below.</p>
             </div>
-            <div class="stat-box" style="min-width: 200px;">
-                <div class="stat-value" id="cumulativeScore">0%</div>
-                <div class="stat-label">Cumulative Performance</div>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <div class="stat-box" style="min-width: 180px;">
+                    <div class="stat-value" id="cumulativeScore">0%</div>
+                    <div class="stat-label">Cumulative Performance</div>
+                </div>
+                <div class="stat-box" style="min-width: 180px;">
+                    <div class="stat-value" id="attendanceRate">0%</div>
+                    <div class="stat-label">Attendance Rate</div>
+                </div>
             </div>
         </div>
 
@@ -112,6 +118,21 @@
                             <th class="text-right">Max Marks</th>
                             <th class="text-right">Obtained Marks</th>
                             <th class="text-right">Percentage</th>
+                        </tr>
+                    </thead>
+                    <tbody><!-- Filled by JS --></tbody>
+                </table>
+        </div>
+
+        <div class="card">
+            <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--primary-color); margin-bottom: 1.5rem;">Your Attendance Records</h2>
+            <div style="overflow-x: auto;">
+                <table class="table" id="attendanceTable" style="min-width: 600px;">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Marked By</th>
                         </tr>
                     </thead>
                     <tbody><!-- Filled by JS --></tbody>

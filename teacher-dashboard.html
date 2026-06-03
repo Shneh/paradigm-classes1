@@ -103,11 +103,36 @@
                         </div>
                         <div style="font-size: 1.8rem; font-weight: 700; color: var(--primary-light);" id="teacherMonthlyReceived">₹0</div>
                         <div style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.2rem;" id="teacherMonthlyReceivedLabel">Selected Month</div>
+                </div>
+
+                <!-- Take Attendance Card -->
+                <div class="card">
+                    <h2 class="card-header">Take Attendance</h2>
+                    <div style="display: flex; gap: 1rem; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-bottom: 1rem;">
+                        <div class="form-group" style="margin-bottom: 0; display: flex; align-items: center; gap: 0.5rem;">
+                            <label for="attendanceDate" style="margin-bottom: 0; font-weight: 500; white-space: nowrap;">Select Date:</label>
+                            <input class="form-input" id="attendanceDate" type="date" required style="padding: 0.4rem; font-size: 0.9rem; width: auto; background: white; border-color: var(--gray-300);">
+                        </div>
+                        <button id="saveAttendanceBtn" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Save Attendance</button>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="table" id="attendanceTable" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Name</th>
+                                    <th style="width: 150px; text-align: center;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Filled by JS -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
                 <div class="card">
-                    <h2 class="card-header">1. Create New Test</h2>
+                    <h2 class="card-header">Create New Test</h2>
                     <form id="add-test-form">
                         <div class="form-group">
                             <label>Subject</label>
@@ -194,6 +219,26 @@
                             </thead>
                             <tbody>
                                 <tr><td colspan="6" style="text-align:center; color:var(--text-light);">Select a student to view fees.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Student Attendance Percentages Card -->
+                <div class="card">
+                    <h2 class="card-header">Student Attendance Percentages</h2>
+                    <div style="overflow-x: auto;">
+                        <table class="table" id="attendanceOverviewTable" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Name</th>
+                                    <th>Class</th>
+                                    <th style="text-align: right; width: 120px;">Percentage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Filled by JS -->
                             </tbody>
                         </table>
                     </div>
