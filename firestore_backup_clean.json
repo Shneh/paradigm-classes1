@@ -1,0 +1,943 @@
+{
+  "admin": {
+    "id": "admin",
+    "password": "shneh@1234"
+  },
+  "alumni": {
+    "list": [
+      {
+        "dateOfJoining": "2026-05-19",
+        "feePayments": [],
+        "password": "paradigm@123",
+        "convertedOn": "2026-05-23",
+        "fatherPhone": "",
+        "id": "s120",
+        "personalPhone": "",
+        "motherPhone": "9627002726",
+        "name": "Asad Hussain",
+        "fees": 1200,
+        "class": "XI"
+      },
+      {
+        "motherPhone": "8126888706",
+        "personalPhone": "",
+        "name": "Aditi Panwar",
+        "fees": 1200,
+        "class": "XII",
+        "dateOfJoining": "2026-05-20",
+        "convertedOn": "2026-05-23",
+        "password": "paradigm@123",
+        "feePayments": [],
+        "fatherPhone": "9410351514",
+        "id": "s121"
+      },
+      {
+        "dateOfJoining": "2026-04-14",
+        "convertedOn": "2026-05-29",
+        "password": "rashmyi307",
+        "feePayments": [
+          {
+            "paidOn": "2026-04-23",
+            "cycleStart": "2026-04-14",
+            "markedBy": "Admin",
+            "finePaid": 0
+          }
+        ],
+        "fatherPhone": "",
+        "id": "s108",
+        "motherPhone": "",
+        "personalPhone": "",
+        "name": "Rashmi Negi",
+        "class": "X",
+        "fees": 1300
+      },
+      {
+        "class": "X",
+        "fees": 1400,
+        "motherPhone": "7906459560",
+        "personalPhone": "",
+        "name": "Sonakshi Rawat",
+        "id": "s112",
+        "fatherPhone": "9058920995",
+        "convertedOn": "2026-06-01",
+        "feePayments": [],
+        "password": "sonakshi_S22",
+        "dateOfJoining": "2026-05-04"
+      }
+    ]
+  },
+  "announcement": {
+    "enabled": true,
+    "text": "Welcome to Paradigm Classes! Admissions are now open for the academic session 2026-2027. Enroll today!  | Fees for Integrated Batches are different from displayed ones. Kindly contact admin/teacher."
+  },
+  "attendance": {
+    "list": [
+      {
+        "takenBy": "t203",
+        "records": {
+          "s107": "present",
+          "s101": "present",
+          "s116": "present",
+          "s102": "present",
+          "s113": "present",
+          "s119": "present",
+          "s118": "present",
+          "s114": "present",
+          "s103": "present",
+          "s105": "absent",
+          "s110": "present",
+          "s106": "present",
+          "s104": "absent",
+          "s109": "present",
+          "s111": "present",
+          "s115": "present"
+        },
+        "date": "2026-06-03"
+      },
+      {
+        "date": "2026-06-04",
+        "records": {
+          "s119": "present",
+          "s113": "present",
+          "s118": "present",
+          "s107": "absent",
+          "s102": "present",
+          "s116": "present",
+          "s101": "present",
+          "s109": "present",
+          "s106": "present",
+          "s104": "present",
+          "s115": "absent",
+          "s111": "present",
+          "s103": "present",
+          "s114": "present",
+          "s110": "present",
+          "s105": "absent"
+        },
+        "takenBy": "t203"
+      }
+    ]
+  },
+  "courses": {
+    "list": [
+      {
+        "features": [
+          "Mathematics mastery",
+          "GAT preparation",
+          "SSB interview guidance"
+        ],
+        "title": "NDA Preparation + SSB",
+        "id": "course-nda",
+        "fees": 3000,
+        "description": "Specialized coaching for NDA aspirants with focus on Mathematics and General Ability Test."
+      },
+      {
+        "description": "Build a strong foundation in Physics, Chemistry, and Mathematics for board exams and future competitive preparations.",
+        "fees": 1500,
+        "id": "course-mpuz26tm",
+        "features": [
+          "RD Sharma-based curriculum",
+          "Regular practice tests",
+          "Board exam preparation"
+        ],
+        "title": "X FOUNDATION"
+      },
+      {
+        "title": "XI Math",
+        "features": [
+          "Board + Competitive focus",
+          "Advanced problem solving",
+          "Regular mock tests"
+        ],
+        "id": "course-mpuz4p28",
+        "fees": 1000,
+        "description": "Comprehensive coaching for board exams with special focus on building concepts for competitive exams."
+      },
+      {
+        "fees": 1100,
+        "id": "course-mpuz56ou",
+        "features": [
+          "Board + Competitive focus",
+          "Advanced problem solving",
+          "Regular mock tests"
+        ],
+        "title": "XII Math",
+        "description": "Comprehensive coaching for board exams with special focus on building concepts for competitive exams."
+      },
+      {
+        "title": "JEE (Main & Advanced)",
+        "features": [
+          "Topic-wise tests",
+          "Previous year papers",
+          "Full-length mock tests"
+        ],
+        "fees": 3000,
+        "id": "course-mpuz671s",
+        "description": "Specialized coaching for JEE aspirants with focus on conceptual clarity and problem-solving skills."
+      }
+    ]
+  },
+  "salaries": {
+    "list": [
+      {
+        "month": "2026-04",
+        "id": 1,
+        "teacherId": "t202",
+        "dateIssued": "2026-04-09",
+        "amount": 1000
+      },
+      {
+        "month": "2026-04",
+        "dateIssued": "2026-04-09",
+        "amount": 1600,
+        "teacherId": "t203",
+        "id": 2
+      },
+      {
+        "dateIssued": "2026-04-13",
+        "amount": 1000,
+        "id": 3,
+        "teacherId": "t202",
+        "month": "2026-04"
+      },
+      {
+        "month": "2026-04",
+        "teacherId": "t203",
+        "id": 4,
+        "dateIssued": "2026-04-13",
+        "amount": 1600
+      },
+      {
+        "dateIssued": "2026-04-18",
+        "amount": 2000,
+        "id": 5,
+        "teacherId": "t203",
+        "month": "2026-04"
+      },
+      {
+        "month": "2026-04",
+        "dateIssued": "2026-04-20",
+        "amount": 1400,
+        "teacherId": "t203",
+        "id": 6
+      },
+      {
+        "month": "2026-04",
+        "dateIssued": "2026-04-30",
+        "amount": 2095,
+        "teacherId": "t202",
+        "id": 7
+      },
+      {
+        "month": "2026-05",
+        "dateIssued": "2026-05-15",
+        "amount": 1000,
+        "teacherId": "t202",
+        "id": 8
+      },
+      {
+        "month": "2026-05",
+        "id": 9,
+        "teacherId": "t203",
+        "dateIssued": "2026-05-16",
+        "amount": 1550
+      },
+      {
+        "month": "2026-05",
+        "teacherId": "t203",
+        "id": 10,
+        "amount": 2500,
+        "dateIssued": "2026-05-16"
+      },
+      {
+        "month": "2026-05",
+        "amount": 1550,
+        "dateIssued": "2026-05-17",
+        "teacherId": "t203",
+        "id": 11
+      },
+      {
+        "month": "2026-05",
+        "id": 12,
+        "teacherId": "t203",
+        "dateIssued": "2026-05-18",
+        "amount": 1200
+      },
+      {
+        "dateIssued": "2026-05-29",
+        "amount": 4670,
+        "teacherId": "t202",
+        "id": 13,
+        "month": "2026-05"
+      },
+      {
+        "id": 14,
+        "teacherId": "t203",
+        "amount": 1452,
+        "dateIssued": "2026-06-01",
+        "month": "2026-06"
+      }
+    ]
+  },
+  "students": {
+    "list": [
+      {
+        "feeSplits": [
+          {
+            "percentage": 35,
+            "teacherId": "t202"
+          },
+          {
+            "percentage": 65,
+            "teacherId": "t203"
+          }
+        ],
+        "fees": 1400,
+        "class": "X",
+        "personalPhone": "9411339696",
+        "motherPhone": "8126356597",
+        "name": "Samiksha Ghildiyal",
+        "id": "s101",
+        "fatherPhone": "7060590660",
+        "feePayments": [
+          {
+            "cycleStart": "2026-04-18",
+            "paidOn": "2026-04-20",
+            "finePaid": 0,
+            "markedBy": "Admin"
+          },
+          {
+            "markedBy": "Admin",
+            "finePaid": 0,
+            "paidOn": "2026-05-17",
+            "cycleStart": "2026-05-18"
+          }
+        ],
+        "password": "waffle",
+        "dateOfJoining": "2026-04-18"
+      },
+      {
+        "name": "Abhinav Rana",
+        "personalPhone": "",
+        "motherPhone": "8958102151",
+        "fees": 1300,
+        "class": "X",
+        "feeSplits": [
+          {
+            "teacherId": "t202",
+            "percentage": 35
+          },
+          {
+            "teacherId": "t203",
+            "percentage": 65
+          }
+        ],
+        "feePayments": [
+          {
+            "paidOn": "2026-04-12",
+            "cycleStart": "2026-04-11",
+            "markedBy": "Admin",
+            "finePaid": 0
+          }
+        ],
+        "password": "akkibhai",
+        "dateOfJoining": "2026-04-11",
+        "id": "s102",
+        "fatherPhone": "7248584090"
+      },
+      {
+        "name": "Aditi Giroti",
+        "personalPhone": "8475021138",
+        "motherPhone": "9627793897",
+        "fees": 1300,
+        "class": "X",
+        "feeSplits": [
+          {
+            "teacherId": "t202",
+            "percentage": 35
+          },
+          {
+            "teacherId": "t203",
+            "percentage": 65
+          }
+        ],
+        "feePayments": [
+          {
+            "markedBy": "Admin",
+            "finePaid": 0,
+            "paidOn": "2026-04-13",
+            "cycleStart": "2026-04-09"
+          },
+          {
+            "finePaid": 0,
+            "markedBy": "Admin",
+            "cycleStart": "2026-05-09",
+            "paidOn": "2026-05-12"
+          }
+        ],
+        "password": "8475021138@aditi",
+        "dateOfJoining": "2026-04-09",
+        "id": "s103",
+        "fatherPhone": "9719581086"
+      },
+      {
+        "password": "ayushsanu",
+        "feePayments": [
+          {
+            "markedBy": "Admin",
+            "finePaid": 0,
+            "paidOn": "2026-04-07",
+            "cycleStart": "2026-04-04"
+          },
+          {
+            "markedBy": "Admin",
+            "finePaid": 0,
+            "paidOn": "2026-05-07",
+            "cycleStart": "2026-05-04"
+          }
+        ],
+        "dateOfJoining": "2026-04-04",
+        "id": "s104",
+        "fatherPhone": "",
+        "personalPhone": "",
+        "motherPhone": "9675703897",
+        "name": "Ayush Rawat",
+        "feeSplits": [
+          {
+            "teacherId": "t202",
+            "percentage": 50
+          },
+          {
+            "teacherId": "t203",
+            "percentage": 50
+          }
+        ],
+        "class": "X",
+        "fees": 1000
+      },
+      {
+        "fees": 1300,
+        "class": "X",
+        "feeSplits": [
+          {
+            "percentage": 35,
+            "teacherId": "t202"
+          },
+          {
+            "teacherId": "t203",
+            "percentage": 65
+          }
+        ],
+        "name": "Harshit Maithani",
+        "motherPhone": "8979717523",
+        "personalPhone": "",
+        "id": "s105",
+        "fatherPhone": "9720437635",
+        "feePayments": [
+          {
+            "paidOn": "2026-04-13",
+            "cycleStart": "2026-04-03",
+            "markedBy": "Admin",
+            "finePaid": 150
+          },
+          {
+            "finePaid": 0,
+            "markedBy": "Admin",
+            "cycleStart": "2026-05-03",
+            "paidOn": "2026-05-04"
+          }
+        ],
+        "password": "maakali",
+        "dateOfJoining": "2026-04-03"
+      },
+      {
+        "personalPhone": "",
+        "motherPhone": "9719815881",
+        "name": "Anshi Rana",
+        "feeSplits": [
+          {
+            "percentage": 35,
+            "teacherId": "t202"
+          },
+          {
+            "teacherId": "t203",
+            "percentage": 65
+          }
+        ],
+        "class": "X",
+        "fees": 1300,
+        "dateOfJoining": "2026-04-09",
+        "feePayments": [
+          {
+            "paidOn": "2026-04-04",
+            "cycleStart": "2026-04-09",
+            "markedBy": "Admin",
+            "finePaid": 0
+          },
+          {
+            "markedBy": "Admin",
+            "finePaid": 0,
+            "paidOn": "2026-05-12",
+            "cycleStart": "2026-05-09"
+          }
+        ],
+        "password": "paradigm@123",
+        "fatherPhone": "",
+        "id": "s106"
+      },
+      {
+        "fatherPhone": "8279427180",
+        "id": "s107",
+        "dateOfJoining": "2026-04-18",
+        "feePayments": [
+          {
+            "finePaid": 0,
+            "markedBy": "Admin",
+            "cycleStart": "2026-04-18",
+            "paidOn": "2026-04-19"
+          }
+        ],
+        "password": "paradigm@123",
+        "feeSplits": [
+          {
+            "teacherId": "t202",
+            "percentage": 35
+          },
+          {
+            "percentage": 65,
+            "teacherId": "t203"
+          }
+        ],
+        "fees": 1400,
+        "class": "X",
+        "motherPhone": "8958060015",
+        "personalPhone": "",
+        "name": "Lavanya Pegwal"
+      },
+      {
+        "feePayments": [
+          {
+            "markedBy": "Admin",
+            "finePaid": 0,
+            "paidOn": "2026-04-07",
+            "cycleStart": "2026-04-03"
+          },
+          {
+            "paidOn": "2026-05-06",
+            "cycleStart": "2026-05-03",
+            "markedBy": "Admin",
+            "finePaid": 0
+          }
+        ],
+        "password": "khushi8954",
+        "dateOfJoining": "2026-04-03",
+        "id": "s109",
+        "fatherPhone": "8954340847",
+        "name": "Khushi Senwal",
+        "personalPhone": "",
+        "motherPhone": "",
+        "class": "X",
+        "fees": 1300,
+        "feeSplits": [
+          {
+            "teacherId": "t202",
+            "percentage": 35
+          },
+          {
+            "percentage": 65,
+            "teacherId": "t203"
+          }
+        ]
+      },
+      {
+        "feeSplits": [
+          {
+            "percentage": 100,
+            "teacherId": "t203"
+          }
+        ],
+        "id": "s110",
+        "fees": 2000,
+        "class": "XII",
+        "feePayments": [
+          {
+            "paidOn": "2026-04-15",
+            "cycleStart": "2026-04-13",
+            "markedBy": "Admin",
+            "finePaid": 0
+          },
+          {
+            "cycleStart": "2026-05-13",
+            "paidOn": "2026-05-14",
+            "finePaid": 0,
+            "markedBy": "Admin"
+          }
+        ],
+        "password": "harshita29",
+        "name": "Harshita Negi",
+        "dateOfJoining": "2026-04-13"
+      },
+      {
+        "personalPhone": "",
+        "motherPhone": "6396217516",
+        "name": "Sagar Rawat",
+        "feeSplits": [
+          {
+            "percentage": 35,
+            "teacherId": "t202"
+          },
+          {
+            "percentage": 65,
+            "teacherId": "t203"
+          }
+        ],
+        "class": "X",
+        "fees": 1400,
+        "dateOfJoining": "2026-05-01",
+        "feePayments": [
+          {
+            "cycleStart": "2026-05-01",
+            "paidOn": "2026-05-05",
+            "finePaid": 0,
+            "markedBy": "Admin"
+          }
+        ],
+        "password": "sagarrawat",
+        "fatherPhone": "7983178233",
+        "id": "s111"
+      },
+      {
+        "dateOfJoining": "2026-05-04",
+        "feePayments": [
+          {
+            "paidOn": "2026-05-08",
+            "cycleStart": "2026-05-04",
+            "markedBy": "Admin",
+            "finePaid": 0
+          }
+        ],
+        "password": "yukiti 90",
+        "fatherPhone": "7678691088",
+        "id": "s113",
+        "personalPhone": "",
+        "motherPhone": "8800423967",
+        "name": "Yuktika Negi",
+        "feeSplits": [
+          {
+            "percentage": 35,
+            "teacherId": "t202"
+          },
+          {
+            "teacherId": "t203",
+            "percentage": 65
+          }
+        ],
+        "fees": 1400,
+        "class": "X"
+      },
+      {
+        "dateOfJoining": "2026-05-04",
+        "password": "aisha @123",
+        "feePayments": [
+          {
+            "cycleStart": "2026-05-04",
+            "paidOn": "2026-05-09",
+            "finePaid": 0,
+            "markedBy": "Admin"
+          }
+        ],
+        "fatherPhone": "",
+        "id": "s114",
+        "name": "Aisha Kaintura",
+        "personalPhone": "",
+        "motherPhone": "7817030337",
+        "class": "X",
+        "fees": 1400,
+        "feeSplits": [
+          {
+            "teacherId": "t202",
+            "percentage": 35
+          },
+          {
+            "percentage": 65,
+            "teacherId": "t203"
+          }
+        ]
+      },
+      {
+        "dateOfJoining": "2026-05-13",
+        "feePayments": [
+          {
+            "markedBy": "Admin",
+            "finePaid": 210,
+            "paidOn": "2026-05-25",
+            "cycleStart": "2026-05-13"
+          }
+        ],
+        "password": "soumil@123",
+        "fatherPhone": "9927972182",
+        "id": "s115",
+        "personalPhone": "9520273690",
+        "motherPhone": "8076466227",
+        "name": "Soumil Bartwal",
+        "feeSplits": [
+          {
+            "teacherId": "t203",
+            "percentage": 100
+          }
+        ],
+        "fees": 2500,
+        "class": "NDA"
+      },
+      {
+        "name": "Naman Bhandari",
+        "personalPhone": "7302042808",
+        "motherPhone": "9634237408",
+        "fees": 2500,
+        "class": "NDA",
+        "feeSplits": [
+          {
+            "teacherId": "t203",
+            "percentage": 100
+          }
+        ],
+        "dateOfJoining": "2026-05-13",
+        "password": "iamdevil",
+        "feePayments": [
+          {
+            "finePaid": 300,
+            "markedBy": "Admin",
+            "cycleStart": "2026-05-13",
+            "paidOn": "2026-05-28"
+          }
+        ],
+        "fatherPhone": "9917094040",
+        "id": "s116"
+      },
+      {
+        "fatherPhone": "6395218052",
+        "id": "s118",
+        "dateOfJoining": "2026-05-15",
+        "feePayments": [
+          {
+            "markedBy": "Admin",
+            "finePaid": 0,
+            "paidOn": "2026-05-18",
+            "cycleStart": "2026-05-15"
+          }
+        ],
+        "password": "muskan gusain 2312",
+        "feeSplits": [
+          {
+            "percentage": 100,
+            "teacherId": "t203"
+          }
+        ],
+        "class": "XI",
+        "fees": 1200,
+        "personalPhone": "9258954184",
+        "motherPhone": "8279893159",
+        "name": "Muskan Gussain"
+      },
+      {
+        "fees": 2500,
+        "class": "NDA",
+        "feeSplits": [
+          {
+            "percentage": 100,
+            "teacherId": "t203"
+          }
+        ],
+        "name": "Priyanshu Bisht",
+        "motherPhone": "9760059009",
+        "personalPhone": "8979033718",
+        "id": "s119",
+        "fatherPhone": "8218752720",
+        "password": "14711471",
+        "feePayments": [
+          {
+            "finePaid": 0,
+            "markedBy": "Admin",
+            "cycleStart": "2026-05-16",
+            "paidOn": "2026-05-16"
+          }
+        ],
+        "dateOfJoining": "2026-05-16"
+      }
+    ]
+  },
+  "teachers": {
+    "list": [
+      {
+        "name": "Harshita Semwal",
+        "id": "t202",
+        "password": "paradigmhunny678",
+        "currentSalary": 5670
+      },
+      {
+        "currentSalary": 22430,
+        "password": "shneh@1234",
+        "id": "t203",
+        "name": "Shneh Rawat"
+      }
+    ]
+  },
+  "tests": {
+    "list": [
+      {
+        "date": "2026-05-24",
+        "subject": "MATH 04",
+        "published": true,
+        "id": 3,
+        "maxMarks": 40,
+        "marks": [
+          {
+            "studentId": "s101",
+            "mark": 6
+          },
+          {
+            "studentId": "s102",
+            "mark": 4
+          },
+          {
+            "studentId": "s103",
+            "mark": 4
+          },
+          {
+            "studentId": "s104",
+            "mark": 5
+          },
+          {
+            "studentId": "s105",
+            "mark": 5
+          },
+          {
+            "studentId": "s106",
+            "mark": 6
+          },
+          {
+            "studentId": "s107",
+            "mark": 0
+          },
+          {
+            "studentId": "s108",
+            "mark": 0
+          },
+          {
+            "studentId": "s109",
+            "mark": 1
+          },
+          {
+            "studentId": "s110",
+            "mark": 19
+          },
+          {
+            "studentId": "s111",
+            "mark": 4
+          },
+          {
+            "studentId": "s112",
+            "mark": 11
+          },
+          {
+            "studentId": "s113",
+            "mark": 2
+          },
+          {
+            "studentId": "s114",
+            "mark": 4
+          },
+          {
+            "studentId": "s115",
+            "mark": 5
+          },
+          {
+            "studentId": "s116",
+            "mark": 2
+          },
+          {
+            "studentId": "s118",
+            "mark": 31
+          },
+          {
+            "studentId": "s119",
+            "mark": 5
+          }
+        ]
+      },
+      {
+        "maxMarks": 30,
+        "id": 2,
+        "marks": [
+          {
+            "studentId": "s101",
+            "mark": 23
+          },
+          {
+            "studentId": "s102",
+            "mark": 6
+          },
+          {
+            "studentId": "s103",
+            "mark": 15
+          },
+          {
+            "mark": 16,
+            "studentId": "s104"
+          },
+          {
+            "mark": 14,
+            "studentId": "s105"
+          },
+          {
+            "studentId": "s106",
+            "mark": 17
+          },
+          {
+            "mark": 5,
+            "studentId": "s108"
+          },
+          {
+            "mark": 24,
+            "studentId": "s110"
+          }
+        ],
+        "published": true,
+        "subject": "CHEM(1)",
+        "date": "2026-05-01"
+      },
+      {
+        "date": "2026-04-18",
+        "maxMarks": 30,
+        "id": 1,
+        "marks": [
+          {
+            "mark": 8,
+            "studentId": "s102"
+          },
+          {
+            "mark": 12,
+            "studentId": "s103"
+          },
+          {
+            "mark": 23,
+            "studentId": "s104"
+          },
+          {
+            "mark": 14,
+            "studentId": "s105"
+          },
+          {
+            "studentId": "s106",
+            "mark": 7
+          }
+        ],
+        "published": true,
+        "subject": "MATH(1)"
+      }
+    ]
+  },
+  "visitors": {
+    "count": 548
+  }
+}

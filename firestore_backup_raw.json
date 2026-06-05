@@ -1,0 +1,2837 @@
+{
+  "documents": [
+    {
+      "name": "projects/paradigm-classes/databases/(default)/documents/appData/admin",
+      "fields": {
+        "id": {
+          "stringValue": "admin"
+        },
+        "password": {
+          "stringValue": "shneh@1234"
+        }
+      },
+      "createTime": "2026-04-02T15:15:31.142295Z",
+      "updateTime": "2026-04-02T15:23:14.136068Z"
+    },
+    {
+      "name": "projects/paradigm-classes/databases/(default)/documents/appData/alumni",
+      "fields": {
+        "list": {
+          "arrayValue": {
+            "values": [
+              {
+                "mapValue": {
+                  "fields": {
+                    "dateOfJoining": {
+                      "stringValue": "2026-05-19"
+                    },
+                    "feePayments": {
+                      "arrayValue": {}
+                    },
+                    "password": {
+                      "stringValue": "paradigm@123"
+                    },
+                    "convertedOn": {
+                      "stringValue": "2026-05-23"
+                    },
+                    "fatherPhone": {
+                      "stringValue": ""
+                    },
+                    "id": {
+                      "stringValue": "s120"
+                    },
+                    "personalPhone": {
+                      "stringValue": ""
+                    },
+                    "motherPhone": {
+                      "stringValue": "9627002726"
+                    },
+                    "name": {
+                      "stringValue": "Asad Hussain"
+                    },
+                    "fees": {
+                      "integerValue": "1200"
+                    },
+                    "class": {
+                      "stringValue": "XI"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "motherPhone": {
+                      "stringValue": "8126888706"
+                    },
+                    "personalPhone": {
+                      "stringValue": ""
+                    },
+                    "name": {
+                      "stringValue": "Aditi Panwar"
+                    },
+                    "fees": {
+                      "integerValue": "1200"
+                    },
+                    "class": {
+                      "stringValue": "XII"
+                    },
+                    "dateOfJoining": {
+                      "stringValue": "2026-05-20"
+                    },
+                    "convertedOn": {
+                      "stringValue": "2026-05-23"
+                    },
+                    "password": {
+                      "stringValue": "paradigm@123"
+                    },
+                    "feePayments": {
+                      "arrayValue": {}
+                    },
+                    "fatherPhone": {
+                      "stringValue": "9410351514"
+                    },
+                    "id": {
+                      "stringValue": "s121"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "dateOfJoining": {
+                      "stringValue": "2026-04-14"
+                    },
+                    "convertedOn": {
+                      "stringValue": "2026-05-29"
+                    },
+                    "password": {
+                      "stringValue": "rashmyi307"
+                    },
+                    "feePayments": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "paidOn": {
+                                  "stringValue": "2026-04-23"
+                                },
+                                "cycleStart": {
+                                  "stringValue": "2026-04-14"
+                                },
+                                "markedBy": {
+                                  "stringValue": "Admin"
+                                },
+                                "finePaid": {
+                                  "integerValue": "0"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "fatherPhone": {
+                      "stringValue": ""
+                    },
+                    "id": {
+                      "stringValue": "s108"
+                    },
+                    "motherPhone": {
+                      "stringValue": ""
+                    },
+                    "personalPhone": {
+                      "stringValue": ""
+                    },
+                    "name": {
+                      "stringValue": "Rashmi Negi"
+                    },
+                    "class": {
+                      "stringValue": "X"
+                    },
+                    "fees": {
+                      "integerValue": "1300"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "class": {
+                      "stringValue": "X"
+                    },
+                    "fees": {
+                      "integerValue": "1400"
+                    },
+                    "motherPhone": {
+                      "stringValue": "7906459560"
+                    },
+                    "personalPhone": {
+                      "stringValue": ""
+                    },
+                    "name": {
+                      "stringValue": "Sonakshi Rawat"
+                    },
+                    "id": {
+                      "stringValue": "s112"
+                    },
+                    "fatherPhone": {
+                      "stringValue": "9058920995"
+                    },
+                    "convertedOn": {
+                      "stringValue": "2026-06-01"
+                    },
+                    "feePayments": {
+                      "arrayValue": {}
+                    },
+                    "password": {
+                      "stringValue": "sonakshi_S22"
+                    },
+                    "dateOfJoining": {
+                      "stringValue": "2026-05-04"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "createTime": "2026-05-16T07:41:29.276557Z",
+      "updateTime": "2026-06-01T08:24:35.469888Z"
+    },
+    {
+      "name": "projects/paradigm-classes/databases/(default)/documents/appData/announcement",
+      "fields": {
+        "enabled": {
+          "booleanValue": true
+        },
+        "text": {
+          "stringValue": "Welcome to Paradigm Classes! Admissions are now open for the academic session 2026-2027. Enroll today!  | Fees for Integrated Batches are different from displayed ones. Kindly contact admin/teacher."
+        }
+      },
+      "createTime": "2026-06-01T10:14:19.854671Z",
+      "updateTime": "2026-06-02T16:57:48.746510Z"
+    },
+    {
+      "name": "projects/paradigm-classes/databases/(default)/documents/appData/attendance",
+      "fields": {
+        "list": {
+          "arrayValue": {
+            "values": [
+              {
+                "mapValue": {
+                  "fields": {
+                    "takenBy": {
+                      "stringValue": "t203"
+                    },
+                    "records": {
+                      "mapValue": {
+                        "fields": {
+                          "s107": {
+                            "stringValue": "present"
+                          },
+                          "s101": {
+                            "stringValue": "present"
+                          },
+                          "s116": {
+                            "stringValue": "present"
+                          },
+                          "s102": {
+                            "stringValue": "present"
+                          },
+                          "s113": {
+                            "stringValue": "present"
+                          },
+                          "s119": {
+                            "stringValue": "present"
+                          },
+                          "s118": {
+                            "stringValue": "present"
+                          },
+                          "s114": {
+                            "stringValue": "present"
+                          },
+                          "s103": {
+                            "stringValue": "present"
+                          },
+                          "s105": {
+                            "stringValue": "absent"
+                          },
+                          "s110": {
+                            "stringValue": "present"
+                          },
+                          "s106": {
+                            "stringValue": "present"
+                          },
+                          "s104": {
+                            "stringValue": "absent"
+                          },
+                          "s109": {
+                            "stringValue": "present"
+                          },
+                          "s111": {
+                            "stringValue": "present"
+                          },
+                          "s115": {
+                            "stringValue": "present"
+                          }
+                        }
+                      }
+                    },
+                    "date": {
+                      "stringValue": "2026-06-03"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "date": {
+                      "stringValue": "2026-06-04"
+                    },
+                    "records": {
+                      "mapValue": {
+                        "fields": {
+                          "s119": {
+                            "stringValue": "present"
+                          },
+                          "s113": {
+                            "stringValue": "present"
+                          },
+                          "s118": {
+                            "stringValue": "present"
+                          },
+                          "s107": {
+                            "stringValue": "absent"
+                          },
+                          "s102": {
+                            "stringValue": "present"
+                          },
+                          "s116": {
+                            "stringValue": "present"
+                          },
+                          "s101": {
+                            "stringValue": "present"
+                          },
+                          "s109": {
+                            "stringValue": "present"
+                          },
+                          "s106": {
+                            "stringValue": "present"
+                          },
+                          "s104": {
+                            "stringValue": "present"
+                          },
+                          "s115": {
+                            "stringValue": "absent"
+                          },
+                          "s111": {
+                            "stringValue": "present"
+                          },
+                          "s103": {
+                            "stringValue": "present"
+                          },
+                          "s114": {
+                            "stringValue": "present"
+                          },
+                          "s110": {
+                            "stringValue": "present"
+                          },
+                          "s105": {
+                            "stringValue": "absent"
+                          }
+                        }
+                      }
+                    },
+                    "takenBy": {
+                      "stringValue": "t203"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "createTime": "2026-06-03T10:39:16.109747Z",
+      "updateTime": "2026-06-04T11:52:52.252071Z"
+    },
+    {
+      "name": "projects/paradigm-classes/databases/(default)/documents/appData/courses",
+      "fields": {
+        "list": {
+          "arrayValue": {
+            "values": [
+              {
+                "mapValue": {
+                  "fields": {
+                    "features": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "stringValue": "Mathematics mastery"
+                          },
+                          {
+                            "stringValue": "GAT preparation"
+                          },
+                          {
+                            "stringValue": "SSB interview guidance"
+                          }
+                        ]
+                      }
+                    },
+                    "title": {
+                      "stringValue": "NDA Preparation + SSB"
+                    },
+                    "id": {
+                      "stringValue": "course-nda"
+                    },
+                    "fees": {
+                      "integerValue": "3000"
+                    },
+                    "description": {
+                      "stringValue": "Specialized coaching for NDA aspirants with focus on Mathematics and General Ability Test."
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "description": {
+                      "stringValue": "Build a strong foundation in Physics, Chemistry, and Mathematics for board exams and future competitive preparations."
+                    },
+                    "fees": {
+                      "integerValue": "1500"
+                    },
+                    "id": {
+                      "stringValue": "course-mpuz26tm"
+                    },
+                    "features": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "stringValue": "RD Sharma-based curriculum"
+                          },
+                          {
+                            "stringValue": "Regular practice tests"
+                          },
+                          {
+                            "stringValue": "Board exam preparation"
+                          }
+                        ]
+                      }
+                    },
+                    "title": {
+                      "stringValue": "X FOUNDATION"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "title": {
+                      "stringValue": "XI Math"
+                    },
+                    "features": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "stringValue": "Board + Competitive focus"
+                          },
+                          {
+                            "stringValue": "Advanced problem solving"
+                          },
+                          {
+                            "stringValue": "Regular mock tests"
+                          }
+                        ]
+                      }
+                    },
+                    "id": {
+                      "stringValue": "course-mpuz4p28"
+                    },
+                    "fees": {
+                      "integerValue": "1000"
+                    },
+                    "description": {
+                      "stringValue": "Comprehensive coaching for board exams with special focus on building concepts for competitive exams."
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "fees": {
+                      "integerValue": "1100"
+                    },
+                    "id": {
+                      "stringValue": "course-mpuz56ou"
+                    },
+                    "features": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "stringValue": "Board + Competitive focus"
+                          },
+                          {
+                            "stringValue": "Advanced problem solving"
+                          },
+                          {
+                            "stringValue": "Regular mock tests"
+                          }
+                        ]
+                      }
+                    },
+                    "title": {
+                      "stringValue": "XII Math"
+                    },
+                    "description": {
+                      "stringValue": "Comprehensive coaching for board exams with special focus on building concepts for competitive exams."
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "title": {
+                      "stringValue": "JEE (Main & Advanced)"
+                    },
+                    "features": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "stringValue": "Topic-wise tests"
+                          },
+                          {
+                            "stringValue": "Previous year papers"
+                          },
+                          {
+                            "stringValue": "Full-length mock tests"
+                          }
+                        ]
+                      }
+                    },
+                    "fees": {
+                      "integerValue": "3000"
+                    },
+                    "id": {
+                      "stringValue": "course-mpuz671s"
+                    },
+                    "description": {
+                      "stringValue": "Specialized coaching for JEE aspirants with focus on conceptual clarity and problem-solving skills."
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "createTime": "2026-06-01T08:50:18.526735Z",
+      "updateTime": "2026-06-01T08:59:10.627870Z"
+    },
+    {
+      "name": "projects/paradigm-classes/databases/(default)/documents/appData/salaries",
+      "fields": {
+        "list": {
+          "arrayValue": {
+            "values": [
+              {
+                "mapValue": {
+                  "fields": {
+                    "month": {
+                      "stringValue": "2026-04"
+                    },
+                    "id": {
+                      "integerValue": "1"
+                    },
+                    "teacherId": {
+                      "stringValue": "t202"
+                    },
+                    "dateIssued": {
+                      "stringValue": "2026-04-09"
+                    },
+                    "amount": {
+                      "integerValue": "1000"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "month": {
+                      "stringValue": "2026-04"
+                    },
+                    "dateIssued": {
+                      "stringValue": "2026-04-09"
+                    },
+                    "amount": {
+                      "integerValue": "1600"
+                    },
+                    "teacherId": {
+                      "stringValue": "t203"
+                    },
+                    "id": {
+                      "integerValue": "2"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "dateIssued": {
+                      "stringValue": "2026-04-13"
+                    },
+                    "amount": {
+                      "integerValue": "1000"
+                    },
+                    "id": {
+                      "integerValue": "3"
+                    },
+                    "teacherId": {
+                      "stringValue": "t202"
+                    },
+                    "month": {
+                      "stringValue": "2026-04"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "month": {
+                      "stringValue": "2026-04"
+                    },
+                    "teacherId": {
+                      "stringValue": "t203"
+                    },
+                    "id": {
+                      "integerValue": "4"
+                    },
+                    "dateIssued": {
+                      "stringValue": "2026-04-13"
+                    },
+                    "amount": {
+                      "integerValue": "1600"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "dateIssued": {
+                      "stringValue": "2026-04-18"
+                    },
+                    "amount": {
+                      "integerValue": "2000"
+                    },
+                    "id": {
+                      "integerValue": "5"
+                    },
+                    "teacherId": {
+                      "stringValue": "t203"
+                    },
+                    "month": {
+                      "stringValue": "2026-04"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "month": {
+                      "stringValue": "2026-04"
+                    },
+                    "dateIssued": {
+                      "stringValue": "2026-04-20"
+                    },
+                    "amount": {
+                      "integerValue": "1400"
+                    },
+                    "teacherId": {
+                      "stringValue": "t203"
+                    },
+                    "id": {
+                      "integerValue": "6"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "month": {
+                      "stringValue": "2026-04"
+                    },
+                    "dateIssued": {
+                      "stringValue": "2026-04-30"
+                    },
+                    "amount": {
+                      "integerValue": "2095"
+                    },
+                    "teacherId": {
+                      "stringValue": "t202"
+                    },
+                    "id": {
+                      "integerValue": "7"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "month": {
+                      "stringValue": "2026-05"
+                    },
+                    "dateIssued": {
+                      "stringValue": "2026-05-15"
+                    },
+                    "amount": {
+                      "integerValue": "1000"
+                    },
+                    "teacherId": {
+                      "stringValue": "t202"
+                    },
+                    "id": {
+                      "integerValue": "8"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "month": {
+                      "stringValue": "2026-05"
+                    },
+                    "id": {
+                      "integerValue": "9"
+                    },
+                    "teacherId": {
+                      "stringValue": "t203"
+                    },
+                    "dateIssued": {
+                      "stringValue": "2026-05-16"
+                    },
+                    "amount": {
+                      "integerValue": "1550"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "month": {
+                      "stringValue": "2026-05"
+                    },
+                    "teacherId": {
+                      "stringValue": "t203"
+                    },
+                    "id": {
+                      "integerValue": "10"
+                    },
+                    "amount": {
+                      "integerValue": "2500"
+                    },
+                    "dateIssued": {
+                      "stringValue": "2026-05-16"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "month": {
+                      "stringValue": "2026-05"
+                    },
+                    "amount": {
+                      "integerValue": "1550"
+                    },
+                    "dateIssued": {
+                      "stringValue": "2026-05-17"
+                    },
+                    "teacherId": {
+                      "stringValue": "t203"
+                    },
+                    "id": {
+                      "integerValue": "11"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "month": {
+                      "stringValue": "2026-05"
+                    },
+                    "id": {
+                      "integerValue": "12"
+                    },
+                    "teacherId": {
+                      "stringValue": "t203"
+                    },
+                    "dateIssued": {
+                      "stringValue": "2026-05-18"
+                    },
+                    "amount": {
+                      "integerValue": "1200"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "dateIssued": {
+                      "stringValue": "2026-05-29"
+                    },
+                    "amount": {
+                      "integerValue": "4670"
+                    },
+                    "teacherId": {
+                      "stringValue": "t202"
+                    },
+                    "id": {
+                      "integerValue": "13"
+                    },
+                    "month": {
+                      "stringValue": "2026-05"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "id": {
+                      "integerValue": "14"
+                    },
+                    "teacherId": {
+                      "stringValue": "t203"
+                    },
+                    "amount": {
+                      "integerValue": "1452"
+                    },
+                    "dateIssued": {
+                      "stringValue": "2026-06-01"
+                    },
+                    "month": {
+                      "stringValue": "2026-06"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "createTime": "2026-04-09T13:08:01.752758Z",
+      "updateTime": "2026-06-01T08:27:43.595499Z"
+    },
+    {
+      "name": "projects/paradigm-classes/databases/(default)/documents/appData/students",
+      "fields": {
+        "list": {
+          "arrayValue": {
+            "values": [
+              {
+                "mapValue": {
+                  "fields": {
+                    "feeSplits": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "percentage": {
+                                  "integerValue": "35"
+                                },
+                                "teacherId": {
+                                  "stringValue": "t202"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "percentage": {
+                                  "integerValue": "65"
+                                },
+                                "teacherId": {
+                                  "stringValue": "t203"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "fees": {
+                      "integerValue": "1400"
+                    },
+                    "class": {
+                      "stringValue": "X"
+                    },
+                    "personalPhone": {
+                      "stringValue": "9411339696"
+                    },
+                    "motherPhone": {
+                      "stringValue": "8126356597"
+                    },
+                    "name": {
+                      "stringValue": "Samiksha Ghildiyal"
+                    },
+                    "id": {
+                      "stringValue": "s101"
+                    },
+                    "fatherPhone": {
+                      "stringValue": "7060590660"
+                    },
+                    "feePayments": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "cycleStart": {
+                                  "stringValue": "2026-04-18"
+                                },
+                                "paidOn": {
+                                  "stringValue": "2026-04-20"
+                                },
+                                "finePaid": {
+                                  "integerValue": "0"
+                                },
+                                "markedBy": {
+                                  "stringValue": "Admin"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "markedBy": {
+                                  "stringValue": "Admin"
+                                },
+                                "finePaid": {
+                                  "integerValue": "0"
+                                },
+                                "paidOn": {
+                                  "stringValue": "2026-05-17"
+                                },
+                                "cycleStart": {
+                                  "stringValue": "2026-05-18"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "password": {
+                      "stringValue": "waffle"
+                    },
+                    "dateOfJoining": {
+                      "stringValue": "2026-04-18"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "name": {
+                      "stringValue": "Abhinav Rana"
+                    },
+                    "personalPhone": {
+                      "stringValue": ""
+                    },
+                    "motherPhone": {
+                      "stringValue": "8958102151"
+                    },
+                    "fees": {
+                      "integerValue": "1300"
+                    },
+                    "class": {
+                      "stringValue": "X"
+                    },
+                    "feeSplits": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "teacherId": {
+                                  "stringValue": "t202"
+                                },
+                                "percentage": {
+                                  "integerValue": "35"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "teacherId": {
+                                  "stringValue": "t203"
+                                },
+                                "percentage": {
+                                  "integerValue": "65"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "feePayments": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "paidOn": {
+                                  "stringValue": "2026-04-12"
+                                },
+                                "cycleStart": {
+                                  "stringValue": "2026-04-11"
+                                },
+                                "markedBy": {
+                                  "stringValue": "Admin"
+                                },
+                                "finePaid": {
+                                  "integerValue": "0"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "password": {
+                      "stringValue": "akkibhai"
+                    },
+                    "dateOfJoining": {
+                      "stringValue": "2026-04-11"
+                    },
+                    "id": {
+                      "stringValue": "s102"
+                    },
+                    "fatherPhone": {
+                      "stringValue": "7248584090"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "name": {
+                      "stringValue": "Aditi Giroti"
+                    },
+                    "personalPhone": {
+                      "stringValue": "8475021138"
+                    },
+                    "motherPhone": {
+                      "stringValue": "9627793897"
+                    },
+                    "fees": {
+                      "integerValue": "1300"
+                    },
+                    "class": {
+                      "stringValue": "X"
+                    },
+                    "feeSplits": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "teacherId": {
+                                  "stringValue": "t202"
+                                },
+                                "percentage": {
+                                  "integerValue": "35"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "teacherId": {
+                                  "stringValue": "t203"
+                                },
+                                "percentage": {
+                                  "integerValue": "65"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "feePayments": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "markedBy": {
+                                  "stringValue": "Admin"
+                                },
+                                "finePaid": {
+                                  "integerValue": "0"
+                                },
+                                "paidOn": {
+                                  "stringValue": "2026-04-13"
+                                },
+                                "cycleStart": {
+                                  "stringValue": "2026-04-09"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "finePaid": {
+                                  "integerValue": "0"
+                                },
+                                "markedBy": {
+                                  "stringValue": "Admin"
+                                },
+                                "cycleStart": {
+                                  "stringValue": "2026-05-09"
+                                },
+                                "paidOn": {
+                                  "stringValue": "2026-05-12"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "password": {
+                      "stringValue": "8475021138@aditi"
+                    },
+                    "dateOfJoining": {
+                      "stringValue": "2026-04-09"
+                    },
+                    "id": {
+                      "stringValue": "s103"
+                    },
+                    "fatherPhone": {
+                      "stringValue": "9719581086"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "password": {
+                      "stringValue": "ayushsanu"
+                    },
+                    "feePayments": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "markedBy": {
+                                  "stringValue": "Admin"
+                                },
+                                "finePaid": {
+                                  "integerValue": "0"
+                                },
+                                "paidOn": {
+                                  "stringValue": "2026-04-07"
+                                },
+                                "cycleStart": {
+                                  "stringValue": "2026-04-04"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "markedBy": {
+                                  "stringValue": "Admin"
+                                },
+                                "finePaid": {
+                                  "integerValue": "0"
+                                },
+                                "paidOn": {
+                                  "stringValue": "2026-05-07"
+                                },
+                                "cycleStart": {
+                                  "stringValue": "2026-05-04"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "dateOfJoining": {
+                      "stringValue": "2026-04-04"
+                    },
+                    "id": {
+                      "stringValue": "s104"
+                    },
+                    "fatherPhone": {
+                      "stringValue": ""
+                    },
+                    "personalPhone": {
+                      "stringValue": ""
+                    },
+                    "motherPhone": {
+                      "stringValue": "9675703897"
+                    },
+                    "name": {
+                      "stringValue": "Ayush Rawat"
+                    },
+                    "feeSplits": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "teacherId": {
+                                  "stringValue": "t202"
+                                },
+                                "percentage": {
+                                  "integerValue": "50"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "teacherId": {
+                                  "stringValue": "t203"
+                                },
+                                "percentage": {
+                                  "integerValue": "50"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "class": {
+                      "stringValue": "X"
+                    },
+                    "fees": {
+                      "integerValue": "1000"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "fees": {
+                      "integerValue": "1300"
+                    },
+                    "class": {
+                      "stringValue": "X"
+                    },
+                    "feeSplits": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "percentage": {
+                                  "integerValue": "35"
+                                },
+                                "teacherId": {
+                                  "stringValue": "t202"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "teacherId": {
+                                  "stringValue": "t203"
+                                },
+                                "percentage": {
+                                  "integerValue": "65"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "name": {
+                      "stringValue": "Harshit Maithani"
+                    },
+                    "motherPhone": {
+                      "stringValue": "8979717523"
+                    },
+                    "personalPhone": {
+                      "stringValue": ""
+                    },
+                    "id": {
+                      "stringValue": "s105"
+                    },
+                    "fatherPhone": {
+                      "stringValue": "9720437635"
+                    },
+                    "feePayments": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "paidOn": {
+                                  "stringValue": "2026-04-13"
+                                },
+                                "cycleStart": {
+                                  "stringValue": "2026-04-03"
+                                },
+                                "markedBy": {
+                                  "stringValue": "Admin"
+                                },
+                                "finePaid": {
+                                  "integerValue": "150"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "finePaid": {
+                                  "integerValue": "0"
+                                },
+                                "markedBy": {
+                                  "stringValue": "Admin"
+                                },
+                                "cycleStart": {
+                                  "stringValue": "2026-05-03"
+                                },
+                                "paidOn": {
+                                  "stringValue": "2026-05-04"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "password": {
+                      "stringValue": "maakali"
+                    },
+                    "dateOfJoining": {
+                      "stringValue": "2026-04-03"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "personalPhone": {
+                      "stringValue": ""
+                    },
+                    "motherPhone": {
+                      "stringValue": "9719815881"
+                    },
+                    "name": {
+                      "stringValue": "Anshi Rana"
+                    },
+                    "feeSplits": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "percentage": {
+                                  "integerValue": "35"
+                                },
+                                "teacherId": {
+                                  "stringValue": "t202"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "teacherId": {
+                                  "stringValue": "t203"
+                                },
+                                "percentage": {
+                                  "integerValue": "65"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "class": {
+                      "stringValue": "X"
+                    },
+                    "fees": {
+                      "integerValue": "1300"
+                    },
+                    "dateOfJoining": {
+                      "stringValue": "2026-04-09"
+                    },
+                    "feePayments": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "paidOn": {
+                                  "stringValue": "2026-04-04"
+                                },
+                                "cycleStart": {
+                                  "stringValue": "2026-04-09"
+                                },
+                                "markedBy": {
+                                  "stringValue": "Admin"
+                                },
+                                "finePaid": {
+                                  "integerValue": "0"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "markedBy": {
+                                  "stringValue": "Admin"
+                                },
+                                "finePaid": {
+                                  "integerValue": "0"
+                                },
+                                "paidOn": {
+                                  "stringValue": "2026-05-12"
+                                },
+                                "cycleStart": {
+                                  "stringValue": "2026-05-09"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "password": {
+                      "stringValue": "paradigm@123"
+                    },
+                    "fatherPhone": {
+                      "stringValue": ""
+                    },
+                    "id": {
+                      "stringValue": "s106"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "fatherPhone": {
+                      "stringValue": "8279427180"
+                    },
+                    "id": {
+                      "stringValue": "s107"
+                    },
+                    "dateOfJoining": {
+                      "stringValue": "2026-04-18"
+                    },
+                    "feePayments": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "finePaid": {
+                                  "integerValue": "0"
+                                },
+                                "markedBy": {
+                                  "stringValue": "Admin"
+                                },
+                                "cycleStart": {
+                                  "stringValue": "2026-04-18"
+                                },
+                                "paidOn": {
+                                  "stringValue": "2026-04-19"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "password": {
+                      "stringValue": "paradigm@123"
+                    },
+                    "feeSplits": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "teacherId": {
+                                  "stringValue": "t202"
+                                },
+                                "percentage": {
+                                  "integerValue": "35"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "percentage": {
+                                  "integerValue": "65"
+                                },
+                                "teacherId": {
+                                  "stringValue": "t203"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "fees": {
+                      "integerValue": "1400"
+                    },
+                    "class": {
+                      "stringValue": "X"
+                    },
+                    "motherPhone": {
+                      "stringValue": "8958060015"
+                    },
+                    "personalPhone": {
+                      "stringValue": ""
+                    },
+                    "name": {
+                      "stringValue": "Lavanya Pegwal"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "feePayments": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "markedBy": {
+                                  "stringValue": "Admin"
+                                },
+                                "finePaid": {
+                                  "integerValue": "0"
+                                },
+                                "paidOn": {
+                                  "stringValue": "2026-04-07"
+                                },
+                                "cycleStart": {
+                                  "stringValue": "2026-04-03"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "paidOn": {
+                                  "stringValue": "2026-05-06"
+                                },
+                                "cycleStart": {
+                                  "stringValue": "2026-05-03"
+                                },
+                                "markedBy": {
+                                  "stringValue": "Admin"
+                                },
+                                "finePaid": {
+                                  "integerValue": "0"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "password": {
+                      "stringValue": "khushi8954"
+                    },
+                    "dateOfJoining": {
+                      "stringValue": "2026-04-03"
+                    },
+                    "id": {
+                      "stringValue": "s109"
+                    },
+                    "fatherPhone": {
+                      "stringValue": "8954340847"
+                    },
+                    "name": {
+                      "stringValue": "Khushi Senwal"
+                    },
+                    "personalPhone": {
+                      "stringValue": ""
+                    },
+                    "motherPhone": {
+                      "stringValue": ""
+                    },
+                    "class": {
+                      "stringValue": "X"
+                    },
+                    "fees": {
+                      "integerValue": "1300"
+                    },
+                    "feeSplits": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "teacherId": {
+                                  "stringValue": "t202"
+                                },
+                                "percentage": {
+                                  "integerValue": "35"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "percentage": {
+                                  "integerValue": "65"
+                                },
+                                "teacherId": {
+                                  "stringValue": "t203"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "feeSplits": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "percentage": {
+                                  "integerValue": "100"
+                                },
+                                "teacherId": {
+                                  "stringValue": "t203"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "id": {
+                      "stringValue": "s110"
+                    },
+                    "fees": {
+                      "integerValue": "2000"
+                    },
+                    "class": {
+                      "stringValue": "XII"
+                    },
+                    "feePayments": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "paidOn": {
+                                  "stringValue": "2026-04-15"
+                                },
+                                "cycleStart": {
+                                  "stringValue": "2026-04-13"
+                                },
+                                "markedBy": {
+                                  "stringValue": "Admin"
+                                },
+                                "finePaid": {
+                                  "integerValue": "0"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "cycleStart": {
+                                  "stringValue": "2026-05-13"
+                                },
+                                "paidOn": {
+                                  "stringValue": "2026-05-14"
+                                },
+                                "finePaid": {
+                                  "integerValue": "0"
+                                },
+                                "markedBy": {
+                                  "stringValue": "Admin"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "password": {
+                      "stringValue": "harshita29"
+                    },
+                    "name": {
+                      "stringValue": "Harshita Negi"
+                    },
+                    "dateOfJoining": {
+                      "stringValue": "2026-04-13"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "personalPhone": {
+                      "stringValue": ""
+                    },
+                    "motherPhone": {
+                      "stringValue": "6396217516"
+                    },
+                    "name": {
+                      "stringValue": "Sagar Rawat"
+                    },
+                    "feeSplits": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "percentage": {
+                                  "integerValue": "35"
+                                },
+                                "teacherId": {
+                                  "stringValue": "t202"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "percentage": {
+                                  "integerValue": "65"
+                                },
+                                "teacherId": {
+                                  "stringValue": "t203"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "class": {
+                      "stringValue": "X"
+                    },
+                    "fees": {
+                      "integerValue": "1400"
+                    },
+                    "dateOfJoining": {
+                      "stringValue": "2026-05-01"
+                    },
+                    "feePayments": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "cycleStart": {
+                                  "stringValue": "2026-05-01"
+                                },
+                                "paidOn": {
+                                  "stringValue": "2026-05-05"
+                                },
+                                "finePaid": {
+                                  "integerValue": "0"
+                                },
+                                "markedBy": {
+                                  "stringValue": "Admin"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "password": {
+                      "stringValue": "sagarrawat"
+                    },
+                    "fatherPhone": {
+                      "stringValue": "7983178233"
+                    },
+                    "id": {
+                      "stringValue": "s111"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "dateOfJoining": {
+                      "stringValue": "2026-05-04"
+                    },
+                    "feePayments": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "paidOn": {
+                                  "stringValue": "2026-05-08"
+                                },
+                                "cycleStart": {
+                                  "stringValue": "2026-05-04"
+                                },
+                                "markedBy": {
+                                  "stringValue": "Admin"
+                                },
+                                "finePaid": {
+                                  "integerValue": "0"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "password": {
+                      "stringValue": "yukiti 90"
+                    },
+                    "fatherPhone": {
+                      "stringValue": "7678691088"
+                    },
+                    "id": {
+                      "stringValue": "s113"
+                    },
+                    "personalPhone": {
+                      "stringValue": ""
+                    },
+                    "motherPhone": {
+                      "stringValue": "8800423967"
+                    },
+                    "name": {
+                      "stringValue": "Yuktika Negi"
+                    },
+                    "feeSplits": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "percentage": {
+                                  "integerValue": "35"
+                                },
+                                "teacherId": {
+                                  "stringValue": "t202"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "teacherId": {
+                                  "stringValue": "t203"
+                                },
+                                "percentage": {
+                                  "integerValue": "65"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "fees": {
+                      "integerValue": "1400"
+                    },
+                    "class": {
+                      "stringValue": "X"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "dateOfJoining": {
+                      "stringValue": "2026-05-04"
+                    },
+                    "password": {
+                      "stringValue": "aisha @123"
+                    },
+                    "feePayments": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "cycleStart": {
+                                  "stringValue": "2026-05-04"
+                                },
+                                "paidOn": {
+                                  "stringValue": "2026-05-09"
+                                },
+                                "finePaid": {
+                                  "integerValue": "0"
+                                },
+                                "markedBy": {
+                                  "stringValue": "Admin"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "fatherPhone": {
+                      "stringValue": ""
+                    },
+                    "id": {
+                      "stringValue": "s114"
+                    },
+                    "name": {
+                      "stringValue": "Aisha Kaintura"
+                    },
+                    "personalPhone": {
+                      "stringValue": ""
+                    },
+                    "motherPhone": {
+                      "stringValue": "7817030337"
+                    },
+                    "class": {
+                      "stringValue": "X"
+                    },
+                    "fees": {
+                      "integerValue": "1400"
+                    },
+                    "feeSplits": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "teacherId": {
+                                  "stringValue": "t202"
+                                },
+                                "percentage": {
+                                  "integerValue": "35"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "percentage": {
+                                  "integerValue": "65"
+                                },
+                                "teacherId": {
+                                  "stringValue": "t203"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "dateOfJoining": {
+                      "stringValue": "2026-05-13"
+                    },
+                    "feePayments": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "markedBy": {
+                                  "stringValue": "Admin"
+                                },
+                                "finePaid": {
+                                  "integerValue": "210"
+                                },
+                                "paidOn": {
+                                  "stringValue": "2026-05-25"
+                                },
+                                "cycleStart": {
+                                  "stringValue": "2026-05-13"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "password": {
+                      "stringValue": "soumil@123"
+                    },
+                    "fatherPhone": {
+                      "stringValue": "9927972182"
+                    },
+                    "id": {
+                      "stringValue": "s115"
+                    },
+                    "personalPhone": {
+                      "stringValue": "9520273690"
+                    },
+                    "motherPhone": {
+                      "stringValue": "8076466227"
+                    },
+                    "name": {
+                      "stringValue": "Soumil Bartwal"
+                    },
+                    "feeSplits": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "teacherId": {
+                                  "stringValue": "t203"
+                                },
+                                "percentage": {
+                                  "integerValue": "100"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "fees": {
+                      "integerValue": "2500"
+                    },
+                    "class": {
+                      "stringValue": "NDA"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "name": {
+                      "stringValue": "Naman Bhandari"
+                    },
+                    "personalPhone": {
+                      "stringValue": "7302042808"
+                    },
+                    "motherPhone": {
+                      "stringValue": "9634237408"
+                    },
+                    "fees": {
+                      "integerValue": "2500"
+                    },
+                    "class": {
+                      "stringValue": "NDA"
+                    },
+                    "feeSplits": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "teacherId": {
+                                  "stringValue": "t203"
+                                },
+                                "percentage": {
+                                  "integerValue": "100"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "dateOfJoining": {
+                      "stringValue": "2026-05-13"
+                    },
+                    "password": {
+                      "stringValue": "iamdevil"
+                    },
+                    "feePayments": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "finePaid": {
+                                  "integerValue": "300"
+                                },
+                                "markedBy": {
+                                  "stringValue": "Admin"
+                                },
+                                "cycleStart": {
+                                  "stringValue": "2026-05-13"
+                                },
+                                "paidOn": {
+                                  "stringValue": "2026-05-28"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "fatherPhone": {
+                      "stringValue": "9917094040"
+                    },
+                    "id": {
+                      "stringValue": "s116"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "fatherPhone": {
+                      "stringValue": "6395218052"
+                    },
+                    "id": {
+                      "stringValue": "s118"
+                    },
+                    "dateOfJoining": {
+                      "stringValue": "2026-05-15"
+                    },
+                    "feePayments": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "markedBy": {
+                                  "stringValue": "Admin"
+                                },
+                                "finePaid": {
+                                  "integerValue": "0"
+                                },
+                                "paidOn": {
+                                  "stringValue": "2026-05-18"
+                                },
+                                "cycleStart": {
+                                  "stringValue": "2026-05-15"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "password": {
+                      "stringValue": "muskan gusain 2312"
+                    },
+                    "feeSplits": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "percentage": {
+                                  "integerValue": "100"
+                                },
+                                "teacherId": {
+                                  "stringValue": "t203"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "class": {
+                      "stringValue": "XI"
+                    },
+                    "fees": {
+                      "integerValue": "1200"
+                    },
+                    "personalPhone": {
+                      "stringValue": "9258954184"
+                    },
+                    "motherPhone": {
+                      "stringValue": "8279893159"
+                    },
+                    "name": {
+                      "stringValue": "Muskan Gussain"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "fees": {
+                      "integerValue": "2500"
+                    },
+                    "class": {
+                      "stringValue": "NDA"
+                    },
+                    "feeSplits": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "percentage": {
+                                  "integerValue": "100"
+                                },
+                                "teacherId": {
+                                  "stringValue": "t203"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "name": {
+                      "stringValue": "Priyanshu Bisht"
+                    },
+                    "motherPhone": {
+                      "stringValue": "9760059009"
+                    },
+                    "personalPhone": {
+                      "stringValue": "8979033718"
+                    },
+                    "id": {
+                      "stringValue": "s119"
+                    },
+                    "fatherPhone": {
+                      "stringValue": "8218752720"
+                    },
+                    "password": {
+                      "stringValue": "14711471"
+                    },
+                    "feePayments": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "finePaid": {
+                                  "integerValue": "0"
+                                },
+                                "markedBy": {
+                                  "stringValue": "Admin"
+                                },
+                                "cycleStart": {
+                                  "stringValue": "2026-05-16"
+                                },
+                                "paidOn": {
+                                  "stringValue": "2026-05-16"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "dateOfJoining": {
+                      "stringValue": "2026-05-16"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "createTime": "2026-04-02T15:16:04.499434Z",
+      "updateTime": "2026-06-04T13:20:41.712334Z"
+    },
+    {
+      "name": "projects/paradigm-classes/databases/(default)/documents/appData/teachers",
+      "fields": {
+        "list": {
+          "arrayValue": {
+            "values": [
+              {
+                "mapValue": {
+                  "fields": {
+                    "name": {
+                      "stringValue": "Harshita Semwal"
+                    },
+                    "id": {
+                      "stringValue": "t202"
+                    },
+                    "password": {
+                      "stringValue": "paradigmhunny678"
+                    },
+                    "currentSalary": {
+                      "integerValue": "5670"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "currentSalary": {
+                      "integerValue": "22430"
+                    },
+                    "password": {
+                      "stringValue": "shneh@1234"
+                    },
+                    "id": {
+                      "stringValue": "t203"
+                    },
+                    "name": {
+                      "stringValue": "Shneh Rawat"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "createTime": "2026-04-02T15:16:04.627838Z",
+      "updateTime": "2026-05-26T15:10:21.649497Z"
+    },
+    {
+      "name": "projects/paradigm-classes/databases/(default)/documents/appData/tests",
+      "fields": {
+        "list": {
+          "arrayValue": {
+            "values": [
+              {
+                "mapValue": {
+                  "fields": {
+                    "date": {
+                      "stringValue": "2026-05-24"
+                    },
+                    "subject": {
+                      "stringValue": "MATH 04"
+                    },
+                    "published": {
+                      "booleanValue": true
+                    },
+                    "id": {
+                      "integerValue": "3"
+                    },
+                    "maxMarks": {
+                      "integerValue": "40"
+                    },
+                    "marks": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "studentId": {
+                                  "stringValue": "s101"
+                                },
+                                "mark": {
+                                  "integerValue": "6"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "studentId": {
+                                  "stringValue": "s102"
+                                },
+                                "mark": {
+                                  "integerValue": "4"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "studentId": {
+                                  "stringValue": "s103"
+                                },
+                                "mark": {
+                                  "integerValue": "4"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "studentId": {
+                                  "stringValue": "s104"
+                                },
+                                "mark": {
+                                  "integerValue": "5"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "studentId": {
+                                  "stringValue": "s105"
+                                },
+                                "mark": {
+                                  "integerValue": "5"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "studentId": {
+                                  "stringValue": "s106"
+                                },
+                                "mark": {
+                                  "integerValue": "6"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "studentId": {
+                                  "stringValue": "s107"
+                                },
+                                "mark": {
+                                  "integerValue": "0"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "studentId": {
+                                  "stringValue": "s108"
+                                },
+                                "mark": {
+                                  "integerValue": "0"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "studentId": {
+                                  "stringValue": "s109"
+                                },
+                                "mark": {
+                                  "integerValue": "1"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "studentId": {
+                                  "stringValue": "s110"
+                                },
+                                "mark": {
+                                  "integerValue": "19"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "studentId": {
+                                  "stringValue": "s111"
+                                },
+                                "mark": {
+                                  "integerValue": "4"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "studentId": {
+                                  "stringValue": "s112"
+                                },
+                                "mark": {
+                                  "integerValue": "11"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "studentId": {
+                                  "stringValue": "s113"
+                                },
+                                "mark": {
+                                  "integerValue": "2"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "studentId": {
+                                  "stringValue": "s114"
+                                },
+                                "mark": {
+                                  "integerValue": "4"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "studentId": {
+                                  "stringValue": "s115"
+                                },
+                                "mark": {
+                                  "integerValue": "5"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "studentId": {
+                                  "stringValue": "s116"
+                                },
+                                "mark": {
+                                  "integerValue": "2"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "studentId": {
+                                  "stringValue": "s118"
+                                },
+                                "mark": {
+                                  "integerValue": "31"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "studentId": {
+                                  "stringValue": "s119"
+                                },
+                                "mark": {
+                                  "integerValue": "5"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "maxMarks": {
+                      "integerValue": "30"
+                    },
+                    "id": {
+                      "integerValue": "2"
+                    },
+                    "marks": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "studentId": {
+                                  "stringValue": "s101"
+                                },
+                                "mark": {
+                                  "integerValue": "23"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "studentId": {
+                                  "stringValue": "s102"
+                                },
+                                "mark": {
+                                  "integerValue": "6"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "studentId": {
+                                  "stringValue": "s103"
+                                },
+                                "mark": {
+                                  "integerValue": "15"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "mark": {
+                                  "integerValue": "16"
+                                },
+                                "studentId": {
+                                  "stringValue": "s104"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "mark": {
+                                  "integerValue": "14"
+                                },
+                                "studentId": {
+                                  "stringValue": "s105"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "studentId": {
+                                  "stringValue": "s106"
+                                },
+                                "mark": {
+                                  "integerValue": "17"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "mark": {
+                                  "integerValue": "5"
+                                },
+                                "studentId": {
+                                  "stringValue": "s108"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "mark": {
+                                  "integerValue": "24"
+                                },
+                                "studentId": {
+                                  "stringValue": "s110"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "published": {
+                      "booleanValue": true
+                    },
+                    "subject": {
+                      "stringValue": "CHEM(1)"
+                    },
+                    "date": {
+                      "stringValue": "2026-05-01"
+                    }
+                  }
+                }
+              },
+              {
+                "mapValue": {
+                  "fields": {
+                    "date": {
+                      "stringValue": "2026-04-18"
+                    },
+                    "maxMarks": {
+                      "integerValue": "30"
+                    },
+                    "id": {
+                      "integerValue": "1"
+                    },
+                    "marks": {
+                      "arrayValue": {
+                        "values": [
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "mark": {
+                                  "integerValue": "8"
+                                },
+                                "studentId": {
+                                  "stringValue": "s102"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "mark": {
+                                  "integerValue": "12"
+                                },
+                                "studentId": {
+                                  "stringValue": "s103"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "mark": {
+                                  "integerValue": "23"
+                                },
+                                "studentId": {
+                                  "stringValue": "s104"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "mark": {
+                                  "integerValue": "14"
+                                },
+                                "studentId": {
+                                  "stringValue": "s105"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "mapValue": {
+                              "fields": {
+                                "studentId": {
+                                  "stringValue": "s106"
+                                },
+                                "mark": {
+                                  "integerValue": "7"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "published": {
+                      "booleanValue": true
+                    },
+                    "subject": {
+                      "stringValue": "MATH(1)"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "createTime": "2026-04-14T03:31:58.318917Z",
+      "updateTime": "2026-06-01T08:35:15.074554Z"
+    },
+    {
+      "name": "projects/paradigm-classes/databases/(default)/documents/appData/visitors",
+      "fields": {
+        "count": {
+          "integerValue": "548"
+        }
+      },
+      "createTime": "2026-04-03T06:50:26.376376Z",
+      "updateTime": "2026-06-05T01:45:02.176816Z"
+    }
+  ]
+}

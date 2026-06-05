@@ -143,6 +143,8 @@ body {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .logo-primary {
@@ -1001,6 +1003,214 @@ label {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* Accessibility Theme & Font Settings */
+body.dark-mode {
+    --primary-color: #3b82f6 !important;
+    --primary-light: #60a5fa !important;
+    --text-dark: #f8fafc !important;
+    --text-light: #94a3b8 !important;
+    --gray-200: #334155 !important;
+    --gray-300: #475569 !important;
+    
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+}
+
+body.dark-mode .navbar {
+    background-color: #1e293b !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .navbar .nav-link,
+body.dark-mode .navbar .mobile-link {
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode .navbar .nav-link:hover,
+body.dark-mode .navbar .mobile-link:hover {
+    color: #3b82f6 !important;
+}
+
+body.dark-mode .logo-primary {
+    color: #3b82f6 !important;
+}
+
+body.dark-mode .logo-secondary {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .mobile-menu {
+    background-color: #1e293b !important;
+}
+
+body.dark-mode .faq,
+body.dark-mode .courses,
+body.dark-mode .facilities,
+body.dark-mode .about,
+body.dark-mode .features {
+    background-color: #0f172a !important;
+}
+
+body.dark-mode .feature-card,
+body.dark-mode .course-card,
+body.dark-mode .facility-card,
+body.dark-mode .testimonial-card,
+body.dark-mode .faq-item,
+body.dark-mode .card,
+body.dark-mode .stat-box,
+body.dark-mode .list-group-item {
+    background-color: #1e293b !important;
+    color: #f8fafc !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .faq-question {
+    background-color: #1e293b !important;
+    color: #3b82f6 !important;
+}
+
+body.dark-mode .faq-answer {
+    background-color: #1e293b !important;
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode .section-title,
+body.dark-mode .about-title,
+body.dark-mode .feature-title,
+body.dark-mode .course-title,
+body.dark-mode .facility-title,
+body.dark-mode .testimonial-name,
+body.dark-mode .faq-question span,
+body.dark-mode .contact-info-title,
+body.dark-mode .card-header,
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6 {
+    color: #f8fafc !important;
+}
+
+body.dark-mode .section-subtitle,
+body.dark-mode .feature-description,
+body.dark-mode .course-description,
+body.dark-mode .facility-description,
+body.dark-mode .testimonial-course,
+body.dark-mode .testimonial-text,
+body.dark-mode .about-description,
+body.dark-mode label,
+body.dark-mode .form-hint,
+body.dark-mode .contact-label,
+body.dark-mode .contact-value {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .form-container,
+body.dark-mode .contact-form-container {
+    background-color: #1e293b !important;
+    color: #f8fafc !important;
+}
+
+body.dark-mode .form-input,
+body.dark-mode .form-select,
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .form-input:focus,
+body.dark-mode .form-select:focus,
+body.dark-mode input:focus,
+body.dark-mode select:focus,
+body.dark-mode textarea:focus {
+    border-color: #3b82f6 !important;
+}
+
+body.dark-mode th,
+body.dark-mode td {
+    color: #cbd5e1 !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode th {
+    color: #3b82f6 !important;
+    background-color: #1e293b !important;
+}
+
+body.dark-mode tr:hover td {
+    background-color: #1e293b !important;
+}
+
+body.dark-mode .chart-container,
+body.dark-mode .fees-table {
+    background-color: #1e293b !important;
+    color: #f8fafc !important;
+}
+
+body.dark-mode .fees-table th {
+    color: #3b82f6 !important;
+    border-bottom-color: #334155 !important;
+}
+
+body.dark-mode .fees-table td {
+    border-bottom-color: #334155 !important;
+}
+
+body.dark-mode .fees-table tr:hover td {
+    background-color: #1e293b !important;
+}
+
+body.dark-mode .fee-card-header {
+    background-color: #1e293b !important;
+    border-bottom-color: #334155 !important;
+}
+
+body.dark-mode .fee-card-title {
+    color: #f8fafc !important;
+}
+
+body.dark-mode .fee-amount {
+    color: #3b82f6 !important;
+}
+
+body.dark-mode .fee-feature-item {
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode .footer {
+    background-color: #0f172a !important;
+    border-top: 1px solid #1e293b !important;
+}
+
+body.dark-mode .footer-title,
+body.dark-mode .footer-logo .logo-primary,
+body.dark-mode .footer-bottom {
+    color: #f8fafc !important;
+}
+
+body.dark-mode .footer-menu a,
+body.dark-mode .footer-contact-item {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .footer-menu a:hover {
+    color: #3b82f6 !important;
+}
+
+body.dark-mode .chat-box {
+    background: #0f172a !important;
+}
+
+body.dark-mode .ai-message {
+    background: #1e293b !important;
+    color: #f8fafc !important;
+    border-color: #334155 !important;
 }
 
 /* Form validation styles */

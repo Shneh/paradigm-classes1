@@ -2,6 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
+    <script>
+        (function () {
+            try {
+                const user = JSON.parse(localStorage.getItem('pc_currentUser') || 'null');
+                if (user && (user.role === 'student' || user.role === 'teacher' || user.role === 'admin')) {
+                    const dashboardUrl = user.role === 'teacher' ? 'teacher-dashboard.html' : 
+                                         (user.role === 'admin' ? 'admin-dashboard.html' : 'student-dashboard.html');
+                    window.location.replace(dashboardUrl);
+                }
+            } catch (e) {
+                // Ignore
+            }
+        })();
+    </script>
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta content="Paradigm Classes - Login" name="description" />
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
@@ -122,13 +136,13 @@
     <nav class="navbar">
         <div class="container">
             <div class="nav-wrapper">
-                <div class="logo">
-                    <a href="index.html"></a><img alt="Paradigm Classes Logo" class="logo-img" src="images/logo.png" />
+                <a href="index.html" class="logo">
+                    <img alt="Paradigm Classes Logo" class="logo-img" src="images/logo.png" />
                     <div>
                         <div class="logo-primary">PARADIGM</div>
                         <div class="logo-secondary">CLASSES</div>
                     </div>
-                </div>
+                </a>
                 <div class="nav-links">
                     <a class="nav-link" href="index.html">Home</a>
                     <a class="nav-link" href="gallery.html">Gallery</a>
