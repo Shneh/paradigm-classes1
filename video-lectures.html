@@ -48,8 +48,10 @@
                 </a>
                 <div class="nav-links">
                     <a class="nav-link" href="index.html">Home</a>
+                    <a class="nav-link" href="study-notes.html">Notes</a>
                     <a class="nav-link" href="gallery.html">Gallery</a>
                     <a class="nav-link" href="results.html">Results</a>
+                    <a class="nav-link" href="study-slides.html">Slides</a>
                     <a class="nav-link" href="askai.html">Ask AI</a>
                     <a class="nav-link" href="faculty.html">Faculty</a>
                     <a class="nav-link" href="index.html#contact">Contact</a>
@@ -63,8 +65,10 @@
             </div>
             <div class="mobile-menu" id="mobileMenu">
                 <a class="mobile-link" href="index.html">Home</a>
+                <a class="mobile-link" href="study-notes.html">Notes</a>
                 <a class="mobile-link" href="gallery.html">Gallery</a>
                 <a class="mobile-link" href="results.html">Results</a>
+                <a class="mobile-link" href="study-slides.html">Slides</a>
                 <a class="mobile-link" href="askai.html">Ask AI</a>
                 <a class="mobile-link" href="faculty.html">Faculty</a>
                 <a class="mobile-link" href="index.html#contact">Contact</a>
@@ -84,7 +88,7 @@
             </div>
             <div class="faq-container">
                 <!-- Class X(BIO) -->
-                <div class="faq-item">
+                <div class="faq-item" id="C101">
                     <button class="faq-question">
                         <span>Class X(BIO)</span>
                         <svg class="faq-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -97,7 +101,7 @@
                     </div>
                 </div>
                 <!-- Class X(SST) -->
-                <div class="faq-item">
+                <div class="faq-item" id="C102">
                     <button class="faq-question">
                         <span>Class X(SST)</span>
                         <svg class="faq-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -121,7 +125,7 @@
                     </div>
                 </div>
                 <!-- Class X(ENGLISH) -->
-                <div class="faq-item">
+                <div class="faq-item" id="C103">
                     <button class="faq-question">
                         <span>Class X(ENGLISH)</span>
                         <svg class="faq-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -134,7 +138,7 @@
                     </div>
                 </div>
                 <!-- Class X(HINDI) -->
-                <div class="faq-item">
+                <div class="faq-item" id="C104">
                     <button class="faq-question">
                         <span>Class X(HINDI)</span>
                         <svg class="faq-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -147,7 +151,7 @@
                     </div>
                 </div>
                 <!-- Class XI (CHEMISTRY) -->
-                <div class="faq-item">
+                <div class="faq-item" id="C105">
                     <button class="faq-question">
                         <span>Class XI/JEE/NEET – CHEMISTRY</span>
                         <svg class="faq-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -207,7 +211,7 @@
                     </div>
                 </div>
                 <!-- Class XI (PHYSICS) -->
-                <div class="faq-item">
+                <div class="faq-item" id="C106">
                     <button class="faq-question">
                         <span>Class XI/JEE/NEET – PHYSICS</span>
                         <svg class="faq-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -264,7 +268,7 @@
                     </div>
                 </div>
                 <!-- Class XII (CHEMISTRY) -->
-                <div class="faq-item">
+                <div class="faq-item" id="C107">
                     <button class="faq-question">
                         <span>Class XII/JEE/NEET – CHEMISTRY</span>
                         <svg class="faq-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -323,7 +327,7 @@
                 </div>
 
                 <!-- Class XII (PHYSICS) -->
-                <div class="faq-item">
+                <div class="faq-item" id="C108">
                     <button class="faq-question">
                         <span>Class XII/JEE/NEET – PHYSICS</span>
                         <svg class="faq-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -392,7 +396,7 @@
                     </div>
                 </div>
                 <!-- NDA (ENGLISH) -->
-                <div class="faq-item">
+                <div class="faq-item" id="C109">
                     <button class="faq-question">
                         <span>NDA- ENGLISH (MANEKSHAW BATCH)</span>
                         <svg class="faq-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -631,12 +635,31 @@
     <script src="js/db.js"></script>
     <script src="js/auth.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             try {
                 const user = typeof DB !== 'undefined' ? DB.getCurrentUser() : null;
                 if (!user || (user.role !== 'student' && user.role !== 'teacher' && user.role !== 'admin')) {
                     window.location.href = 'login.html';
                     return;
+                }
+
+                if (user.role === 'student') {
+                    // Restrict all items by default for students
+                    document.querySelectorAll('.faq-item').forEach(item => {
+                        item.classList.add('restricted');
+                    });
+
+                    // Fetch actual permissions asynchronously
+                    const students = await DB.getStudents();
+                    const student = students.find(s => s.id.toLowerCase() === user.id.toLowerCase());
+                    const allowedLectures = student ? (student.lecturePermissions || []) : [];
+                    
+                    document.querySelectorAll('.faq-item').forEach(item => {
+                        const lectureId = item.id;
+                        if (lectureId && allowedLectures.includes(lectureId)) {
+                            item.classList.remove('restricted');
+                        }
+                    });
                 }
 
                 const navCta = document.querySelector('.nav-cta a');

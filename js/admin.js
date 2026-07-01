@@ -173,12 +173,79 @@ document.addEventListener('DOMContentLoaded', async () => {
                 opt.textContent = `${student.name} (${student.id})`;
                 feeStudentIdSelect.appendChild(opt);
             }
-            if(splitStudentIdSelect) {
-                const opt = document.createElement('option');
-                opt.value = student.id;
-                opt.textContent = `${student.name} (${student.id})`;
-                splitStudentIdSelect.appendChild(opt);
-            }
+        });
+        await renderPermissionsTable();
+    }
+
+    async function renderPermissionsTable() {
+        const tableBody = document.querySelector('#lecturePermissionsTable tbody');
+        if (!tableBody) return;
+
+        const students = await DB.getStudents();
+        tableBody.innerHTML = '';
+
+        if (students.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="11" style="text-align: center; color: var(--text-light);">No active students.</td></tr>';
+            return;
+        }
+
+        const LECTURE_COURSES = ['C101', 'C102', 'C103', 'C104', 'C105', 'C106', 'C107', 'C108', 'C109'];
+
+        students.forEach(student => {
+            const tr = document.createElement('tr');
+            
+            let cellsHTML = `
+                <td><strong>${student.id}</strong></td>
+                <td><strong>${student.name}</strong></td>
+            `;
+
+            LECTURE_COURSES.forEach(courseId => {
+                const hasPermission = student.lecturePermissions && student.lecturePermissions.includes(courseId);
+                cellsHTML += `
+                    <td style="text-align: center;">
+                        <input type="checkbox" 
+                               class="student-course-checkbox" 
+                               data-student-id="${student.id}" 
+                               data-course-id="${courseId}" 
+                               ${hasPermission ? 'checked' : ''} 
+                               style="width: 18px; height: 18px; cursor: pointer;">
+                    </td>
+                `;
+            });
+
+            tr.innerHTML = cellsHTML;
+            tableBody.appendChild(tr);
+        });
+
+        // Add event listeners to checkboxes for auto-saving
+        tableBody.querySelectorAll('.student-course-checkbox').forEach(cb => {
+            cb.addEventListener('change', async (e) => {
+                const checkbox = e.target;
+                const studentId = checkbox.dataset.studentId;
+                const courseId = checkbox.dataset.courseId;
+                const checked = checkbox.checked;
+
+                try {
+                    const studentsList = await DB.getStudents();
+                    const studentIdx = studentsList.findIndex(s => s.id === studentId);
+                    if (studentIdx !== -1) {
+                        if (!studentsList[studentIdx].lecturePermissions) {
+                            studentsList[studentIdx].lecturePermissions = [];
+                        }
+                        if (checked) {
+                            if (!studentsList[studentIdx].lecturePermissions.includes(courseId)) {
+                                studentsList[studentIdx].lecturePermissions.push(courseId);
+                            }
+                        } else {
+                            studentsList[studentIdx].lecturePermissions = studentsList[studentIdx].lecturePermissions.filter(id => id !== courseId);
+                        }
+                        await DB.setStudents(studentsList);
+                    }
+                } catch (err) {
+                    console.error("Error updating permissions:", err);
+                    alert("Error saving permission: " + err.message);
+                }
+            });
         });
     }
 
@@ -754,6 +821,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     }
                     splitsWrapper.style.display = 'block';
                 }
+
             } else {
                 const splitsWrapper = document.getElementById('updateStudentSplitsWrapper');
                 if (splitsWrapper) splitsWrapper.style.display = 'none';

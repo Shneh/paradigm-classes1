@@ -74,6 +74,9 @@ const DB = {
     getCourses: async () => await getList('courses'),
     setCourses: async (courses) => await setList('courses', courses),
     
+    getSlides: async () => await getList('slides'),
+    setSlides: async (slides) => await setList('slides', slides),
+    
     getAdmin: async () => {
         try {
             const snapshot = await db.collection('appData').doc('admin').get();

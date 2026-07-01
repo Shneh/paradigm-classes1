@@ -396,7 +396,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (attendanceDateInput) {
         attendanceDateInput.value = todayStr;
-        attendanceDateInput.min = todayStr;
         attendanceDateInput.addEventListener('change', renderAttendanceForm);
     }
 
@@ -525,10 +524,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return;
             }
 
-            if (selectedDate < todayStr) {
-                alert('You can only take attendance from today onward.');
-                return;
-            }
+
 
             const toggleGroups = document.querySelectorAll('.attendance-toggle-group');
             const records = {};

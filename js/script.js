@@ -2,6 +2,10 @@
 document.querySelectorAll(".faq-question").forEach(button => {
   button.addEventListener("click", () => {
     const item = button.closest(".faq-item");
+    if (item.classList.contains("restricted")) {
+      alert("You are not enrolled in this course. Ask admin for permissions.");
+      return;
+    }
     item.classList.toggle("active");
   });
 });

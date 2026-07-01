@@ -54,6 +54,7 @@
                 <div class="nav-links">
                     <a class="nav-link" href="index.html">Home</a>
                     <a class="nav-link" href="video-lectures.html">Videos</a>
+                    <a class="nav-link" href="study-slides.html">Slides</a>
                     <a class="nav-link" href="results.html">Results</a>
                 </div>
                 <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open Menu">☰</button>
@@ -64,6 +65,7 @@
             <div class="mobile-menu" id="mobileMenu">
                 <a class="mobile-link" href="index.html">Home</a>
                 <a class="mobile-link" href="video-lectures.html">Videos</a>
+                <a class="mobile-link" href="study-slides.html">Slides</a>
                 <a class="mobile-link" href="results.html">Results</a>
             </div>
         </div>
@@ -181,6 +183,35 @@
                         </div>
                         <button type="submit" class="btn btn-primary" style="width: 100%; height: 44px; background:#b91c1c; border-color:#b91c1c;">Update Profile</button>
                     </form>
+                </div>
+
+                <div class="card" id="lecturePermissionsCard">
+                    <h2 class="card-header" style="color: #b91c1c;">Video Lecture Permissions</h2>
+                    <p style="margin-bottom: 1.5rem; color: var(--text-light); font-size: 0.9rem; line-height: 1.4;">
+                        Select which video lecture scrollers each student can access. Permissions are updated instantly in the database when toggled.
+                    </p>
+                    <div style="overflow-x: auto; max-width: 100%;">
+                        <table class="table" id="lecturePermissionsTable" style="min-width: 1000px; border-collapse: collapse; width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: left; padding: 0.5rem;">ID</th>
+                                    <th style="text-align: left; padding: 0.5rem;">Student Name</th>
+                                    <th style="text-align: center; padding: 0.5rem; font-size: 0.8rem; line-height: 1.2;">X(BIO)<br><small style="color:var(--text-light);">C101</small></th>
+                                    <th style="text-align: center; padding: 0.5rem; font-size: 0.8rem; line-height: 1.2;">X(SST)<br><small style="color:var(--text-light);">C102</small></th>
+                                    <th style="text-align: center; padding: 0.5rem; font-size: 0.8rem; line-height: 1.2;">X(ENG)<br><small style="color:var(--text-light);">C103</small></th>
+                                    <th style="text-align: center; padding: 0.5rem; font-size: 0.8rem; line-height: 1.2;">X(HIN)<br><small style="color:var(--text-light);">C104</small></th>
+                                    <th style="text-align: center; padding: 0.5rem; font-size: 0.8rem; line-height: 1.2;">XI(CHM)<br><small style="color:var(--text-light);">C105</small></th>
+                                    <th style="text-align: center; padding: 0.5rem; font-size: 0.8rem; line-height: 1.2;">XI(PHY)<br><small style="color:var(--text-light);">C106</small></th>
+                                    <th style="text-align: center; padding: 0.5rem; font-size: 0.8rem; line-height: 1.2;">XII(CHM)<br><small style="color:var(--text-light);">C107</small></th>
+                                    <th style="text-align: center; padding: 0.5rem; font-size: 0.8rem; line-height: 1.2;">XII(PHY)<br><small style="color:var(--text-light);">C108</small></th>
+                                    <th style="text-align: center; padding: 0.5rem; font-size: 0.8rem; line-height: 1.2;">NDA(ENG)<br><small style="color:var(--text-light);">C109</small></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dynamically populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <div class="card" id="manage-splits-card">
