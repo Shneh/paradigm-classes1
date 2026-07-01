@@ -181,29 +181,46 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <div class="logo light">
-                        <img alt="Paradigm Classes Logo" class="logo-img" src="images/logo.png" />
-                        <div>
-                            <div class="logo-primary">PARADIGM</div>
-                            <div class="logo-secondary" style="color: var(--primary-light);">CLASSES</div>
-                        </div>
-                    </div>
-                    <p class="footer-about">
-                        Premium coaching institute dedicated to building conceptual clarity and academic excellence for students.
-                    </p>
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo-primary">PARADIGM</div>
+                    <div class="logo-secondary">CLASSES</div>
+                    <p class="footer-tagline">Excellence in PCM Education</p>
                 </div>
+
+                <div class="footer-links">
+                    <h4 class="footer-title">Quick Links</h4>
+                    <ul class="footer-menu">
+                        <li><a href="index.html#home">Home</a></li>
+                        <li><a href="index.html#courses">Courses</a></li>
+                        <li><a href="index.html#about">About Us</a></li>
+                        <li><a href="index.html#testimonials">Testimonials</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                        <li><a href="fees.html" style="font-weight: bold; color: #f59e0b;">Course Fees Chart</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-courses">
+                    <h4 class="footer-title">Our Courses</h4>
+                    <ul class="footer-menu">
+                        <li><a href="#courses">Class IX-X Foundation</a></li>
+                        <li><a href="#courses">Class XI-XII (PCM)</a></li>
+                        <li><a href="#courses">JEE Preparation</a></li>
+                        <li><a href="#courses">NEET Preparation</a></li>
+                        <li><a href="#courses">NDA &amp; CUET</a></li>
+                    </ul>
+                </div>
+
                 <div class="footer-contact">
-                    <h3 class="footer-title">Contact Us</h3>
+                    <h4 class="footer-title">Contact Us</h4>
                     <p class="footer-contact-item">
                         <svg class="footer-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z">
+                                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z">
                             </path>
                         </svg>
-                        +91 7906459560
+                        +91 9627242349
                     </p>
                     <p class="footer-contact-item">
                         <svg class="footer-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -214,8 +231,20 @@
                         </svg>
                         paradigm.pcm@gmail.com
                     </p>
+                    <p class="footer-contact-item">
+                        <svg class="footer-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+                            </path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        Arcadia Grant, Uttarakhand
+                    </p>
                 </div>
             </div>
+
             <div class="footer-bottom">
                 <p class="copyright">© 2025 Paradigm Classes. All Rights Reserved.</p>
             </div>
@@ -269,6 +298,7 @@
             if (addSlideForm) {
                 addSlideForm.addEventListener('submit', async (e) => {
                     e.preventDefault();
+                    e.stopImmediatePropagation();
                     const title = document.getElementById('slideTitle').value.trim();
                     const link = document.getElementById('slideLink').value.trim();
                     const category = document.getElementById('slideCategory').value;
