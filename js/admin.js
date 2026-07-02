@@ -47,6 +47,75 @@ document.addEventListener('DOMContentLoaded', async () => {
     const teacherBreakdownTableBody = document.querySelector('#teacherBreakdownTable tbody');
     const teacherBreakdownTotalEl = document.getElementById('teacherBreakdownTotal');
 
+    // === Premium SPA Tab Toggling & Sidebar Layout Controller ===
+    const menuItems = document.querySelectorAll('.menu-item');
+    const tabContents = document.querySelectorAll('.tab-content');
+    const activeTabTitle = document.getElementById('activeTabTitle');
+    const menuToggleBtn = document.getElementById('menuToggleBtn');
+    const adminSidebar = document.getElementById('adminSidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    // Populate admin ID in topbar badge
+    const adminUserSpan = document.querySelector('.user-badge span');
+    if (adminUserSpan && user) {
+        adminUserSpan.textContent = user.id || 'Admin';
+    }
+
+    function switchTab(tabId) {
+        let activeItem = null;
+        menuItems.forEach(item => {
+            if (item.dataset.tab === tabId) {
+                item.classList.add('active');
+                activeItem = item;
+            } else {
+                item.classList.remove('active');
+            }
+        });
+
+        tabContents.forEach(content => {
+            if (content.id === `tab-${tabId}`) {
+                content.classList.add('active');
+            } else {
+                content.classList.remove('active');
+            }
+        });
+
+        if (activeTabTitle && activeItem) {
+            // Get content text ignoring nested svg node
+            const titleNode = Array.from(activeItem.childNodes).find(n => n.nodeType === Node.TEXT_NODE);
+            activeTabTitle.textContent = titleNode ? titleNode.textContent.trim() : activeItem.textContent.trim();
+        }
+
+        sessionStorage.setItem('adminActiveTab', tabId);
+    }
+
+    menuItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const tabId = item.dataset.tab;
+            switchTab(tabId);
+
+            if (adminSidebar.classList.contains('open')) {
+                adminSidebar.classList.remove('open');
+                sidebarOverlay.classList.remove('show');
+            }
+        });
+    });
+
+    if (menuToggleBtn && adminSidebar && sidebarOverlay) {
+        menuToggleBtn.addEventListener('click', () => {
+            adminSidebar.classList.toggle('open');
+            sidebarOverlay.classList.toggle('show');
+        });
+
+        sidebarOverlay.addEventListener('click', () => {
+            adminSidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('show');
+        });
+    }
+
+    const cachedTab = sessionStorage.getItem('adminActiveTab') || 'overview';
+    switchTab(cachedTab);
+
     // Helper to calculate teacher dynamic salary
     function calculateTeacherDynamicSalary(teacherId, studentsList) {
         let total = 0;
@@ -179,17 +248,33 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function renderPermissionsTable() {
         const tableBody = document.querySelector('#lecturePermissionsTable tbody');
-        if (!tableBody) return;
+        const thead = document.querySelector('#lecturePermissionsTable thead');
+        if (!tableBody || !thead) return;
 
         const students = await DB.getStudents();
-        tableBody.innerHTML = '';
+        const lectures = await DB.getVideoLectures();
 
+        // Dynamically build the permission headers
+        let headersHTML = `
+            <tr>
+                <th style="text-align: left; padding: 0.5rem;">ID</th>
+                <th style="text-align: left; padding: 0.5rem;">Student Name</th>
+        `;
+        lectures.forEach(scroller => {
+            headersHTML += `
+                <th style="text-align: center; padding: 0.5rem; font-size: 0.8rem; line-height: 1.2;">
+                    ${scroller.title}<br><small style="color:var(--text-light);">${scroller.id}</small>
+                </th>
+            `;
+        });
+        headersHTML += `</tr>`;
+        thead.innerHTML = headersHTML;
+
+        tableBody.innerHTML = '';
         if (students.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="11" style="text-align: center; color: var(--text-light);">No active students.</td></tr>';
+            tableBody.innerHTML = `<tr><td colspan="${2 + lectures.length}" style="text-align: center; color: var(--text-light);">No active students.</td></tr>`;
             return;
         }
-
-        const LECTURE_COURSES = ['C101', 'C102', 'C103', 'C104', 'C105', 'C106', 'C107', 'C108', 'C109'];
 
         students.forEach(student => {
             const tr = document.createElement('tr');
@@ -199,16 +284,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <td><strong>${student.name}</strong></td>
             `;
 
-            LECTURE_COURSES.forEach(courseId => {
-                const hasPermission = student.lecturePermissions && student.lecturePermissions.includes(courseId);
+            lectures.forEach(scroller => {
+                const hasPermission = student.lecturePermissions && student.lecturePermissions.includes(scroller.id);
                 cellsHTML += `
                     <td style="text-align: center;">
                         <input type="checkbox" 
-                               class="student-course-checkbox" 
-                               data-student-id="${student.id}" 
-                               data-course-id="${courseId}" 
-                               ${hasPermission ? 'checked' : ''} 
-                               style="width: 18px; height: 18px; cursor: pointer;">
+                                class="student-course-checkbox" 
+                                data-student-id="${student.id}" 
+                                data-course-id="${scroller.id}" 
+                                ${hasPermission ? 'checked' : ''} 
+                                style="width: 18px; height: 18px; cursor: pointer;">
                     </td>
                 `;
             });
@@ -1107,6 +1192,578 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    // === Video Lectures Management ===
+    const createScrollerForm = document.getElementById('create-scroller-form');
+    const newScrollerTitleInput = document.getElementById('newScrollerTitle');
+    const scrollersListTableBody = document.querySelector('#scrollersListTable tbody');
+    const manageVideoScrollerSelect = document.getElementById('manageVideoScrollerSelect');
+    const addVideoForm = document.getElementById('add-video-form');
+    const addVideoFormTitle = document.getElementById('addVideoFormTitle');
+    const scrollerVideosListContainer = document.getElementById('scrollerVideosListContainer');
+    const scrollerVideosTableBody = document.querySelector('#scrollerVideosTable tbody');
+    const scrollerVideosPlaceholder = document.getElementById('scrollerVideosPlaceholder');
+
+    async function renderScrollersList() {
+        if (!scrollersListTableBody) return;
+        const lectures = await DB.getVideoLectures();
+        scrollersListTableBody.innerHTML = '';
+        
+        // Save current selection to restore after render
+        const selectedId = manageVideoScrollerSelect.value;
+        manageVideoScrollerSelect.innerHTML = '<option value="" disabled selected>-- Select a Scroller --</option>';
+
+        if (lectures.length === 0) {
+            scrollersListTableBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--text-light);">No scrollers created yet.</td></tr>';
+            return;
+        }
+
+        lectures.forEach(scroller => {
+            // Dropdown select option
+            const opt = document.createElement('option');
+            opt.value = scroller.id;
+            opt.textContent = `${scroller.title} (${scroller.id})`;
+            manageVideoScrollerSelect.appendChild(opt);
+
+            // Table row
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><strong>${scroller.id}</strong></td>
+                <td>${scroller.title}</td>
+                <td style="text-align: right; display: flex; gap: 0.3rem; justify-content: flex-end;">
+                    <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;" onclick="editScrollerTitle('${scroller.id}')">Edit</button>
+                    <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; color: #dc2626; border-color: #dc2626;" onclick="deleteScroller('${scroller.id}')">Delete</button>
+                </td>
+            `;
+            scrollersListTableBody.appendChild(tr);
+        });
+
+        // Restore dropdown selection if still exists
+        if (selectedId && lectures.some(l => l.id === selectedId)) {
+            manageVideoScrollerSelect.value = selectedId;
+            showScrollerVideos(selectedId);
+        } else {
+            addVideoForm.style.display = 'none';
+            scrollerVideosListContainer.style.display = 'none';
+            scrollerVideosPlaceholder.style.display = 'block';
+        }
+    }
+
+    window.editScrollerTitle = async (scrollerId) => {
+        const lectures = await DB.getVideoLectures();
+        const scroller = lectures.find(l => l.id === scrollerId);
+        if (!scroller) return;
+
+        const newTitle = prompt("Enter new title for scroller:", scroller.title);
+        if (newTitle === null) return;
+        const trimmed = newTitle.trim();
+        if (trimmed === '') return alert("Title cannot be empty.");
+
+        scroller.title = trimmed;
+        await DB.setVideoLectures(lectures);
+        alert("Scroller title updated successfully!");
+        await renderScrollersList();
+        await renderPermissionsTable(); // Permissions header must update
+    };
+
+    window.deleteScroller = async (scrollerId) => {
+        if (!confirm(`Are you sure you want to delete this scroller? All video lectures in it will be permanently deleted.`)) return;
+
+        try {
+            let lectures = await DB.getVideoLectures();
+            lectures = lectures.filter(l => l.id !== scrollerId);
+            await DB.setVideoLectures(lectures);
+
+            // Also clean up permissions for active students
+            const students = await DB.getStudents();
+            let updatedPermissions = false;
+            students.forEach(student => {
+                if (student.lecturePermissions && student.lecturePermissions.includes(scrollerId)) {
+                    student.lecturePermissions = student.lecturePermissions.filter(id => id !== scrollerId);
+                    updatedPermissions = true;
+                }
+            });
+            if (updatedPermissions) {
+                await DB.setStudents(students);
+            }
+
+            alert("Scroller deleted successfully!");
+            await renderScrollersList();
+            await renderPermissionsTable();
+        } catch (e) {
+            console.error(e);
+            alert("Error deleting scroller: " + e.message);
+        }
+    };
+
+    if (createScrollerForm) {
+        createScrollerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = newScrollerTitleInput.value.trim();
+            if (title === '') return;
+
+            try {
+                const lectures = await DB.getVideoLectures();
+                // Sequential Cxx ID generation
+                const nextNum = lectures.length > 0 ? Math.max(...lectures.map(l => parseInt(l.id.replace('C', '')) || 100)) + 1 : 101;
+                const newId = 'C' + nextNum;
+
+                lectures.push({
+                    id: newId,
+                    title: title,
+                    videos: []
+                });
+
+                await DB.setVideoLectures(lectures);
+                newScrollerTitleInput.value = '';
+                alert(`Scroller "${title}" created successfully with ID: ${newId}`);
+                await renderScrollersList();
+                await renderPermissionsTable();
+            } catch (err) {
+                console.error(err);
+                alert("Error creating scroller: " + err.message);
+            }
+        });
+    }
+
+    if (manageVideoScrollerSelect) {
+        manageVideoScrollerSelect.addEventListener('change', (e) => {
+            showScrollerVideos(e.target.value);
+        });
+    }
+
+    async function showScrollerVideos(scrollerId) {
+        const lectures = await DB.getVideoLectures();
+        const scroller = lectures.find(l => l.id === scrollerId);
+        if (!scroller) return;
+
+        addVideoFormTitle.textContent = `Add Lecture to ${scroller.title}`;
+        addVideoForm.style.display = 'block';
+        scrollerVideosPlaceholder.style.display = 'none';
+        scrollerVideosListContainer.style.display = 'block';
+
+        renderVideosTable(scroller);
+    }
+
+    function renderVideosTable(scroller) {
+        if (!scrollerVideosTableBody) return;
+        scrollerVideosTableBody.innerHTML = '';
+        const videos = scroller.videos || [];
+
+        if (videos.length === 0) {
+            scrollerVideosTableBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--text-light);">No lectures added to this scroller yet.</td></tr>';
+            return;
+        }
+
+        videos.forEach((video, index) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><strong>${video.title || 'Untitled'}</strong></td>
+                <td><a href="${video.link}" target="_blank" style="word-break: break-all; font-size: 0.85rem; color: var(--primary-light); text-decoration: none;">${video.link || 'No Link'}</a></td>
+                <td style="text-align: right; display: flex; gap: 0.3rem; justify-content: flex-end;">
+                    <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;" onclick="editVideo('${scroller.id}', ${index})">Edit</button>
+                    <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; color: #dc2626; border-color: #dc2626;" onclick="deleteVideo('${scroller.id}', ${index})">Remove</button>
+                </td>
+            `;
+            scrollerVideosTableBody.appendChild(tr);
+        });
+    }
+
+    // Multi-row video inputs handler
+    const addAnotherVideoRowBtn = document.getElementById('addAnotherVideoRowBtn');
+    const addVideoRowsContainer = document.getElementById('addVideoRowsContainer');
+
+    function updateRemoveRowButtonsVisibility() {
+        if (!addVideoRowsContainer) return;
+        const rows = addVideoRowsContainer.querySelectorAll('.video-input-row');
+        const removeBtns = addVideoRowsContainer.querySelectorAll('.remove-input-row-btn');
+        removeBtns.forEach(btn => {
+            btn.style.display = rows.length > 1 ? 'block' : 'none';
+        });
+    }
+
+    if (addAnotherVideoRowBtn && addVideoRowsContainer) {
+        addAnotherVideoRowBtn.addEventListener('click', () => {
+            const newRow = document.createElement('div');
+            newRow.className = 'video-input-row';
+            newRow.style.cssText = 'display: flex; gap: 0.5rem; margin-bottom: 0.75rem; align-items: flex-end;';
+            newRow.innerHTML = `
+                <div style="flex: 1;">
+                    <label style="font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Video Title</label>
+                    <input class="form-input video-row-title" type="text" placeholder="e.g. LECTURE 1" required style="padding: 0.4rem 0.6rem;">
+                </div>
+                <div style="flex: 1.5;">
+                    <label style="font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Video Link (YouTube/Telegram)</label>
+                    <input class="form-input video-row-link" type="url" placeholder="e.g. https://youtu.be/..." required style="padding: 0.4rem 0.6rem;">
+                </div>
+                <button type="button" class="btn btn-outline remove-input-row-btn" style="padding: 0.4rem; color: #dc2626; border-color: #fca5a5;" title="Remove this row">✕</button>
+            `;
+            addVideoRowsContainer.appendChild(newRow);
+
+            newRow.querySelector('.remove-input-row-btn').addEventListener('click', () => {
+                newRow.remove();
+                updateRemoveRowButtonsVisibility();
+            });
+
+            updateRemoveRowButtonsVisibility();
+        });
+    }
+
+    if (addVideoRowsContainer) {
+        addVideoRowsContainer.querySelectorAll('.remove-input-row-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.target.closest('.video-input-row').remove();
+                updateRemoveRowButtonsVisibility();
+            });
+        });
+    }
+
+    if (addVideoForm) {
+        addVideoForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const scrollerId = manageVideoScrollerSelect.value;
+            if (!scrollerId) return;
+
+            const rows = addVideoRowsContainer.querySelectorAll('.video-input-row');
+            const newVideos = [];
+            rows.forEach(row => {
+                const title = row.querySelector('.video-row-title').value.trim();
+                const link = row.querySelector('.video-row-link').value.trim();
+                if (title && link) {
+                    newVideos.push({ title, link });
+                }
+            });
+
+            if (newVideos.length === 0) return;
+
+            try {
+                const lectures = await DB.getVideoLectures();
+                const scroller = lectures.find(l => l.id === scrollerId);
+                if (scroller) {
+                    if (!scroller.videos) scroller.videos = [];
+                    scroller.videos.push(...newVideos);
+                    await DB.setVideoLectures(lectures);
+
+                    // Reset to single row input
+                    addVideoRowsContainer.innerHTML = `
+                        <div class="video-input-row" style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem; align-items: flex-end;">
+                            <div style="flex: 1;">
+                                <label style="font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Video Title</label>
+                                <input class="form-input video-row-title" type="text" placeholder="e.g. LECTURE 1" required style="padding: 0.4rem 0.6rem;">
+                            </div>
+                            <div style="flex: 1.5;">
+                                <label style="font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Video Link (YouTube/Telegram)</label>
+                                <input class="form-input video-row-link" type="url" placeholder="e.g. https://youtu.be/..." required style="padding: 0.4rem 0.6rem;">
+                            </div>
+                            <button type="button" class="btn btn-outline remove-input-row-btn" style="padding: 0.4rem; color: #dc2626; border-color: #fca5a5; display: none;" title="Remove this row">✕</button>
+                        </div>
+                    `;
+
+                    addVideoRowsContainer.querySelector('.remove-input-row-btn').addEventListener('click', (ev) => {
+                        ev.target.closest('.video-input-row').remove();
+                        updateRemoveRowButtonsVisibility();
+                    });
+
+                    updateRemoveRowButtonsVisibility();
+
+                    alert(`Successfully added ${newVideos.length} video(s) to scroller!`);
+                    await showScrollerVideos(scrollerId);
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Error adding videos: " + err.message);
+            }
+        });
+    }
+
+    // Inline Table Editor for existing links
+    window.editVideo = (scrollerId, index) => {
+        if (!scrollerVideosTableBody) return;
+        const rows = scrollerVideosTableBody.querySelectorAll('tr');
+        const row = rows[index];
+        if (!row) return;
+
+        const titleCell = row.querySelectorAll('td')[0];
+        const linkCell = row.querySelectorAll('td')[1];
+        const actionCell = row.querySelectorAll('td')[2];
+
+        const currentTitle = titleCell.querySelector('strong').textContent.trim();
+        const currentLink = linkCell.querySelector('a') ? linkCell.querySelector('a').getAttribute('href') : '';
+
+        titleCell.innerHTML = `<input class="form-input inline-edit-title" value="${currentTitle}" style="padding: 0.3rem 0.5rem; font-size: 0.85rem;" required>`;
+        linkCell.innerHTML = `<input class="form-input inline-edit-link" type="url" value="${currentLink}" style="padding: 0.3rem 0.5rem; font-size: 0.85rem;" required>`;
+
+        actionCell.innerHTML = `
+            <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; background: #22c55e; color: white; border-color: #22c55e;" onclick="saveInlineVideoEdit('${scrollerId}', ${index}, this)">Save</button>
+            <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;" onclick="cancelInlineVideoEdit('${scrollerId}')">Cancel</button>
+        `;
+    };
+
+    window.cancelInlineVideoEdit = async (scrollerId) => {
+        await showScrollerVideos(scrollerId);
+    };
+
+    window.saveInlineVideoEdit = async (scrollerId, index, btnEl) => {
+        const row = btnEl.closest('tr');
+        if (!row) return;
+
+        const newTitle = row.querySelector('.inline-edit-title').value.trim();
+        const newLink = row.querySelector('.inline-edit-link').value.trim();
+
+        if (newTitle === '' || newLink === '') {
+            return alert("Title and link cannot be empty.");
+        }
+
+        try {
+            const lectures = await DB.getVideoLectures();
+            const scroller = lectures.find(l => l.id === scrollerId);
+            if (scroller && scroller.videos && scroller.videos[index]) {
+                scroller.videos[index] = { title: newTitle, link: newLink };
+                await DB.setVideoLectures(lectures);
+                alert("Lecture updated successfully!");
+                await showScrollerVideos(scrollerId);
+            }
+        } catch (e) {
+            console.error(e);
+            alert("Error saving video update: " + e.message);
+        }
+    };
+
+    window.deleteVideo = async (scrollerId, index) => {
+        if (!confirm("Are you sure you want to remove this video lecture from the scroller?")) return;
+
+        try {
+            const lectures = await DB.getVideoLectures();
+            const scroller = lectures.find(l => l.id === scrollerId);
+            if (scroller && scroller.videos) {
+                scroller.videos.splice(index, 1);
+                await DB.setVideoLectures(lectures);
+                alert("Video removed successfully!");
+                await showScrollerVideos(scrollerId);
+            }
+        } catch (e) {
+            console.error(e);
+            alert("Error removing video: " + e.message);
+        }
+    };
+
+    // === Admin Attendance Dashboard ===
+    const adminAttendanceDateInput = document.getElementById('adminAttendanceDate');
+    const adminAttendanceFormTableBody = document.querySelector('#adminAttendanceFormTable tbody');
+    const adminSaveAttendanceBtn = document.getElementById('adminSaveAttendanceBtn');
+    const adminAttendanceTabularReportTableBody = document.querySelector('#adminAttendanceTabularReportTable tbody');
+    const adminAttendanceTabularHeader = document.getElementById('adminAttendanceTabularHeader');
+
+    // Date pre-fill helper (local timezone safe)
+    const tzOffset = (new Date()).getTimezoneOffset() * 60000;
+    const todayYYYYMMDD = (new Date(Date.now() - tzOffset)).toISOString().split('T')[0];
+
+    if (adminAttendanceDateInput) {
+        adminAttendanceDateInput.value = todayYYYYMMDD;
+        adminAttendanceDateInput.addEventListener('change', renderAdminAttendanceForm);
+    }
+
+    async function renderAdminAttendanceForm() {
+        if (!adminAttendanceFormTableBody || !adminAttendanceDateInput) return;
+        const selectedDate = adminAttendanceDateInput.value;
+        if (!selectedDate) return;
+
+        const students = await DB.getStudents();
+        const attendanceList = await DB.getAttendance();
+        const dayRecord = attendanceList.find(r => r.date === selectedDate);
+        
+        adminAttendanceFormTableBody.innerHTML = '';
+        
+        if (students.length === 0) {
+            adminAttendanceFormTableBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--text-light);">No active students.</td></tr>';
+            return;
+        }
+
+        students.forEach(student => {
+            let status = 'present';
+            if (dayRecord && dayRecord.records && dayRecord.records[student.id]) {
+                status = dayRecord.records[student.id];
+            }
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${student.id}</td>
+                <td><strong>${student.name}</strong></td>
+                <td style="text-align: center;">
+                    <div class="admin-attendance-toggle-group" style="display: flex; border: 1px solid var(--gray-300); border-radius: var(--radius-md); overflow: hidden; width: 100px; margin: 0 auto;" data-student-id="${student.id}" data-status="${status}">
+                        <button type="button" class="toggle-btn p-btn" style="flex: 1; border: none; padding: 0.3rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s;">P</button>
+                        <button type="button" class="toggle-btn a-btn" style="flex: 1; border: none; padding: 0.3rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s;">A</button>
+                    </div>
+                </td>
+            `;
+            adminAttendanceFormTableBody.appendChild(tr);
+
+            const toggleGroup = tr.querySelector('.admin-attendance-toggle-group');
+            const pBtn = toggleGroup.querySelector('.p-btn');
+            const aBtn = toggleGroup.querySelector('.a-btn');
+
+            function setToggleStatus(newStatus) {
+                toggleGroup.dataset.status = newStatus;
+                if (newStatus === 'present') {
+                    pBtn.style.backgroundColor = '#22c55e';
+                    pBtn.style.color = 'white';
+                    aBtn.style.backgroundColor = '#f1f5f9';
+                    aBtn.style.color = 'var(--text-light)';
+                } else {
+                    aBtn.style.backgroundColor = '#ef4444';
+                    aBtn.style.color = 'white';
+                    pBtn.style.backgroundColor = '#f1f5f9';
+                    pBtn.style.color = 'var(--text-light)';
+                }
+            }
+
+            setToggleStatus(status);
+
+            pBtn.addEventListener('click', () => setToggleStatus('present'));
+            aBtn.addEventListener('click', () => setToggleStatus('absent'));
+        });
+    }
+
+    if (adminSaveAttendanceBtn) {
+        adminSaveAttendanceBtn.addEventListener('click', async () => {
+            const selectedDate = adminAttendanceDateInput.value;
+            if (!selectedDate) return alert('Select date first.');
+
+            const toggles = document.querySelectorAll('.admin-attendance-toggle-group');
+            const records = {};
+            toggles.forEach(t => {
+                records[t.dataset.studentId] = t.dataset.status;
+            });
+
+            try {
+                const attendanceList = await DB.getAttendance();
+                const existingIdx = attendanceList.findIndex(r => r.date === selectedDate);
+                const newRecord = {
+                    date: selectedDate,
+                    records: records,
+                    takenBy: 'Admin'
+                };
+
+                if (existingIdx !== -1) {
+                    attendanceList[existingIdx] = newRecord;
+                } else {
+                    attendanceList.push(newRecord);
+                }
+
+                await DB.setAttendance(attendanceList);
+                alert("Attendance saved successfully!");
+                await renderAdminAttendanceOverviewTable();
+            } catch (err) {
+                console.error(err);
+                alert("Error saving attendance: " + err.message);
+            }
+        });
+    }
+
+    async function renderAdminAttendanceOverviewTable() {
+        if (!adminAttendanceTabularReportTableBody || !adminAttendanceTabularHeader) return;
+
+        const students = await DB.getStudents();
+        const attendanceList = await DB.getAttendance();
+
+        // Extract and sort dates chronologically (oldest-to-newest)
+        const sortedDates = [...new Set(attendanceList.map(a => a.date))].sort((a, b) => a.localeCompare(b));
+
+        // Format dates to look like "02 JUL" for headers
+        const formatHeaderDate = (dateStr) => {
+            const parts = dateStr.split('-');
+            if (parts.length !== 3) return dateStr;
+            const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+            const day = parts[2];
+            const monthIdx = parseInt(parts[1]) - 1;
+            return `${day} ${months[monthIdx]}`;
+        };
+
+        // Render table headers
+        let headerRowHTML = `
+            <th style="padding: 0.75rem; border: 1px solid var(--gray-200); text-align: left; font-weight: 700; color: var(--primary-color);">Student Name</th>
+            <th style="padding: 0.75rem; border: 1px solid var(--gray-200); text-align: center; font-weight: 700; color: var(--primary-color); width: 90px;">Rate (%)</th>
+        `;
+        sortedDates.forEach(date => {
+            headerRowHTML += `
+                <th style="padding: 0.75rem; border: 1px solid var(--gray-200); text-align: center; font-size: 0.8rem; font-weight: 600; color: var(--text-dark); min-width: 70px;">
+                    ${formatHeaderDate(date)}
+                </th>
+            `;
+        });
+        adminAttendanceTabularHeader.innerHTML = headerRowHTML;
+
+        // Render student rows
+        adminAttendanceTabularReportTableBody.innerHTML = '';
+        if (students.length === 0) {
+            adminAttendanceTabularReportTableBody.innerHTML = `<tr><td colspan="${2 + sortedDates.length}" style="text-align: center; color: var(--text-light); padding: 2rem;">No students found.</td></tr>`;
+            return;
+        }
+
+        students.forEach(student => {
+            let totalDays = 0;
+            let presentDays = 0;
+
+            let rowHTML = `
+                <td style="padding: 0.75rem; border: 1px solid var(--gray-200);"><strong>${student.name}</strong> <small style="color:var(--text-light); font-size: 0.75rem; display:block;">(${student.id})</small></td>
+            `;
+
+            // Pre-calculate rate for student
+            attendanceList.forEach(day => {
+                if (day.records && day.records[student.id]) {
+                    totalDays++;
+                    if (day.records[student.id] === 'present') {
+                        presentDays++;
+                    }
+                }
+            });
+            const rateVal = totalDays > 0 ? ((presentDays / totalDays) * 100).toFixed(1) : null;
+            const rateText = rateVal !== null ? `${rateVal}%` : 'N/A';
+
+            let rateColor = '#64748b';
+            if (rateVal !== null) {
+                const r = parseFloat(rateVal);
+                if (r >= 85) rateColor = '#166534';
+                else if (r >= 75) rateColor = '#b45309';
+                else rateColor = '#b91c1c';
+            }
+
+            rowHTML += `
+                <td style="padding: 0.75rem; border: 1px solid var(--gray-200); text-align: center; font-weight: 700; color: ${rateColor};">${rateText}</td>
+            `;
+
+            // Render P / A cells chronologically
+            sortedDates.forEach(date => {
+                const dayRecord = attendanceList.find(a => a.date === date);
+                let cellText = '-';
+                let cellColor = '#94a3b8';
+                let bgStyle = '';
+
+                if (dayRecord && dayRecord.records && dayRecord.records[student.id]) {
+                    const status = dayRecord.records[student.id];
+                    if (status === 'present') {
+                        cellText = 'P';
+                        cellColor = '#166534';
+                        bgStyle = 'background-color: #dcfce7;';
+                    } else {
+                        cellText = 'A';
+                        cellColor = '#991b1b';
+                        bgStyle = 'background-color: #fee2e2;';
+                    }
+                }
+
+                rowHTML += `
+                    <td style="padding: 0.5rem; border: 1px solid var(--gray-200); text-align: center; font-weight: 700; color: ${cellColor}; ${bgStyle}">
+                        ${cellText}
+                    </td>
+                `;
+            });
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = rowHTML;
+            adminAttendanceTabularReportTableBody.appendChild(tr);
+        });
+    }
+
     document.getElementById('logoutBtn').addEventListener('click', () => {
         DB.logout();
         window.location.href = 'index.html';
@@ -1119,4 +1776,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     await renderSalaries();
     await renderCourses();
     await calculateFinancials();
+    await renderScrollersList();
+    await renderAdminAttendanceForm();
+    await renderAdminAttendanceOverviewTable();
 });

@@ -76,6 +76,23 @@ const DB = {
     
     getSlides: async () => await getList('slides'),
     setSlides: async (slides) => await setList('slides', slides),
+
+    getVideoLectures: async () => {
+        try {
+            const list = await getList('videoLectures');
+            if (list.length === 0) {
+                const response = await fetch('js/default_lectures.json');
+                const defaultList = await response.json();
+                await setList('videoLectures', defaultList);
+                return defaultList;
+            }
+            return list;
+        } catch (e) {
+            console.error("Error fetching videoLectures:", e);
+            return [];
+        }
+    },
+    setVideoLectures: async (lectures) => await setList('videoLectures', lectures),
     
     getAdmin: async () => {
         try {
@@ -323,7 +340,7 @@ function initAccessibilityWidget() {
             .pc-accessibility-widget {
                 position: fixed;
                 bottom: 20px;
-                left: 20px;
+                right: 20px;
                 background: rgba(255, 255, 255, 0.85);
                 backdrop-filter: blur(12px);
                 -webkit-backdrop-filter: blur(12px);

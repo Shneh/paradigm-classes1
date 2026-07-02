@@ -4,513 +4,1097 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta content="Paradigm Classes - Admin Dashboard" name="description" />
-    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800&display=swap" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
     <title>Admin Dashboard - Paradigm Classes</title>
     <style>
         :root {
             --primary-color: #1e3a8a;
             --primary-light: #3b82f6;
-            --text-dark: #1e293b;
+            --primary-dark: #1e293b;
+            --text-dark: #0f172a;
             --text-light: #64748b;
+            --gray-100: #f1f5f9;
             --gray-200: #e2e8f0;
             --gray-300: #cbd5e1;
+            --radius-sm: 0.25rem;
             --radius-md: 0.375rem;
             --radius-lg: 0.5rem;
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --radius-xl: 0.75rem;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
         }
-        .dashboard-container { padding: 8rem 2rem 4rem; max-width: 1200px; margin: 0 auto; }
-        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 2px solid var(--gray-200); padding-bottom: 1rem; }
-        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
-        .card { background: white; padding: 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); margin-bottom: 2rem; }
-        .card-header { font-size: 1.5rem; font-weight: 700; color: #b91c1c; margin-bottom: 1.5rem; border-bottom: 2px solid var(--gray-200); padding-bottom: 0.5rem; }
-        .table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-        .table th, .table td { padding: 0.75rem; border: 1px solid var(--gray-200); text-align: left; }
-        .form-row { display: flex; gap: 1rem; align-items: flex-end; margin-bottom: 1rem; }
-        .form-row .form-group { flex: 1; margin: 0; }
+
+        /* Layout Structure */
+        body {
+            background-color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            margin: 0;
+            overflow-x: hidden;
+            font-family: 'Satoshi', 'Inter', sans-serif;
+        }
+        
+        .admin-layout {
+            display: flex;
+            width: 100vw;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styling */
+        .admin-sidebar {
+            width: 260px;
+            background: #0f172a; /* Slate-900 */
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 1001;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 4px 0 20px rgba(0,0,0,0.05);
+        }
+
+        .sidebar-brand {
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 1px solid #1e293b;
+        }
+
+        .sidebar-brand img {
+            height: 38px;
+            width: auto;
+        }
+
+        .sidebar-brand-text {
+            line-height: 1.2;
+        }
+
+        .brand-primary {
+            font-weight: 800;
+            font-size: 1.2rem;
+            letter-spacing: 0.05em;
+            color: #f8fafc;
+        }
+
+        .brand-secondary {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #ef4444; /* Crimson accent */
+            letter-spacing: 0.08em;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 1.5rem 0.75rem;
+            margin: 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.8rem 1rem;
+            color: #94a3b8; /* Slate-400 */
+            text-decoration: none;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            font-size: 0.925rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .menu-item:hover {
+            color: #f8fafc;
+            background: #1e293b; /* Slate-800 */
+        }
+
+        .menu-item.active {
+            color: #ffffff;
+            background: #3b82f6; /* Blue-500 */
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+        }
+
+        .sidebar-footer {
+            padding: 1.25rem;
+            border-top: 1px solid #1e293b;
+        }
+
+        /* Content Area Styling */
+        .admin-main {
+            flex: 1;
+            margin-left: 260px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
+        }
+
+        .admin-topbar {
+            height: 70px;
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .menu-toggle-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #1e293b;
+        }
+
+        .topbar-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0;
+            letter-spacing: -0.01em;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #f1f5f9;
+            padding: 0.4rem 0.8rem;
+            border-radius: 99px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #334155;
+        }
+
+        .user-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #b91c1c;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 800;
+        }
+
+        .admin-content-body {
+            padding: 2rem;
+            flex: 1;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Tab Content Toggling */
+        .tab-content {
+            display: none;
+            animation: tabFadeIn 0.2s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes tabFadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Premium Dashboard Cards */
+        .card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-sm);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.2s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            border-color: #cbd5e1;
+        }
+
+        .card-header {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .dashboard-full {
+            grid-column: 1 / -1;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 1rem;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            border: 1px solid var(--gray-200);
+        }
+
+        .table th, .table td {
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid var(--gray-200);
+            text-align: left;
+        }
+
+        .table th {
+            background-color: var(--gray-100);
+            font-weight: 700;
+            color: var(--primary-dark);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-end;
+            margin-bottom: 1rem;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+            margin: 0;
+        }
+
+        .badge {
+            padding: 0.25rem 0.6rem;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        /* Form Controls UI/UX */
+        .form-input {
+            border-radius: var(--radius-md);
+            border: 1px solid var(--gray-300);
+            padding: 0.6rem 0.8rem;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary-light);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 0.825rem;
+            color: #334155;
+            margin-bottom: 0.4rem;
+            display: block;
+        }
+
+        .topbar-links {
+            display: flex;
+            gap: 1.25rem;
+            margin-right: 1.5rem;
+            align-items: center;
+        }
+
+        .topbar-link {
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            transition: color 0.2s ease;
+        }
+
+        .topbar-link:hover {
+            color: #b91c1c;
+        }
+
+        body.dark-mode .topbar-link:hover {
+            color: #f87171;
+        }
+
         @media (max-width: 768px) {
-            .dashboard-grid { grid-template-columns: 1fr; gap: 1rem; }
-            .dashboard-container { padding: 6rem 1rem 2rem; }
-            .card { padding: 1.5rem 1rem; }
-            .form-row { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
-            .form-row .form-group { width: 100%; margin: 0; }
-            .stat-box { padding: 1.5rem 1rem !important; width: 100% !important; }
-            .stat-value { font-size: 2rem !important; }
-            .action-buttons { flex-direction: column; }
+            .topbar-links {
+                display: none !important;
+            }
+        }
+
+        /* Overlay & Drawer */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.3);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+        }
+
+        /* Responsive Media Queries */
+        @media (max-width: 1024px) {
+            .admin-sidebar {
+                transform: translateX(-100%);
+            }
+            .admin-sidebar.open {
+                transform: translateX(0);
+            }
+            .admin-main {
+                margin-left: 0;
+            }
+            .menu-toggle-btn {
+                display: block;
+            }
+            .sidebar-overlay.show {
+                display: block;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .admin-topbar {
+                padding: 0 1rem;
+            }
+            .admin-content-body {
+                padding: 1rem;
+            }
+            .card {
+                padding: 1.25rem;
+            }
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .form-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+            .form-row .form-group {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="container">
-            <div class="nav-wrapper">
-                <a href="index.html" class="logo" style="text-decoration: none;">
-                    <img alt="Paradigm Classes Logo" class="logo-img" src="images/logo.png" style="height: 40px; width: auto; object-fit: contain; margin-right: 8px;"/>
-                    <div>
-                        <div class="logo-primary">PARADIGM</div>
-                        <div class="logo-secondary" style="color:#b91c1c;">ADMIN PANEL</div>
-                    </div>
-                </a>
-                <div class="nav-links">
-                    <a class="nav-link" href="index.html">Home</a>
-                    <a class="nav-link" href="video-lectures.html">Videos</a>
-                    <a class="nav-link" href="study-slides.html">Slides</a>
-                    <a class="nav-link" href="results.html">Results</a>
-                </div>
-                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open Menu">☰</button>
-                <div class="nav-cta">
-                    <button id="logoutBtn" class="btn btn-outline" style="background:#b91c1c; color:white; border:none; padding: 0.5rem 1rem;">Logout</button>
+    <!-- Sidebar mobile overlay toggle -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="admin-layout">
+        <!-- Sidebar Navigation Menu -->
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="sidebar-brand">
+                <img alt="Paradigm Classes Logo" src="images/logo.png" />
+                <div class="sidebar-brand-text">
+                    <div class="brand-primary">PARADIGM</div>
+                    <div class="brand-secondary">ADMIN PANEL</div>
                 </div>
             </div>
-            <div class="mobile-menu" id="mobileMenu">
-                <a class="mobile-link" href="index.html">Home</a>
-                <a class="mobile-link" href="video-lectures.html">Videos</a>
-                <a class="mobile-link" href="study-slides.html">Slides</a>
-                <a class="mobile-link" href="results.html">Results</a>
+            
+            <ul class="sidebar-menu">
+                <li class="menu-item active" data-tab="overview">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" style="margin-right: 2px;"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+                    Dashboard Overview
+                </li>
+                <li class="menu-item" data-tab="students">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    Student Directory
+                </li>
+                <li class="menu-item" data-tab="attendance">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    Attendance Portal
+                </li>
+                <li class="menu-item" data-tab="academics">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    Academics & Videos
+                </li>
+                <li class="menu-item" data-tab="teachers">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    Teachers & Splits
+                </li>
+            </ul>
+            
+            <div class="sidebar-footer">
+                <button id="logoutBtn" class="btn" style="background: transparent; color: #f87171; border: 2px solid #ef4444; font-weight: 700; width: 100%; border-radius: var(--radius-lg); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.6rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    Logout
+                </button>
             </div>
-        </div>
-    </nav>
-    <div style="margin-top: 80px;"></div>
+        </aside>
 
-    <div class="dashboard-container">
-        <div class="dashboard-header">
-            <h1 class="section-title" style="margin: 0;">SuperAdmin Dashboard</h1>
-        </div>
-
-        <div class="dashboard-grid">
-            <!-- Left Column: Manage Students -->
-            <div>
-                <div class="card">
-                    <h2 class="card-header">Student Management</h2>
-                    <form id="add-student-form">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Name</label>
-                                <input class="form-input" id="studentName" type="text" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Class</label>
-                                <input class="form-input" id="studentClass" type="text" placeholder="e.g. IX, NDA" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Password</label>
-                                <input class="form-input" id="studentPassword" type="text" required>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Date of Joining</label>
-                                <input class="form-input" id="studentDoj" type="date" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Monthly Fees (₹)</label>
-                                <input class="form-input" id="studentFees" type="number" min="0" required>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Mother's Phone No.</label>
-                                <input class="form-input" id="studentMotherPhone" type="tel" pattern="[0-9]{10}" placeholder="10-digit number">
-                            </div>
-                            <div class="form-group">
-                                <label>Father's Phone No.</label>
-                                <input class="form-input" id="studentFatherPhone" type="tel" pattern="[0-9]{10}" placeholder="10-digit number">
-                            </div>
-                            <div class="form-group">
-                                <label>Personal Phone No.</label>
-                                <input class="form-input" id="studentPersonalPhone" type="tel" pattern="[0-9]{10}" placeholder="10-digit number">
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 1rem; background:#b91c1c; border-color:#b91c1c;">Add Student</button>
-                    </form>
-                    <div style="overflow-x: auto;">
-                        <table class="table" id="studentsTable" style="min-width: 500px;">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Class</th>
-                                    <th>Phone Numbers</th>
-                                    <th>Password</th>
-                                    <th>Fee Splits</th>
-                                    <th style="width: 160px;">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody><!-- Filled by JS --></tbody>
-                        </table>
+        <!-- Main Workspace Area -->
+        <main class="admin-main">
+            <!-- Sticky Dashboard Top bar -->
+            <header class="admin-topbar">
+                <div class="topbar-left">
+                    <button class="menu-toggle-btn" id="menuToggleBtn">☰</button>
+                    <h2 class="topbar-title" id="activeTabTitle">Dashboard Overview</h2>
+                </div>
+                <div class="topbar-right">
+                    <div class="topbar-links">
+                        <a href="index.html" class="topbar-link">Home</a>
+                        <a href="video-lectures.html" class="topbar-link">Videos</a>
+                        <a href="study-slides.html" class="topbar-link">Slides</a>
+                        <a href="results.html" class="topbar-link">Results</a>
+                    </div>
+                    <div class="user-badge">
+                        <div class="user-avatar">SA</div>
+                        <span>SuperAdmin</span>
                     </div>
                 </div>
-                
-                <div class="card">
-                    <h2 class="card-header">Update Student Profile</h2>
-                    <form id="update-student-form">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Select Student</label>
-                                <select class="form-input" id="updateStudentId" required style="border-color: var(--gray-300); background: white;">
-                                    <option value="" disabled selected>-- Select Student --</option>
-                                    <!-- Filled by JS -->
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Date of Joining</label>
-                                <input class="form-input" id="updateStudentDoj" type="date" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Monthly Fees (₹)</label>
-                                <input class="form-input" id="updateStudentFees" type="number" min="0" required>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Mother's Phone No.</label>
-                                <input class="form-input" id="updateStudentMotherPhone" type="tel" pattern="[0-9]{10}" placeholder="Optional">
-                            </div>
-                            <div class="form-group">
-                                <label>Father's Phone No.</label>
-                                <input class="form-input" id="updateStudentFatherPhone" type="tel" pattern="[0-9]{10}" placeholder="Optional">
-                            </div>
-                            <div class="form-group">
-                                <label>Personal Phone No.</label>
-                                <input class="form-input" id="updateStudentPersonalPhone" type="tel" pattern="[0-9]{10}" placeholder="Optional">
-                            </div>
-                        </div>
-                        <div id="updateStudentSplitsWrapper" style="display: none; margin-top: 1.5rem; margin-bottom: 1.5rem; border-top: 1px solid var(--gray-200); padding-top: 1rem;">
-                            <h4 style="margin-top: 0; margin-bottom: 0.75rem; color: var(--text-dark); font-size: 1.1rem; font-weight: 700;">Teacher Fee Share Percentages</h4>
-                            <div id="updateStudentSplitsList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(185px, 1fr)); gap: 1rem;">
-                                <!-- Dynamically populated list of teachers and percentage inputs -->
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%; height: 44px; background:#b91c1c; border-color:#b91c1c;">Update Profile</button>
-                    </form>
-                </div>
+            </header>
 
-                <div class="card" id="lecturePermissionsCard">
-                    <h2 class="card-header" style="color: #b91c1c;">Video Lecture Permissions</h2>
-                    <p style="margin-bottom: 1.5rem; color: var(--text-light); font-size: 0.9rem; line-height: 1.4;">
-                        Select which video lecture scrollers each student can access. Permissions are updated instantly in the database when toggled.
-                    </p>
-                    <div style="overflow-x: auto; max-width: 100%;">
-                        <table class="table" id="lecturePermissionsTable" style="min-width: 1000px; border-collapse: collapse; width: 100%;">
-                            <thead>
-                                <tr>
-                                    <th style="text-align: left; padding: 0.5rem;">ID</th>
-                                    <th style="text-align: left; padding: 0.5rem;">Student Name</th>
-                                    <th style="text-align: center; padding: 0.5rem; font-size: 0.8rem; line-height: 1.2;">X(BIO)<br><small style="color:var(--text-light);">C101</small></th>
-                                    <th style="text-align: center; padding: 0.5rem; font-size: 0.8rem; line-height: 1.2;">X(SST)<br><small style="color:var(--text-light);">C102</small></th>
-                                    <th style="text-align: center; padding: 0.5rem; font-size: 0.8rem; line-height: 1.2;">X(ENG)<br><small style="color:var(--text-light);">C103</small></th>
-                                    <th style="text-align: center; padding: 0.5rem; font-size: 0.8rem; line-height: 1.2;">X(HIN)<br><small style="color:var(--text-light);">C104</small></th>
-                                    <th style="text-align: center; padding: 0.5rem; font-size: 0.8rem; line-height: 1.2;">XI(CHM)<br><small style="color:var(--text-light);">C105</small></th>
-                                    <th style="text-align: center; padding: 0.5rem; font-size: 0.8rem; line-height: 1.2;">XI(PHY)<br><small style="color:var(--text-light);">C106</small></th>
-                                    <th style="text-align: center; padding: 0.5rem; font-size: 0.8rem; line-height: 1.2;">XII(CHM)<br><small style="color:var(--text-light);">C107</small></th>
-                                    <th style="text-align: center; padding: 0.5rem; font-size: 0.8rem; line-height: 1.2;">XII(PHY)<br><small style="color:var(--text-light);">C108</small></th>
-                                    <th style="text-align: center; padding: 0.5rem; font-size: 0.8rem; line-height: 1.2;">NDA(ENG)<br><small style="color:var(--text-light);">C109</small></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Dynamically populated by JS -->
-                            </tbody>
-                        </table>
+            <div class="admin-content-body">
+                <!-- ================= TAB 1: OVERVIEW ================= -->
+                <div class="tab-content active" id="tab-overview">
+                    <!-- Financial Stats Overview -->
+                    <div class="card">
+                        <h2 class="card-header" style="color: #b91c1c; border-bottom: none; margin-bottom: 0; padding-bottom: 0;">Tuition Financial Overview</h2>
+                        <p style="color: var(--text-light); margin-top: 0.5rem; margin-bottom: 1.5rem; font-size: 0.9rem;">
+                            Live metrics computed based on active student fee shares and payouts issued to tutors.
+                        </p>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; width: 100%;">
+                            <div class="stat-box" style="text-align: center; background: #f8fafc; padding: 1.5rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--gray-200);">
+                                <h3 style="color: var(--text-light); font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Expected Monthly Income</h3>
+                                <div id="totalExpectedFees" class="stat-value" style="font-size: 2rem; font-weight: 700; color: #1e3a8a;">₹0</div>
+                            </div>
+                            <div class="stat-box" style="text-align: center; background: #f8fafc; padding: 1.5rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--gray-200);">
+                                <h3 style="color: var(--text-light); font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Total Collected Income</h3>
+                                <div id="totalActualCollected" class="stat-value" style="font-size: 2rem; font-weight: 700; color: #166534;">₹0</div>
+                                <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 0.2rem;">All-Time Fees + Fines Paid</div>
+                            </div>
+                            <div class="stat-box" style="text-align: center; background: #f8fafc; padding: 1.5rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--gray-200);">
+                                <h3 style="color: var(--text-light); font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Monthly Teacher Payouts</h3>
+                                <div id="totalTeacherSalaries" class="stat-value" style="font-size: 2rem; font-weight: 700; color: #b91c1c;">₹0</div>
+                                <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 0.2rem;">Total dynamic monthly salary</div>
+                            </div>
+                            <div class="stat-box" style="text-align: center; background: #f8fafc; padding: 1.5rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--gray-200);">
+                                <h3 style="color: var(--text-light); font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Tuition Net Monthly Margin</h3>
+                                <div id="tuitionNetMargin" class="stat-value" style="font-size: 2rem; font-weight: 700; color: #0284c7;">₹0</div>
+                                <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 0.2rem;">Expected Fees - Payouts</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <!-- Alert Marquee Section -->
+                        <div class="card">
+                            <h2 class="card-header" style="color: #b91c1c;">Tuition Announcement (Marquee)</h2>
+                            <form id="update-announcement-form">
+                                <div class="form-group">
+                                    <label>Announcement Ticker Message</label>
+                                    <textarea class="form-input" id="announcementText" rows="3" placeholder="Enter scrolling alert message for all pages..." required style="resize: vertical; font-family: inherit; padding: 0.5rem;"></textarea>
+                                </div>
+                                <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 1rem; margin-bottom: 1.5rem;">
+                                    <input type="checkbox" id="announcementEnabled" style="width: 18px; height: 18px; cursor: pointer;">
+                                    <label for="announcementEnabled" style="font-weight: 600; cursor: pointer; margin: 0; user-select: none;">Enable Marquee Banner across ALL pages</label>
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="width: 100%; background:#b91c1c; border-color:#b91c1c;">Publish Announcement</button>
+                            </form>
+                        </div>
+
+                        <!-- Change Admin Credentials -->
+                        <div class="card">
+                            <h2 class="card-header" style="color: #b91c1c;">Change Admin Credentials</h2>
+                            <form id="update-admin-form">
+                                <div class="form-group" style="margin-bottom: 1rem;">
+                                    <label>New Admin ID</label>
+                                    <input class="form-input" id="adminIdInput" type="text" required>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 1.5rem;">
+                                    <label>New Password</label>
+                                    <input class="form-input" id="adminPasswordInput" type="password" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="width: 100%; background:#b91c1c; border-color:#b91c1c;">Update Credentials</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
 
-                <div class="card" id="manage-splits-card">
-                    <h2 class="card-header" style="color: #b91c1c;">Manage Student Fee Splits</h2>
-                    <div class="form-group" style="margin-bottom: 1rem;">
-                        <label>Select Student</label>
-                        <select class="form-input" id="splitStudentId" style="border-color: var(--gray-300); background: white;">
-                            <option value="" disabled selected>-- Select Student --</option>
-                            <!-- Filled by JS -->
-                        </select>
-                    </div>
-                    <div id="studentSplitsContainer" style="display: none;">
-                        <div style="margin-bottom: 1rem; padding: 0.75rem; background: #f8fafc; border-radius: var(--radius-md); border: 1px solid var(--gray-200);">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
-                                <span style="font-weight: 500; color: var(--text-dark);">Total Monthly Fee:</span>
-                                <span id="splitStudentTotalFees" style="font-weight: bold; color: #1e3a8a;">₹0</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between;">
-                                <span style="font-weight: 500; color: var(--text-dark);">Total Assigned Share:</span>
-                                <span id="splitStudentAssignedTotal" style="font-weight: bold; color: #166534;">0%</span>
-                            </div>
+                <!-- ================= TAB 2: STUDENTS ================= -->
+                <div class="tab-content" id="tab-students">
+                    <div class="dashboard-grid">
+                        <!-- Left Pane: Add Student -->
+                        <div class="card">
+                            <h2 class="card-header" style="color: #b91c1c;">Add New Student</h2>
+                            <form id="add-student-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <input class="form-input" id="studentName" type="text" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Class</label>
+                                        <input class="form-input" id="studentClass" type="text" placeholder="e.g. IX, NDA" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Password</label>
+                                        <input class="form-input" id="studentPassword" type="text" required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Date of Joining</label>
+                                        <input class="form-input" id="studentDoj" type="date" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Monthly Fees (₹)</label>
+                                        <input class="form-input" id="studentFees" type="number" min="0" required>
+                                    </div>
+                                </div>
+                                <div class="form-row" style="margin-bottom: 1.5rem;">
+                                    <div class="form-group">
+                                        <label>Mother's Phone No.</label>
+                                        <input class="form-input" id="studentMotherPhone" type="tel" pattern="[0-9]{10}" placeholder="10-digit number">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Father's Phone No.</label>
+                                        <input class="form-input" id="studentFatherPhone" type="tel" pattern="[0-9]{10}" placeholder="10-digit number">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Personal Phone No.</label>
+                                        <input class="form-input" id="studentPersonalPhone" type="tel" pattern="[0-9]{10}" placeholder="10-digit number">
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="width: 100%; background:#b91c1c; border-color:#b91c1c;">Add Student</button>
+                            </form>
                         </div>
 
-                        <form id="save-all-splits-form">
-                            <h4 style="margin-top: 1rem; margin-bottom: 0.75rem; color: var(--text-dark); font-size: 1.1rem; font-weight: 700;">Allocate Fee Share Percentages (%)</h4>
-                            <div id="studentSplitsInputsList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(185px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
-                                <!-- Dynamically populated list of teachers and percentage inputs -->
-                            </div>
-                            <button type="submit" class="btn btn-primary" style="width: 100%; height: 44px; background:#b91c1c; border-color:#b91c1c;">Save Splits in a Single Go</button>
-                        </form>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <h2 class="card-header">Manage Student Fees</h2>
-                    <div class="form-group" style="margin-bottom: 1rem;">
-                        <label>Select Student</label>
-                        <select class="form-input" id="feeStudentId" style="border-color: var(--gray-300); background: white;">
-                            <option value="" disabled selected>-- Select Student --</option>
-                            <!-- Filled by JS -->
-                        </select>
-                    </div>
-                    <div style="overflow-x: auto;">
-                        <table class="table" id="feeCyclesTable" style="min-width: 600px;">
-                            <thead>
-                                <tr>
-                                    <th>Cycle</th>
-                                    <th>Start</th>
-                                    <th>End</th>
-                                    <th class="text-right">Fees + Fine</th>
-                                    <th>Status</th>
-                                    <th style="width: 80px;">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr><td colspan="6" style="text-align:center; color:var(--text-light);">Select a student to view fees.</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h2 class="card-header">Alumni Directory</h2>
-                    <div style="overflow-x: auto;">
-                        <table class="table" id="alumniTable" style="min-width: 500px;">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Class</th>
-                                    <th>Phone Numbers</th>
-                                    <th>Converted On</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr><td colspan="5" style="text-align:center; color:var(--text-light);">Loading...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right Column: Teachers & Salaries -->
-            <div>
-                <div class="card">
-                    <h2 class="card-header">Teacher Management</h2>
-                    <form id="add-teacher-form">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Name</label>
-                                <input class="form-input" id="teacherName" type="text" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Assign Password</label>
-                                <input class="form-input" id="teacherPassword" type="text" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary" style="height: 44px; background:#b91c1c; border-color:#b91c1c;">Add</button>
+                        <!-- Right Pane: Update Profile -->
+                        <div class="card">
+                            <h2 class="card-header" style="color: #b91c1c;">Update Student Profile</h2>
+                            <form id="update-student-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Select Student</label>
+                                        <select class="form-input" id="updateStudentId" required style="border-color: var(--gray-300); background: white;">
+                                            <option value="" disabled selected>-- Select Student --</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Date of Joining</label>
+                                        <input class="form-input" id="updateStudentDoj" type="date" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Monthly Fees (₹)</label>
+                                        <input class="form-input" id="updateStudentFees" type="number" min="0" required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Mother's Phone No.</label>
+                                        <input class="form-input" id="updateStudentMotherPhone" type="tel" pattern="[0-9]{10}" placeholder="Optional">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Father's Phone No.</label>
+                                        <input class="form-input" id="updateStudentFatherPhone" type="tel" pattern="[0-9]{10}" placeholder="Optional">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Personal Phone No.</label>
+                                        <input class="form-input" id="updateStudentPersonalPhone" type="tel" pattern="[0-9]{10}" placeholder="Optional">
+                                    </div>
+                                </div>
+                                <div id="updateStudentSplitsWrapper" style="display: none; margin-top: 1.5rem; margin-bottom: 1.5rem; border-top: 1px solid var(--gray-200); padding-top: 1rem;">
+                                    <h4 style="margin-top: 0; margin-bottom: 0.75rem; color: var(--text-dark); font-size: 1.05rem; font-weight: 700;">Teacher Fee Share Percentages</h4>
+                                    <div id="updateStudentSplitsList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(185px, 1fr)); gap: 1rem;">
+                                        <!-- Dynamically populated splits inputs -->
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="width: 100%; background:#b91c1c; border-color:#b91c1c; margin-top: 0.5rem;">Update Profile</button>
+                            </form>
                         </div>
-                    </form>
-                    <div style="overflow-x: auto;">
-                        <table class="table" id="teachersTable" style="min-width: 500px;">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Password</th>
-                                    <th>Salary</th>
-                                    <th style="width: 80px;">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody><!-- Filled by JS --></tbody>
-                        </table>
                     </div>
-                </div>
-                <div class="card">
-                    <h2 class="card-header" style="color: #b91c1c;">Teacher Salary Breakdown</h2>
-                    <div class="form-group" style="margin-bottom: 1rem;">
-                        <label>Select Teacher</label>
-                        <select class="form-input" id="breakdownTeacherId" style="border-color: var(--gray-300); background: white;">
-                            <option value="" disabled selected>-- Select Teacher --</option>
-                            <!-- Filled by JS -->
-                        </select>
-                    </div>
-                    <div id="teacherBreakdownContainer" style="display: none;">
-                        <h4 style="margin-top: 1rem; margin-bottom: 0.5rem; color: var(--text-dark);">Monthly Salary Breakdown:</h4>
+
+                    <!-- Active Student List Directory -->
+                    <div class="card">
+                        <h2 class="card-header" style="color: #b91c1c;">Active Student Directory</h2>
                         <div style="overflow-x: auto;">
-                            <table class="table" id="teacherBreakdownTable" style="margin-bottom: 1rem;">
+                            <table class="table" id="studentsTable" style="min-width: 800px;">
                                 <thead>
                                     <tr>
-                                        <th>Student Name (ID)</th>
-                                        <th>Student Fees</th>
-                                        <th>Share %</th>
-                                        <th style="text-align: right;">Amount</th>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Class</th>
+                                        <th>Phone Numbers</th>
+                                        <th>Password</th>
+                                        <th>Fee Splits</th>
+                                        <th style="width: 160px; text-align: right;">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody><!-- Filled by JS --></tbody>
+                                <tbody></tbody>
                             </table>
                         </div>
-                        <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.1rem; color: #166534; padding: 0.5rem; border-top: 2px solid var(--gray-200);">
-                            <span>Total Dynamic Salary:</span>
-                            <span id="teacherBreakdownTotal">₹0</span>
-                        </div>
                     </div>
-                </div>
-                <div class="card">
-                    <h2 class="card-header" style="color: #b91c1c;">Tuition Announcement &amp; Alert (Marquee)</h2>
-                    <form id="update-announcement-form">
-                        <div class="form-group">
-                            <label>Announcement Ticker Message</label>
-                            <textarea class="form-input" id="announcementText" rows="3" placeholder="Enter scrolling alert message for all pages..." required style="resize: vertical; font-family: inherit; padding: 0.5rem;"></textarea>
-                        </div>
-                        <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 1rem; margin-bottom: 1.5rem;">
-                            <input type="checkbox" id="announcementEnabled" style="width: 18px; height: 18px; cursor: pointer;">
-                            <label for="announcementEnabled" style="font-weight: 600; cursor: pointer; margin: 0; user-select: none;">Enable Marquee Banner across ALL pages</label>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%; background:#b91c1c; border-color:#b91c1c;">Publish Announcement</button>
-                    </form>
-                </div>
 
-                <div class="card">
-                    <h2 class="card-header">Change Admin Credentials</h2>
-                    <form id="update-admin-form">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>New Admin ID</label>
-                                <input class="form-input" id="adminIdInput" type="text" required>
-                            </div>
-                            <div class="form-group">
-                                <label>New Password</label>
-                                <input class="form-input" id="adminPasswordInput" type="password" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary" style="height: 44px; background:#b91c1c; border-color:#b91c1c;">Update</button>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="card">
-                    <h2 class="card-header">Manage Salaries</h2>
-                    <form id="add-salary-form">
-                        <div class="form-group">
-                            <label>Select Teacher</label>
-                            <select class="form-input" id="salaryTeacherId" required style="border-color: var(--gray-300); background: white;">
-                                <option value="" disabled selected>-- Select Teacher --</option>
-                                <!-- Filled by JS -->
+                    <!-- Manage Student Fees / Ledgers -->
+                    <div class="card">
+                        <h2 class="card-header" style="color: #b91c1c;">Student Monthly Fee Ledgers</h2>
+                        <div class="form-group" style="margin-bottom: 1.5rem; max-width: 400px;">
+                            <label>Select Student</label>
+                            <select class="form-input" id="feeStudentId" style="border-color: var(--gray-300); background: white;">
+                                <option value="" disabled selected>-- Select Student --</option>
                             </select>
                         </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Month (e.g. 2025-05)</label>
-                                <input class="form-input" id="salaryMonth" type="month" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Amount (₹)</label>
-                                <input class="form-input" id="salaryAmount" type="number" min="0" required>
-                            </div>
+                        <div style="overflow-x: auto;">
+                            <table class="table" id="feeCyclesTable" style="min-width: 700px;">
+                                <thead>
+                                    <tr>
+                                        <th>Cycle</th>
+                                        <th>Start</th>
+                                        <th>End</th>
+                                        <th class="text-right">Fees + Fine</th>
+                                        <th>Status</th>
+                                        <th style="width: 120px;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td colspan="6" style="text-align:center; color:var(--text-light);">Select a student to view fee logs.</td></tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; background:#b91c1c; border-color:#b91c1c;">Issue Salary</button>
-                    </form>
-                    
-                    <h3 style="margin-top: 2rem; margin-bottom: 1rem;">Recent Payouts</h3>
-                    <div style="overflow-x: auto;">
-                        <table class="table" id="salariesTable" style="min-width: 400px;">
-                            <thead>
-                                <tr>
-                                    <th>Teacher</th>
-                                    <th>Month</th>
-                                    <th class="text-right" style="text-align: right;">Amount</th>
-                                    <th class="text-right" style="text-align: right; width: 80px;">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody><!-- Filled by JS --></tbody>
-                        </table>
+                    </div>
+
+                    <!-- Alumni Directory Section -->
+                    <div class="card">
+                        <h2 class="card-header" style="color: #b91c1c;">Alumni Directory</h2>
+                        <div style="overflow-x: auto;">
+                            <table class="table" id="alumniTable" style="min-width: 700px;">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Class</th>
+                                        <th>Phone Numbers</th>
+                                        <th>Converted On</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td colspan="5" style="text-align:center; color:var(--text-light);">Loading alumni...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
-                <div class="card">
-                    <h2 class="card-header" style="color: #b91c1c;">Course &amp; Fee Structure Management</h2>
-                    <form id="add-course-form" style="margin-bottom: 2rem;">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Course Title</label>
-                                <input class="form-input" id="courseTitle" type="text" placeholder="e.g. Class IX-X Foundation" required>
+                <!-- ================= TAB 3: ATTENDANCE ================= -->
+                <div class="tab-content" id="tab-attendance">
+                    <div class="card">
+                        <h2 class="card-header" style="color: #b91c1c;">Student Attendance Dashboard</h2>
+                        <p style="margin-bottom: 1.5rem; color: var(--text-light); font-size: 0.95rem; line-height: 1.5;">
+                            Take daily student attendance and view a complete chronological history report of all marked attendance logs in a dynamic tabular interface.
+                        </p>
+                        
+                        <div class="dashboard-grid">
+                            <!-- Take Attendance Form Widget -->
+                            <div style="border-right: 1px solid var(--gray-200); padding-right: 1.5rem;">
+                                <h3 style="font-size: 1.25rem; color: var(--text-dark); margin-bottom: 1rem; font-weight: 700;">Take Student Attendance</h3>
+                                <div style="display: flex; gap: 0.5rem; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-bottom: 1.5rem;">
+                                    <div class="form-group" style="margin-bottom: 0; display: flex; align-items: center; gap: 0.5rem; flex: 1;">
+                                        <label for="adminAttendanceDate" style="margin-bottom: 0; font-weight: 600; font-size: 0.85rem; white-space: nowrap;">Date:</label>
+                                        <input class="form-input" id="adminAttendanceDate" type="date" required style="padding: 0.4rem; font-size: 0.9rem; background: white; border-color: var(--gray-300);">
+                                    </div>
+                                    <button id="adminSaveAttendanceBtn" class="btn btn-primary" style="background:#b91c1c; border-color:#b91c1c; padding: 0.45rem 1rem; font-size: 0.85rem;">Save Attendance</button>
+                                </div>
+                                
+                                <div style="max-height: 400px; overflow-y: auto; border: 1px solid var(--gray-200); border-radius: var(--radius-md);">
+                                    <table class="table" id="adminAttendanceFormTable" style="margin-top: 0; width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Student Name</th>
+                                                <th style="width: 120px; text-align: center;">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label>Monthly Fees (₹)</label>
-                                <input class="form-input" id="courseFees" type="number" min="0" placeholder="e.g. 2000" required>
+                            
+                            <!-- Chronological Tabular Attendance Timeline Report -->
+                            <div>
+                                <h3 style="font-size: 1.25rem; color: var(--text-dark); margin-bottom: 1rem; font-weight: 700;">Attendance Timeline Report</h3>
+                                <div style="overflow-x: auto; width: 100%; border: 1px solid var(--gray-200); border-radius: var(--radius-md);">
+                                    <table class="table" id="adminAttendanceTabularReportTable" style="margin-top: 0; min-width: 800px; border-collapse: collapse;">
+                                        <thead style="position: sticky; top: 0; background: #f8fafc; z-index: 10; box-shadow: 0 1px 0 rgba(0,0,0,0.1);">
+                                            <tr id="adminAttendanceTabularHeader">
+                                                <th style="padding: 0.75rem; border: 1px solid var(--gray-200); text-align: left; font-weight: 700; color: var(--primary-color);">Student Name</th>
+                                                <th style="padding: 0.75rem; border: 1px solid var(--gray-200); text-align: center; font-weight: 700; color: var(--primary-color); width: 95px;">Rate (%)</th>
+                                                <!-- Dynamic chronological date columns go here -->
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label>Course Description</label>
-                            <textarea class="form-input" id="courseDescription" rows="2" placeholder="Brief summary of what the course covers..." required style="resize: vertical; font-family: inherit; padding: 0.5rem;"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Key Features (Comma-separated)</label>
-                            <input class="form-input" id="courseFeatures" type="text" placeholder="e.g. RD Sharma-based curriculum, Regular practice tests, Mock exams" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem; background:#b91c1c; border-color:#b91c1c;">Add Course</button>
-                    </form>
+                    </div>
+                </div>
 
-                    <h3 style="margin-top: 1.5rem; margin-bottom: 1rem;">Active Courses &amp; Fee Chart</h3>
-                    <div style="overflow-x: auto;">
-                        <table class="table" id="coursesTable" style="min-width: 450px;">
-                            <thead>
-                                <tr>
-                                    <th>Course Title</th>
-                                    <th class="text-right" style="text-align: right; width: 100px;">Monthly Fee</th>
-                                    <th>Features</th>
-                                    <th class="text-right" style="text-align: right; width: 80px;">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Filled dynamically by JS -->
-                            </tbody>
-                        </table>
+                <!-- ================= TAB 4: ACADEMICS ================= -->
+                <div class="tab-content" id="tab-academics">
+                    <!-- Video Lectures Scroller Management -->
+                    <div class="card">
+                        <h2 class="card-header" style="color: #b91c1c;">Video Lectures Scroller Management</h2>
+                        <p style="margin-bottom: 1.5rem; color: var(--text-light); font-size: 0.95rem; line-height: 1.5;">
+                            Create new accordion sections (scrollers) or add, edit, and delete video lectures. Any updates made here will instantly reflect on the student's Video Lectures page.
+                        </p>
+                        
+                        <div class="dashboard-grid">
+                            <!-- Left Column: Manage Scrollers -->
+                            <div style="border-right: 1px solid var(--gray-200); padding-right: 1.5rem;">
+                                <h3 style="font-size: 1.2rem; color: var(--text-dark); margin-bottom: 1rem; font-weight: 700;">1. Scrollers / Class Sections</h3>
+                                
+                                <!-- Create new scroller form -->
+                                <form id="create-scroller-form" style="margin-bottom: 1.5rem;">
+                                    <div class="form-row">
+                                        <div class="form-group" style="flex: 1;">
+                                            <label style="font-size: 0.85rem; font-weight: 600;">Scroller/Category Name</label>
+                                            <input class="form-input" id="newScrollerTitle" type="text" placeholder="e.g. Class X (SST)" required style="padding: 0.5rem;">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary" style="background:#b91c1c; border-color:#b91c1c; height: 38px; padding: 0.5rem 1rem;">Create</button>
+                                    </div>
+                                </form>
+                                
+                                <!-- Scrollers list -->
+                                <div style="max-height: 350px; overflow-y: auto; padding-right: 0.5rem;">
+                                    <table class="table" id="scrollersListTable" style="margin-top: 0; width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Title</th>
+                                                <th style="width: 140px; text-align: right;">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <!-- Right Column: Manage Videos in Scroller -->
+                            <div>
+                                <h3 style="font-size: 1.2rem; color: var(--text-dark); margin-bottom: 1rem; font-weight: 700;">2. Video Lectures in Selected Scroller</h3>
+                                
+                                <div class="form-group" style="margin-bottom: 1.5rem;">
+                                    <label style="font-size: 0.85rem; font-weight: 600;">Select Scroller</label>
+                                    <select class="form-input" id="manageVideoScrollerSelect" style="border-color: var(--gray-300); background: white; padding: 0.5rem;">
+                                        <option value="" disabled selected>-- Select a Scroller --</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Add video form (disabled until scroller selected) -->
+                                <form id="add-video-form" style="margin-bottom: 1.5rem; display: none;">
+                                    <h4 id="addVideoFormTitle" style="font-size: 1rem; color: var(--text-dark); margin-bottom: 0.75rem; font-weight: 700;">Add Lecture</h4>
+                                    
+                                    <div id="addVideoRowsContainer">
+                                        <div class="video-input-row" style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem; align-items: flex-end;">
+                                            <div style="flex: 1;">
+                                                <label style="font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Video Title</label>
+                                                <input class="form-input video-row-title" type="text" placeholder="e.g. LECTURE 1" required style="padding: 0.4rem 0.6rem;">
+                                            </div>
+                                            <div style="flex: 1.5;">
+                                                <label style="font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Video Link (YouTube/Telegram)</label>
+                                                <input class="form-input video-row-link" type="url" placeholder="e.g. https://youtu.be/..." required style="padding: 0.4rem 0.6rem;">
+                                            </div>
+                                            <button type="button" class="btn btn-outline remove-input-row-btn" style="padding: 0.4rem; color: #dc2626; border-color: #fca5a5; display: none;" title="Remove this row">✕</button>
+                                        </div>
+                                    </div>
+
+                                    <div style="display: flex; gap: 0.5rem; justify-content: space-between; margin-top: 1rem;">
+                                        <button type="button" id="addAnotherVideoRowBtn" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem; border-color: var(--primary-light); color: var(--primary-light); background: transparent;">
+                                            + Add Another Video
+                                        </button>
+                                        <button type="submit" class="btn btn-primary" style="background:#b91c1c; border-color:#b91c1c; padding: 0.5rem 1.5rem; font-size: 0.85rem;">
+                                            Save All Videos
+                                        </button>
+                                    </div>
+                                </form>
+                                
+                                <!-- Video list in scroller -->
+                                <div id="scrollerVideosListContainer" style="display: none;">
+                                    <h4 style="font-size: 1rem; color: var(--text-dark); margin-bottom: 0.5rem; font-weight: 700;">Current Lecture Videos</h4>
+                                    <div style="max-height: 250px; overflow-y: auto; border: 1px solid var(--gray-200); border-radius: var(--radius-md); padding: 0.5rem;">
+                                        <table class="table" id="scrollerVideosTable" style="margin-top: 0; min-width: 100%;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Video Title</th>
+                                                    <th>URL</th>
+                                                    <th style="width: 120px; text-align: right;">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <div id="scrollerVideosPlaceholder" style="text-align: center; padding: 3rem; color: var(--text-light); border: 2px dashed var(--gray-200); border-radius: var(--radius-md);">
+                                    Select a scroller from the dropdown to manage its video links.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video Lectures Permissions checklist -->
+                    <div class="card" id="lecturePermissionsCard">
+                        <h2 class="card-header" style="color: #b91c1c;">Video Lecture Permissions</h2>
+                        <p style="margin-bottom: 1.5rem; color: var(--text-light); font-size: 0.9rem; line-height: 1.4;">
+                            Select which video lecture scrollers each student can access. Permissions are updated instantly in the database when toggled.
+                        </p>
+                        <div style="overflow-x: auto; max-width: 100%;">
+                            <table class="table" id="lecturePermissionsTable" style="min-width: 900px; border-collapse: collapse; width: 100%;">
+                                <thead>
+                                    <!-- Populated dynamically by JS -->
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Course fee structure management -->
+                    <div class="card">
+                        <h2 class="card-header" style="color: #b91c1c;">Course &amp; Fee Structure Management</h2>
+                        <form id="add-course-form" style="margin-bottom: 2rem;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Course Title</label>
+                                    <input class="form-input" id="courseTitle" type="text" placeholder="e.g. Class IX-X Foundation" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Monthly Fees (₹)</label>
+                                    <input class="form-input" id="courseFees" type="number" min="0" placeholder="e.g. 2000" required>
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 1rem;">
+                                <label>Course Description</label>
+                                <textarea class="form-input" id="courseDescription" rows="2" placeholder="Brief summary of what the course covers..." required style="resize: vertical; font-family: inherit; padding: 0.5rem;"></textarea>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 1.5rem;">
+                                <label>Key Features (Comma-separated)</label>
+                                <input class="form-input" id="courseFeatures" type="text" placeholder="e.g. RD Sharma-based curriculum, Regular practice tests, Mock exams" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%; background:#b91c1c; border-color:#b91c1c;">Add Course</button>
+                        </form>
+
+                        <h3 style="margin-top: 1.5rem; margin-bottom: 1rem; font-weight: 700;">Active Courses &amp; Fee Chart</h3>
+                        <div style="overflow-x: auto;">
+                            <table class="table" id="coursesTable" style="min-width: 500px;">
+                                <thead>
+                                    <tr>
+                                        <th>Course Title</th>
+                                        <th class="text-right" style="text-align: right; width: 120px;">Monthly Fee</th>
+                                        <th>Features</th>
+                                        <th class="text-right" style="text-align: right; width: 100px;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= TAB 5: TEACHERS ================= -->
+                <div class="tab-content" id="tab-teachers">
+                    <div class="dashboard-grid">
+                        <!-- Add Teacher Form -->
+                        <div class="card">
+                            <h2 class="card-header" style="color: #b91c1c;">Add Teacher Account</h2>
+                            <form id="add-teacher-form">
+                                <div class="form-group" style="margin-bottom: 1rem;">
+                                    <label>Name</label>
+                                    <input class="form-input" id="teacherName" type="text" required>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 1.5rem;">
+                                    <label>Assign Password</label>
+                                    <input class="form-input" id="teacherPassword" type="text" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="width: 100%; background:#b91c1c; border-color:#b91c1c;">Add Teacher</button>
+                            </form>
+                        </div>
+
+                        <!-- Teacher Salary Breakdown -->
+                        <div class="card">
+                            <h2 class="card-header" style="color: #b91c1c;">Teacher Salary Breakdown</h2>
+                            <div class="form-group" style="margin-bottom: 1rem;">
+                                <label>Select Teacher</label>
+                                <select class="form-input" id="breakdownTeacherId" style="border-color: var(--gray-300); background: white;">
+                                    <option value="" disabled selected>-- Select Teacher --</option>
+                                </select>
+                            </div>
+                            <div id="teacherBreakdownContainer" style="display: none;">
+                                <h4 style="margin-top: 1rem; margin-bottom: 0.5rem; color: var(--text-dark); font-weight: 700;">Monthly Salary Breakdown:</h4>
+                                <div style="overflow-x: auto;">
+                                    <table class="table" id="teacherBreakdownTable" style="margin-bottom: 1rem;">
+                                        <thead>
+                                            <tr>
+                                                <th>Student Name (ID)</th>
+                                                <th>Student Fees</th>
+                                                <th>Share %</th>
+                                                <th style="text-align: right;">Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.1rem; color: #166534; padding: 0.75rem 0.5rem; border-top: 2px solid var(--gray-200);">
+                                    <span>Total Dynamic Salary:</span>
+                                    <span id="teacherBreakdownTotal">₹0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Teacher Directory and base dynamic payouts -->
+                    <div class="card">
+                        <h2 class="card-header" style="color: #b91c1c;">Active Teachers List</h2>
+                        <div style="overflow-x: auto;">
+                            <table class="table" id="teachersTable" style="min-width: 600px;">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Password</th>
+                                        <th>Salary</th>
+                                        <th style="width: 100px; text-align: right;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Manage Student Fee Splits -->
+                    <div class="card" id="manage-splits-card">
+                        <h2 class="card-header" style="color: #b91c1c;">Manage Student Fee Splits</h2>
+                        <div class="form-group" style="margin-bottom: 1.5rem; max-width: 400px;">
+                            <label>Select Student</label>
+                            <select class="form-input" id="splitStudentId" style="border-color: var(--gray-300); background: white;">
+                                <option value="" disabled selected>-- Select Student --</option>
+                            </select>
+                        </div>
+                        <div id="studentSplitsContainer" style="display: none;">
+                            <div style="margin-bottom: 1.5rem; padding: 0.75rem; background: #f8fafc; border-radius: var(--radius-md); border: 1px solid var(--gray-200); max-width: 400px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                                    <span style="font-weight: 500; color: var(--text-dark);">Total Monthly Fee:</span>
+                                    <span id="splitStudentTotalFees" style="font-weight: bold; color: #1e3a8a;">₹0</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span style="font-weight: 500; color: var(--text-dark);">Total Assigned Share:</span>
+                                    <span id="splitStudentAssignedTotal" style="font-weight: bold; color: #166534;">0%</span>
+                                </div>
+                            </div>
+
+                            <form id="save-all-splits-form">
+                                <h4 style="margin-top: 1rem; margin-bottom: 0.75rem; color: var(--text-dark); font-size: 1.05rem; font-weight: 700;">Allocate Fee Share Percentages (%)</h4>
+                                <div id="studentSplitsInputsList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(185px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                                    <!-- Populated dynamically split inputs -->
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="background:#b91c1c; border-color:#b91c1c; padding: 0.75rem 1.5rem;">Save Splits</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Manage Salaries Issue Payouts -->
+                    <div class="card">
+                        <h2 class="card-header" style="color: #b91c1c;">Issue Teacher Salary</h2>
+                        <form id="add-salary-form">
+                            <div class="form-group" style="margin-bottom: 1rem;">
+                                <label>Select Teacher</label>
+                                <select class="form-input" id="salaryTeacherId" required style="border-color: var(--gray-300); background: white;">
+                                    <option value="" disabled selected>-- Select Teacher --</option>
+                                </select>
+                            </div>
+                            <div class="form-row" style="margin-bottom: 1.5rem;">
+                                <div class="form-group">
+                                    <label>Month (e.g. 2025-05)</label>
+                                    <input class="form-input" id="salaryMonth" type="month" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Amount (₹)</label>
+                                    <input class="form-input" id="salaryAmount" type="number" min="0" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%; background:#b91c1c; border-color:#b91c1c;">Issue Salary Payout</button>
+                        </form>
+                        
+                        <h3 style="margin-top: 2.5rem; margin-bottom: 1rem; font-weight: 700;">Recent Payouts History</h3>
+                        <div style="overflow-x: auto;">
+                            <table class="table" id="salariesTable" style="min-width: 500px;">
+                                <thead>
+                                    <tr>
+                                        <th>Teacher</th>
+                                        <th>Month</th>
+                                        <th class="text-right" style="text-align: right;">Amount</th>
+                                        <th class="text-right" style="text-align: right; width: 100px;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Financial Overview Card -->
-        <div class="card" style="margin-top: 2rem; margin-bottom: 2rem;">
-            <h2 class="card-header" style="color: #b91c1c;">Tuition Financial Overview</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; width: 100%;">
-                <div class="stat-box" style="text-align: center; background: #f8fafc; padding: 1.5rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--gray-200);">
-                    <h3 style="color: var(--text-light); font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Expected Monthly Income</h3>
-                    <div id="totalExpectedFees" class="stat-value" style="font-size: 2rem; font-weight: 700; color: #1e3a8a;">₹0</div>
-                </div>
-                <div class="stat-box" style="text-align: center; background: #f8fafc; padding: 1.5rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--gray-200);">
-                    <h3 style="color: var(--text-light); font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Total Collected Income</h3>
-                    <div id="totalActualCollected" class="stat-value" style="font-size: 2rem; font-weight: 700; color: #166534;">₹0</div>
-                    <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 0.2rem;">All-Time Fees + Fines Paid</div>
-                </div>
-                <div class="stat-box" style="text-align: center; background: #f8fafc; padding: 1.5rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--gray-200);">
-                    <h3 style="color: var(--text-light); font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Monthly Teacher Payouts</h3>
-                    <div id="totalTeacherSalaries" class="stat-value" style="font-size: 2rem; font-weight: 700; color: #b91c1c;">₹0</div>
-                    <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 0.2rem;">Total dynamic monthly salary</div>
-                </div>
-                <div class="stat-box" style="text-align: center; background: #f8fafc; padding: 1.5rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--gray-200);">
-                    <h3 style="color: var(--text-light); font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Tuition Net Monthly Margin</h3>
-                    <div id="tuitionNetMargin" class="stat-value" style="font-size: 2rem; font-weight: 700; color: #0284c7;">₹0</div>
-                    <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 0.2rem;">Expected Fees - Payouts</div>
-                </div>
-            </div>
-        </div>
+        </main>
     </div>
 
+    <!-- Scripts Loading -->
     <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
     <script src="js/db.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/admin.js"></script>
-    <script>
-        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-        const mobileMenu = document.getElementById('mobileMenu');
-        if(mobileMenuToggle && mobileMenu) {
-            mobileMenuToggle.addEventListener('click', () => {
-                mobileMenu.classList.toggle('open');
-            });
-        }
-    </script>
 </body>
 </html>

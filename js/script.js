@@ -1,49 +1,51 @@
 
-document.querySelectorAll(".faq-question").forEach(button => {
-  button.addEventListener("click", () => {
-    const item = button.closest(".faq-item");
-    if (item.classList.contains("restricted")) {
-      alert("You are not enrolled in this course. Ask admin for permissions.");
-      return;
-    }
+document.addEventListener("click", (e) => {
+  const button = e.target.closest(".faq-question");
+  if (!button) return;
+  const item = button.closest(".faq-item");
+  if (!item) return;
 
-    const answer = item.querySelector(".faq-answer");
-    const isActive = item.classList.contains("active");
+  if (item.classList.contains("restricted")) {
+    alert("You are not enrolled in this course. Ask admin for permissions.");
+    return;
+  }
 
-    // Close all other open items first
-    document.querySelectorAll(".faq-item.active").forEach(openItem => {
-      if (openItem !== item) {
-        const openAnswer = openItem.querySelector(".faq-answer");
-        openAnswer.style.height = openAnswer.scrollHeight + "px";
-        requestAnimationFrame(() => {
-          openAnswer.style.height = "0";
-        });
-        openItem.classList.remove("active");
-      }
-    });
+  const answer = item.querySelector(".faq-answer");
+  const isActive = item.classList.contains("active");
 
-    if (isActive) {
-      // Collapse: set explicit px first, then animate to 0
-      answer.style.height = answer.scrollHeight + "px";
+  // Close all other open items first
+  document.querySelectorAll(".faq-item.active").forEach(openItem => {
+    if (openItem !== item) {
+      const openAnswer = openItem.querySelector(".faq-answer");
+      openAnswer.style.height = openAnswer.scrollHeight + "px";
       requestAnimationFrame(() => {
-        answer.style.height = "0";
+        openAnswer.style.height = "0";
       });
-      item.classList.remove("active");
-    } else {
-      // Expand: animate to scrollHeight, then set to auto so resize works
-      item.classList.add("active");
-      answer.style.height = "0";
-      const targetHeight = answer.scrollHeight + "px";
-      requestAnimationFrame(() => {
-        answer.style.height = targetHeight;
-      });
-      answer.addEventListener("transitionend", () => {
-        if (item.classList.contains("active")) {
-          answer.style.height = "auto";
-        }
-      }, { once: true });
+      openItem.classList.remove("active");
     }
   });
+
+  if (isActive) {
+    // Collapse: set explicit px first, then animate to 0
+    answer.style.height = answer.scrollHeight + "px";
+    requestAnimationFrame(() => {
+      answer.style.height = "0";
+    });
+    item.classList.remove("active");
+  } else {
+    // Expand: animate to scrollHeight, then set to auto so resize works
+    item.classList.add("active");
+    answer.style.height = "0";
+    const targetHeight = answer.scrollHeight + "px";
+    requestAnimationFrame(() => {
+      answer.style.height = targetHeight;
+    });
+    answer.addEventListener("transitionend", () => {
+      if (item.classList.contains("active")) {
+        answer.style.height = "auto";
+      }
+    }, { once: true });
+  }
 });
 const track = document.getElementById('slider-track');
 const slides = track ? track.querySelectorAll('.slider-img') : [];
