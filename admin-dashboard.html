@@ -904,6 +904,40 @@
                         </div>
                     </div>
 
+                    <!-- Batch Lecture Progress Dashboard -->
+                    <div class="card" id="batchProgressCard" style="margin-top: 2rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                            <div>
+                                <h2 class="card-header" style="color: #b91c1c; border-bottom: none; margin: 0; padding: 0;">Batch Lecture Progress</h2>
+                                <p style="margin: 0.25rem 0 0 0; color: var(--text-light); font-size: 0.9rem;">Monitor lecture completion percentages across the entire batch.</p>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                <label style="font-weight: 600; font-size: 0.9rem; margin-right: 0.25rem; color: var(--text-dark);">Filter by Class/Batch:</label>
+                                <select class="form-input" id="batchProgressFilter" style="border-color: var(--gray-300); background: white; padding: 0.4rem 0.8rem; width: 180px; font-size: 0.9rem; margin: 0;">
+                                    <option value="all">All Classes</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div style="overflow-x: auto; max-width: 100%;">
+                            <table class="table" id="batchProgressTable" style="min-width: 900px; border-collapse: collapse; width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>Student ID</th>
+                                        <th>Student Name</th>
+                                        <th>Class/Batch</th>
+                                        <th>Accessible Sections</th>
+                                        <th>Completed Ratio</th>
+                                        <th style="width: 250px;">Progress Bar</th>
+                                        <th style="text-align: right; width: 140px;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Populated dynamically by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
                     <!-- Course fee structure management -->
                     <div class="card">
                         <h2 class="card-header" style="color: #b91c1c;">Course &amp; Fee Structure Management</h2>

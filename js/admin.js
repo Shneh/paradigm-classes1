@@ -1,5 +1,4 @@
-document.addEventListener('DOMContentLoaded', async () => {
-    // Standard auth check
+async function initAdminDashboard() {
     const user = Auth.checkAuth('admin');
     if (!user) return;
 
@@ -329,6 +328,171 @@ document.addEventListener('DOMContentLoaded', async () => {
                 } catch (err) {
                     console.error("Error updating permissions:", err);
                     alert("Error saving permission: " + err.message);
+                }
+            });
+        });
+        await renderBatchProgress();
+    }
+
+    async function renderBatchProgress() {
+        const tableBody = document.querySelector('#batchProgressTable tbody');
+        const filterSelect = document.getElementById('batchProgressFilter');
+        if (!tableBody || !filterSelect) return;
+
+        const students = await DB.getStudents();
+        const lectures = await DB.getVideoLectures();
+
+        const classes = [...new Set(students.map(s => s.class).filter(Boolean))].sort();
+        
+        const currentFilterVal = filterSelect.value || 'all';
+        filterSelect.innerHTML = '<option value="all">All Classes</option>';
+        classes.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c;
+            opt.textContent = `Class ${c}`;
+            filterSelect.appendChild(opt);
+        });
+        filterSelect.value = currentFilterVal;
+
+        const selectedClass = filterSelect.value;
+        const filteredStudents = selectedClass === 'all' 
+            ? students 
+            : students.filter(s => s.class === selectedClass);
+
+        tableBody.innerHTML = '';
+        if (filteredStudents.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-light); padding: 2rem;">No active students found in this filter.</td></tr>`;
+            return;
+        }
+
+        filteredStudents.forEach(student => {
+            const permissions = student.lecturePermissions || [];
+            const accessibleSections = lectures.filter(l => permissions.includes(l.id));
+
+            let totalVideos = 0;
+            let completedVideos = 0;
+            const completedSet = new Set(student.completedLectures || []);
+
+            accessibleSections.forEach(section => {
+                const videos = section.videos || [];
+                videos.forEach(video => {
+                    totalVideos++;
+                    const videoKey = `${section.id}::${video.title}`;
+                    if (completedSet.has(videoKey)) {
+                        completedVideos++;
+                    }
+                });
+            });
+
+            const overallPercent = totalVideos > 0 ? Math.round((completedVideos / totalVideos) * 100) : 0;
+            const sectionTitles = accessibleSections.map(s => s.title).join(', ') || 'None';
+
+            const tr = document.createElement('tr');
+            tr.id = `row-progress-${student.id}`;
+            tr.innerHTML = `
+                <td><strong>${student.id}</strong></td>
+                <td>${student.name}</td>
+                <td><span class="badge" style="background:#e2e8f0; color:#475569; font-weight:700;">${student.class || 'N/A'}</span></td>
+                <td>
+                    <div style="font-size:0.85rem; max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-light);" title="${sectionTitles}">
+                        ${sectionTitles}
+                    </div>
+                </td>
+                <td style="font-weight: 700;">${completedVideos} / ${totalVideos}</td>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 0.5rem; width: 100%;">
+                        <div style="flex-grow: 1; background-color: var(--gray-200); height: 8px; border-radius: 4px; overflow: hidden; position: relative;">
+                            <div style="width: ${overallPercent}%; height: 100%; background: linear-gradient(90deg, #3b82f6, #1e3a8a); border-radius: 4px;"></div>
+                        </div>
+                        <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-dark); min-width: 35px; text-align: right;">${overallPercent}%</span>
+                    </div>
+                </td>
+                <td style="text-align: right;">
+                    <button class="btn btn-outline btn-details-toggle" 
+                            style="padding: 0.2rem 0.5rem; color: #1e3a8a; border-color: #1e3a8a; font-size: 0.8rem;" 
+                            data-student-id="${student.id}">
+                        View Details
+                    </button>
+                </td>
+            `;
+
+            tableBody.appendChild(tr);
+
+            const detailsTr = document.createElement('tr');
+            detailsTr.id = `details-${student.id}`;
+            detailsTr.className = 'details-row';
+            detailsTr.style.display = 'none';
+            detailsTr.style.background = '#f8fafc';
+
+            let detailsHtml = '';
+            if (accessibleSections.length === 0) {
+                detailsHtml = `<p style="color: var(--text-light); font-style: italic; margin: 0;">No accessible lectures assigned to this student.</p>`;
+            } else {
+                detailsHtml = `
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 0.5rem;">
+                `;
+                accessibleSections.forEach(section => {
+                    const videos = section.videos || [];
+                    let secCompleted = 0;
+                    const itemsList = videos.map(video => {
+                        const videoKey = `${section.id}::${video.title}`;
+                        const isDone = completedSet.has(videoKey);
+                        if (isDone) secCompleted++;
+                        
+                        const statusBadge = isDone 
+                            ? `<span style="display:inline-flex; align-items:center; justify-content:center; width:16px; height:16px; background:#dcfce7; color:#166534; border-radius:50%; font-size:10px; font-weight:bold; margin-right:6px;">✓</span>`
+                            : `<span style="display:inline-flex; align-items:center; justify-content:center; width:16px; height:16px; background:#e2e8f0; color:#64748b; border-radius:50%; font-size:10px; font-weight:bold; margin-right:6px;">○</span>`;
+                        
+                        return `<li style="list-style: none; margin-bottom: 0.35rem; font-size: 0.85rem; color: ${isDone ? 'var(--text-light)' : 'var(--text-dark)'}; ${isDone ? 'text-decoration: line-through;' : ''}">
+                            ${statusBadge} ${video.title}
+                        </li>`;
+                    }).join('') || `<li style="list-style: none; color: var(--text-light); font-style: italic;">No videos added</li>`;
+
+                    detailsHtml += `
+                        <div style="background: white; border: 1px solid var(--gray-200); border-radius: var(--radius-md); padding: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                            <h4 style="margin-top: 0; margin-bottom: 0.75rem; color: var(--primary-color); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--gray-100); padding-bottom: 0.5rem; font-size: 0.95rem;">
+                                <span>${section.title}</span>
+                                <span style="font-size: 0.8rem; background: rgba(30,58,138,0.06); padding: 0.1rem 0.5rem; border-radius: 99px;">${secCompleted}/${videos.length}</span>
+                            </h4>
+                            <ul style="padding-left: 0; margin: 0;">
+                                ${itemsList}
+                            </ul>
+                        </div>
+                    `;
+                });
+                detailsHtml += `</div>`;
+            }
+
+            detailsTr.innerHTML = `
+                <td colspan="7" style="padding: 1.5rem 2rem; border-bottom: 2px solid var(--gray-200);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <h3 style="margin: 0; font-size: 1.1rem; color: var(--text-dark); font-weight: 700;">Lecture Completion Status for ${student.name}</h3>
+                        <span style="font-size:0.85rem; color: var(--text-light); font-weight: 600;">Overall: ${completedVideos} / ${totalVideos} Videos (${overallPercent}%)</span>
+                    </div>
+                    ${detailsHtml}
+                </td>
+            `;
+
+            tableBody.appendChild(detailsTr);
+        });
+
+        tableBody.querySelectorAll('.btn-details-toggle').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const sId = btn.dataset.studentId;
+                const detailRow = document.getElementById(`details-${sId}`);
+                if (detailRow) {
+                    const isVisible = detailRow.style.display !== 'none';
+                    if (isVisible) {
+                        detailRow.style.display = 'none';
+                        btn.textContent = 'View Details';
+                        btn.style.background = 'transparent';
+                        btn.style.color = '#1e3a8a';
+                    } else {
+                        detailRow.style.display = 'table-row';
+                        btn.textContent = 'Hide Details';
+                        btn.style.background = '#1e3a8a';
+                        btn.style.color = 'white';
+                    }
                 }
             });
         });
@@ -1769,6 +1933,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.location.href = 'index.html';
     });
 
+    const batchFilter = document.getElementById('batchProgressFilter');
+    if (batchFilter) {
+        batchFilter.addEventListener('change', () => {
+            renderBatchProgress();
+        });
+    }
+
     // Initial render
     await renderStudents();
     await renderAlumni();
@@ -1779,4 +1950,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     await renderScrollersList();
     await renderAdminAttendanceForm();
     await renderAdminAttendanceOverviewTable();
-});
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAdminDashboard);
+} else {
+    initAdminDashboard();
+}

@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', async () => {
+async function initStudentDashboard() {
     // Auth Check
     const user = Auth.checkAuth('student');
     if (!user) return;
@@ -200,7 +200,205 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    async function renderLectureProgress() {
+        const sectionsContainer = document.getElementById('lectureSectionsContainer');
+        const overallProgressText = document.getElementById('overallLectureProgress');
+        const progressBar = document.getElementById('lectureProgressBar');
+        if (!sectionsContainer) return;
+
+        try {
+            const lectures = await DB.getVideoLectures();
+            const students = await DB.getStudents();
+            const student = students.find(s => s.id.toLowerCase() === user.id.toLowerCase());
+            
+            if (!student) {
+                sectionsContainer.innerHTML = '<div style="text-align: center; padding: 2rem; color: var(--text-light);">Student record not found.</div>';
+                return;
+            }
+
+            const permissions = student.lecturePermissions || [];
+            const accessibleSections = lectures.filter(l => permissions.includes(l.id));
+
+            if (accessibleSections.length === 0) {
+                sectionsContainer.innerHTML = '<div style="text-align: center; padding: 2rem; color: var(--text-light); font-weight: 500;">No video lectures are currently accessible to you. Please contact Admin/Teacher for access.</div>';
+                overallProgressText.textContent = '0 / 0 Completed (0% Done)';
+                progressBar.style.width = '0%';
+                return;
+            }
+
+            let completedSet = new Set(student.completedLectures || []);
+            let totalVideos = 0;
+            let completedVideos = 0;
+
+            accessibleSections.forEach(section => {
+                const videos = section.videos || [];
+                videos.forEach(video => {
+                    totalVideos++;
+                    const videoKey = `${section.id}::${video.title}`;
+                    if (completedSet.has(videoKey)) {
+                        completedVideos++;
+                    }
+                });
+            });
+
+            const overallPercent = totalVideos > 0 ? Math.round((completedVideos / totalVideos) * 100) : 0;
+            overallProgressText.textContent = `${completedVideos} / ${totalVideos} Completed (${overallPercent}% Done)`;
+            progressBar.style.width = `${overallPercent}%`;
+
+            sectionsContainer.innerHTML = '';
+
+            accessibleSections.forEach(section => {
+                const videos = section.videos || [];
+                let sectionTotal = videos.length;
+                let sectionCompleted = 0;
+
+                const videoRowsHtml = videos.map((video, idx) => {
+                    const videoKey = `${section.id}::${video.title}`;
+                    const isCompleted = completedSet.has(videoKey);
+                    if (isCompleted) sectionCompleted++;
+
+                    const watchBtnHtml = video.link 
+                        ? `<a href="${video.link}" target="_blank" class="btn-watch">
+                            <svg style="width:12px; height:12px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg> Watch
+                           </a>`
+                        : `<span style="font-size:0.8rem; color:var(--text-light);">(No Link)</span>`;
+
+                    return `
+                        <div class="video-row" data-video-key="${videoKey}">
+                            <label class="video-left">
+                                <div class="custom-checkbox-wrapper">
+                                    <input type="checkbox" class="custom-checkbox-input video-checkbox" data-video-key="${videoKey}" ${isCompleted ? 'checked' : ''}>
+                                    <span class="custom-checkmark"></span>
+                                </div>
+                                <span class="video-title">${video.title || `Lecture ${idx + 1}`}</span>
+                            </label>
+                            <div class="video-right">
+                                ${watchBtnHtml}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                const sectionPercent = sectionTotal > 0 ? Math.round((sectionCompleted / sectionTotal) * 100) : 0;
+
+                const sectionEl = document.createElement('div');
+                sectionEl.className = 'lecture-section';
+                sectionEl.id = `section-${section.id}`;
+                sectionEl.innerHTML = `
+                    <button class="lecture-section-header">
+                        <span class="lecture-section-title">
+                            <svg style="width:16px; height:16px; color:var(--primary-color);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            ${section.title}
+                        </span>
+                        <div class="lecture-section-meta">
+                            <span class="lecture-section-badge" id="badge-${section.id}">${sectionCompleted} / ${sectionTotal} Done (${sectionPercent}%)</span>
+                            <svg class="lecture-section-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
+                    </button>
+                    <div class="lecture-section-content">
+                        ${videoRowsHtml}
+                    </div>
+                `;
+
+                const header = sectionEl.querySelector('.lecture-section-header');
+                const content = sectionEl.querySelector('.lecture-section-content');
+                header.addEventListener('click', () => {
+                    const isOpening = !sectionEl.classList.contains('active');
+                    if (isOpening) {
+                        sectionEl.classList.add('active');
+                        content.style.height = '0px';
+                        requestAnimationFrame(() => {
+                            content.style.height = content.scrollHeight + 'px';
+                        });
+                        const onEnd = () => {
+                            if (sectionEl.classList.contains('active')) {
+                                content.style.height = 'auto';
+                            }
+                            content.removeEventListener('transitionend', onEnd);
+                        };
+                        content.addEventListener('transitionend', onEnd);
+                    } else {
+                        content.style.height = content.scrollHeight + 'px';
+                        requestAnimationFrame(() => {
+                            content.style.height = '0px';
+                        });
+                        sectionEl.classList.remove('active');
+                    }
+                });
+
+                sectionsContainer.appendChild(sectionEl);
+            });
+
+            sectionsContainer.addEventListener('change', async (e) => {
+                if (e.target.classList.contains('video-checkbox')) {
+                    const cb = e.target;
+                    const key = cb.getAttribute('data-video-key');
+                    const isChecked = cb.checked;
+
+                    if (isChecked) {
+                        completedSet.add(key);
+                    } else {
+                        completedSet.delete(key);
+                    }
+
+                    let newCompleted = 0;
+                    accessibleSections.forEach(section => {
+                        let secCompleted = 0;
+                        const vds = section.videos || [];
+                        vds.forEach(v => {
+                            const vKey = `${section.id}::${v.title}`;
+                            if (completedSet.has(vKey)) {
+                                newCompleted++;
+                                secCompleted++;
+                            }
+                        });
+                        const badge = document.getElementById(`badge-${section.id}`);
+                        if (badge) {
+                            const secTotal = vds.length;
+                            const secPct = secTotal > 0 ? Math.round((secCompleted / secTotal) * 100) : 0;
+                            badge.textContent = `${secCompleted} / ${secTotal} Done (${secPct}%)`;
+                        }
+                    });
+
+                    const newPercent = totalVideos > 0 ? Math.round((newCompleted / totalVideos) * 100) : 0;
+                    overallProgressText.textContent = `${newCompleted} / ${totalVideos} Completed (${newPercent}% Done)`;
+                    progressBar.style.width = `${newPercent}%`;
+
+                    try {
+                        const allStudents = await DB.getStudents();
+                        const sIdx = allStudents.findIndex(s => s.id.toLowerCase() === user.id.toLowerCase());
+                        if (sIdx !== -1) {
+                            allStudents[sIdx].completedLectures = Array.from(completedSet);
+                            await DB.setStudents(allStudents);
+                        }
+                    } catch (dbError) {
+                        console.error("Error saving completed lectures to DB:", dbError);
+                        alert("Could not sync progress with database. Check internet connection.");
+                    }
+                }
+            });
+
+        } catch (error) {
+            console.error("Error in renderLectureProgress:", error);
+            sectionsContainer.innerHTML = '<div style="text-align: center; padding: 2rem; color: #dc2626;">Error loading lecture progress.</div>';
+        }
+    }
+
+    await renderLectureProgress();
     await renderFees();
     await renderResults();
     await renderAttendance();
-});
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initStudentDashboard);
+} else {
+    initStudentDashboard();
+}
