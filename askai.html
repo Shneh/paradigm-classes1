@@ -1,94 +1,323 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ask AI | Paradigm Classes</title>
-
     <link rel="stylesheet" href="css/styles.css">
-
     <style>
-        /* Chat layout */
-        .chat-container {
-            max-width: 900px;
-            margin: 120px auto 40px;
-            padding: 20px;
+        body {
+            background-color: #f8fafc;
+            color: #0f172a;
+            font-family: 'Satoshi', 'Inter', sans-serif;
+            margin: 0;
         }
 
-        .chat-box {
-            height: 500px;
-            overflow-y: auto;
-            border-radius: 12px;
-            padding: 20px;
-            background: #f5f7fb;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Messages */
-        .message {
-            margin-bottom: 15px;
-            padding: 12px 16px;
-            border-radius: 10px;
-            max-width: 75%;
-            line-height: 1.5;
-        }
-
-        .user-message {
-            background: #2563eb;
+        .askai-hero {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
             color: white;
-            margin-left: auto;
+            padding: 3rem 2rem 2rem 2rem;
+            text-align: center;
+            position: relative;
         }
 
-        .ai-message {
-            background: white;
-            border: 1px solid #ddd;
+        .askai-hero h1 {
+            font-size: 2.25rem;
+            font-weight: 800;
+            margin: 0 0 0.5rem 0;
+            background: linear-gradient(to right, #ffffff, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        /* Input */
-        .chat-input-container {
+        .askai-hero p {
+            color: #94a3b8;
+            font-size: 1rem;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .askai-container {
+            max-width: 1300px;
+            margin: 1.5rem auto 3rem auto;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 960px) {
+            .askai-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Chat Panel */
+        .chat-card {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+            border: 1px solid #e2e8f0;
             display: flex;
-            margin-top: 15px;
-            gap: 10px;
+            flex-direction: column;
+            height: 680px;
+            overflow: hidden;
         }
 
-        .chat-input {
-            flex: 1;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
+        .chat-header-bar {
+            padding: 1rem 1.25rem;
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
 
-        .send-btn {
-            padding: 12px 20px;
-            background: #2563eb;
-            color: white;
-            border: none;
+        .chat-controls-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .chat-select {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
             border-radius: 8px;
+            padding: 0.45rem 0.75rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #1e3a8a;
+            outline: none;
             cursor: pointer;
         }
 
-        .send-btn:hover {
+        .preset-chips-bar {
+            padding: 0.6rem 1.25rem;
+            background: #fafafa;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .chip-btn {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 99px;
+            padding: 0.3rem 0.75rem;
+            font-size: 0.775rem;
+            font-weight: 600;
+            color: #334155;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .chip-btn:hover {
+            background: #1e3a8a;
+            color: #ffffff;
+            border-color: #1e3a8a;
+        }
+
+        .chat-box-body {
+            flex: 1;
+            padding: 1.25rem;
+            overflow-y: auto;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            max-width: 82%;
+            padding: 0.85rem 1.1rem;
+            border-radius: 12px;
+            font-size: 0.925rem;
+            line-height: 1.55;
+            word-wrap: break-word;
+            position: relative;
+        }
+
+        .user-message {
+            background: #1e3a8a;
+            color: #ffffff;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+            box-shadow: 0 2px 8px rgba(30, 58, 138, 0.15);
+        }
+
+        .ai-message {
+            background: #ffffff;
+            color: #0f172a;
+            align-self: flex-start;
+            border: 1px solid #e2e8f0;
+            border-bottom-left-radius: 2px;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+        }
+
+        .ai-meta-tag {
+            font-size: 0.725rem;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 0.4rem;
+            padding-bottom: 0.3rem;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .math-expr {
+            font-family: 'Monaco', 'Courier New', monospace;
+            background: #eff6ff;
+            color: #1e40af;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        .chat-input-footer {
+            padding: 0.85rem 1.25rem;
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .chat-input-field {
+            flex: 1;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 0.65rem 0.85rem;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .chat-input-field:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        .action-btn {
+            background: #1e3a8a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.65rem 1.1rem;
+            font-weight: 700;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .action-btn:hover {
             background: #1d4ed8;
         }
 
-        /* typing */
-        .typing {
-            font-style: italic;
-            color: gray;
+        .icon-btn {
+            background: #f1f5f9;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 0.6rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .icon-btn:hover {
+            background: #e2e8f0;
+        }
+
+        /* DL Inspector Side Panel */
+        .inspector-card {
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .inspector-header {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #0f172a;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 0.6rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .dl-badge {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 0.2rem 0.6rem;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 800;
+        }
+
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .slider-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #475569;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .custom-slider {
+            width: 100%;
+            accent-color: #1e3a8a;
+            cursor: pointer;
+        }
+
+        /* Typing Dots */
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: #64748b;
+            border-radius: 50%;
+            display: inline-block;
+            animation: typingBounce 1.4s infinite ease-in-out both;
+        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typingBounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1.0); }
         }
     </style>
-
 </head>
 
 <body>
     <!-- Spacing after fixed navbar -->
     <div style="margin-top: 80px;"></div>
-    <!-- Navigation -->
+
+    <!-- Main Navigation Header -->
     <nav class="navbar">
         <div class="container">
             <div class="nav-wrapper">
-
                 <a href="index.html" class="logo">
                     <img alt="Paradigm Classes Logo" class="logo-img" src="images/logo.png" />
                     <div>
@@ -100,7 +329,7 @@
                     <a class="nav-link" href="index.html">Home</a>
                     <a class="nav-link" href="gallery.html">Gallery</a>
                     <a class="nav-link" href="results.html">Results</a>
-                    <a class="nav-link" href="askai.html">Ask AI</a>
+                    <a class="nav-link active" href="askai.html">Ask AI</a>
                     <a class="nav-link" href="faculty.html">Faculty</a>
                     <a class="nav-link" href="index.html#contact">Contact</a>
                 </div>
@@ -123,409 +352,128 @@
         </div>
     </nav>
 
+    <!-- Page Hero Banner -->
+    <header class="askai-hero">
+        <h1>Paradigm AI Doubt Solver</h1>
+        <p>Interactive Generative AI &amp; Deep Learning Engine for Physics, Chemistry, Mathematics, CS, NDA, and GATE doubts.</p>
+    </header>
 
-    <!-- Chat -->
-    <section class="ai-section">
-
-        <div class="ai-wrapper">
-
-            <!-- Left Info Panel -->
-
-            <div class="ai-info">
-
-                <h2>Paradigm AI Doubt Solver</h2>
-
-                <p>
-                    Ask doubts in Physics, Chemistry, Mathematics,
-                    NDA, GATE, or Computer Science.
-                </p>
-
-                <div class="ai-tags">
-                    <span>Physics</span>
-                    <span>Chemistry</span>
-                    <span>Mathematics</span>
-                    <span>NDA</span>
-                    <span>GATE</span>
-                    <span>Computer Science</span>
-                </div>
-
-            </div>
-
-            <!-- Chat Panel -->
-            <div class="ai-chat">
-
-                <div class="chat-header">
-                    <div class="ai-status">
-                        <span class="dot"></span>
-                        AI Online
-                    </div>
-                </div>
-
-                <div id="chat-box" class="chat-box">
-                    <div class="message ai-message">
-
-                        Welcome to Paradigm AI 🎓
-
-                        You can ask:
-                        • Numerical problems
-                        • Theory doubts
-                        • NDA questions
-                        • Programming doubts
-
-                    </div>
-                </div>
-
-                <div class="chat-input-area">
-
-                    <select id="model-select" style="background: white; border-color: var(--gray-300); border-radius: 8px; font-weight: 600; padding: 0.5rem; outline: none; cursor: pointer; color: #1e3a8a;">
-                        <option value="api">☁️ Remote AI Agent</option>
-                        <option value="local">💻 Local ML/GenAI Model</option>
+    <!-- Main Workspace -->
+    <main class="askai-container">
+        <!-- Left: Interactive Chat Panel -->
+        <section class="chat-card">
+            <div class="chat-header-bar">
+                <div class="chat-controls-left">
+                    <select id="model-select" class="chat-select" title="Select AI Engine Model">
+                        <option value="local">💻 In-Browser Deep Learning Model</option>
+                        <option value="api">☁️ Remote AI Agent (Cloud API)</option>
                     </select>
 
-                    <select id="subject-select" style="color: #475569;">
-                        <option value="general">General</option>
-                        <option value="physics">Physics</option>
-                        <option value="chemistry">Chemistry</option>
-                        <option value="math">Mathematics</option>
-                        <option value="cs">Computer Science</option>
-                        <option value="nda">NDA</option>
-                        <option value="gate">GATE</option>
+                    <select id="subject-select" class="chat-select" title="Target Subject Domain" style="color: #334155;">
+                        <option value="general">📚 Subject: All / Auto</option>
+                        <option value="physics">⚛️ Physics</option>
+                        <option value="chemistry">🧪 Chemistry</option>
+                        <option value="math">📐 Mathematics</option>
+                        <option value="cs">💻 Computer Science</option>
+                        <option value="nda">🎖️ NDA Defence</option>
+                        <option value="gate">⚙️ GATE Prep</option>
                     </select>
-
-                    <input type="text" id="chat-input" placeholder="Type your doubt here...">
-
-                    <button onclick="sendMessage()">Send</button>
-
                 </div>
 
+                <div style="display: flex; gap: 0.4rem;">
+                    <button class="icon-btn" id="tts-btn" title="Read Answer Aloud (Text-to-Speech)">🔊</button>
+                    <button class="icon-btn" id="clear-btn" title="Clear Chat History">🗑️</button>
+                </div>
             </div>
 
-        </div>
+            <!-- Quick Preset Prompt Chips Bar -->
+            <div class="preset-chips-bar">
+                <button class="chip-btn" onclick="askPreset('Explain Newton\'s Second Law of Motion with formula')">⚡ Newton's 2nd Law</button>
+                <button class="chip-btn" onclick="askPreset('What is the formula for quadratic equation roots and discriminant?')">📐 Quadratic Roots</button>
+                <button class="chip-btn" onclick="askPreset('Explain quantum numbers and electron configuration')">🧪 Quantum Numbers</button>
+                <button class="chip-btn" onclick="askPreset('What is the NDA Exam pattern and syllabus?')">🎖️ NDA Exam Guide</button>
+                <button class="chip-btn" onclick="askPreset('Explain GATE exam paper weightage and eligibility')">⚙️ GATE Overview</button>
+            </div>
 
-    </section>
+            <!-- Messages Stream Box -->
+            <div id="chat-box" class="chat-box-body">
+                <div class="message ai-message">
+                    <strong>Welcome to Paradigm AI 🎓</strong><br><br>
+                    You can ask:<br>
+                    • Physics &amp; Mechanics numericals<br>
+                    • Chemistry atomic theory &amp; reactions<br>
+                    • Calculus &amp; Algebra equations<br>
+                    • NDA &amp; GATE exam prep strategies<br>
+                    • Computer Science &amp; Data Structures
+                </div>
+            </div>
 
-    <script>
+            <!-- Input Controls Bar -->
+            <div class="chat-input-footer">
+                <button class="icon-btn" id="voice-btn" title="Voice Input (Speech-to-Text)">🎙️</button>
+                <input type="text" id="chat-input" class="chat-input-field" placeholder="Type your PCM, NDA or GATE doubt here...">
+                <button class="action-btn" id="send-btn">Send ➔</button>
+            </div>
+        </section>
 
-        const API_URL = "https://text.pollinations.ai/"; // Changed to use free AI agent
+        <!-- Right: GenAI & Deep Learning Inspector Panel -->
+        <aside class="inspector-card">
+            <h3 class="inspector-header">
+                <span>🧠 AI Engine Inspector</span>
+                <span class="dl-badge">Deep Learning</span>
+            </h3>
 
-        // Core AI, ML, DL, and GenAI Concept Training Data
-        const localCorpus = [
-            {
-                intent: "physics_gravity",
-                keywords: ["gravity", "gravitation", "attraction", "mass", "earth", "force"],
-                text: "Gravity is a fundamental force of attraction acting between all matter with mass. Sir Isaac Newton formulated the Law of Universal Gravitation, stating that every mass exerts a gravitational pull proportional to its mass and inversely proportional to the square of the distance between them. In Einstein's General Relativity, gravity is described as the curvature of spacetime caused by mass and energy."
-            },
-            {
-                intent: "physics_energy",
-                keywords: ["energy", "work", "power", "kinetic", "potential", "conservation"],
-                text: "Energy is defined as the capacity to do work. It exists in various forms including kinetic energy (energy of motion: 1/2 * m * v²), potential energy (stored energy: m * g * h), thermal, chemical, and nuclear. The Law of Conservation of Energy states that energy can neither be created nor destroyed, only transformed from one form to another."
-            },
-            {
-                intent: "chemistry_atom",
-                keywords: ["atom", "atomic", "electron", "proton", "neutron", "nucleus", "matter"],
-                text: "An atom is the basic unit of a chemical element. It consists of a dense central nucleus containing positively charged protons and neutral neutrons, surrounded by a cloud of negatively charged electrons. Protons and neutrons are made of quarks, held together by the strong nuclear force."
-            },
-            {
-                intent: "chemistry_reaction",
-                keywords: ["reaction", "bond", "molecule", "compound", "reactant", "product", "equation"],
-                text: "A chemical reaction is a process where reactants are transformed into products by breaking and forming chemical bonds. Atoms are rearranged, but mass is conserved (Law of Conservation of Mass). Reactions are classified as synthesis, decomposition, combustion, single-displacement, or double-displacement."
-            },
-            {
-                intent: "math_calculus",
-                keywords: ["calculus", "derivative", "integration", "limit", "rate", "change", "area"],
-                text: "Calculus is the mathematical study of continuous change. It has two main branches: Differential Calculus, which deals with rates of change (derivatives: the slope of a curve), and Integral Calculus, which deals with accumulation of quantities (integrals: the area under a curve). They are connected by the Fundamental Theorem of Calculus."
-            },
-            {
-                intent: "math_algebra",
-                keywords: ["algebra", "equation", "variable", "formula", "solve", "matrix", "linear"],
-                text: "Algebra is a branch of mathematics dealing with symbols and the rules for manipulating them. Variables represent unknown quantities in equations, which are solved using arithmetic properties. Linear algebra extends this to systems of linear equations, vectors, and matrices, essential for machine learning."
-            },
-            {
-                intent: "admissions_fees",
-                keywords: ["fee", "fees", "cost", "price", "admission", "enroll", "join"],
-                text: "At Paradigm Classes, we offer dynamic, highly competitive fee structures for our PCM, boards, JEE, and NEET courses. For exact current structures and comparative course charts, please check our dynamic Course Fees Chart linked at the very footer of our pages!"
-            }
-        ];
+            <!-- Softmax Classification Panel -->
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                    <span style="font-size: 0.8rem; font-weight: 700; color: #475569;">Predicted Domain:</span>
+                    <span id="nn-domain-badge" style="background: #1e3a8a; color: white; padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 800;">AUTO</span>
+                </div>
+                <div style="font-size: 0.75rem; color: #64748b; margin-bottom: 0.75rem;">
+                    Neural Softmax Confidence: <strong id="nn-confidence-text" style="color: #166534;">N/A</strong>
+                </div>
+                <div id="prob-container" style="background: #f8fafc; padding: 0.75rem; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <div style="font-size: 0.75rem; color: #94a3b8; text-align: center;">Ask a doubt to trigger Softmax probability classification.</div>
+                </div>
+            </div>
 
-        const markovTrainingSentences = [
-            "Physics is the fundamental science that studies matter and energy through space and time.",
-            "Chemistry studies the composition structure properties and changes of chemical matter.",
-            "Mathematics is the language of science that uses numbers formulas and shapes to solve complex real-world equations.",
-            "Force equals mass times acceleration which is Newton's second law of motion.",
-            "An atom is the basic unit of an element consisting of protons neutrons and electrons.",
-            "Calculus measures rates of continuous change through derivatives and integration.",
-            "Linear algebra solves vector spaces and matrix equations which are core to artificial intelligence.",
-            "Gravity curves spacetime around massive objects causing gravitational attraction.",
-            "Chemical bonds form when atoms share or transfer valence electrons to achieve stability.",
-            "Energy is conserved and can only be transformed from potential to kinetic forms."
-        ];
+            <!-- Vector RAG Cosine Match Panel -->
+            <div style="border-top: 1px solid #f1f5f9; padding-top: 1rem;">
+                <div class="slider-label" style="margin-bottom: 0.4rem;">
+                    <span>Vector Cosine Match:</span>
+                    <span id="cosine-score-val" style="color: #1e3a8a;">0% Match</span>
+                </div>
+                <div style="height: 8px; background: #e2e8f0; border-radius: 99px; overflow: hidden;">
+                    <div id="cosine-score-bar" style="height: 100%; width: 0%; background: linear-gradient(to right, #3b82f6, #166534); transition: width 0.4s ease;"></div>
+                </div>
+            </div>
 
-        // Custom Offline AI/ML Model Engine
-        class ParadigmNLPModel {
-            constructor() {
-                this.corpus = localCorpus;
-                this.stopwords = new Set(["the", "is", "a", "of", "to", "how", "what", "when", "why", "who", "which", "where", "and", "in", "on", "for", "with", "an", "at", "by", "from", "about", "are", "do", "does", "did", "can", "could", "will", "would", "should", "your", "my", "me", "you"]);
-                this.vocab = this.buildVocab();
-                this.docVectors = this.vectorizeCorpus();
-                this.markovModel = this.trainMarkovChain();
-            }
-
-            // NLP concept: Tokenization
-            tokenize(text) {
-                return text.toLowerCase()
-                    .replace(/[^\w\s]/g, ' ')
-                    .split(/\s+/)
-                    .filter(token => token.length > 0);
-            }
-
-            // NLP concept: Vocabulary assembly
-            buildVocab() {
-                const vocabSet = new Set();
-                this.corpus.forEach(doc => {
-                    doc.keywords.forEach(kw => vocabSet.add(kw));
-                    this.tokenize(doc.text).forEach(t => {
-                        if (!this.stopwords.has(t)) vocabSet.add(t);
-                    });
-                });
-                return Array.from(vocabSet);
-            }
-
-            // NLP/ML concept: Vector space feature extraction (TF representation)
-            vectorize(text) {
-                const tokens = this.tokenize(text);
-                const vector = new Array(this.vocab.length).fill(0);
+            <!-- Hyperparameter Tuning Controls -->
+            <div style="border-top: 1px solid #f1f5f9; padding-top: 1rem; display: flex; flex-direction: column; gap: 1rem;">
+                <h4 style="font-size: 0.85rem; font-weight: 800; color: #0f172a; margin: 0;">GenAI Hyperparameters</h4>
                 
-                tokens.forEach(token => {
-                    const idx = this.vocab.indexOf(token);
-                    if (idx !== -1) {
-                        vector[idx] += 1;
-                    }
-                });
-                return vector;
-            }
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>Temperature (Sampling):</span>
+                        <span id="temp-val">0.7</span>
+                    </div>
+                    <input type="range" id="temp-slider" class="custom-slider" min="0.1" max="1.2" step="0.1" value="0.7">
+                    <span style="font-size: 0.7rem; color: #94a3b8;">Low (0.1) = Deterministic | High (1.2) = Creative</span>
+                </div>
 
-            vectorizeCorpus() {
-                return this.corpus.map(doc => {
-                    const vector = this.vectorize(doc.text);
-                    doc.keywords.forEach(kw => {
-                        const idx = this.vocab.indexOf(kw);
-                        if (idx !== -1) {
-                            vector[idx] += 5; // Extra weight to core key concepts
-                        }
-                    });
-                    return vector;
-                });
-            }
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <span style="font-size: 0.8rem; font-weight: 700; color: #475569;">RAG Context Pipeline:</span>
+                    <input type="checkbox" id="rag-toggle" checked style="width: 18px; height: 18px; cursor: pointer; accent-color: #1e3a8a;">
+                </div>
+            </div>
+        </aside>
+    </main>
 
-            // ML/DL mathematical concept: Cosine Similarity
-            cosineSimilarity(vecA, vecB) {
-                let dotProduct = 0;
-                let normA = 0;
-                let normB = 0;
-                for (let i = 0; i < vecA.length; i++) {
-                    dotProduct += vecA[i] * vecB[i];
-                    normA += vecA[i] * vecA[i];
-                    normB += vecB[i] * vecB[i];
-                }
-                if (normA === 0 || normB === 0) return 0;
-                return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
-            }
-
-            // ML concept: 1-NN Vector Space Similarity Classifier
-            classify(query) {
-                const queryVec = this.vectorize(query);
-                let bestIdx = -1;
-                let bestScore = 0;
-
-                for (let i = 0; i < this.docVectors.length; i++) {
-                    const score = this.cosineSimilarity(queryVec, this.docVectors[i]);
-                    if (score > bestScore) {
-                        bestScore = score;
-                        bestIdx = i;
-                    }
-                }
-                return { index: bestIdx, score: bestScore };
-            }
-
-            // GenAI concept: Autoregressive word transition training (Markov Chain)
-            trainMarkovChain() {
-                const model = {};
-                markovTrainingSentences.forEach(sentence => {
-                    const words = sentence.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").split(/\s+/).filter(w => w.length > 0);
-                    for (let i = 0; i < words.length - 1; i++) {
-                        const currentWord = words[i].toLowerCase();
-                        const nextWord = words[i + 1].toLowerCase();
-                        if (!model[currentWord]) {
-                            model[currentWord] = [];
-                        }
-                        model[currentWord].push(nextWord);
-                    }
-                });
-                return model;
-            }
-
-            // GenAI concept: Autoregressive text generation with greedy/probabilistic temperature sampling
-            generateText(seedWord, maxLength = 25, temperature = 0.7) {
-                let current = seedWord.toLowerCase();
-                let result = [seedWord];
-                
-                for (let i = 0; i < maxLength; i++) {
-                    const transitions = this.markovModel[current];
-                    if (!transitions || transitions.length === 0) {
-                        // Fallback transition
-                        const randomWords = Object.keys(this.markovModel);
-                        current = randomWords[Math.floor(Math.random() * randomWords.length)];
-                        result.push(current);
-                        continue;
-                    }
-
-                    let nextWord;
-                    if (temperature < 0.3) {
-                        // Low Temperature: greedy search (deterministic)
-                        const counts = {};
-                        let maxWord = transitions[0];
-                        let maxCount = 0;
-                        transitions.forEach(w => {
-                            counts[w] = (counts[w] || 0) + 1;
-                            if (counts[w] > maxCount) {
-                                maxCount = counts[w];
-                                maxWord = w;
-                            }
-                        });
-                        nextWord = maxWord;
-                    } else {
-                        // High Temperature: probabilistic transition search
-                        nextWord = transitions[Math.floor(Math.random() * transitions.length)];
-                    }
-
-                    result.push(nextWord);
-                    current = nextWord;
-                    
-                    if (["equations", "stability", "forms", "electrons", "time", "motion", "energy"].includes(nextWord)) {
-                        break;
-                    }
-                }
-                
-                let sentence = result.join(' ');
-                sentence = sentence.charAt(0).toUpperCase() + sentence.slice(1) + ".";
-                return sentence;
-            }
-
-            // Main inference trigger
-            predict(queryText) {
-                const { index, score } = this.classify(queryText);
-                
-                if (score >= 0.12 && index !== -1) {
-                    return `[💻 Custom Vector-Space Similarity ML Classifier (Similarity: ${(score * 100).toFixed(1)}%)]\n\n${this.corpus[index].text}`;
-                }
-                
-                // GenAI Autoregressive fallback
-                const tokens = this.tokenize(queryText).filter(t => !this.stopwords.has(t));
-                let seed = "physics";
-                if (tokens.length > 0) {
-                    const match = tokens.find(t => this.markovModel[t]);
-                    if (match) seed = match;
-                }
-
-                const generated = this.generateText(seed, 20, 0.7);
-                return `[💻 Custom Autoregressive GenAI Model (Markov Chain seed: '${seed}')]\n\nI could not find an exact match in my vector space, so I dynamically generated a PCM explanation for you: "${generated}"`;
-            }
-        }
-
-        const localModel = new ParadigmNLPModel();
-
-        const chatBox = document.getElementById("chat-box");
-        const input = document.getElementById("chat-input");
-
-        function addMessage(text, type) {
-
-            const msg = document.createElement("div");
-
-            msg.classList.add("message");
-
-            if (type === "user")
-                msg.classList.add("user-message");
-            else
-                msg.classList.add("ai-message");
-
-            msg.innerText = text;
-
-            chatBox.appendChild(msg);
-
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
-        function showTyping() {
-            const typing = document.createElement("div");
-            typing.className = "message ai-message typing";
-            typing.id = "typing";
-            typing.innerHTML = `AI is typing...`;
-            chatBox.appendChild(typing);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
-        function removeTyping() {
-            const typing = document.getElementById("typing");
-            if (typing) typing.remove();
-        }
-
-        async function sendMessage() {
-            const input = document.getElementById("chat-input");
-            const subjectSelect = document.getElementById("subject-select");
-            const subject = subjectSelect.options[subjectSelect.selectedIndex].text;
-            const message = input.value.trim();
-
-            if (!message) return;
-
-            addMessage(message, "user");
-            input.value = "";
-            showTyping();
-
-            // Intercept and route offline to local custom AI/ML model if selected
-            const modelSelect = document.getElementById("model-select");
-            const modelVal = modelSelect ? modelSelect.value : "api";
-
-            if (modelVal === "local") {
-                setTimeout(() => {
-                    const reply = localModel.predict(message);
-                    removeTyping();
-                    addMessage(reply, "ai");
-                }, 500); // Premium interactive delay
-                return;
-            }
-
-            try {
-                // Compose prompt instructing the AI
-                const promptContext = `You are Paradigm AI, an expert and helpful tutor. A student is asking a doubt regarding ${subject}. Please answer clearly, concisely and directly. Avoid formatting your answer with markdown if possible. Here is the student's question: ${message}`;
-                const encodedPrompt = encodeURIComponent(promptContext);
-
-                // Using Pollinations AI as a free open endpoint
-                const res = await fetch(`https://text.pollinations.ai/prompt/${encodedPrompt}`);
-
-                if (!res.ok) throw new Error("API response was not ok");
-
-                const replyText = await res.text();
-
-                removeTyping();
-                addMessage(replyText, "ai");
-
-            } catch (e) {
-                console.error("Error fetching from AI agent:", e);
-                removeTyping();
-                addMessage("Apologies, I am facing technical difficulties. Please try re-formulating your question.", "ai");
-            }
-        }
-
-        input.addEventListener("keypress", function (e) {
-            if (e.key === "Enter")
-                sendMessage();
-        });
-    </script>
-
+    <!-- Load Firebase & Custom Scripts -->
     <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
     <script src="js/db.js"></script>
     <script src="js/script.js"></script>
+    <script src="js/askai.js"></script>
 </body>
-
 </html>
