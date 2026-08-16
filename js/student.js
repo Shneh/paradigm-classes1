@@ -38,22 +38,33 @@ async function initStudentDashboard() {
             endCycle.setDate(endCycle.getDate() + 30);
             const endStr = endCycle.toISOString().split('T')[0];
 
-            let rowHtml = `<td>Cycle ${cycleNum}</td><td>${DB.formatDate(startStr)}</td><td>${DB.formatDate(endStr)}</td><td class="text-right">₹${baseFees.toLocaleString('en-IN')}</td>`;
+            let rowHtml = `<td>Cycle ${cycleNum}</td><td>${DB.formatDate(startStr)}</td><td>${DB.formatDate(endStr)}</td>`;
             
             const paymentRecord = payments.find(p => p.cycleStart === startStr);
             if (paymentRecord) {
+                const totalPayableFee = paymentRecord.totalPayableFee !== undefined ? paymentRecord.totalPayableFee : (baseFees + (paymentRecord.finePaid || 0));
+                const feePaid = paymentRecord.feePaid !== undefined ? paymentRecord.feePaid : totalPayableFee;
+                const balance = paymentRecord.balance !== undefined ? paymentRecord.balance : (totalPayableFee - feePaid);
+                const balColor = balance > 0 ? '#b91c1c' : '#166534';
+                const statusBadge = balance > 0 ? `<span class="badge badge-warning" style="background:#fef08a;color:#854d0e;padding:0.25rem 0.5rem;border-radius:99px;font-weight:700;">Paid w/ Bal</span>` : `<span class="badge badge-success" style="background:#dcfce7;color:#166534;padding:0.25rem 0.5rem;border-radius:99px;font-weight:700;">Paid</span>`;
+
                 rowHtml += `
-                    <td class="text-right" style="color:var(--text-light);">₹${paymentRecord.finePaid || 0}</td>
-                    <td><span class="badge badge-success" style="background:#dcfce7;color:#166534;padding:0.25rem 0.5rem;border-radius:99px;font-weight:700;">Paid</span><br><small>by ${paymentRecord.markedBy}</small><br><small>on ${DB.formatDate(paymentRecord.paidOn)}</small></td>
+                    <td class="text-right">₹${totalPayableFee.toLocaleString('en-IN')} <br><small style="color:var(--text-light);">(Fine: ₹${paymentRecord.finePaid || 0})</small></td>
+                    <td class="text-right" style="font-weight:700; color:#166534;">₹${feePaid.toLocaleString('en-IN')}</td>
+                    <td class="text-right" style="font-weight:700; color:${balColor};">₹${balance.toLocaleString('en-IN')}</td>
+                    <td>${statusBadge}<br><small>by ${paymentRecord.markedBy}</small><br><small>on ${DB.formatDate(paymentRecord.paidOn)}</small></td>
                 `;
             } else {
                 const dueDate = new Date(cycleStartDate);
                 dueDate.setDate(dueDate.getDate() + 5);
                 const delayDays = Math.max(0, Math.floor((today - dueDate) / (1000 * 60 * 60 * 24)));
                 const currentFine = delayDays * 30;
+                const totalDue = baseFees + currentFine;
                 
                 rowHtml += `
-                    <td class="text-right" style="color: #b91c1c;">₹${currentFine}</td>
+                    <td class="text-right">₹${totalDue.toLocaleString('en-IN')} <br><small style="color:var(--text-light);">(Fine: ₹${currentFine})</small></td>
+                    <td class="text-right">₹0</td>
+                    <td class="text-right" style="font-weight:700; color:#b91c1c;">₹${totalDue.toLocaleString('en-IN')}</td>
                     <td><span class="badge badge-warning" style="background:#fef08a;color:#854d0e;padding:0.25rem 0.5rem;border-radius:99px;font-weight:700;">Unpaid</span></td>
                 `;
             }

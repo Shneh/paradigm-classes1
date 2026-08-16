@@ -263,6 +263,10 @@
             gap: 2rem;
         }
 
+        .dashboard-grid > div {
+            min-width: 0;
+        }
+
         .dashboard-full {
             grid-column: 1 / -1;
         }
@@ -368,10 +372,31 @@
             color: #f87171;
         }
 
-        @media (max-width: 768px) {
-            .topbar-links {
-                display: none !important;
-            }
+        /* Mobile Top Navigation Ribbon */
+        .mobile-top-ribbon {
+            display: none;
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 0.45rem 0.85rem;
+            gap: 0.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            position: sticky;
+            top: 60px;
+            z-index: 999;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+        }
+
+        .mobile-top-ribbon .topbar-link {
+            font-size: 0.8rem;
+            padding: 0.3rem 0.75rem;
+            background: #f1f5f9;
+            border-radius: 99px;
+            color: #1e293b;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
         }
 
         /* Overlay & Drawer */
@@ -408,17 +433,33 @@
 
         @media (max-width: 768px) {
             .admin-topbar {
+                height: 60px;
                 padding: 0 1rem;
             }
+            .topbar-links {
+                display: none !important;
+            }
+            .mobile-top-ribbon {
+                display: flex !important;
+            }
+            .topbar-title {
+                font-size: 1.15rem;
+            }
             .admin-content-body {
-                padding: 1rem;
+                padding: 0.75rem;
             }
             .card {
-                padding: 1.25rem;
+                padding: 1rem 0.85rem;
+                margin-bottom: 1.25rem;
+                border-radius: var(--radius-lg);
+            }
+            .card-header {
+                font-size: 1.15rem;
+                margin-bottom: 0.75rem;
             }
             .dashboard-grid {
                 grid-template-columns: 1fr;
-                gap: 1.5rem;
+                gap: 1rem;
             }
             .form-row {
                 flex-direction: column;
@@ -427,6 +468,25 @@
             }
             .form-row .form-group {
                 width: 100%;
+            }
+            .financial-stats-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 0.75rem !important;
+            }
+            .stat-box {
+                padding: 0.85rem 0.5rem !important;
+            }
+            .stat-box h3 {
+                font-size: 0.725rem !important;
+            }
+            .stat-value {
+                font-size: 1.35rem !important;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .verbose-text {
+                display: none !important;
             }
         }
     </style>
@@ -447,7 +507,7 @@
             </div>
             
             <ul class="sidebar-menu">
-                <li class="menu-item active" data-tab="overview">
+                <li class="menu-item" data-tab="overview">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" style="margin-right: 2px;"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
                     Dashboard Overview
                 </li>
@@ -455,7 +515,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                     Student Directory
                 </li>
-                <li class="menu-item" data-tab="attendance">
+                <li class="menu-item active" data-tab="attendance">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                     Attendance Portal
                 </li>
@@ -467,6 +527,13 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                     Teachers & Splits
                 </li>
+
+                <!-- Quick Navigation Links for Mobile Drawer -->
+                <li style="border-top: 1px solid #1e293b; margin-top: 0.75rem; padding-top: 0.75rem; color: #64748b; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding-left: 0.5rem;">Website Navigation</li>
+                <li><a href="index.html" class="menu-item" style="text-decoration: none;"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Home Page</a></li>
+                <li><a href="video-lectures.html" class="menu-item" style="text-decoration: none;"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg> Videos Page</a></li>
+                <li><a href="study-slides.html" class="menu-item" style="text-decoration: none;"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Slides Page</a></li>
+                <li><a href="results.html" class="menu-item" style="text-decoration: none;"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Results Page</a></li>
             </ul>
             
             <div class="sidebar-footer">
@@ -483,7 +550,7 @@
             <header class="admin-topbar">
                 <div class="topbar-left">
                     <button class="menu-toggle-btn" id="menuToggleBtn">☰</button>
-                    <h2 class="topbar-title" id="activeTabTitle">Dashboard Overview</h2>
+                    <h2 class="topbar-title" id="activeTabTitle">Attendance Portal</h2>
                 </div>
                 <div class="topbar-right">
                     <div class="topbar-links">
@@ -499,16 +566,24 @@
                 </div>
             </header>
 
+            <!-- Mobile Top Navigation Ribbon Bar -->
+            <div class="mobile-top-ribbon">
+                <a href="index.html" class="topbar-link">Home</a>
+                <a href="video-lectures.html" class="topbar-link">Videos</a>
+                <a href="study-slides.html" class="topbar-link">Slides</a>
+                <a href="results.html" class="topbar-link">Results</a>
+            </div>
+
             <div class="admin-content-body">
                 <!-- ================= TAB 1: OVERVIEW ================= -->
-                <div class="tab-content active" id="tab-overview">
+                <div class="tab-content" id="tab-overview">
                     <!-- Financial Stats Overview -->
                     <div class="card">
                         <h2 class="card-header" style="color: #b91c1c; border-bottom: none; margin-bottom: 0; padding-bottom: 0;">Tuition Financial Overview</h2>
-                        <p style="color: var(--text-light); margin-top: 0.5rem; margin-bottom: 1.5rem; font-size: 0.9rem;">
+                        <p class="verbose-text" style="color: var(--text-light); margin-top: 0.5rem; margin-bottom: 1.5rem; font-size: 0.9rem;">
                             Live metrics computed based on active student fee shares and payouts issued to tutors.
                         </p>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; width: 100%;">
+                        <div class="financial-stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; width: 100%;">
                             <div class="stat-box" style="text-align: center; background: #f8fafc; padding: 1.5rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--gray-200);">
                                 <h3 style="color: var(--text-light); font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Expected Monthly Income</h3>
                                 <div id="totalExpectedFees" class="stat-value" style="font-size: 2rem; font-weight: 700; color: #1e3a8a;">₹0</div>
@@ -672,6 +747,7 @@
                                         <th>Class</th>
                                         <th>Phone Numbers</th>
                                         <th>Password</th>
+                                        <th>Balance</th>
                                         <th>Fee Splits</th>
                                         <th style="width: 160px; text-align: right;">Action</th>
                                     </tr>
@@ -697,13 +773,15 @@
                                         <th>Cycle</th>
                                         <th>Start</th>
                                         <th>End</th>
-                                        <th class="text-right">Fees + Fine</th>
+                                        <th class="text-right">Total Payable Fee</th>
+                                        <th class="text-right">Fee Paid</th>
+                                        <th class="text-right">Balance</th>
                                         <th>Status</th>
-                                        <th style="width: 120px;">Action</th>
+                                        <th style="width: 140px;">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr><td colspan="6" style="text-align:center; color:var(--text-light);">Select a student to view fee logs.</td></tr>
+                                    <tr><td colspan="8" style="text-align:center; color:var(--text-light);">Select a student to view fee logs.</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -732,10 +810,10 @@
                 </div>
 
                 <!-- ================= TAB 3: ATTENDANCE ================= -->
-                <div class="tab-content" id="tab-attendance">
+                <div class="tab-content active" id="tab-attendance">
                     <div class="card">
                         <h2 class="card-header" style="color: #b91c1c;">Student Attendance Dashboard</h2>
-                        <p style="margin-bottom: 1.5rem; color: var(--text-light); font-size: 0.95rem; line-height: 1.5;">
+                        <p class="verbose-text" style="margin-bottom: 1.5rem; color: var(--text-light); font-size: 0.95rem; line-height: 1.5;">
                             Take daily student attendance and view a complete chronological history report of all marked attendance logs in a dynamic tabular interface.
                         </p>
                         
@@ -766,14 +844,27 @@
                             </div>
                             
                             <!-- Chronological Tabular Attendance Timeline Report -->
-                            <div>
-                                <h3 style="font-size: 1.25rem; color: var(--text-dark); margin-bottom: 1rem; font-weight: 700;">Attendance Timeline Report</h3>
-                                <div style="overflow-x: auto; width: 100%; border: 1px solid var(--gray-200); border-radius: var(--radius-md);">
-                                    <table class="table" id="adminAttendanceTabularReportTable" style="margin-top: 0; min-width: 800px; border-collapse: collapse;">
+                            <div style="min-width: 0;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+                                    <h3 style="font-size: 1.25rem; color: var(--text-dark); margin: 0; font-weight: 700;">Attendance Timeline Report</h3>
+                                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <label for="adminAttendanceSortSelect" style="font-size: 0.85rem; font-weight: 600; margin: 0; white-space: nowrap; color: var(--text-dark);">Sort By:</label>
+                                        <select class="form-input" id="adminAttendanceSortSelect" style="padding: 0.35rem 0.6rem; font-size: 0.85rem; background: white; border-color: var(--gray-300); width: auto; margin: 0;">
+                                            <option value="name-asc">Name (A - Z)</option>
+                                            <option value="name-desc">Name (Z - A)</option>
+                                            <option value="rate-desc">Rate (High to Low)</option>
+                                            <option value="rate-asc">Rate (Low to High)</option>
+                                            <option value="id-asc">ID (Ascending)</option>
+                                            <option value="id-desc">ID (Descending)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div style="overflow-x: auto; max-width: 100%; border: 1px solid var(--gray-200); border-radius: var(--radius-md); box-sizing: border-box;">
+                                    <table class="table" id="adminAttendanceTabularReportTable" style="margin-top: 0; min-width: 800px; border-collapse: separate; border-spacing: 0;">
                                         <thead style="position: sticky; top: 0; background: #f8fafc; z-index: 10; box-shadow: 0 1px 0 rgba(0,0,0,0.1);">
                                             <tr id="adminAttendanceTabularHeader">
-                                                <th style="padding: 0.75rem; border: 1px solid var(--gray-200); text-align: left; font-weight: 700; color: var(--primary-color);">Student Name</th>
-                                                <th style="padding: 0.75rem; border: 1px solid var(--gray-200); text-align: center; font-weight: 700; color: var(--primary-color); width: 95px;">Rate (%)</th>
+                                                <th style="padding: 0.75rem; border: 1px solid var(--gray-200); text-align: left; font-weight: 700; color: var(--primary-color); position: sticky; left: 0; background: #f8fafc; z-index: 12;">Student Name</th>
+                                                <th style="padding: 0.75rem; border: 1px solid var(--gray-200); text-align: center; font-weight: 700; color: var(--primary-color); width: 95px; position: sticky; left: 160px; background: #f8fafc; z-index: 12;">Rate (%)</th>
                                                 <!-- Dynamic chronological date columns go here -->
                                             </tr>
                                         </thead>
@@ -790,7 +881,7 @@
                     <!-- Video Lectures Scroller Management -->
                     <div class="card">
                         <h2 class="card-header" style="color: #b91c1c;">Video Lectures Scroller Management</h2>
-                        <p style="margin-bottom: 1.5rem; color: var(--text-light); font-size: 0.95rem; line-height: 1.5;">
+                        <p class="verbose-text" style="margin-bottom: 1.5rem; color: var(--text-light); font-size: 0.95rem; line-height: 1.5;">
                             Create new accordion sections (scrollers) or add, edit, and delete video lectures. Any updates made here will instantly reflect on the student's Video Lectures page.
                         </p>
                         
@@ -891,7 +982,7 @@
                     <!-- Video Lectures Permissions checklist -->
                     <div class="card" id="lecturePermissionsCard">
                         <h2 class="card-header" style="color: #b91c1c;">Video Lecture Permissions</h2>
-                        <p style="margin-bottom: 1.5rem; color: var(--text-light); font-size: 0.9rem; line-height: 1.4;">
+                        <p class="verbose-text" style="margin-bottom: 1.5rem; color: var(--text-light); font-size: 0.9rem; line-height: 1.4;">
                             Select which video lecture scrollers each student can access. Permissions are updated instantly in the database when toggled.
                         </p>
                         <div style="overflow-x: auto; max-width: 100%;">
@@ -909,7 +1000,7 @@
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
                             <div>
                                 <h2 class="card-header" style="color: #b91c1c; border-bottom: none; margin: 0; padding: 0;">Batch Lecture Progress</h2>
-                                <p style="margin: 0.25rem 0 0 0; color: var(--text-light); font-size: 0.9rem;">Monitor lecture completion percentages across the entire batch.</p>
+                                <p class="verbose-text" style="margin: 0.25rem 0 0 0; color: var(--text-light); font-size: 0.9rem;">Monitor lecture completion percentages across the entire batch.</p>
                             </div>
                             <div style="display: flex; gap: 0.5rem; align-items: center;">
                                 <label style="font-weight: 600; font-size: 0.9rem; margin-right: 0.25rem; color: var(--text-dark);">Filter by Class/Batch:</label>

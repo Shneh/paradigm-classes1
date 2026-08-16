@@ -112,7 +112,7 @@ async function initAdminDashboard() {
         });
     }
 
-    const cachedTab = sessionStorage.getItem('adminActiveTab') || 'overview';
+    const cachedTab = sessionStorage.getItem('adminActiveTab') || 'attendance';
     switchTab(cachedTab);
 
     // Helper to calculate teacher dynamic salary
@@ -200,6 +200,17 @@ async function initAdminDashboard() {
             }
             splitsHtml += '</div>';
 
+            let totalUnpaidBalance = 0;
+            if (student.feePayments && Array.isArray(student.feePayments)) {
+                student.feePayments.forEach(p => {
+                    if (p.balance !== undefined) {
+                        totalUnpaidBalance += (p.balance || 0);
+                    }
+                });
+            }
+            const studentBal = student.balance !== undefined ? student.balance : totalUnpaidBalance;
+            const balColor = studentBal > 0 ? '#b91c1c' : '#166534';
+
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>${student.id}</td>
@@ -219,6 +230,7 @@ async function initAdminDashboard() {
                         </button>
                     </div>
                 </td>
+                <td><strong style="color: ${balColor};">₹${studentBal.toLocaleString('en-IN')}</strong></td>
                 <td>${splitsHtml}</td>
                 <td>
                     <div class="action-buttons" style="display: flex; gap: 0.3rem;">
@@ -1134,7 +1146,7 @@ async function initAdminDashboard() {
         });
     }
 
-    window.markFeePaid = async (studentId, cycleStart, payDate) => {
+    window.markFeePaid = async (studentId, cycleStart, payDate, totalPayableInput, feePaidInput) => {
         const students = await DB.getStudents();
         const studentIndex = students.findIndex(s => s.id === studentId);
         if(studentIndex === -1) return;
@@ -1151,17 +1163,82 @@ async function initAdminDashboard() {
         const delayDays = Math.max(0, Math.floor((payDateObj - dueDate) / (1000 * 60 * 60 * 24)));
         const fineLock = delayDays * 30;
 
-        student.feePayments.push({
+        const defaultPayable = (student.fees || 0) + fineLock;
+        const parsedPayable = totalPayableInput !== undefined && totalPayableInput !== '' ? parseFloat(totalPayableInput) : defaultPayable;
+        const totalPayableFee = isNaN(parsedPayable) ? defaultPayable : parsedPayable;
+
+        const parsedFeePaid = feePaidInput !== undefined && feePaidInput !== '' ? parseFloat(feePaidInput) : totalPayableFee;
+        const feePaid = isNaN(parsedFeePaid) ? totalPayableFee : parsedFeePaid;
+
+        const balance = totalPayableFee - feePaid;
+
+        const existingRecordIdx = student.feePayments.findIndex(p => p.cycleStart === cycleStart);
+        const newRecord = {
             cycleStart,
+            totalPayableFee,
+            feePaid,
+            balance,
             finePaid: fineLock,
             paidOn: paymentDateStr,
             markedBy: 'Admin'
+        };
+
+        if (existingRecordIdx !== -1) {
+            student.feePayments[existingRecordIdx] = newRecord;
+        } else {
+            student.feePayments.push(newRecord);
+        }
+
+        // Recalculate student balance across all payments
+        let totalBal = 0;
+        let totalPayableSum = 0;
+        let totalPaidSum = 0;
+        student.feePayments.forEach(p => {
+            const pPayable = p.totalPayableFee !== undefined ? p.totalPayableFee : ((student.fees || 0) + (p.finePaid || 0));
+            const pPaid = p.feePaid !== undefined ? p.feePaid : pPayable;
+            const pBal = p.balance !== undefined ? p.balance : (pPayable - pPaid);
+            totalPayableSum += pPayable;
+            totalPaidSum += pPaid;
+            totalBal += pBal;
         });
+        student.totalPayableFee = totalPayableSum;
+        student.feePaid = totalPaidSum;
+        student.balance = totalBal;
+
+        // Distribute feePaid to assigned teachers' salary payouts based on percentage split
+        const splits = student.feeSplits || [];
+        if (splits.length > 0 && feePaid > 0) {
+            const salaries = await DB.getSalaries();
+            const payMonthStr = paymentDateStr.substring(0, 7);
+
+            splits.forEach(split => {
+                const percentage = split.percentage || 0;
+                if (percentage > 0) {
+                    const shareAmount = Math.round((feePaid * percentage) / 100);
+                    if (shareAmount > 0) {
+                        const maxSalaryId = salaries.length > 0 ? Math.max(...salaries.map(s => s.id || 0)) : 0;
+                        salaries.push({
+                            id: maxSalaryId + 1,
+                            teacherId: split.teacherId,
+                            month: payMonthStr,
+                            amount: shareAmount,
+                            dateIssued: paymentDateStr,
+                            note: `Fee share (${percentage}%) from student ${student.name} (${student.id})`
+                        });
+                    }
+                }
+            });
+
+            await DB.setSalaries(salaries);
+            renderSalaries();
+        }
 
         await DB.setStudents(students);
         await calculateFinancials();
         renderFeeCycles(studentId);
-        alert('Fees marked as paid.');
+        renderStudents();
+        renderTeachers();
+        alert('Fees marked as paid and teacher salary payouts distributed successfully.');
     };
 
     async function renderFeeCycles(studentId) {
@@ -1170,7 +1247,7 @@ async function initAdminDashboard() {
         const students = await DB.getStudents();
         const student = students.find(s => s.id === studentId);
         if(!student || !student.dateOfJoining) {
-            feeCyclesTableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No valid Date of Joining found! Please update student profile.</td></tr>';
+            feeCyclesTableBody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No valid Date of Joining found! Please update student profile.</td></tr>';
             return;
         }
 
@@ -1192,10 +1269,17 @@ async function initAdminDashboard() {
             
             const paymentRecord = payments.find(p => p.cycleStart === startStr);
             if (paymentRecord) {
-                const totalPaid = baseFees + (paymentRecord.finePaid || 0);
+                const totalPayableFee = paymentRecord.totalPayableFee !== undefined ? paymentRecord.totalPayableFee : (baseFees + (paymentRecord.finePaid || 0));
+                const feePaid = paymentRecord.feePaid !== undefined ? paymentRecord.feePaid : totalPayableFee;
+                const balance = paymentRecord.balance !== undefined ? paymentRecord.balance : (totalPayableFee - feePaid);
+                const balColor = balance > 0 ? '#b91c1c' : '#166534';
+                const statusBadge = balance > 0 ? `<span class="badge badge-warning" style="background:#fef08a;color:#854d0e;">Paid w/ Bal</span>` : `<span class="badge badge-success" style="background:#dcfce7;color:#166534;">Paid</span>`;
+
                 rowHtml += `
-                    <td class="text-right">₹${totalPaid.toLocaleString('en-IN')} <br><small style="color:var(--text-light);">(Fine: ₹${paymentRecord.finePaid || 0})</small></td>
-                    <td><span class="badge badge-success" style="background:#dcfce7;color:#166534;">Paid</span><br><small>by ${paymentRecord.markedBy}</small><br><small>on ${DB.formatDate(paymentRecord.paidOn)}</small></td>
+                    <td class="text-right">₹${totalPayableFee.toLocaleString('en-IN')} <br><small style="color:var(--text-light);">(Fine: ₹${paymentRecord.finePaid || 0})</small></td>
+                    <td class="text-right" style="font-weight: 700; color: #166534;">₹${feePaid.toLocaleString('en-IN')}</td>
+                    <td class="text-right" style="font-weight: 700; color: ${balColor};">₹${balance.toLocaleString('en-IN')}</td>
+                    <td>${statusBadge}<br><small>by ${paymentRecord.markedBy}</small><br><small>on ${DB.formatDate(paymentRecord.paidOn)}</small></td>
                     <td>-</td>
                 `;
             } else {
@@ -1207,11 +1291,18 @@ async function initAdminDashboard() {
                 const totalDue = baseFees + currentFine;
                 
                 rowHtml += `
-                    <td class="text-right" style="color: #b91c1c;">₹${totalDue.toLocaleString('en-IN')} <br><small style="color:var(--text-light);">(Fine: ₹${currentFine})</small></td>
+                    <td class="text-right">
+                        <input type="number" id="totalPayable-${startStr}" class="form-input" style="padding: 0.25rem 0.4rem; font-size: 0.85rem; text-align: right; width: 95px; display: inline-block;" value="${totalDue}" oninput="if(document.getElementById('feePaid-${startStr}') && !document.getElementById('feePaid-${startStr}').dataset.userModified){ document.getElementById('feePaid-${startStr}').value = this.value; } const tp=parseFloat(this.value)||0; const fp=parseFloat(document.getElementById('feePaid-${startStr}')?.value)||0; const b=document.getElementById('balDisplay-${startStr}'); if(b){ b.textContent='₹'+(tp-fp).toLocaleString('en-IN'); b.style.color=(tp-fp)>0?'#b91c1c':'#166534'; }">
+                        <br><small style="color:var(--text-light);">(Fine: ₹${currentFine})</small>
+                    </td>
+                    <td class="text-right">
+                        <input type="number" id="feePaid-${startStr}" class="form-input" style="padding: 0.25rem 0.4rem; font-size: 0.85rem; text-align: right; width: 95px; display: inline-block;" value="${totalDue}" oninput="this.dataset.userModified='true'; const tp=parseFloat(document.getElementById('totalPayable-${startStr}')?.value)||0; const fp=parseFloat(this.value)||0; const b=document.getElementById('balDisplay-${startStr}'); if(b){ b.textContent='₹'+(tp-fp).toLocaleString('en-IN'); b.style.color=(tp-fp)>0?'#b91c1c':'#166534'; }">
+                    </td>
+                    <td class="text-right" style="font-weight: 700; color: #166534;" id="balDisplay-${startStr}">₹0</td>
                     <td><span class="badge badge-warning" style="background:#fef08a;color:#854d0e;">Unpaid</span></td>
                     <td style="display: flex; flex-direction: column; gap: 0.3rem;">
                         <input type="date" id="payDate-${startStr}" class="form-input" style="padding: 0.2rem; font-size: 0.85rem;" value="${today.toISOString().split('T')[0]}">
-                        <button class="btn btn-primary" style="padding: 0.2rem 0.6rem; font-size: 0.85rem;" onclick="markFeePaid('${student.id}', '${startStr}', document.getElementById('payDate-${startStr}').value)">Mark Paid</button>
+                        <button class="btn btn-primary" style="padding: 0.25rem 0.6rem; font-size: 0.85rem; background:#b91c1c; border-color:#b91c1c;" onclick="markFeePaid('${student.id}', '${startStr}', document.getElementById('payDate-${startStr}').value, document.getElementById('totalPayable-${startStr}').value, document.getElementById('feePaid-${startStr}').value)">Mark Paid</button>
                     </td>
                 `;
             }
@@ -1823,6 +1914,13 @@ async function initAdminDashboard() {
         });
     }
 
+    const adminAttendanceSortSelect = document.getElementById('adminAttendanceSortSelect');
+    if (adminAttendanceSortSelect) {
+        adminAttendanceSortSelect.addEventListener('change', () => {
+            renderAdminAttendanceOverviewTable();
+        });
+    }
+
     async function renderAdminAttendanceOverviewTable() {
         if (!adminAttendanceTabularReportTableBody || !adminAttendanceTabularHeader) return;
 
@@ -1844,8 +1942,8 @@ async function initAdminDashboard() {
 
         // Render table headers
         let headerRowHTML = `
-            <th style="padding: 0.75rem; border: 1px solid var(--gray-200); text-align: left; font-weight: 700; color: var(--primary-color);">Student Name</th>
-            <th style="padding: 0.75rem; border: 1px solid var(--gray-200); text-align: center; font-weight: 700; color: var(--primary-color); width: 90px;">Rate (%)</th>
+            <th style="padding: 0.75rem; border: 1px solid var(--gray-200); text-align: left; font-weight: 700; color: var(--primary-color); position: sticky; left: 0; background: #f8fafc; z-index: 12; min-width: 150px;">Student Name</th>
+            <th style="padding: 0.75rem; border: 1px solid var(--gray-200); text-align: center; font-weight: 700; color: var(--primary-color); width: 95px; position: sticky; left: 150px; background: #f8fafc; z-index: 12;">Rate (%)</th>
         `;
         sortedDates.forEach(date => {
             headerRowHTML += `
@@ -1863,15 +1961,10 @@ async function initAdminDashboard() {
             return;
         }
 
+        // Compute attendance rates for sorting
         students.forEach(student => {
             let totalDays = 0;
             let presentDays = 0;
-
-            let rowHTML = `
-                <td style="padding: 0.75rem; border: 1px solid var(--gray-200);"><strong>${student.name}</strong> <small style="color:var(--text-light); font-size: 0.75rem; display:block;">(${student.id})</small></td>
-            `;
-
-            // Pre-calculate rate for student
             attendanceList.forEach(day => {
                 if (day.records && day.records[student.id]) {
                     totalDays++;
@@ -1880,7 +1973,23 @@ async function initAdminDashboard() {
                     }
                 }
             });
-            const rateVal = totalDays > 0 ? ((presentDays / totalDays) * 100).toFixed(1) : null;
+            student._attendanceRate = totalDays > 0 ? (presentDays / totalDays) * 100 : -1;
+        });
+
+        // Apply sorting based on select control
+        const sortVal = adminAttendanceSortSelect ? adminAttendanceSortSelect.value : 'name-asc';
+        students.sort((a, b) => {
+            if (sortVal === 'name-asc') return a.name.localeCompare(b.name);
+            if (sortVal === 'name-desc') return b.name.localeCompare(a.name);
+            if (sortVal === 'rate-desc') return b._attendanceRate - a._attendanceRate;
+            if (sortVal === 'rate-asc') return a._attendanceRate - b._attendanceRate;
+            if (sortVal === 'id-asc') return a.id.localeCompare(b.id, undefined, { numeric: true });
+            if (sortVal === 'id-desc') return b.id.localeCompare(a.id, undefined, { numeric: true });
+            return a.name.localeCompare(b.name);
+        });
+
+        students.forEach(student => {
+            const rateVal = student._attendanceRate >= 0 ? student._attendanceRate.toFixed(1) : null;
             const rateText = rateVal !== null ? `${rateVal}%` : 'N/A';
 
             let rateColor = '#64748b';
@@ -1891,8 +2000,9 @@ async function initAdminDashboard() {
                 else rateColor = '#b91c1c';
             }
 
-            rowHTML += `
-                <td style="padding: 0.75rem; border: 1px solid var(--gray-200); text-align: center; font-weight: 700; color: ${rateColor};">${rateText}</td>
+            let rowHTML = `
+                <td style="padding: 0.75rem; border: 1px solid var(--gray-200); position: sticky; left: 0; background: #ffffff; z-index: 5; min-width: 150px;"><strong>${student.name}</strong> <small style="color:var(--text-light); font-size: 0.75rem; display:block;">(${student.id})</small></td>
+                <td style="padding: 0.75rem; border: 1px solid var(--gray-200); text-align: center; font-weight: 700; color: ${rateColor}; position: sticky; left: 150px; background: #ffffff; z-index: 5;">${rateText}</td>
             `;
 
             // Render P / A cells chronologically
