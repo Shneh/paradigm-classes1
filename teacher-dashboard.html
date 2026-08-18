@@ -153,12 +153,23 @@
                 <div class="card">
                     <h2 class="card-header">Create New Test</h2>
                     <form id="add-test-form">
-                        <div class="form-group">
-                            <label>Subject</label>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Subject Name</label>
                             <input class="form-input" id="testSubject" type="text" required placeholder="e.g. Physics - Chapter 1">
                         </div>
-                        <div class="form-group">
-                            <label>Maximum Marks</label>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Target Class / Batch</label>
+                            <select class="form-input" id="testTargetClass" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-300); border-radius: var(--radius-md); background: white;">
+                                <option value="All">All Classes / Batches</option>
+                                <option value="IX">Class IX</option>
+                                <option value="X">Class X</option>
+                                <option value="XI">Class XI</option>
+                                <option value="XII">Class XII</option>
+                                <option value="NDA">NDA Batch</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Maximum Marks</label>
                             <input class="form-input" id="testMaxMarks" type="number" required placeholder="e.g. 50">
                         </div>
                         <button type="submit" class="btn btn-primary">Create Test</button>
@@ -197,7 +208,13 @@
                         <h2 class="card-header" style="border: none; margin: 0;">Feed Marks</h2>
                         <button class="btn btn-outline" id="closeMarkPanel" style="padding: 0.2rem 0.5rem;">✕</button>
                     </div>
-                    <p style="margin-bottom: 1rem;" id="markEntrySubject">Subject: -</p>
+                    <div style="margin-bottom: 1rem;">
+                        <p style="margin: 0; font-weight: 700; color: var(--primary-color); font-size: 1.05rem;" id="markEntrySubject">Subject: -</p>
+                        <div id="markEntryBatchNotice" style="margin-top: 0.5rem; background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; display: flex; justify-content: space-between; align-items: center;">
+                            <span>Target Batch: <strong id="markEntryTargetBatchLabel">All</strong></span>
+                            <span style="font-size: 0.8rem; font-weight: 500;" id="markEntryStudentCount">0 Students</span>
+                        </div>
+                    </div>
                     <form id="feed-marks-form">
                         <div style="overflow-x: auto;">
                             <table class="table" id="marksTable" style="min-width: 500px;">

@@ -122,6 +122,30 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    async function populateTestTargetClasses() {
+        const select = document.getElementById('testTargetClass');
+        if (!select) return;
+        const students = await DB.getStudents();
+        const uniqueClasses = new Set(['IX', 'X', 'XI', 'XII', 'NDA']);
+        students.forEach(s => {
+            if (s.class && s.class.trim()) {
+                uniqueClasses.add(s.class.trim().toUpperCase());
+            }
+        });
+
+        const currentVal = select.value || 'All';
+        select.innerHTML = '<option value="All">All Classes / Batches</option>';
+        Array.from(uniqueClasses).sort().forEach(cls => {
+            const opt = document.createElement('option');
+            opt.value = cls;
+            opt.textContent = cls === 'NDA' ? 'NDA Batch' : `Class ${cls}`;
+            select.appendChild(opt);
+        });
+        if (Array.from(select.options).some(o => o.value === currentVal)) {
+            select.value = currentVal;
+        }
+    }
+
     async function renderTests() {
         const tests = await DB.getTests();
         testsList.innerHTML = '';
@@ -133,12 +157,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         tests.forEach(test => {
             const div = document.createElement('div');
             div.className = 'list-group-item';
+            const targetClassStr = test.targetClass && test.targetClass !== 'All' ? test.targetClass : 'All Batches';
+            const targetClassBadgeHtml = test.targetClass && test.targetClass !== 'All'
+                ? `<span class="badge" style="background:#eff6ff; color:#1e40af; border:1px solid #bfdbfe; font-weight:700;">Class: ${test.targetClass}</span>`
+                : `<span class="badge" style="background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; font-weight:600;">All Batches</span>`;
+
             div.innerHTML = `
                 <div>
-                    <div style="font-weight: 700;">${test.subject}</div>
-                    <div style="font-size: 0.85rem; color: var(--text-light);">Max Marks: ${test.maxMarks} | Date: ${DB.formatDate(test.date)}</div>
-                    <div style="margin-top: 0.2rem;">
+                    <div style="font-weight: 700; font-size: 1.05rem;">${test.subject}</div>
+                    <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.2rem;">Max Marks: ${test.maxMarks} | Date: ${DB.formatDate(test.date)}</div>
+                    <div style="margin-top: 0.4rem; display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
                         <span class="badge ${test.published ? 'badge-success' : 'badge-warning'}">${test.published ? 'Published' : 'Draft'}</span>
+                        ${targetClassBadgeHtml}
                     </div>
                 </div>
                 <div class="test-actions">
@@ -149,7 +179,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             `;
             testsList.appendChild(div);
         });
-
     }
 
     async function renderFeeStudents() {
@@ -181,13 +210,36 @@ document.addEventListener('DOMContentLoaded', async () => {
         if(!test) return;
 
         currentEditingTestId = testId;
+        const targetClass = test.targetClass || 'All';
         markEntrySubject.textContent = `Subject: ${test.subject} (Max: ${test.maxMarks})`;
+        
+        const labelEl = document.getElementById('markEntryTargetBatchLabel');
+        if (labelEl) {
+            labelEl.textContent = targetClass !== 'All' ? `Class ${targetClass}` : 'All Batches';
+        }
+
         markEntryPanel.style.display = 'block';
 
         const students = await DB.getStudents();
+        let targetStudents = students;
+        
+        if (targetClass !== 'All') {
+            targetStudents = students.filter(s => (s.class || '').trim().toUpperCase() === targetClass.trim().toUpperCase());
+        }
+
+        const countEl = document.getElementById('markEntryStudentCount');
+        if (countEl) {
+            countEl.textContent = `${targetStudents.length} Student${targetStudents.length === 1 ? '' : 's'}`;
+        }
+
         marksTableBody.innerHTML = '';
         
-        students.forEach(student => {
+        if (targetStudents.length === 0) {
+            marksTableBody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: #dc2626; padding: 1.5rem; font-weight: 600;">No students found enrolled in ${targetClass !== 'All' ? 'Class ' + targetClass : 'any batch'}.</td></tr>`;
+            return;
+        }
+
+        targetStudents.forEach(student => {
             // Check if mark already exists
             const existingMark = test.marks.find(m => m.studentId === student.id);
             const markVal = existingMark ? existingMark.mark : '';
@@ -195,7 +247,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>${student.id}</td>
-                <td>${student.name}</td>
+                <td><strong>${student.name}</strong> <span class="badge" style="background:#e2e8f0; color:#475569; font-size:0.75rem; margin-left:4px;">${student.class || 'N/A'}</span></td>
                 <td>
                     <input type="number" class="form-input mark-input" style="padding:0.4rem;" data-id="${student.id}" value="${markVal}" min="0" max="${test.maxMarks}">
                 </td>
@@ -321,8 +373,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     addTestForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const subject = document.getElementById('testSubject').value;
+        const subject = document.getElementById('testSubject').value.trim();
         const maxMarks = parseInt(document.getElementById('testMaxMarks').value);
+        const targetClassSelect = document.getElementById('testTargetClass');
+        const targetClass = targetClassSelect ? targetClassSelect.value : 'All';
         
         const tests = await DB.getTests();
         const newId = tests.length > 0 ? Math.max(...tests.map(t => t.id)) + 1 : 1;
@@ -330,6 +384,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         tests.unshift({
             id: newId,
             subject,
+            targetClass,
             maxMarks,
             date: new Date().toISOString().split('T')[0],
             marks: [],
@@ -561,6 +616,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Initial render
+    await populateTestTargetClasses();
     await renderSalaries();
     await renderTests();
     await renderFeeStudents();
