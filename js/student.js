@@ -358,6 +358,8 @@ async function initStudentDashboard() {
                     const isChecked = cb.checked;
 
                     let newlyAwarded = false;
+                    let newlyDeducted = false;
+
                     if (isChecked) {
                         completedSet.add(key);
                         if (!rewardedSet.has(key)) {
@@ -366,6 +368,10 @@ async function initStudentDashboard() {
                         }
                     } else {
                         completedSet.delete(key);
+                        if (rewardedSet.has(key)) {
+                            rewardedSet.delete(key);
+                            newlyDeducted = true;
+                        }
                     }
 
                     let newCompleted = 0;
@@ -404,6 +410,13 @@ async function initStudentDashboard() {
                                     studentCoinsEl.textContent = `${currentCoins.toLocaleString('en-IN')} Coins`;
                                 }
                                 showCoinToast(`+10 Coins awarded for completing lecture! Total: ${currentCoins} Coins`);
+                            } else if (newlyDeducted) {
+                                allStudents[sIdx].coins = Math.max(0, (allStudents[sIdx].coins || 0) - 10);
+                                const currentCoins = allStudents[sIdx].coins;
+                                if (studentCoinsEl) {
+                                    studentCoinsEl.textContent = `${currentCoins.toLocaleString('en-IN')} Coins`;
+                                }
+                                showCoinToast(`-10 Coins deducted for unchecking lecture. Total: ${currentCoins} Coins`);
                             }
                             await DB.setStudents(allStudents);
                         }
