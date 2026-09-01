@@ -41,6 +41,9 @@ async function initAdminDashboard() {
     const saveAllSplitsForm = document.getElementById('save-all-splits-form');
     const studentSplitsInputsList = document.getElementById('studentSplitsInputsList');
 
+    const grantCoinStudentIdSelect = document.getElementById('grantCoinStudentId');
+    const grantCoinsForm = document.getElementById('grant-coins-form');
+
     const breakdownTeacherIdSelect = document.getElementById('breakdownTeacherId');
     const teacherBreakdownContainer = document.getElementById('teacherBreakdownContainer');
     const teacherBreakdownTableBody = document.querySelector('#teacherBreakdownTable tbody');
@@ -181,9 +184,16 @@ async function initAdminDashboard() {
         const students = await DB.getStudents();
         const teachers = await DB.getTeachers();
         studentsTableBody.innerHTML = '';
+        
+        const prevUpdateId = updateStudentIdSelect ? updateStudentIdSelect.value : '';
+        const prevFeeId = feeStudentIdSelect ? feeStudentIdSelect.value : '';
+        const prevSplitId = splitStudentIdSelect ? splitStudentIdSelect.value : '';
+        const prevGrantId = grantCoinStudentIdSelect ? grantCoinStudentIdSelect.value : '';
+
         if(updateStudentIdSelect) updateStudentIdSelect.innerHTML = '<option value="" disabled selected>-- Select Student --</option>';
         if(feeStudentIdSelect) feeStudentIdSelect.innerHTML = '<option value="" disabled selected>-- Select Student --</option>';
         if(splitStudentIdSelect) splitStudentIdSelect.innerHTML = '<option value="" disabled selected>-- Select Student --</option>';
+        if(grantCoinStudentIdSelect) grantCoinStudentIdSelect.innerHTML = '<option value="" disabled selected>-- Select Student --</option>';
         
         students.forEach(student => {
             const splits = student.feeSplits || [];
@@ -200,22 +210,12 @@ async function initAdminDashboard() {
             }
             splitsHtml += '</div>';
 
-            let totalUnpaidBalance = 0;
-            if (student.feePayments && Array.isArray(student.feePayments)) {
-                student.feePayments.forEach(p => {
-                    if (p.balance !== undefined) {
-                        totalUnpaidBalance += (p.balance || 0);
-                    }
-                });
-            }
-            const studentBal = student.balance !== undefined ? student.balance : totalUnpaidBalance;
-            const balColor = studentBal > 0 ? '#b91c1c' : '#166534';
-
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>${student.id}</td>
                 <td>${student.name}</td>
                 <td><span class="badge" style="background:#e2e8f0; color:#475569;">${student.class || 'N/A'}</span></td>
+                <td><strong style="color: #b45309; font-size: 0.95rem;">${(student.coins || 0).toLocaleString('en-IN')} Coins</strong></td>
                 <td><div style="font-size:0.85rem; color:var(--text-light); line-height:1.4;">
                     M: ${student.motherPhone ? `<a href="tel:${student.motherPhone}" style="color: var(--primary-light); text-decoration: none;" title="Call Mother">📞 ${student.motherPhone}</a>` : 'N/A'}<br>
                     F: ${student.fatherPhone ? `<a href="tel:${student.fatherPhone}" style="color: var(--primary-light); text-decoration: none;" title="Call Father">📞 ${student.fatherPhone}</a>` : 'N/A'}<br>
@@ -230,10 +230,10 @@ async function initAdminDashboard() {
                         </button>
                     </div>
                 </td>
-                <td><strong style="color: ${balColor};">₹${studentBal.toLocaleString('en-IN')}</strong></td>
                 <td>${splitsHtml}</td>
                 <td>
                     <div class="action-buttons" style="display: flex; gap: 0.3rem;">
+                        <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #b45309; border-color: #f59e0b; font-size: 0.8rem;" onclick="quickGrantCoins('${student.id}')" title="Grant Coins">+Coins</button>
                         <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #1e3a8a; border-color: #1e3a8a; font-size: 0.8rem;" onclick="makeAlumni('${student.id}')" title="Move to Alumni">Alumni</button>
                         <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #dc2626; border-color: #dc2626; font-size: 0.8rem;" onclick="removeStudent('${student.id}')" title="Permanently Remove">Remove</button>
                     </div>
@@ -253,7 +253,32 @@ async function initAdminDashboard() {
                 opt.textContent = `${student.name} (${student.id})`;
                 feeStudentIdSelect.appendChild(opt);
             }
+            if(splitStudentIdSelect) {
+                const opt = document.createElement('option');
+                opt.value = student.id;
+                opt.textContent = `${student.name} (${student.id})`;
+                splitStudentIdSelect.appendChild(opt);
+            }
+            if(grantCoinStudentIdSelect) {
+                const opt = document.createElement('option');
+                opt.value = student.id;
+                opt.textContent = `${student.name} (${student.id})`;
+                grantCoinStudentIdSelect.appendChild(opt);
+            }
         });
+
+        if (prevUpdateId && updateStudentIdSelect && Array.from(updateStudentIdSelect.options).some(o => o.value === prevUpdateId)) {
+            updateStudentIdSelect.value = prevUpdateId;
+        }
+        if (prevFeeId && feeStudentIdSelect && Array.from(feeStudentIdSelect.options).some(o => o.value === prevFeeId)) {
+            feeStudentIdSelect.value = prevFeeId;
+        }
+        if (prevSplitId && splitStudentIdSelect && Array.from(splitStudentIdSelect.options).some(o => o.value === prevSplitId)) {
+            splitStudentIdSelect.value = prevSplitId;
+        }
+        if (prevGrantId && grantCoinStudentIdSelect && Array.from(grantCoinStudentIdSelect.options).some(o => o.value === prevGrantId)) {
+            grantCoinStudentIdSelect.value = prevGrantId;
+        }
         await renderPermissionsTable();
     }
 
@@ -1146,7 +1171,23 @@ async function initAdminDashboard() {
         });
     }
 
-    window.markFeePaid = async (studentId, cycleStart, payDate, totalPayableInput, feePaidInput) => {
+    window.updateAdminFeeCycleCalc = (startStr, cycleStartStr, baseFees) => {
+        const payDateVal = document.getElementById(`payDate-${startStr}`)?.value;
+        if (!payDateVal) return;
+        const payDateObj = new Date(payDateVal);
+        const startDate = new Date(cycleStartStr);
+        const dueDate = new Date(startDate);
+        dueDate.setDate(dueDate.getDate() + 5);
+        const delayDays = Math.max(0, Math.floor((payDateObj - dueDate) / (1000 * 60 * 60 * 24)));
+        const fine = delayDays * 30;
+        const total = baseFees + fine;
+        const fineEl = document.getElementById(`fineDisplay-${startStr}`);
+        const totalEl = document.getElementById(`totalDisplay-${startStr}`);
+        if (fineEl) fineEl.textContent = `₹${fine.toLocaleString('en-IN')}`;
+        if (totalEl) totalEl.textContent = `₹${total.toLocaleString('en-IN')}`;
+    };
+
+    window.markFeePaid = async (studentId, cycleStart, payDate) => {
         const students = await DB.getStudents();
         const studentIndex = students.findIndex(s => s.id === studentId);
         if(studentIndex === -1) return;
@@ -1162,22 +1203,15 @@ async function initAdminDashboard() {
         dueDate.setDate(dueDate.getDate() + 5);
         const delayDays = Math.max(0, Math.floor((payDateObj - dueDate) / (1000 * 60 * 60 * 24)));
         const fineLock = delayDays * 30;
-
-        const defaultPayable = (student.fees || 0) + fineLock;
-        const parsedPayable = totalPayableInput !== undefined && totalPayableInput !== '' ? parseFloat(totalPayableInput) : defaultPayable;
-        const totalPayableFee = isNaN(parsedPayable) ? defaultPayable : parsedPayable;
-
-        const parsedFeePaid = feePaidInput !== undefined && feePaidInput !== '' ? parseFloat(feePaidInput) : totalPayableFee;
-        const feePaid = isNaN(parsedFeePaid) ? totalPayableFee : parsedFeePaid;
-
-        const balance = totalPayableFee - feePaid;
+        const baseFee = student.fees || 0;
+        const totalFee = baseFee + fineLock;
 
         const existingRecordIdx = student.feePayments.findIndex(p => p.cycleStart === cycleStart);
         const newRecord = {
             cycleStart,
-            totalPayableFee,
-            feePaid,
-            balance,
+            totalPayableFee: totalFee,
+            feePaid: totalFee,
+            balance: 0,
             finePaid: fineLock,
             paidOn: paymentDateStr,
             markedBy: 'Admin'
@@ -1189,32 +1223,29 @@ async function initAdminDashboard() {
             student.feePayments.push(newRecord);
         }
 
-        // Recalculate student balance across all payments
-        let totalBal = 0;
+        // Recalculate totals
         let totalPayableSum = 0;
         let totalPaidSum = 0;
         student.feePayments.forEach(p => {
             const pPayable = p.totalPayableFee !== undefined ? p.totalPayableFee : ((student.fees || 0) + (p.finePaid || 0));
             const pPaid = p.feePaid !== undefined ? p.feePaid : pPayable;
-            const pBal = p.balance !== undefined ? p.balance : (pPayable - pPaid);
             totalPayableSum += pPayable;
             totalPaidSum += pPaid;
-            totalBal += pBal;
         });
         student.totalPayableFee = totalPayableSum;
         student.feePaid = totalPaidSum;
-        student.balance = totalBal;
+        student.balance = 0;
 
         // Distribute feePaid to assigned teachers' salary payouts based on percentage split
         const splits = student.feeSplits || [];
-        if (splits.length > 0 && feePaid > 0) {
+        if (splits.length > 0 && totalFee > 0) {
             const salaries = await DB.getSalaries();
             const payMonthStr = paymentDateStr.substring(0, 7);
 
             splits.forEach(split => {
                 const percentage = split.percentage || 0;
                 if (percentage > 0) {
-                    const shareAmount = Math.round((feePaid * percentage) / 100);
+                    const shareAmount = Math.round((totalFee * percentage) / 100);
                     if (shareAmount > 0) {
                         const maxSalaryId = salaries.length > 0 ? Math.max(...salaries.map(s => s.id || 0)) : 0;
                         salaries.push({
@@ -1257,6 +1288,7 @@ async function initAdminDashboard() {
         let cycleStartDate = new Date(student.dateOfJoining);
         let cycleNum = 1;
         const today = new Date();
+        const todayStr = today.toISOString().split('T')[0];
         
         // Loop up to current date cycle
         while (cycleStartDate <= today || cycleNum === 1) { // ensure at least one cycle
@@ -1269,21 +1301,18 @@ async function initAdminDashboard() {
             
             const paymentRecord = payments.find(p => p.cycleStart === startStr);
             if (paymentRecord) {
-                const totalPayableFee = paymentRecord.totalPayableFee !== undefined ? paymentRecord.totalPayableFee : (baseFees + (paymentRecord.finePaid || 0));
-                const feePaid = paymentRecord.feePaid !== undefined ? paymentRecord.feePaid : totalPayableFee;
-                const balance = paymentRecord.balance !== undefined ? paymentRecord.balance : (totalPayableFee - feePaid);
-                const balColor = balance > 0 ? '#b91c1c' : '#166534';
-                const statusBadge = balance > 0 ? `<span class="badge badge-warning" style="background:#fef08a;color:#854d0e;">Paid w/ Bal</span>` : `<span class="badge badge-success" style="background:#dcfce7;color:#166534;">Paid</span>`;
+                const fine = paymentRecord.finePaid || 0;
+                const totalPaid = baseFees + fine;
 
                 rowHtml += `
-                    <td class="text-right">₹${totalPayableFee.toLocaleString('en-IN')} <br><small style="color:var(--text-light);">(Fine: ₹${paymentRecord.finePaid || 0})</small></td>
-                    <td class="text-right" style="font-weight: 700; color: #166534;">₹${feePaid.toLocaleString('en-IN')}</td>
-                    <td class="text-right" style="font-weight: 700; color: ${balColor};">₹${balance.toLocaleString('en-IN')}</td>
-                    <td>${statusBadge}<br><small>by ${paymentRecord.markedBy}</small><br><small>on ${DB.formatDate(paymentRecord.paidOn)}</small></td>
+                    <td class="text-right">₹${baseFees.toLocaleString('en-IN')}</td>
+                    <td class="text-right">₹${fine.toLocaleString('en-IN')}</td>
+                    <td class="text-right" style="font-weight: 700; color: #166534;">₹${totalPaid.toLocaleString('en-IN')}</td>
+                    <td><span class="badge badge-success" style="background:#dcfce7;color:#166534;">Paid</span><br><small>by ${paymentRecord.markedBy}</small><br><small>on ${DB.formatDate(paymentRecord.paidOn)}</small></td>
                     <td>-</td>
                 `;
             } else {
-                // Compute current fine
+                // Compute initial fine based on today
                 const dueDate = new Date(cycleStartDate);
                 dueDate.setDate(dueDate.getDate() + 5);
                 const delayDays = Math.max(0, Math.floor((today - dueDate) / (1000 * 60 * 60 * 24)));
@@ -1291,18 +1320,13 @@ async function initAdminDashboard() {
                 const totalDue = baseFees + currentFine;
                 
                 rowHtml += `
-                    <td class="text-right">
-                        <input type="number" id="totalPayable-${startStr}" class="form-input" style="padding: 0.25rem 0.4rem; font-size: 0.85rem; text-align: right; width: 95px; display: inline-block;" value="${totalDue}" oninput="if(document.getElementById('feePaid-${startStr}') && !document.getElementById('feePaid-${startStr}').dataset.userModified){ document.getElementById('feePaid-${startStr}').value = this.value; } const tp=parseFloat(this.value)||0; const fp=parseFloat(document.getElementById('feePaid-${startStr}')?.value)||0; const b=document.getElementById('balDisplay-${startStr}'); if(b){ b.textContent='₹'+(tp-fp).toLocaleString('en-IN'); b.style.color=(tp-fp)>0?'#b91c1c':'#166534'; }">
-                        <br><small style="color:var(--text-light);">(Fine: ₹${currentFine})</small>
-                    </td>
-                    <td class="text-right">
-                        <input type="number" id="feePaid-${startStr}" class="form-input" style="padding: 0.25rem 0.4rem; font-size: 0.85rem; text-align: right; width: 95px; display: inline-block;" value="${totalDue}" oninput="this.dataset.userModified='true'; const tp=parseFloat(document.getElementById('totalPayable-${startStr}')?.value)||0; const fp=parseFloat(this.value)||0; const b=document.getElementById('balDisplay-${startStr}'); if(b){ b.textContent='₹'+(tp-fp).toLocaleString('en-IN'); b.style.color=(tp-fp)>0?'#b91c1c':'#166534'; }">
-                    </td>
-                    <td class="text-right" style="font-weight: 700; color: #166534;" id="balDisplay-${startStr}">₹0</td>
+                    <td class="text-right">₹${baseFees.toLocaleString('en-IN')}</td>
+                    <td class="text-right" id="fineDisplay-${startStr}">₹${currentFine.toLocaleString('en-IN')}</td>
+                    <td class="text-right" style="font-weight: 700; color: #166534;" id="totalDisplay-${startStr}">₹${totalDue.toLocaleString('en-IN')}</td>
                     <td><span class="badge badge-warning" style="background:#fef08a;color:#854d0e;">Unpaid</span></td>
                     <td style="display: flex; flex-direction: column; gap: 0.3rem;">
-                        <input type="date" id="payDate-${startStr}" class="form-input" style="padding: 0.2rem; font-size: 0.85rem;" value="${today.toISOString().split('T')[0]}">
-                        <button class="btn btn-primary" style="padding: 0.25rem 0.6rem; font-size: 0.85rem; background:#b91c1c; border-color:#b91c1c;" onclick="markFeePaid('${student.id}', '${startStr}', document.getElementById('payDate-${startStr}').value, document.getElementById('totalPayable-${startStr}').value, document.getElementById('feePaid-${startStr}').value)">Mark Paid</button>
+                        <input type="date" id="payDate-${startStr}" class="form-input" style="padding: 0.2rem; font-size: 0.85rem;" value="${todayStr}" onchange="window.updateAdminFeeCycleCalc('${startStr}', '${startStr}', ${baseFees})">
+                        <button class="btn btn-primary" style="padding: 0.25rem 0.6rem; font-size: 0.85rem; background:#b91c1c; border-color:#b91c1c;" onclick="markFeePaid('${student.id}', '${startStr}', document.getElementById('payDate-${startStr}').value)">Mark Paid</button>
                     </td>
                 `;
             }
@@ -1366,6 +1390,48 @@ async function initAdminDashboard() {
             }
         });
     }
+
+    if (grantCoinsForm) {
+        grantCoinsForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const studentId = grantCoinStudentIdSelect ? grantCoinStudentIdSelect.value : '';
+            const amount = parseInt(document.getElementById('grantCoinAmount').value) || 0;
+            
+            if (!studentId) return alert('Please select a student.');
+            if (amount === 0) return alert('Please enter a non-zero coin amount.');
+
+            const students = await DB.getStudents();
+            const sIdx = students.findIndex(s => s.id === studentId);
+            if (sIdx !== -1) {
+                const prevCoins = students[sIdx].coins || 0;
+                students[sIdx].coins = prevCoins + amount;
+                await DB.setStudents(students);
+                
+                alert(`Successfully granted ${amount > 0 ? '+' : ''}${amount} coins to ${students[sIdx].name}! New balance: ${students[sIdx].coins} Coins`);
+                document.getElementById('grantCoinAmount').value = '';
+                document.getElementById('grantCoinNote').value = '';
+                renderStudents();
+            }
+        });
+    }
+
+    window.quickGrantCoins = async (studentId) => {
+        const students = await DB.getStudents();
+        const student = students.find(s => s.id === studentId);
+        if (!student) return;
+
+        const input = prompt(`Grant coins to ${student.name} (${student.id}).\nCurrent coins: ${student.coins || 0} Coins\n\nEnter amount to add (+/-):`, '50');
+        if (input === null) return;
+        const amount = parseInt(input);
+        if (isNaN(amount) || amount === 0) return alert('Invalid coin amount.');
+
+        const sIdx = students.findIndex(s => s.id === studentId);
+        students[sIdx].coins = (students[sIdx].coins || 0) + amount;
+        await DB.setStudents(students);
+
+        alert(`Successfully updated coins for ${student.name}! New balance: ${students[sIdx].coins} Coins`);
+        renderStudents();
+    };
 
     if (breakdownTeacherIdSelect) {
         breakdownTeacherIdSelect.addEventListener('change', (e) => {

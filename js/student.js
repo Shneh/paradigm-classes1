@@ -18,7 +18,7 @@ async function initStudentDashboard() {
         const student = students.find(s => s.id === user.id);
         if(!student || !student.dateOfJoining) {
             if(feeCyclesTableBody) {
-                feeCyclesTableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No joining date recorded. Please contact Admin.</td></tr>';
+                feeCyclesTableBody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No joining date recorded. Please contact Admin.</td></tr>';
             }
             return;
         }
@@ -42,16 +42,14 @@ async function initStudentDashboard() {
             
             const paymentRecord = payments.find(p => p.cycleStart === startStr);
             if (paymentRecord) {
-                const totalPayableFee = paymentRecord.totalPayableFee !== undefined ? paymentRecord.totalPayableFee : (baseFees + (paymentRecord.finePaid || 0));
-                const feePaid = paymentRecord.feePaid !== undefined ? paymentRecord.feePaid : totalPayableFee;
-                const balance = paymentRecord.balance !== undefined ? paymentRecord.balance : (totalPayableFee - feePaid);
-                const balColor = balance > 0 ? '#b91c1c' : '#166534';
-                const statusBadge = balance > 0 ? `<span class="badge badge-warning" style="background:#fef08a;color:#854d0e;padding:0.25rem 0.5rem;border-radius:99px;font-weight:700;">Paid w/ Bal</span>` : `<span class="badge badge-success" style="background:#dcfce7;color:#166534;padding:0.25rem 0.5rem;border-radius:99px;font-weight:700;">Paid</span>`;
+                const fine = paymentRecord.finePaid || 0;
+                const totalPaid = baseFees + fine;
+                const statusBadge = `<span class="badge badge-success" style="background:#dcfce7;color:#166534;padding:0.25rem 0.5rem;border-radius:99px;font-weight:700;">Paid</span>`;
 
                 rowHtml += `
-                    <td class="text-right">₹${totalPayableFee.toLocaleString('en-IN')} <br><small style="color:var(--text-light);">(Fine: ₹${paymentRecord.finePaid || 0})</small></td>
-                    <td class="text-right" style="font-weight:700; color:#166534;">₹${feePaid.toLocaleString('en-IN')}</td>
-                    <td class="text-right" style="font-weight:700; color:${balColor};">₹${balance.toLocaleString('en-IN')}</td>
+                    <td class="text-right">₹${baseFees.toLocaleString('en-IN')}</td>
+                    <td class="text-right">₹${fine.toLocaleString('en-IN')}</td>
+                    <td class="text-right" style="font-weight:700; color:#166534;">₹${totalPaid.toLocaleString('en-IN')}</td>
                     <td>${statusBadge}<br><small>by ${paymentRecord.markedBy}</small><br><small>on ${DB.formatDate(paymentRecord.paidOn)}</small></td>
                 `;
             } else {
@@ -62,9 +60,9 @@ async function initStudentDashboard() {
                 const totalDue = baseFees + currentFine;
                 
                 rowHtml += `
-                    <td class="text-right">₹${totalDue.toLocaleString('en-IN')} <br><small style="color:var(--text-light);">(Fine: ₹${currentFine})</small></td>
-                    <td class="text-right">₹0</td>
-                    <td class="text-right" style="font-weight:700; color:#b91c1c;">₹${totalDue.toLocaleString('en-IN')}</td>
+                    <td class="text-right">₹${baseFees.toLocaleString('en-IN')}</td>
+                    <td class="text-right">₹${currentFine.toLocaleString('en-IN')}</td>
+                    <td class="text-right" style="font-weight:700; color:#166534;">₹${totalDue.toLocaleString('en-IN')}</td>
                     <td><span class="badge badge-warning" style="background:#fef08a;color:#854d0e;padding:0.25rem 0.5rem;border-radius:99px;font-weight:700;">Unpaid</span></td>
                 `;
             }
@@ -227,6 +225,11 @@ async function initStudentDashboard() {
                 return;
             }
 
+            const studentCoinsEl = document.getElementById('studentCoins');
+            if (studentCoinsEl) {
+                studentCoinsEl.textContent = `${(student.coins || 0).toLocaleString('en-IN')} Coins`;
+            }
+
             const permissions = student.lecturePermissions || [];
             const accessibleSections = lectures.filter(l => permissions.includes(l.id));
 
@@ -238,6 +241,7 @@ async function initStudentDashboard() {
             }
 
             let completedSet = new Set(student.completedLectures || []);
+            let rewardedSet = new Set(student.rewardedLectures || []);
             let totalVideos = 0;
             let completedVideos = 0;
 
@@ -353,8 +357,13 @@ async function initStudentDashboard() {
                     const key = cb.getAttribute('data-video-key');
                     const isChecked = cb.checked;
 
+                    let newlyAwarded = false;
                     if (isChecked) {
                         completedSet.add(key);
+                        if (!rewardedSet.has(key)) {
+                            rewardedSet.add(key);
+                            newlyAwarded = true;
+                        }
                     } else {
                         completedSet.delete(key);
                     }
@@ -387,6 +396,15 @@ async function initStudentDashboard() {
                         const sIdx = allStudents.findIndex(s => s.id.toLowerCase() === user.id.toLowerCase());
                         if (sIdx !== -1) {
                             allStudents[sIdx].completedLectures = Array.from(completedSet);
+                            allStudents[sIdx].rewardedLectures = Array.from(rewardedSet);
+                            if (newlyAwarded) {
+                                allStudents[sIdx].coins = (allStudents[sIdx].coins || 0) + 10;
+                                const currentCoins = allStudents[sIdx].coins;
+                                if (studentCoinsEl) {
+                                    studentCoinsEl.textContent = `${currentCoins.toLocaleString('en-IN')} Coins`;
+                                }
+                                showCoinToast(`+10 Coins awarded for completing lecture! Total: ${currentCoins} Coins`);
+                            }
                             await DB.setStudents(allStudents);
                         }
                     } catch (dbError) {
@@ -406,6 +424,43 @@ async function initStudentDashboard() {
     await renderFees();
     await renderResults();
     await renderAttendance();
+}
+
+function showCoinToast(message) {
+    let toast = document.getElementById('coinToast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'coinToast';
+        toast.style.cssText = `
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            color: #ffffff;
+            padding: 12px 24px;
+            border-radius: 99px;
+            box-shadow: 0 10px 25px rgba(30, 58, 138, 0.4);
+            font-weight: 700;
+            font-size: 1rem;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transform: translateY(100px);
+            opacity: 0;
+            border: 2px solid #f59e0b;
+        `;
+        document.body.appendChild(toast);
+    }
+    toast.textContent = message;
+    toast.style.transform = 'translateY(0)';
+    toast.style.opacity = '1';
+
+    setTimeout(() => {
+        toast.style.transform = 'translateY(100px)';
+        toast.style.opacity = '0';
+    }, 3500);
 }
 
 if (document.readyState === 'loading') {

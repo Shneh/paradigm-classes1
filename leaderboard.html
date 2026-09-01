@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard - Paradigm Classes</title>
+    <meta name="description" content="Track student academic achievements, lecture completion, and coin rankings at Paradigm Classes.">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+            --silver-gradient: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 50%, #64748b 100%);
+            --bronze-gradient: linear-gradient(135deg, #fdba74 0%, #ea580c 50%, #c2410c 100%);
+        }
+
+        /* Leaderboard Header Hero */
+        .leaderboard-hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #1e1b4b 100%);
+            color: white;
+            padding: 3.5rem 1rem 5rem 1rem;
+            text-align: center;
+            border-radius: 0 0 2.5rem 2.5rem;
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.3);
+            margin-top: 70px;
+            position: relative;
+            overflow: hidden;
+        }
+        .leaderboard-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, rgba(15, 23, 42, 0) 70%);
+            pointer-events: none;
+        }
+        .leaderboard-hero h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.02em;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .leaderboard-hero p {
+            font-size: 1.15rem;
+            color: rgba(255, 255, 255, 0.85);
+            max-width: 650px;
+            margin: 0 auto 2rem auto;
+            line-height: 1.6;
+        }
+
+        /* Overview Stat Strip */
+        .stat-strip {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .stat-strip-box {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 1rem;
+            padding: 0.85rem 1.5rem;
+            min-width: 180px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-align: left;
+        }
+        .stat-icon-wrapper {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .stat-strip-num {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: white;
+            line-height: 1.1;
+        }
+        .stat-strip-label {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+        
+        /* 3D Decorated Podium Layout */
+        .podium-section {
+            margin-top: -3.5rem;
+            margin-bottom: 3rem;
+            padding: 0 1rem;
+        }
+        .podium-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .podium-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem 1.25rem 1.5rem 1.25rem;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            border: 2px solid var(--gray-200);
+            width: 240px;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .podium-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+        
+        /* 1st Winner Pedestal */
+        .podium-card.first {
+            order: 2;
+            width: 270px;
+            border-color: #f59e0b;
+            background: linear-gradient(180deg, #fffbeb 0%, #ffffff 100%);
+            box-shadow: 0 20px 45px rgba(245, 158, 11, 0.25);
+            transform: translateY(-16px);
+        }
+        .podium-card.first:hover {
+            transform: translateY(-22px);
+        }
+        .podium-card.second {
+            order: 1;
+            border-color: #94a3b8;
+            background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+        }
+        .podium-card.third {
+            order: 3;
+            border-color: #ea580c;
+            background: linear-gradient(180deg, #fff7ed 0%, #ffffff 100%);
+        }
+
+        /* Avatar Circle */
+        .podium-avatar-wrapper {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem auto;
+        }
+        .first .podium-avatar-wrapper {
+            width: 96px;
+            height: 96px;
+        }
+        .avatar-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.75rem;
+            color: white;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            border: 4px solid white;
+        }
+        .first .avatar-circle {
+            background: var(--gold-gradient);
+            font-size: 2.25rem;
+        }
+        .second .avatar-circle {
+            background: var(--silver-gradient);
+        }
+        .third .avatar-circle {
+            background: var(--bronze-gradient);
+        }
+        
+        .crown-tag {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0f172a;
+            color: #f59e0b;
+            border: 2px solid #f59e0b;
+            padding: 0.2rem 0.75rem;
+            border-radius: 99px;
+            font-weight: 900;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .second .crown-tag {
+            color: #94a3b8;
+            border-color: #94a3b8;
+        }
+        .third .crown-tag {
+            color: #ea580c;
+            border-color: #ea580c;
+        }
+
+        .podium-name {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            margin-bottom: 0.2rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .podium-class {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        .podium-coins-badge {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #b45309;
+            background: #fef3c7;
+            border: 1px solid #fde68a;
+            padding: 0.4rem 1rem;
+            border-radius: 99px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .podium-lectures-count {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 0.6rem;
+            font-weight: 600;
+        }
+
+        /* User Rank Banner */
+        .user-rank-banner {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            color: white;
+            border-radius: 1.5rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.25);
+            flex-wrap: wrap;
+            gap: 1.25rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .user-rank-info {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+        .user-avatar-pill {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background: white;
+            color: #1e3a8a;
+            font-weight: 900;
+            font-size: 1.35rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .user-rank-name {
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin-bottom: 0.2rem;
+        }
+        .user-rank-sub {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        .user-rank-stats-group {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        .user-stat-pill {
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(8px);
+            padding: 0.5rem 1.25rem;
+            border-radius: 99px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        /* Leaderboard Table Card */
+        .leaderboard-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--gray-200);
+            margin-bottom: 4rem;
+        }
+        .table-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.75rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .filter-tabs {
+            display: flex;
+            gap: 0.5rem;
+            background: #f1f5f9;
+            padding: 0.3rem;
+            border-radius: 99px;
+        }
+        .filter-tab {
+            padding: 0.4rem 1.1rem;
+            border-radius: 99px;
+            border: none;
+            background: transparent;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .filter-tab.active {
+            background: white;
+            color: var(--primary-color);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            min-width: 280px;
+        }
+        .search-input-wrapper input {
+            width: 100%;
+            padding: 0.6rem 1rem 0.6rem 2.5rem;
+            border-radius: 99px;
+            border: 1px solid var(--gray-300);
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+        .search-input-wrapper input:focus {
+            border-color: var(--primary-color);
+        }
+        .search-icon-svg {
+            position: absolute;
+            left: 0.9rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+
+        /* Custom Table Design */
+        .rank-badge {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            background: #f1f5f9;
+        }
+        .rank-badge.top-1 { background: #fef3c7; color: #b45309; border: 2px solid #f59e0b; }
+        .rank-badge.top-2 { background: #f8fafc; color: #475569; border: 2px solid #94a3b8; }
+        .rank-badge.top-3 { background: #fff7ed; color: #c2410c; border: 2px solid #ea580c; }
+
+        .table-avatar-initials {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            color: #334155;
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.75rem;
+        }
+        .my-rank-row {
+            background: #eff6ff !important;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .lecture-progress-bar-container {
+            width: 100px;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 99px;
+            overflow: hidden;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 0.5rem;
+        }
+        .lecture-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+            border-radius: 99px;
+        }
+
+        body.dark-mode .leaderboard-card {
+            background: #1e293b;
+            border-color: #334155;
+        }
+        body.dark-mode .podium-card {
+            background: #1e293b;
+            border-color: #334155;
+            color: #f8fafc;
+        }
+        body.dark-mode .podium-name { color: #f8fafc; }
+        body.dark-mode .filter-tabs { background: #0f172a; }
+        body.dark-mode .filter-tab.active { background: #1e293b; color: white; }
+        body.dark-mode .my-rank-row { background: #1e3a8a !important; }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="index.html" class="logo" style="text-decoration: none;">
+                    <img alt="Paradigm Classes Logo" class="logo-img" src="images/logo.png" style="height: 40px; width: auto; object-fit: contain; margin-right: 8px;"/>
+                    <div>
+                        <div class="logo-primary">PARADIGM</div>
+                        <div class="logo-secondary">CLASSES</div>
+                    </div>
+                </a>
+                <div class="nav-links">
+                    <a class="nav-link" href="index.html">Home</a>
+                    <a class="nav-link" href="study-notes.html">Notes</a>
+                    <a class="nav-link" href="video-lectures.html">Videos</a>
+                    <a class="nav-link" href="study-slides.html">Slides</a>
+                    <a class="nav-link" href="results.html">Results</a>
+                    <a class="nav-link active" href="leaderboard.html" style="color: #d97706; font-weight: 700;">Leaderboard</a>
+                </div>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open Menu">☰</button>
+                <div class="nav-cta" id="navCtaArea">
+                    <a class="btn btn-primary" href="login.html" id="navCtaBtn">LOGIN</a>
+                </div>
+            </div>
+            <div class="mobile-menu" id="mobileMenu">
+                <a class="mobile-link" href="index.html">Home</a>
+                <a class="mobile-link" href="study-notes.html">Notes</a>
+                <a class="mobile-link" href="video-lectures.html">Videos</a>
+                <a class="mobile-link" href="study-slides.html">Slides</a>
+                <a class="mobile-link" href="results.html">Results</a>
+                <a class="mobile-link active" href="leaderboard.html" style="color: #d97706; font-weight: 700;">Leaderboard</a>
+                <a class="mobile-cta" href="login.html" id="mobileCtaBtn">LOGIN</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Hero -->
+    <header class="leaderboard-hero">
+        <div class="container">
+            <h1>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
+                Student Leaderboard
+            </h1>
+            <p>Track academic achievements, video lecture milestones, and coin rankings across Paradigm Classes.</p>
+
+            <div class="stat-strip">
+                <div class="stat-strip-box">
+                    <div class="stat-icon-wrapper">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <div>
+                        <div class="stat-strip-num" id="totalStudentsStat">0</div>
+                        <div class="stat-strip-label">Active Competitors</div>
+                    </div>
+                </div>
+                <div class="stat-strip-box">
+                    <div class="stat-icon-wrapper">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    </div>
+                    <div>
+                        <div class="stat-strip-num" id="totalLecturesStat">0</div>
+                        <div class="stat-strip-label">Lectures Watched</div>
+                    </div>
+                </div>
+                <div class="stat-strip-box">
+                    <div class="stat-icon-wrapper">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2"><circle cx="12" cy="12" r="8"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    </div>
+                    <div>
+                        <div class="stat-strip-num" id="totalCoinsStat">0</div>
+                        <div class="stat-strip-label">Coins Awarded</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- 3D Podium Section -->
+        <section class="podium-section">
+            <div class="podium-container" id="podiumContainer">
+                <!-- Dynamically Rendered Podium Pedestals -->
+            </div>
+        </section>
+
+        <!-- Personal Standing Banner -->
+        <div class="user-rank-banner" id="userRankBanner" style="display: none;">
+            <div class="user-rank-info">
+                <div class="user-avatar-pill" id="userAvatarInitials">--</div>
+                <div>
+                    <div class="user-rank-name" id="userRankTitle">Your Standing</div>
+                    <div class="user-rank-sub" id="userRankSubText">Keep watching lectures to climb higher!</div>
+                </div>
+            </div>
+            <div class="user-rank-stats-group">
+                <div class="user-stat-pill" id="userRankBadge">Rank #--</div>
+                <div class="user-stat-pill" id="userCoinsBadge">0 Coins</div>
+                <div class="user-stat-pill" id="userLecturesBadge">0 Lectures</div>
+            </div>
+        </div>
+
+        <!-- Leaderboard Table Card -->
+        <div class="leaderboard-card">
+            <div class="table-controls">
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-filter="all">All Students</button>
+                    <button class="filter-tab" data-filter="top10">Top 10</button>
+                </div>
+                <div class="search-input-wrapper">
+                    <svg class="search-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" id="searchStudentInput" placeholder="Search student by name or class...">
+                </div>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table class="table" id="leaderboardTable" style="min-width: 680px;">
+                    <thead>
+                        <tr>
+                            <th style="width: 80px; text-align: center;">Rank</th>
+                            <th>Student</th>
+                            <th>Class</th>
+                            <th>Lectures Completed</th>
+                            <th class="text-right">Coins Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardTbody">
+                        <tr><td colspan="5" style="text-align: center; color: var(--text-light); padding: 2.5rem;">Loading rankings...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/db.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/leaderboard.js"></script>
+</body>
+</html>

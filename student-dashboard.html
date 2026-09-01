@@ -286,6 +286,7 @@
                     <a class="nav-link" href="video-lectures.html">Videos</a>
                     <a class="nav-link" href="study-slides.html">Slides</a>
                     <a class="nav-link" href="results.html">Results</a>
+                    <a class="nav-link" href="leaderboard.html" style="color: #d97706; font-weight: 700;">Leaderboard</a>
                 </div>
                 <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open Menu">☰</button>
                 <div class="nav-cta">
@@ -298,6 +299,7 @@
                 <a class="mobile-link" href="video-lectures.html">Videos</a>
                 <a class="mobile-link" href="study-slides.html">Slides</a>
                 <a class="mobile-link" href="results.html">Results</a>
+                <a class="mobile-link" href="leaderboard.html" style="color: #d97706; font-weight: 700;">Leaderboard</a>
             </div>
         </div>
     </nav>
@@ -310,6 +312,12 @@
                 <p class="section-subtitle" style="margin-top:0.5rem;">View your performance records below.</p>
             </div>
             <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <a href="leaderboard.html" class="stat-box" style="min-width: 160px; text-decoration: none; border: 2px solid #f59e0b; background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); cursor: pointer; transition: transform 0.2s ease;">
+                    <div class="stat-value" id="studentCoins" style="color: #b45309; display: flex; align-items: center; justify-content: center; gap: 0.3rem;">
+                        0 Coins
+                    </div>
+                    <div class="stat-label" style="color: #92400e; font-weight: 700;">Coins (Leaderboard)</div>
+                </a>
                 <div class="stat-box" style="min-width: 180px;">
                     <div class="stat-value" id="cumulativeScore">0%</div>
                     <div class="stat-label">Cumulative Performance</div>
@@ -353,9 +361,9 @@
                             <th>Cycle</th>
                             <th>Start Date</th>
                             <th>End Date</th>
-                            <th class="text-right">Total Payable Fee</th>
-                            <th class="text-right">Fee Paid</th>
-                            <th class="text-right">Balance</th>
+                            <th class="text-right">Base Fee</th>
+                            <th class="text-right">Fine</th>
+                            <th class="text-right">Total Fee</th>
                             <th>Status</th>
                         </tr>
                     </thead>

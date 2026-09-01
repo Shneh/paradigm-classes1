@@ -279,6 +279,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    window.updateTeacherFeeCycleCalc = (startStr, cycleStartStr, baseFees) => {
+        const payDateVal = document.getElementById(`payDate-${startStr}`)?.value;
+        if (!payDateVal) return;
+        const payDateObj = new Date(payDateVal);
+        const startDate = new Date(cycleStartStr);
+        const dueDate = new Date(startDate);
+        dueDate.setDate(dueDate.getDate() + 5);
+        const delayDays = Math.max(0, Math.floor((payDateObj - dueDate) / (1000 * 60 * 60 * 24)));
+        const fine = delayDays * 30;
+        const total = baseFees + fine;
+        const fineEl = document.getElementById(`teacherFineDisplay-${startStr}`);
+        const totalEl = document.getElementById(`teacherTotalDisplay-${startStr}`);
+        if (fineEl) fineEl.textContent = `₹${fine.toLocaleString('en-IN')}`;
+        if (totalEl) totalEl.textContent = `₹${total.toLocaleString('en-IN')}`;
+    };
+
     window.markFeePaid = async (studentId, cycleStart, payDate) => {
         const students = await DB.getStudents();
         const studentIndex = students.findIndex(s => s.id === studentId);
@@ -295,13 +311,65 @@ document.addEventListener('DOMContentLoaded', async () => {
         dueDate.setDate(dueDate.getDate() + 5);
         const delayDays = Math.max(0, Math.floor((payDateObj - dueDate) / (1000 * 60 * 60 * 24)));
         const fineLock = delayDays * 30;
+        const baseFee = student.fees || 0;
+        const totalFee = baseFee + fineLock;
 
-        student.feePayments.push({
+        const existingRecordIdx = student.feePayments.findIndex(p => p.cycleStart === cycleStart);
+        const newRecord = {
             cycleStart,
+            totalPayableFee: totalFee,
+            feePaid: totalFee,
+            balance: 0,
             finePaid: fineLock,
             paidOn: paymentDateStr,
             markedBy: user.name
+        };
+
+        if (existingRecordIdx !== -1) {
+            student.feePayments[existingRecordIdx] = newRecord;
+        } else {
+            student.feePayments.push(newRecord);
+        }
+
+        // Recalculate totals
+        let totalPayableSum = 0;
+        let totalPaidSum = 0;
+        student.feePayments.forEach(p => {
+            const pPayable = p.totalPayableFee !== undefined ? p.totalPayableFee : ((student.fees || 0) + (p.finePaid || 0));
+            const pPaid = p.feePaid !== undefined ? p.feePaid : pPayable;
+            totalPayableSum += pPayable;
+            totalPaidSum += pPaid;
         });
+        student.totalPayableFee = totalPayableSum;
+        student.feePaid = totalPaidSum;
+        student.balance = 0;
+
+        // Distribute feePaid to assigned teachers' salary payouts based on percentage split
+        const splits = student.feeSplits || [];
+        if (splits.length > 0 && totalFee > 0) {
+            const salaries = await DB.getSalaries();
+            const payMonthStr = paymentDateStr.substring(0, 7);
+
+            splits.forEach(split => {
+                const percentage = split.percentage || 0;
+                if (percentage > 0) {
+                    const shareAmount = Math.round((totalFee * percentage) / 100);
+                    if (shareAmount > 0) {
+                        const maxSalaryId = salaries.length > 0 ? Math.max(...salaries.map(s => s.id || 0)) : 0;
+                        salaries.push({
+                            id: maxSalaryId + 1,
+                            teacherId: split.teacherId,
+                            month: payMonthStr,
+                            amount: shareAmount,
+                            dateIssued: paymentDateStr,
+                            note: `Fee share (${percentage}%) from student ${student.name} (${student.id})`
+                        });
+                    }
+                }
+            });
+
+            await DB.setSalaries(salaries);
+        }
 
         await DB.setStudents(students);
         renderFeeCycles(studentId);
@@ -314,7 +382,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const students = await DB.getStudents();
         const student = students.find(s => s.id === studentId);
         if(!student || !student.dateOfJoining) {
-            feeCyclesTableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No valid Date of Joining found!</td></tr>';
+            feeCyclesTableBody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No valid Date of Joining found!</td></tr>';
             return;
         }
 
@@ -324,6 +392,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         let cycleStartDate = new Date(student.dateOfJoining);
         let cycleNum = 1;
         const today = new Date();
+        const todayStr = today.toISOString().split('T')[0];
         
         // Loop up to current date cycle
         while (cycleStartDate <= today || cycleNum === 1) { // ensure at least one cycle
@@ -336,9 +405,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             const paymentRecord = payments.find(p => p.cycleStart === startStr);
             if (paymentRecord) {
-                const totalPaid = baseFees + (paymentRecord.finePaid || 0);
+                const fine = paymentRecord.finePaid || 0;
+                const totalPaid = baseFees + fine;
                 rowHtml += `
-                    <td class="text-right">₹${totalPaid.toLocaleString('en-IN')} <br><small style="color:var(--text-light);">(Fine: ₹${paymentRecord.finePaid || 0})</small></td>
+                    <td class="text-right">₹${baseFees.toLocaleString('en-IN')}</td>
+                    <td class="text-right">₹${fine.toLocaleString('en-IN')}</td>
+                    <td class="text-right" style="font-weight: 700; color: #166534;">₹${totalPaid.toLocaleString('en-IN')}</td>
                     <td><span class="badge badge-success" style="background:#dcfce7;color:#166534;">Paid</span><br><small>by ${paymentRecord.markedBy}</small><br><small>on ${DB.formatDate(paymentRecord.paidOn)}</small></td>
                     <td>-</td>
                 `;
@@ -351,10 +423,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const totalDue = baseFees + currentFine;
                 
                 rowHtml += `
-                    <td class="text-right" style="color: #b91c1c;">₹${totalDue.toLocaleString('en-IN')} <br><small style="color:var(--text-light);">(Fine: ₹${currentFine})</small></td>
+                    <td class="text-right">₹${baseFees.toLocaleString('en-IN')}</td>
+                    <td class="text-right" id="teacherFineDisplay-${startStr}">₹${currentFine.toLocaleString('en-IN')}</td>
+                    <td class="text-right" style="font-weight: 700; color: #166534;" id="teacherTotalDisplay-${startStr}">₹${totalDue.toLocaleString('en-IN')}</td>
                     <td><span class="badge badge-warning" style="background:#fef08a;color:#854d0e;">Unpaid</span></td>
                     <td style="display: flex; flex-direction: column; gap: 0.3rem;">
-                        <input type="date" id="payDate-${startStr}" class="form-input" style="padding: 0.2rem; font-size: 0.85rem;" value="${today.toISOString().split('T')[0]}">
+                        <input type="date" id="payDate-${startStr}" class="form-input" style="padding: 0.2rem; font-size: 0.85rem;" value="${todayStr}" onchange="window.updateTeacherFeeCycleCalc('${startStr}', '${startStr}', ${baseFees})">
                         <button class="btn btn-primary" style="padding: 0.2rem 0.6rem; font-size: 0.85rem;" onclick="markFeePaid('${student.id}', '${startStr}', document.getElementById('payDate-${startStr}').value)">Mark Paid</button>
                     </td>
                 `;

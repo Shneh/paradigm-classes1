@@ -62,6 +62,7 @@
                     <a class="nav-link" href="results.html">Results</a>
                     <a class="nav-link" href="askai.html">Ask AI</a>
                     <a class="nav-link" href="faculty.html">Faculty</a>
+                    <a class="nav-link" href="leaderboard.html" style="color: #d97706; font-weight: 700;">Leaderboard</a>
                 </div>
                 <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open Menu">☰</button>
                 <div class="nav-cta">
@@ -76,6 +77,7 @@
                 <a class="mobile-link" href="results.html">Results</a>
                 <a class="mobile-link" href="askai.html">Ask AI</a>
                 <a class="mobile-link" href="faculty.html">Faculty</a>
+                <a class="mobile-link" href="leaderboard.html" style="color: #d97706; font-weight: 700;">Leaderboard</a>
             </div>
         </div>
     </nav>
@@ -242,19 +244,21 @@
                         </select>
                     </div>
                     <div style="overflow-x: auto;">
-                        <table class="table" id="feeCyclesTable" style="min-width: 600px;">
+                        <table class="table" id="feeCyclesTable" style="min-width: 700px;">
                             <thead>
                                 <tr>
                                     <th>Cycle</th>
                                     <th>Start</th>
                                     <th>End</th>
-                                    <th class="text-right">Fees + Fine</th>
+                                    <th class="text-right">Base Fee</th>
+                                    <th class="text-right">Fine</th>
+                                    <th class="text-right">Total Fee</th>
                                     <th>Status</th>
-                                    <th style="width: 80px;">Action</th>
+                                    <th style="width: 160px;">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr><td colspan="6" style="text-align:center; color:var(--text-light);">Select a student to view fees.</td></tr>
+                                <tr><td colspan="8" style="text-align:center; color:var(--text-light);">Select a student to view fees.</td></tr>
                             </tbody>
                         </table>
                     </div>

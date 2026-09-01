@@ -531,6 +531,7 @@
                 <!-- Quick Navigation Links for Mobile Drawer -->
                 <li style="border-top: 1px solid #1e293b; margin-top: 0.75rem; padding-top: 0.75rem; color: #64748b; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding-left: 0.5rem;">Website Navigation</li>
                 <li><a href="index.html" class="menu-item" style="text-decoration: none;"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Home Page</a></li>
+                <li><a href="leaderboard.html" class="menu-item" style="text-decoration: none; color: #f59e0b;"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Leaderboard</a></li>
                 <li><a href="video-lectures.html" class="menu-item" style="text-decoration: none;"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg> Videos Page</a></li>
                 <li><a href="study-slides.html" class="menu-item" style="text-decoration: none;"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Slides Page</a></li>
                 <li><a href="results.html" class="menu-item" style="text-decoration: none;"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Results Page</a></li>
@@ -745,11 +746,11 @@
                                         <th>ID</th>
                                         <th>Name</th>
                                         <th>Class</th>
+                                        <th>Coins</th>
                                         <th>Phone Numbers</th>
                                         <th>Password</th>
-                                        <th>Balance</th>
                                         <th>Fee Splits</th>
-                                        <th style="width: 160px; text-align: right;">Action</th>
+                                        <th style="width: 220px; text-align: right;">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -773,11 +774,11 @@
                                         <th>Cycle</th>
                                         <th>Start</th>
                                         <th>End</th>
-                                        <th class="text-right">Total Payable Fee</th>
-                                        <th class="text-right">Fee Paid</th>
-                                        <th class="text-right">Balance</th>
+                                        <th class="text-right">Base Fee</th>
+                                        <th class="text-right">Fine</th>
+                                        <th class="text-right">Total Fee</th>
                                         <th>Status</th>
-                                        <th style="width: 140px;">Action</th>
+                                        <th style="width: 160px;">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -1139,6 +1140,30 @@
                                 <tbody></tbody>
                             </table>
                         </div>
+                    </div>
+
+                    <!-- Manage & Grant Student Coins -->
+                    <div class="card" id="manage-coins-card">
+                        <h2 class="card-header" style="color: #b91c1c;">Manage & Grant Student Coins</h2>
+                        <form id="grant-coins-form">
+                            <div class="form-row" style="margin-bottom: 1rem;">
+                                <div class="form-group">
+                                    <label>Select Student</label>
+                                    <select class="form-input" id="grantCoinStudentId" required style="border-color: var(--gray-300); background: white;">
+                                        <option value="" disabled selected>-- Select Student --</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Coins Amount (+/-)</label>
+                                    <input class="form-input" id="grantCoinAmount" type="number" placeholder="e.g. 50" required>
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 1.5rem;">
+                                <label>Reason / Note (Optional)</label>
+                                <input class="form-input" id="grantCoinNote" type="text" placeholder="e.g. Quiz Bonus / Good Performance">
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="background:#b91c1c; border-color:#b91c1c; padding: 0.75rem 1.5rem; width: 100%;">Grant Coins</button>
+                        </form>
                     </div>
 
                     <!-- Manage Student Fee Splits -->
