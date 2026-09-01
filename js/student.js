@@ -146,65 +146,138 @@ async function initStudentDashboard() {
         });
     }
 
+    let calendarDate = new Date();
+
     async function renderAttendance() {
-        if (!attendanceTableBody || !attendanceRateEl) return;
+        const calendarDaysGrid = document.getElementById('calendarDaysGrid');
+        const calendarMonthTitle = document.getElementById('calendarMonthTitle');
+        const prevMonthBtn = document.getElementById('prevMonthBtn');
+        const nextMonthBtn = document.getElementById('nextMonthBtn');
+        if (!attendanceRateEl || !calendarDaysGrid) return;
 
         const attendanceList = await DB.getAttendance();
         
         let totalDays = 0;
         let presentDays = 0;
-        const records = [];
+        const attendanceMap = {};
 
-        const sortedAttendance = [...attendanceList].sort((a, b) => b.date.localeCompare(a.date));
-
-        sortedAttendance.forEach(day => {
+        attendanceList.forEach(day => {
             if (day.records && day.records[user.id]) {
                 totalDays++;
-                const status = day.records[user.id];
+                const status = day.records[user.id]; // 'present' or 'absent'
                 if (status === 'present') {
                     presentDays++;
                 }
-                records.push({
-                    date: day.date,
+                attendanceMap[day.date] = {
                     status: status,
                     takenBy: day.takenBy || 'Teacher'
-                });
+                };
             }
         });
 
         if (totalDays === 0) {
             attendanceRateEl.textContent = 'N/A';
-            attendanceTableBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--text-light);">No attendance records found.</td></tr>';
         } else {
             const percentage = ((presentDays / totalDays) * 100).toFixed(1);
             attendanceRateEl.textContent = `${percentage}%`;
 
             let color = '#64748b';
-            if (percentage >= 85) {
-                color = '#166534';
-            } else if (percentage >= 75) {
-                color = '#b45309';
-            } else {
-                color = '#b91c1c';
-            }
+            if (percentage >= 85) color = '#166534';
+            else if (percentage >= 75) color = '#b45309';
+            else color = '#b91c1c';
             attendanceRateEl.style.color = color;
+        }
 
-            attendanceTableBody.innerHTML = '';
-            records.forEach(rec => {
-                const tr = document.createElement('tr');
-                const badgeStyle = rec.status === 'present' 
-                    ? 'background: #dcfce7; color: #166534;' 
-                    : 'background: #fee2e2; color: #991b1b;';
-                const statusText = rec.status.toUpperCase();
+        function drawCalendar() {
+            if (!calendarDaysGrid || !calendarMonthTitle) return;
 
-                tr.innerHTML = `
-                    <td>${DB.formatDate(rec.date)}</td>
-                    <td>
-                        <span class="badge" style="padding: 0.25rem 0.5rem; border-radius: 99px; font-weight: 700; font-size: 0.8rem; ${badgeStyle}">${statusText}</span>
-                    </td>
-                    <td>${rec.takenBy}</td>
+            const year = calendarDate.getFullYear();
+            const month = calendarDate.getMonth();
+
+            const monthNames = [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+
+            calendarMonthTitle.textContent = `${monthNames[month]} ${year}`;
+            calendarDaysGrid.innerHTML = '';
+
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            // Padding days before start of month
+            for (let i = 0; i < firstDayIndex; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.style.padding = '0.4rem';
+                calendarDaysGrid.appendChild(emptyCell);
+            }
+
+            // Days of the month
+            for (let d = 1; d <= daysInMonth; d++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                const rec = attendanceMap[dateStr];
+
+                const dayCell = document.createElement('div');
+                dayCell.style.cssText = 'display: flex; align-items: center; justify-content: center; padding: 0.2rem;';
+
+                const circle = document.createElement('div');
+                circle.textContent = d;
+                circle.style.cssText = `
+                    width: 34px;
+                    height: 34px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 0.8rem;
+                    font-weight: 700;
+                    margin: auto;
+                    transition: transform 0.2s ease;
+                    cursor: default;
                 `;
-                attendanceTableBody.appendChild(tr);
+
+                if (rec) {
+                    if (rec.status === 'present') {
+                        // Green Circle for Present
+                        circle.style.background = '#dcfce7';
+                        circle.style.color = '#15803d';
+                        circle.style.border = '1.5px solid #22c55e';
+                        circle.title = `${dateStr}: PRESENT (Marked by ${rec.takenBy})`;
+                    } else {
+                        // Red Circle for Absent
+                        circle.style.background = '#fee2e2';
+                        circle.style.color = '#b91c1c';
+                        circle.style.border = '1.5px solid #ef4444';
+                        circle.title = `${dateStr}: ABSENT (Marked by ${rec.takenBy})`;
+                    }
+                } else {
+                    // Grey Circle for N/A
+                    circle.style.background = '#f1f5f9';
+                    circle.style.color = '#94a3b8';
+                    circle.style.border = '1px solid #cbd5e1';
+                    circle.title = `${dateStr}: N/A`;
+                }
+
+                dayCell.appendChild(circle);
+                calendarDaysGrid.appendChild(dayCell);
+            }
+        }
+
+        drawCalendar();
+
+        if (prevMonthBtn && !prevMonthBtn.hasAttribute('data-bound')) {
+            prevMonthBtn.setAttribute('data-bound', 'true');
+            prevMonthBtn.addEventListener('click', () => {
+                calendarDate.setMonth(calendarDate.getMonth() - 1);
+                drawCalendar();
+            });
+        }
+
+        if (nextMonthBtn && !nextMonthBtn.hasAttribute('data-bound')) {
+            nextMonthBtn.setAttribute('data-bound', 'true');
+            nextMonthBtn.addEventListener('click', () => {
+                calendarDate.setMonth(calendarDate.getMonth() + 1);
+                drawCalendar();
             });
         }
     }

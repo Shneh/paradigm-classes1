@@ -422,19 +422,39 @@
                 </table>
         </div>
 
-        <div class="card">
-            <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--primary-color); margin-bottom: 1.5rem;">Your Attendance Records</h2>
-            <div style="overflow-x: auto;">
-                <table class="table" id="attendanceTable" style="min-width: 600px;">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Marked By</th>
-                        </tr>
-                    </thead>
-                    <tbody><!-- Filled by JS --></tbody>
-                </table>
+        <div class="card" id="attendanceCard">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+                <div>
+                    <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--primary-color); margin: 0;">Attendance Calendar</h2>
+                    <p style="font-size: 0.85rem; color: var(--text-light); margin: 0.2rem 0 0 0;">Monthly overview of your class attendance</p>
+                </div>
+                <!-- Legend -->
+                <div style="display: flex; align-items: center; gap: 0.85rem; font-size: 0.8rem; font-weight: 600;">
+                    <span style="display: flex; align-items: center; gap: 0.35rem;"><span style="width: 12px; height: 12px; border-radius: 50%; background: #22c55e; border: 1px solid #166534; display: inline-block;"></span> Present</span>
+                    <span style="display: flex; align-items: center; gap: 0.35rem;"><span style="width: 12px; height: 12px; border-radius: 50%; background: #ef4444; border: 1px solid #991b1b; display: inline-block;"></span> Absent</span>
+                    <span style="display: flex; align-items: center; gap: 0.35rem;"><span style="width: 12px; height: 12px; border-radius: 50%; background: #e2e8f0; border: 1px solid #94a3b8; display: inline-block;"></span> N/A</span>
+                </div>
+            </div>
+
+            <!-- Month Controls -->
+            <div style="display: flex; align-items: center; justify-content: space-between; background: var(--gray-100); padding: 0.5rem 0.85rem; border-radius: 0.6rem; margin-bottom: 1rem;">
+                <button type="button" id="prevMonthBtn" class="btn btn-outline" style="padding: 0.25rem 0.65rem; font-size: 0.8rem; min-height: 32px; border-color: var(--gray-300); background: white;">&larr; Prev</button>
+                <span id="calendarMonthTitle" style="font-weight: 700; color: var(--primary-color); font-size: 0.95rem;">Month Year</span>
+                <button type="button" id="nextMonthBtn" class="btn btn-outline" style="padding: 0.25rem 0.65rem; font-size: 0.8rem; min-height: 32px; border-color: var(--gray-300); background: white;">Next &rarr;</button>
+            </div>
+
+            <!-- Calendar Grid Container -->
+            <div id="attendanceCalendarContainer" style="max-width: 100%; overflow-x: auto;">
+                <div style="min-width: 300px;">
+                    <!-- Weekday Headers -->
+                    <div style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: 700; font-size: 0.75rem; color: var(--text-light); margin-bottom: 0.5rem; text-transform: uppercase;">
+                        <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+                    </div>
+                    <!-- Calendar Days Grid -->
+                    <div id="calendarDaysGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.35rem; text-align: center;">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
             </div>
         </div>
 
