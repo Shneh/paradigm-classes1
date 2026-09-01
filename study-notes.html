@@ -409,7 +409,8 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const user = typeof DB !== 'undefined' ? DB.getCurrentUser() : null;
-        if (!user || (user.role !== 'student' && user.role !== 'teacher' && user.role !== 'admin')) {
+        if (!user) {
+            alert("Please login to access Study Notes.");
             window.location.href = 'login.html';
             return;
         }

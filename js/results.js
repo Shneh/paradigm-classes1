@@ -1,4 +1,11 @@
 document.addEventListener('DOMContentLoaded', async () => {
+    const user = typeof DB !== 'undefined' ? DB.getCurrentUser() : null;
+    if (!user) {
+        alert("Please login to view Test Results & Batch Leaderboards.");
+        window.location.href = 'login.html';
+        return;
+    }
+
     const batchTabsContainer = document.getElementById('batchTabs');
     const searchInput = document.getElementById('searchInput');
     const sortSelect = document.getElementById('sortSelect');
