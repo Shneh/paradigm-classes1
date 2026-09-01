@@ -286,9 +286,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         const startDate = new Date(cycleStartStr);
         const dueDate = new Date(startDate);
         dueDate.setDate(dueDate.getDate() + 5);
-        const delayDays = Math.max(0, Math.floor((payDateObj - dueDate) / (1000 * 60 * 60 * 24)));
+        const delayDays = isNaN(payDateObj.getTime()) || isNaN(dueDate.getTime()) ? 0 : Math.max(0, Math.floor((payDateObj - dueDate) / (1000 * 60 * 60 * 24)));
         const fine = delayDays * 30;
-        const total = baseFees + fine;
+        const total = (baseFees || 0) + fine;
         const fineEl = document.getElementById(`teacherFineDisplay-${startStr}`);
         const totalEl = document.getElementById(`teacherTotalDisplay-${startStr}`);
         if (fineEl) fineEl.textContent = `₹${fine.toLocaleString('en-IN')}`;
@@ -309,7 +309,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const startDate = new Date(cycleStart);
         const dueDate = new Date(startDate);
         dueDate.setDate(dueDate.getDate() + 5);
-        const delayDays = Math.max(0, Math.floor((payDateObj - dueDate) / (1000 * 60 * 60 * 24)));
+        const delayDays = isNaN(payDateObj.getTime()) || isNaN(dueDate.getTime()) ? 0 : Math.max(0, Math.floor((payDateObj - dueDate) / (1000 * 60 * 60 * 24)));
         const fineLock = delayDays * 30;
         const baseFee = student.fees || 0;
         const totalFee = baseFee + fineLock;

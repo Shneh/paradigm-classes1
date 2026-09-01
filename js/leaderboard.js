@@ -186,6 +186,9 @@ async function initLeaderboard() {
                 const coinsCount = (student.coins || 0);
                 const progressPct = Math.round((lecturesCount / maxLecs) * 100);
 
+                const safeName = window.escapeHTML ? window.escapeHTML(student.name) : student.name;
+                const safeClass = window.escapeHTML ? window.escapeHTML(student.class || 'N/A') : (student.class || 'N/A');
+
                 const tr = document.createElement('tr');
                 if (isCurrentUser) tr.className = 'my-rank-row';
 
@@ -197,12 +200,12 @@ async function initLeaderboard() {
                         <div style="display: flex; align-items: center;">
                             <div class="table-avatar-initials">${getInitials(student.name)}</div>
                             <div>
-                                <strong style="color: var(--text-dark); font-size: 0.95rem;">${student.name}</strong>
+                                <strong style="color: var(--text-dark); font-size: 0.95rem;">${safeName}</strong>
                                 ${isCurrentUser ? '<span class="badge badge-success" style="margin-left: 0.5rem; background:#dcfce7; color:#166534; font-size: 0.7rem; font-weight:700;">YOU</span>' : ''}
                             </div>
                         </div>
                     </td>
-                    <td><span class="badge" style="background:#f1f5f9; color:#475569; font-weight:600;">${student.class || 'N/A'}</span></td>
+                    <td><span class="badge" style="background:#f1f5f9; color:#475569; font-weight:600;">${safeClass}</span></td>
                     <td>
                         <span style="font-weight: 600;">${lecturesCount}</span>
                         <div class="lecture-progress-bar-container">

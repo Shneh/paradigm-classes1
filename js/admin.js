@@ -210,22 +210,30 @@ async function initAdminDashboard() {
             }
             splitsHtml += '</div>';
 
+            const safeId = window.escapeHTML(student.id);
+            const safeName = window.escapeHTML(student.name);
+            const safeClass = window.escapeHTML(student.class || 'N/A');
+            const safePwd = window.escapeHTML(student.password);
+            const safeMotherPhone = window.escapeHTML(student.motherPhone);
+            const safeFatherPhone = window.escapeHTML(student.fatherPhone);
+            const safePersonalPhone = window.escapeHTML(student.personalPhone);
+
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td>${student.id}</td>
-                <td>${student.name}</td>
-                <td><span class="badge" style="background:#e2e8f0; color:#475569;">${student.class || 'N/A'}</span></td>
+                <td>${safeId}</td>
+                <td>${safeName}</td>
+                <td><span class="badge" style="background:#e2e8f0; color:#475569;">${safeClass}</span></td>
                 <td><strong style="color: #b45309; font-size: 0.95rem;">${(student.coins || 0).toLocaleString('en-IN')} Coins</strong></td>
                 <td><div style="font-size:0.85rem; color:var(--text-light); line-height:1.4;">
-                    M: ${student.motherPhone ? `<a href="tel:${student.motherPhone}" style="color: var(--primary-light); text-decoration: none;" title="Call Mother">📞 ${student.motherPhone}</a>` : 'N/A'}<br>
-                    F: ${student.fatherPhone ? `<a href="tel:${student.fatherPhone}" style="color: var(--primary-light); text-decoration: none;" title="Call Father">📞 ${student.fatherPhone}</a>` : 'N/A'}<br>
-                    P: ${student.personalPhone ? `<a href="tel:${student.personalPhone}" style="color: var(--primary-light); text-decoration: none;" title="Call Student">📞 ${student.personalPhone}</a>` : 'N/A'}
+                    M: ${safeMotherPhone ? `<a href="tel:${safeMotherPhone}" style="color: var(--primary-light); text-decoration: none;" title="Call Mother">📞 ${safeMotherPhone}</a>` : 'N/A'}<br>
+                    F: ${safeFatherPhone ? `<a href="tel:${safeFatherPhone}" style="color: var(--primary-light); text-decoration: none;" title="Call Father">📞 ${safeFatherPhone}</a>` : 'N/A'}<br>
+                    P: ${safePersonalPhone ? `<a href="tel:${safePersonalPhone}" style="color: var(--primary-light); text-decoration: none;" title="Call Student">📞 ${safePersonalPhone}</a>` : 'N/A'}
                 </div></td>
                 <td>
                     <div style="display: flex; align-items: center; gap: 0.5rem;">
-                        <span id="pwd-${student.id}" style="font-family: monospace; color: var(--primary-light); display: none;">${student.password}</span>
-                        <span id="pwd-mask-${student.id}" style="font-family: monospace; color: var(--text-light);">••••••••</span>
-                        <button type="button" class="btn btn-outline" style="padding: 0.2rem; font-size: 0; line-height: 0; border: none; background: transparent; color: var(--text-light); cursor: pointer;" onclick="toggleStudentPassword('${student.id}', this)" title="Toggle Visibility">
+                        <span id="pwd-${safeId}" style="font-family: monospace; color: var(--primary-light); display: none;">${safePwd}</span>
+                        <span id="pwd-mask-${safeId}" style="font-family: monospace; color: var(--text-light);">••••••••</span>
+                        <button type="button" class="btn btn-outline" style="padding: 0.2rem; font-size: 0; line-height: 0; border: none; background: transparent; color: var(--text-light); cursor: pointer;" onclick="toggleStudentPassword('${safeId}', this)" title="Toggle Visibility">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                         </button>
                     </div>
@@ -233,9 +241,9 @@ async function initAdminDashboard() {
                 <td>${splitsHtml}</td>
                 <td>
                     <div class="action-buttons" style="display: flex; gap: 0.3rem;">
-                        <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #b45309; border-color: #f59e0b; font-size: 0.8rem;" onclick="quickGrantCoins('${student.id}')" title="Grant Coins">+Coins</button>
-                        <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #1e3a8a; border-color: #1e3a8a; font-size: 0.8rem;" onclick="makeAlumni('${student.id}')" title="Move to Alumni">Alumni</button>
-                        <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #dc2626; border-color: #dc2626; font-size: 0.8rem;" onclick="removeStudent('${student.id}')" title="Permanently Remove">Remove</button>
+                        <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #b45309; border-color: #f59e0b; font-size: 0.8rem;" onclick="quickGrantCoins('${safeId}')" title="Grant Coins">+Coins</button>
+                        <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #1e3a8a; border-color: #1e3a8a; font-size: 0.8rem;" onclick="makeAlumni('${safeId}')" title="Move to Alumni">Alumni</button>
+                        <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #dc2626; border-color: #dc2626; font-size: 0.8rem;" onclick="removeStudent('${safeId}')" title="Permanently Remove">Remove</button>
                     </div>
                 </td>
             `;
@@ -1178,9 +1186,9 @@ async function initAdminDashboard() {
         const startDate = new Date(cycleStartStr);
         const dueDate = new Date(startDate);
         dueDate.setDate(dueDate.getDate() + 5);
-        const delayDays = Math.max(0, Math.floor((payDateObj - dueDate) / (1000 * 60 * 60 * 24)));
+        const delayDays = isNaN(payDateObj.getTime()) || isNaN(dueDate.getTime()) ? 0 : Math.max(0, Math.floor((payDateObj - dueDate) / (1000 * 60 * 60 * 24)));
         const fine = delayDays * 30;
-        const total = baseFees + fine;
+        const total = (baseFees || 0) + fine;
         const fineEl = document.getElementById(`fineDisplay-${startStr}`);
         const totalEl = document.getElementById(`totalDisplay-${startStr}`);
         if (fineEl) fineEl.textContent = `₹${fine.toLocaleString('en-IN')}`;
@@ -1201,7 +1209,7 @@ async function initAdminDashboard() {
         const startDate = new Date(cycleStart);
         const dueDate = new Date(startDate);
         dueDate.setDate(dueDate.getDate() + 5);
-        const delayDays = Math.max(0, Math.floor((payDateObj - dueDate) / (1000 * 60 * 60 * 24)));
+        const delayDays = isNaN(payDateObj.getTime()) || isNaN(dueDate.getTime()) ? 0 : Math.max(0, Math.floor((payDateObj - dueDate) / (1000 * 60 * 60 * 24)));
         const fineLock = delayDays * 30;
         const baseFee = student.fees || 0;
         const totalFee = baseFee + fineLock;
