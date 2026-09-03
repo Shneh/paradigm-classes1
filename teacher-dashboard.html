@@ -234,6 +234,29 @@
                     </form>
                 </div>
 
+                <div class="card" id="teacher-notes-card">
+                    <h2 class="card-header">Post Student Notes / Remarks</h2>
+                    <form id="teacher-add-note-form" style="margin-bottom: 1.5rem;">
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label>Select Student</label>
+                            <select class="form-input" id="teacherNoteStudentId" required style="border-color: var(--gray-300); background: white;">
+                                <option value="" disabled selected>-- Select Student --</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label>Note / Remark for Student Portal</label>
+                            <textarea class="form-input" id="teacherNoteText" rows="3" placeholder="Enter note text for student..." required style="resize: vertical; border-color: var(--gray-300);"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Post Note to Student</button>
+                    </form>
+                    <div id="teacherSelectedStudentNotes">
+                        <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-dark); margin-bottom: 0.75rem;">Notes History for Selected Student</h3>
+                        <div id="teacherNotesList">
+                            <p style="color: var(--text-light); font-size: 0.9rem; font-style: italic;">Select a student above to view notes history.</p>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card">
                     <h2 class="card-header">Manage Student Fees</h2>
                     <div class="form-group" style="margin-bottom: 1rem;">

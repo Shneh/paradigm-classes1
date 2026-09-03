@@ -509,6 +509,65 @@ async function initStudentDashboard() {
         }
     }
 
+    async function renderStudentNotes() {
+        const container = document.getElementById('studentNotesContainer');
+        if (!container) return;
+
+        try {
+            const students = await DB.getStudents();
+            const student = students.find(s => s.id.toLowerCase() === user.id.toLowerCase());
+            
+            if (!student) {
+                container.innerHTML = '<div style="color: var(--text-light); font-size: 0.9rem; font-style: italic;">Student record not found.</div>';
+                return;
+            }
+
+            const notes = student.notes || [];
+            if (notes.length === 0) {
+                container.innerHTML = `
+                    <div style="background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 12px; padding: 1.25rem; text-align: center; color: var(--text-light);">
+                        <p style="margin: 0; font-size: 0.9rem; font-weight: 500;">No notes or announcements posted for you yet.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = '';
+            const sortedNotes = [...notes].sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+
+            sortedNotes.forEach(note => {
+                const noteCard = document.createElement('div');
+                noteCard.style.cssText = 'background: white; border: 1px solid #e2e8f0; border-left: 4px solid #2563eb; border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);';
+                
+                const isTeacherNote = note.authorRole === 'teacher';
+                const authorBadge = isTeacherNote 
+                    ? `<span class="badge" style="background:#dcfce7; color:#166534; font-size:0.75rem; font-weight:700; padding:0.2rem 0.6rem; border-radius:99px;">Teacher (${window.escapeHTML(note.authorName || 'Teacher')})</span>`
+                    : `<span class="badge" style="background:#dbeafe; color:#1e40af; font-size:0.75rem; font-weight:700; padding:0.2rem 0.6rem; border-radius:99px;">Admin</span>`;
+                
+                const dateStr = note.date || DB.formatDate(note.createdAt);
+
+                noteCard.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.5rem;">
+                        <div style="display: flex; align-items: center; gap: 0.6rem;">
+                            ${authorBadge}
+                        </div>
+                        <div style="font-size: 0.8rem; color: var(--text-light); font-weight: 600;">
+                            📅 ${dateStr}
+                        </div>
+                    </div>
+                    <div style="font-size: 0.95rem; color: var(--text-dark); white-space: pre-wrap; line-height: 1.6; font-weight: 500;">
+                        ${window.escapeHTML(note.text)}
+                    </div>
+                `;
+                container.appendChild(noteCard);
+            });
+        } catch (e) {
+            console.error("Error rendering student notes:", e);
+            container.innerHTML = '<div style="color: #dc2626; font-size: 0.9rem;">Error loading notes.</div>';
+        }
+    }
+
+    await renderStudentNotes();
     await renderLectureProgress();
     await renderFees();
     await renderResults();

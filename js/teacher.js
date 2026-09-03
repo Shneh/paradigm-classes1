@@ -39,6 +39,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const feeStudentIdSelect = document.getElementById('feeStudentId');
     const feeCyclesTableBody = document.querySelector('#feeCyclesTable tbody');
 
+    const teacherNoteStudentIdSelect = document.getElementById('teacherNoteStudentId');
+    const teacherAddNoteForm = document.getElementById('teacher-add-note-form');
+    const teacherNotesList = document.getElementById('teacherNotesList');
+
     // Attendance DOM Elements
     const attendanceDateInput = document.getElementById('attendanceDate');
     const attendanceTableBody = document.querySelector('#attendanceTable tbody');
@@ -182,8 +186,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     async function renderFeeStudents() {
+        const students = await DB.getStudents();
         if (feeStudentIdSelect) {
-            const students = await DB.getStudents();
+            const prevFeeVal = feeStudentIdSelect.value;
             feeStudentIdSelect.innerHTML = '<option value="" disabled selected>-- Select Student --</option>';
             students.forEach(student => {
                 const opt = document.createElement('option');
@@ -191,7 +196,67 @@ document.addEventListener('DOMContentLoaded', async () => {
                 opt.textContent = `${student.name} (${student.id})`;
                 feeStudentIdSelect.appendChild(opt);
             });
+            if (prevFeeVal) feeStudentIdSelect.value = prevFeeVal;
         }
+        if (teacherNoteStudentIdSelect) {
+            const prevNoteVal = teacherNoteStudentIdSelect.value;
+            teacherNoteStudentIdSelect.innerHTML = '<option value="" disabled selected>-- Select Student --</option>';
+            students.forEach(student => {
+                const opt = document.createElement('option');
+                opt.value = student.id;
+                opt.textContent = `${student.name} (${student.id})`;
+                teacherNoteStudentIdSelect.appendChild(opt);
+            });
+            if (prevNoteVal) {
+                teacherNoteStudentIdSelect.value = prevNoteVal;
+                renderTeacherStudentNotes(prevNoteVal);
+            }
+        }
+    }
+
+    async function renderTeacherStudentNotes(studentId) {
+        if (!teacherNotesList) return;
+        if (!studentId) {
+            teacherNotesList.innerHTML = '<p style="color: var(--text-light); font-size: 0.9rem; font-style: italic;">Select a student above to view notes history.</p>';
+            return;
+        }
+        const students = await DB.getStudents();
+        const student = students.find(s => s.id.toLowerCase() === studentId.toLowerCase());
+        if (!student) {
+            teacherNotesList.innerHTML = '<p style="color: #dc2626; font-size: 0.9rem;">Student record not found.</p>';
+            return;
+        }
+        const notes = student.notes || [];
+        if (notes.length === 0) {
+            teacherNotesList.innerHTML = '<p style="color: var(--text-light); font-size: 0.9rem; font-style: italic;">No notes posted for this student yet.</p>';
+            return;
+        }
+
+        teacherNotesList.innerHTML = '';
+        const sortedNotes = [...notes].sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+
+        sortedNotes.forEach(note => {
+            const noteDiv = document.createElement('div');
+            noteDiv.style.cssText = 'background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 0.85rem; margin-bottom: 0.75rem;';
+            
+            const isTeacherNote = note.authorRole === 'teacher';
+            const authorBadge = isTeacherNote 
+                ? `<span class="badge" style="background:#dcfce7; color:#166534; font-size:0.75rem; font-weight:700;">Teacher (${window.escapeHTML(note.authorName || 'Teacher')})</span>`
+                : `<span class="badge" style="background:#dbeafe; color:#1e40af; font-size:0.75rem; font-weight:700;">Admin</span>`;
+                
+            const dateStr = note.date || DB.formatDate(note.createdAt);
+
+            noteDiv.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; flex-wrap: wrap; gap: 0.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        ${authorBadge}
+                        <span style="font-size: 0.8rem; color: var(--text-light); font-weight: 600;">${dateStr}</span>
+                    </div>
+                </div>
+                <div style="font-size: 0.9rem; color: var(--text-dark); white-space: pre-wrap; line-height: 1.5;">${window.escapeHTML(note.text)}</div>
+            `;
+            teacherNotesList.appendChild(noteDiv);
+        });
     }
 
     // Handlers
@@ -276,6 +341,42 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (feeStudentIdSelect) {
         feeStudentIdSelect.addEventListener('change', (e) => {
             renderFeeCycles(e.target.value);
+        });
+    }
+
+    if (teacherAddNoteForm) {
+        teacherAddNoteForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const studentId = teacherNoteStudentIdSelect ? teacherNoteStudentIdSelect.value : '';
+            const text = document.getElementById('teacherNoteText').value.trim();
+            if (!studentId) return alert('Please select a student.');
+            if (!text) return alert('Please enter note text.');
+
+            let students = await DB.getStudents();
+            const sIdx = students.findIndex(s => s.id.toLowerCase() === studentId.toLowerCase());
+            if (sIdx !== -1) {
+                if (!students[sIdx].notes) students[sIdx].notes = [];
+                const now = new Date();
+                const noteObj = {
+                    id: 'note_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
+                    text: text,
+                    date: DB.formatDate(now.toISOString()),
+                    authorRole: 'teacher',
+                    authorName: user.name || 'Teacher',
+                    createdAt: now.toISOString()
+                };
+                students[sIdx].notes.push(noteObj);
+                await DB.setStudents(students);
+                alert(`Note successfully posted to ${students[sIdx].name}'s portal!`);
+                document.getElementById('teacherNoteText').value = '';
+                renderTeacherStudentNotes(studentId);
+            }
+        });
+    }
+
+    if (teacherNoteStudentIdSelect) {
+        teacherNoteStudentIdSelect.addEventListener('change', (e) => {
+            renderTeacherStudentNotes(e.target.value);
         });
     }
 

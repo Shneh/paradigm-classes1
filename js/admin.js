@@ -44,6 +44,10 @@ async function initAdminDashboard() {
     const grantCoinStudentIdSelect = document.getElementById('grantCoinStudentId');
     const grantCoinsForm = document.getElementById('grant-coins-form');
 
+    const adminNoteStudentIdSelect = document.getElementById('adminNoteStudentId');
+    const adminAddNoteForm = document.getElementById('admin-add-note-form');
+    const adminNotesList = document.getElementById('adminNotesList');
+
     const breakdownTeacherIdSelect = document.getElementById('breakdownTeacherId');
     const teacherBreakdownContainer = document.getElementById('teacherBreakdownContainer');
     const teacherBreakdownTableBody = document.querySelector('#teacherBreakdownTable tbody');
@@ -189,11 +193,13 @@ async function initAdminDashboard() {
         const prevFeeId = feeStudentIdSelect ? feeStudentIdSelect.value : '';
         const prevSplitId = splitStudentIdSelect ? splitStudentIdSelect.value : '';
         const prevGrantId = grantCoinStudentIdSelect ? grantCoinStudentIdSelect.value : '';
+        const prevAdminNoteId = adminNoteStudentIdSelect ? adminNoteStudentIdSelect.value : '';
 
         if(updateStudentIdSelect) updateStudentIdSelect.innerHTML = '<option value="" disabled selected>-- Select Student --</option>';
         if(feeStudentIdSelect) feeStudentIdSelect.innerHTML = '<option value="" disabled selected>-- Select Student --</option>';
         if(splitStudentIdSelect) splitStudentIdSelect.innerHTML = '<option value="" disabled selected>-- Select Student --</option>';
         if(grantCoinStudentIdSelect) grantCoinStudentIdSelect.innerHTML = '<option value="" disabled selected>-- Select Student --</option>';
+        if(adminNoteStudentIdSelect) adminNoteStudentIdSelect.innerHTML = '<option value="" disabled selected>-- Select Student --</option>';
         
         students.forEach(student => {
             const splits = student.feeSplits || [];
@@ -273,6 +279,12 @@ async function initAdminDashboard() {
                 opt.textContent = `${student.name} (${student.id})`;
                 grantCoinStudentIdSelect.appendChild(opt);
             }
+            if(adminNoteStudentIdSelect) {
+                const opt = document.createElement('option');
+                opt.value = student.id;
+                opt.textContent = `${student.name} (${student.id})`;
+                adminNoteStudentIdSelect.appendChild(opt);
+            }
         });
 
         if (prevUpdateId && updateStudentIdSelect && Array.from(updateStudentIdSelect.options).some(o => o.value === prevUpdateId)) {
@@ -286,6 +298,10 @@ async function initAdminDashboard() {
         }
         if (prevGrantId && grantCoinStudentIdSelect && Array.from(grantCoinStudentIdSelect.options).some(o => o.value === prevGrantId)) {
             grantCoinStudentIdSelect.value = prevGrantId;
+        }
+        if (prevAdminNoteId && adminNoteStudentIdSelect && Array.from(adminNoteStudentIdSelect.options).some(o => o.value === prevAdminNoteId)) {
+            adminNoteStudentIdSelect.value = prevAdminNoteId;
+            renderAdminStudentNotes(prevAdminNoteId);
         }
         await renderPermissionsTable();
     }
@@ -1440,6 +1456,127 @@ async function initAdminDashboard() {
         alert(`Successfully updated coins for ${student.name}! New balance: ${students[sIdx].coins} Coins`);
         renderStudents();
     };
+
+    async function renderAdminStudentNotes(studentId) {
+        if (!adminNotesList) return;
+        if (!studentId) {
+            adminNotesList.innerHTML = '<p style="color: var(--text-light); font-size: 0.9rem; font-style: italic;">Select a student above to view, edit, or delete notes.</p>';
+            return;
+        }
+        const students = await DB.getStudents();
+        const student = students.find(s => s.id.toLowerCase() === studentId.toLowerCase());
+        if (!student) {
+            adminNotesList.innerHTML = '<p style="color: #dc2626; font-size: 0.9rem;">Student record not found.</p>';
+            return;
+        }
+        const notes = student.notes || [];
+        if (notes.length === 0) {
+            adminNotesList.innerHTML = '<p style="color: var(--text-light); font-size: 0.9rem; font-style: italic;">No notes posted for this student yet.</p>';
+            return;
+        }
+
+        adminNotesList.innerHTML = '';
+        const sortedNotes = [...notes].sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+
+        sortedNotes.forEach(note => {
+            const noteDiv = document.createElement('div');
+            noteDiv.style.cssText = 'background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 0.85rem; margin-bottom: 0.75rem;';
+            
+            const isTeacherNote = note.authorRole === 'teacher';
+            const authorBadge = isTeacherNote 
+                ? `<span class="badge" style="background:#dcfce7; color:#166534; font-size:0.75rem; font-weight:700;">Teacher (${window.escapeHTML(note.authorName || 'Teacher')})</span>`
+                : `<span class="badge" style="background:#dbeafe; color:#1e40af; font-size:0.75rem; font-weight:700;">Admin</span>`;
+                
+            const dateStr = note.date || DB.formatDate(note.createdAt);
+
+            noteDiv.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; flex-wrap: wrap; gap: 0.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        ${authorBadge}
+                        <span style="font-size: 0.8rem; color: var(--text-light); font-weight: 600;">${dateStr}</span>
+                    </div>
+                    <div style="display: flex; gap: 0.4rem;">
+                        <button class="btn btn-outline" style="padding: 0.15rem 0.45rem; font-size: 0.75rem; color: #1e40af; border-color: #3b82f6;" onclick="editAdminStudentNote('${student.id}', '${note.id}')">Edit</button>
+                        <button class="btn btn-outline" style="padding: 0.15rem 0.45rem; font-size: 0.75rem; color: #dc2626; border-color: #ef4444;" onclick="deleteAdminStudentNote('${student.id}', '${note.id}')">Delete</button>
+                    </div>
+                </div>
+                <div style="font-size: 0.9rem; color: var(--text-dark); white-space: pre-wrap; line-height: 1.5;">${window.escapeHTML(note.text)}</div>
+            `;
+            adminNotesList.appendChild(noteDiv);
+        });
+    }
+
+    window.editAdminStudentNote = async (studentId, noteId) => {
+        let students = await DB.getStudents();
+        const sIdx = students.findIndex(s => s.id.toLowerCase() === studentId.toLowerCase());
+        if (sIdx === -1) return alert("Student not found.");
+        
+        const notes = students[sIdx].notes || [];
+        const nIdx = notes.findIndex(n => n.id === noteId);
+        if (nIdx === -1) return alert("Note not found.");
+
+        const currentText = notes[nIdx].text;
+        const newText = prompt("Edit Note for Student Portal:", currentText);
+        if (newText === null) return;
+        const trimmed = newText.trim();
+        if (!trimmed) return alert("Note content cannot be empty.");
+
+        students[sIdx].notes[nIdx].text = trimmed;
+        students[sIdx].notes[nIdx].date = DB.formatDate(new Date().toISOString());
+        students[sIdx].notes[nIdx].createdAt = new Date().toISOString();
+
+        await DB.setStudents(students);
+        alert("Note updated successfully!");
+        renderAdminStudentNotes(studentId);
+    };
+
+    window.deleteAdminStudentNote = async (studentId, noteId) => {
+        if (!confirm("Are you sure you want to delete this note from the student's portal?")) return;
+        let students = await DB.getStudents();
+        const sIdx = students.findIndex(s => s.id.toLowerCase() === studentId.toLowerCase());
+        if (sIdx === -1) return alert("Student not found.");
+        
+        students[sIdx].notes = (students[sIdx].notes || []).filter(n => n.id !== noteId);
+        await DB.setStudents(students);
+        alert("Note deleted successfully!");
+        renderAdminStudentNotes(studentId);
+    };
+
+    if (adminAddNoteForm) {
+        adminAddNoteForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const studentId = adminNoteStudentIdSelect ? adminNoteStudentIdSelect.value : '';
+            const text = document.getElementById('adminNoteText').value.trim();
+            if (!studentId) return alert('Please select a student.');
+            if (!text) return alert('Please enter note text.');
+
+            let students = await DB.getStudents();
+            const sIdx = students.findIndex(s => s.id.toLowerCase() === studentId.toLowerCase());
+            if (sIdx !== -1) {
+                if (!students[sIdx].notes) students[sIdx].notes = [];
+                const now = new Date();
+                const noteObj = {
+                    id: 'note_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
+                    text: text,
+                    date: DB.formatDate(now.toISOString()),
+                    authorRole: 'admin',
+                    authorName: 'Admin',
+                    createdAt: now.toISOString()
+                };
+                students[sIdx].notes.push(noteObj);
+                await DB.setStudents(students);
+                alert(`Note successfully posted to ${students[sIdx].name}'s portal!`);
+                document.getElementById('adminNoteText').value = '';
+                renderAdminStudentNotes(studentId);
+            }
+        });
+    }
+
+    if (adminNoteStudentIdSelect) {
+        adminNoteStudentIdSelect.addEventListener('change', (e) => {
+            renderAdminStudentNotes(e.target.value);
+        });
+    }
 
     if (breakdownTeacherIdSelect) {
         breakdownTeacherIdSelect.addEventListener('change', (e) => {
