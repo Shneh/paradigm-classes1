@@ -160,6 +160,17 @@
         .video-left:hover .custom-checkmark {
             border-color: var(--primary-light);
         }
+        .video-left.is-locked {
+            cursor: not-allowed !important;
+        }
+        .custom-checkbox-input:disabled {
+            cursor: not-allowed !important;
+        }
+        .custom-checkbox-input:disabled ~ .custom-checkmark {
+            background-color: #15803d !important;
+            border-color: #166534 !important;
+            cursor: not-allowed !important;
+        }
         .custom-checkbox-input:checked ~ .custom-checkmark {
             background-color: var(--primary-color);
             border-color: var(--primary-color);

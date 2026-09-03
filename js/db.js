@@ -66,8 +66,44 @@ async function setList(docId, list) {
     }
 }
 
+// Automatic coin sync helper for students who have watched video lectures
+async function syncStudentCoins(students) {
+    if (!students || !Array.isArray(students) || students.length === 0) return students;
+    let isModified = false;
+    students.forEach(student => {
+        const completed = Array.from(new Set(student.completedLectures || []));
+        const rewarded = new Set(student.rewardedLectures || []);
+        let unrewardedCount = 0;
+        
+        completed.forEach(key => {
+            if (!rewarded.has(key)) {
+                rewarded.add(key);
+                unrewardedCount++;
+            }
+        });
+
+        if (unrewardedCount > 0) {
+            student.rewardedLectures = Array.from(rewarded);
+            student.coins = (student.coins || 0) + (unrewardedCount * 10);
+            isModified = true;
+        }
+    });
+
+    if (isModified) {
+        try {
+            await setList('students', students);
+        } catch (e) {
+            console.error("Auto coin backfill save failed:", e);
+        }
+    }
+    return students;
+}
+
 const DB = {
-    getStudents: async () => await getList('students'),
+    getStudents: async () => {
+        const students = await getList('students');
+        return await syncStudentCoins(students);
+    },
     setStudents: async (students) => await setList('students', students),
     
     getAlumni: async () => await getList('alumni'),

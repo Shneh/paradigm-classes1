@@ -7,11 +7,7 @@ function getInitials(name) {
 
 async function initLeaderboard() {
     const user = typeof DB !== 'undefined' ? DB.getCurrentUser() : null;
-    if (!user) {
-        alert("Please login to view the Student Leaderboard.");
-        window.location.href = 'login.html';
-        return;
-    }
+
 
     const navCtaBtn = document.getElementById('navCtaBtn');
     const mobileCtaBtn = document.getElementById('mobileCtaBtn');

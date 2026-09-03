@@ -356,12 +356,13 @@ async function initStudentDashboard() {
 
                     return `
                         <div class="video-row" data-video-key="${videoKey}">
-                            <label class="video-left">
+                            <label class="video-left ${isCompleted ? 'is-locked' : ''}">
                                 <div class="custom-checkbox-wrapper">
-                                    <input type="checkbox" class="custom-checkbox-input video-checkbox" data-video-key="${videoKey}" ${isCompleted ? 'checked' : ''}>
+                                    <input type="checkbox" class="custom-checkbox-input video-checkbox" data-video-key="${videoKey}" ${isCompleted ? 'checked disabled' : ''}>
                                     <span class="custom-checkmark"></span>
                                 </div>
                                 <span class="video-title">${video.title || `Lecture ${idx + 1}`}</span>
+                                ${isCompleted ? '<span class="lock-indicator" style="font-size:0.75rem; color:#166534; font-weight:700; background:#dcfce7; padding:0.15rem 0.4rem; border-radius:99px; margin-left:0.5rem; display:inline-flex; align-items:center; gap:0.2rem;">🔒 Watched</span>' : ''}
                             </label>
                             <div class="video-right">
                                 ${watchBtnHtml}
@@ -428,23 +429,32 @@ async function initStudentDashboard() {
                 if (e.target.classList.contains('video-checkbox')) {
                     const cb = e.target;
                     const key = cb.getAttribute('data-video-key');
-                    const isChecked = cb.checked;
+                    
+                    // Once marked watched, ticks cannot be unticked
+                    if (!cb.checked) {
+                        cb.checked = true;
+                        return;
+                    }
 
+                    // Lock checkbox immediately
+                    cb.disabled = true;
+                    const parentLabel = cb.closest('.video-left');
+                    if (parentLabel) {
+                        parentLabel.classList.add('is-locked');
+                        if (!parentLabel.querySelector('.lock-indicator')) {
+                            const badge = document.createElement('span');
+                            badge.className = 'lock-indicator';
+                            badge.style.cssText = 'font-size:0.75rem; color:#166534; font-weight:700; background:#dcfce7; padding:0.15rem 0.4rem; border-radius:99px; margin-left:0.5rem; display:inline-flex; align-items:center; gap:0.2rem;';
+                            badge.innerHTML = '🔒 Watched';
+                            parentLabel.appendChild(badge);
+                        }
+                    }
+
+                    completedSet.add(key);
                     let newlyAwarded = false;
-                    let newlyDeducted = false;
-
-                    if (isChecked) {
-                        completedSet.add(key);
-                        if (!rewardedSet.has(key)) {
-                            rewardedSet.add(key);
-                            newlyAwarded = true;
-                        }
-                    } else {
-                        completedSet.delete(key);
-                        if (rewardedSet.has(key)) {
-                            rewardedSet.delete(key);
-                            newlyDeducted = true;
-                        }
+                    if (!rewardedSet.has(key)) {
+                        rewardedSet.add(key);
+                        newlyAwarded = true;
                     }
 
                     let newCompleted = 0;
@@ -483,13 +493,6 @@ async function initStudentDashboard() {
                                     studentCoinsEl.textContent = `${currentCoins.toLocaleString('en-IN')} Coins`;
                                 }
                                 showCoinToast(`+10 Coins awarded for completing lecture! Total: ${currentCoins} Coins`);
-                            } else if (newlyDeducted) {
-                                allStudents[sIdx].coins = Math.max(0, (allStudents[sIdx].coins || 0) - 10);
-                                const currentCoins = allStudents[sIdx].coins;
-                                if (studentCoinsEl) {
-                                    studentCoinsEl.textContent = `${currentCoins.toLocaleString('en-IN')} Coins`;
-                                }
-                                showCoinToast(`-10 Coins deducted for unchecking lecture. Total: ${currentCoins} Coins`);
                             }
                             await DB.setStudents(allStudents);
                         }
