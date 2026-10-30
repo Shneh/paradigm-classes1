@@ -2012,6 +2012,473 @@ async function initAdminDashboard() {
         }
     };
 
+    // === Study Notes Management ===
+    const createNoteScrollerForm = document.getElementById('create-note-scroller-form');
+    const newNoteScrollerTitleInput = document.getElementById('newNoteScrollerTitle');
+    const noteScrollersListTableBody = document.querySelector('#noteScrollersListTable tbody');
+    const manageNoteScrollerSelect = document.getElementById('manageNoteScrollerSelect');
+    const addNoteManagementForm = document.getElementById('add-note-management-form');
+    const addNoteFormTitle = document.getElementById('addNoteFormTitle');
+    const managementNoteTitleInput = document.getElementById('managementNoteTitle');
+    const managementNoteLinkInput = document.getElementById('managementNoteLink');
+    const scrollerNotesListContainer = document.getElementById('scrollerNotesListContainer');
+    const scrollerNotesTableBody = document.querySelector('#scrollerNotesTable tbody');
+    const scrollerNotesPlaceholder = document.getElementById('scrollerNotesPlaceholder');
+
+    async function renderNoteScrollersList() {
+        if (!noteScrollersListTableBody) return;
+        const sections = await DB.getNoteSections();
+        noteScrollersListTableBody.innerHTML = '';
+
+        const selectedId = manageNoteScrollerSelect ? manageNoteScrollerSelect.value : '';
+        if (manageNoteScrollerSelect) {
+            manageNoteScrollerSelect.innerHTML = '<option value="" disabled selected>-- Select a Notes Scroller --</option>';
+        }
+
+        if (sections.length === 0) {
+            noteScrollersListTableBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--text-light);">No notes scrollers created yet.</td></tr>';
+            return;
+        }
+
+        sections.forEach(sec => {
+            if (manageNoteScrollerSelect) {
+                const opt = document.createElement('option');
+                opt.value = sec.id;
+                opt.textContent = `${sec.title} (${sec.id})`;
+                manageNoteScrollerSelect.appendChild(opt);
+            }
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><strong>${window.escapeHTML(sec.id)}</strong></td>
+                <td>${window.escapeHTML(sec.title)}</td>
+                <td style="text-align: right; display: flex; gap: 0.3rem; justify-content: flex-end;">
+                    <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;" onclick="editNoteScrollerTitle('${sec.id}')">Edit</button>
+                    <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; color: #dc2626; border-color: #dc2626;" onclick="deleteNoteScroller('${sec.id}')">Delete</button>
+                </td>
+            `;
+            noteScrollersListTableBody.appendChild(tr);
+        });
+
+        if (selectedId && sections.some(s => s.id === selectedId) && manageNoteScrollerSelect) {
+            manageNoteScrollerSelect.value = selectedId;
+            showScrollerNotes(selectedId);
+        } else {
+            if (addNoteManagementForm) addNoteManagementForm.style.display = 'none';
+            if (scrollerNotesListContainer) scrollerNotesListContainer.style.display = 'none';
+            if (scrollerNotesPlaceholder) scrollerNotesPlaceholder.style.display = 'block';
+        }
+    }
+
+    window.editNoteScrollerTitle = async (secId) => {
+        const sections = await DB.getNoteSections();
+        const sec = sections.find(s => s.id === secId);
+        if (!sec) return;
+
+        const newTitle = prompt("Enter new title for note scroller:", sec.title);
+        if (newTitle === null) return;
+        const trimmed = newTitle.trim();
+        if (trimmed === '') return alert("Title cannot be empty.");
+
+        sec.title = trimmed;
+        await DB.setNoteSections(sections);
+        alert("Notes scroller title updated successfully!");
+        await renderNoteScrollersList();
+    };
+
+    window.deleteNoteScroller = async (secId) => {
+        if (!confirm("Are you sure you want to delete this notes scroller? All notes under this section will also be removed.")) return;
+
+        try {
+            let sections = await DB.getNoteSections();
+            sections = sections.filter(s => s.id !== secId);
+            await DB.setNoteSections(sections);
+
+            let notes = await DB.getNotes();
+            notes = notes.filter(n => n.sectionId !== secId);
+            await DB.setNotes(notes);
+
+            alert("Notes scroller deleted successfully!");
+            await renderNoteScrollersList();
+        } catch (e) {
+            console.error(e);
+            alert("Error deleting notes scroller: " + e.message);
+        }
+    };
+
+    if (createNoteScrollerForm) {
+        createNoteScrollerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = newNoteScrollerTitleInput.value.trim();
+            if (title === '') return;
+
+            try {
+                const sections = await DB.getNoteSections();
+                const newId = 'sec_note_' + Date.now();
+                sections.push({
+                    id: newId,
+                    title: title
+                });
+
+                await DB.setNoteSections(sections);
+                newNoteScrollerTitleInput.value = '';
+                alert(`Notes scroller "${title}" created successfully!`);
+                await renderNoteScrollersList();
+            } catch (err) {
+                console.error(err);
+                alert("Error creating note scroller: " + err.message);
+            }
+        });
+    }
+
+    if (manageNoteScrollerSelect) {
+        manageNoteScrollerSelect.addEventListener('change', (e) => {
+            showScrollerNotes(e.target.value);
+        });
+    }
+
+    async function showScrollerNotes(secId) {
+        const sections = await DB.getNoteSections();
+        const sec = sections.find(s => s.id === secId);
+        if (!sec) return;
+
+        if (addNoteFormTitle) addNoteFormTitle.textContent = `Add Note Link to ${sec.title}`;
+        if (addNoteManagementForm) addNoteManagementForm.style.display = 'block';
+        if (scrollerNotesPlaceholder) scrollerNotesPlaceholder.style.display = 'none';
+        if (scrollerNotesListContainer) scrollerNotesListContainer.style.display = 'block';
+
+        renderScrollerNotesTable(secId);
+    }
+
+    async function renderScrollerNotesTable(secId) {
+        if (!scrollerNotesTableBody) return;
+        scrollerNotesTableBody.innerHTML = '';
+        const notes = await DB.getNotes();
+        const secNotes = notes.filter(n => n.sectionId === secId);
+
+        if (secNotes.length === 0) {
+            scrollerNotesTableBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--text-light);">No notes added to this section yet.</td></tr>';
+            return;
+        }
+
+        secNotes.forEach(note => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><strong>${window.escapeHTML(note.title || 'Untitled')}</strong></td>
+                <td><a href="${note.link}" target="_blank" style="word-break: break-all; font-size: 0.85rem; color: var(--primary-light); text-decoration: none;">${window.escapeHTML(note.link || 'No Link')}</a></td>
+                <td style="text-align: right; display: flex; gap: 0.3rem; justify-content: flex-end;">
+                    <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;" onclick="editNote('${note.id}')">Edit</button>
+                    <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; color: #dc2626; border-color: #dc2626;" onclick="deleteNote('${note.id}')">Remove</button>
+                </td>
+            `;
+            scrollerNotesTableBody.appendChild(tr);
+        });
+    }
+
+    if (addNoteManagementForm) {
+        addNoteManagementForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const secId = manageNoteScrollerSelect ? manageNoteScrollerSelect.value : '';
+            if (!secId) return alert("Select a notes scroller first.");
+
+            const title = managementNoteTitleInput.value.trim();
+            const link = managementNoteLinkInput.value.trim();
+            if (!title || !link) return alert("All fields are required.");
+
+            try {
+                const notes = await DB.getNotes();
+                notes.push({
+                    id: 'note_' + Date.now(),
+                    sectionId: secId,
+                    title: title,
+                    link: link,
+                    addedBy: 'admin',
+                    date: new Date().toISOString()
+                });
+                await DB.setNotes(notes);
+                managementNoteTitleInput.value = '';
+                managementNoteLinkInput.value = '';
+                alert("Note link added successfully!");
+                await renderScrollerNotesTable(secId);
+            } catch (err) {
+                console.error(err);
+                alert("Error adding note link: " + err.message);
+            }
+        });
+    }
+
+    window.editNote = async (noteId) => {
+        const notes = await DB.getNotes();
+        const note = notes.find(n => n.id === noteId);
+        if (!note) return;
+
+        const newTitle = prompt("Enter new title for note:", note.title);
+        if (newTitle === null) return;
+        const newLink = prompt("Enter new link/URL for note:", note.link);
+        if (newLink === null) return;
+
+        if (newTitle.trim() === '' || newLink.trim() === '') {
+            return alert("Title and link cannot be empty.");
+        }
+
+        note.title = newTitle.trim();
+        note.link = newLink.trim();
+        await DB.setNotes(notes);
+        alert("Note updated successfully!");
+        if (manageNoteScrollerSelect) {
+            await renderScrollerNotesTable(manageNoteScrollerSelect.value);
+        }
+    };
+
+    window.deleteNote = async (noteId) => {
+        if (!confirm("Are you sure you want to remove this note link?")) return;
+        try {
+            let notes = await DB.getNotes();
+            notes = notes.filter(n => n.id !== noteId);
+            await DB.setNotes(notes);
+            alert("Note link removed successfully!");
+            if (manageNoteScrollerSelect) {
+                await renderScrollerNotesTable(manageNoteScrollerSelect.value);
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Error deleting note: " + err.message);
+        }
+    };
+
+    // === Study Slides Management ===
+    const createSlideScrollerForm = document.getElementById('create-slide-scroller-form');
+    const newSlideScrollerTitleInput = document.getElementById('newSlideScrollerTitle');
+    const slideScrollersListTableBody = document.querySelector('#slideScrollersListTable tbody');
+    const manageSlideScrollerSelect = document.getElementById('manageSlideScrollerSelect');
+    const addSlideManagementForm = document.getElementById('add-slide-management-form');
+    const addSlideFormTitle = document.getElementById('addSlideFormTitle');
+    const managementSlideTitleInput = document.getElementById('managementSlideTitle');
+    const managementSlideLinkInput = document.getElementById('managementSlideLink');
+    const scrollerSlidesListContainer = document.getElementById('scrollerSlidesListContainer');
+    const scrollerSlidesTableBody = document.querySelector('#scrollerSlidesTable tbody');
+    const scrollerSlidesPlaceholder = document.getElementById('scrollerSlidesPlaceholder');
+
+    async function renderSlideScrollersList() {
+        if (!slideScrollersListTableBody) return;
+        const sections = await DB.getSlideSections();
+        slideScrollersListTableBody.innerHTML = '';
+
+        const selectedId = manageSlideScrollerSelect ? manageSlideScrollerSelect.value : '';
+        if (manageSlideScrollerSelect) {
+            manageSlideScrollerSelect.innerHTML = '<option value="" disabled selected>-- Select a Slides Scroller --</option>';
+        }
+
+        if (sections.length === 0) {
+            slideScrollersListTableBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--text-light);">No slides scrollers created yet.</td></tr>';
+            return;
+        }
+
+        sections.forEach(sec => {
+            if (manageSlideScrollerSelect) {
+                const opt = document.createElement('option');
+                opt.value = sec.id;
+                opt.textContent = `${sec.title} (${sec.id})`;
+                manageSlideScrollerSelect.appendChild(opt);
+            }
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><strong>${window.escapeHTML(sec.id)}</strong></td>
+                <td>${window.escapeHTML(sec.title)}</td>
+                <td style="text-align: right; display: flex; gap: 0.3rem; justify-content: flex-end;">
+                    <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;" onclick="editSlideScrollerTitle('${sec.id}')">Edit</button>
+                    <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; color: #dc2626; border-color: #dc2626;" onclick="deleteSlideScroller('${sec.id}')">Delete</button>
+                </td>
+            `;
+            slideScrollersListTableBody.appendChild(tr);
+        });
+
+        if (selectedId && sections.some(s => s.id === selectedId) && manageSlideScrollerSelect) {
+            manageSlideScrollerSelect.value = selectedId;
+            showScrollerSlides(selectedId);
+        } else {
+            if (addSlideManagementForm) addSlideManagementForm.style.display = 'none';
+            if (scrollerSlidesListContainer) scrollerSlidesListContainer.style.display = 'none';
+            if (scrollerSlidesPlaceholder) scrollerSlidesPlaceholder.style.display = 'block';
+        }
+    }
+
+    window.editSlideScrollerTitle = async (secId) => {
+        const sections = await DB.getSlideSections();
+        const sec = sections.find(s => s.id === secId);
+        if (!sec) return;
+
+        const newTitle = prompt("Enter new title for slides scroller:", sec.title);
+        if (newTitle === null) return;
+        const trimmed = newTitle.trim();
+        if (trimmed === '') return alert("Title cannot be empty.");
+
+        sec.title = trimmed;
+        await DB.setSlideSections(sections);
+        alert("Slides scroller title updated successfully!");
+        await renderSlideScrollersList();
+    };
+
+    window.deleteSlideScroller = async (secId) => {
+        if (!confirm("Are you sure you want to delete this slides scroller? All slides under this section will also be removed.")) return;
+
+        try {
+            let sections = await DB.getSlideSections();
+            sections = sections.filter(s => s.id !== secId);
+            await DB.setSlideSections(sections);
+
+            let slides = await DB.getSlides();
+            slides = slides.filter(s => s.category !== secId);
+            await DB.setSlides(slides);
+
+            alert("Slides scroller deleted successfully!");
+            await renderSlideScrollersList();
+        } catch (e) {
+            console.error(e);
+            alert("Error deleting slides scroller: " + e.message);
+        }
+    };
+
+    if (createSlideScrollerForm) {
+        createSlideScrollerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = newSlideScrollerTitleInput.value.trim();
+            if (title === '') return;
+
+            try {
+                const sections = await DB.getSlideSections();
+                const newId = 'slide_' + Date.now();
+                sections.push({
+                    id: newId,
+                    title: title
+                });
+
+                await DB.setSlideSections(sections);
+                newSlideScrollerTitleInput.value = '';
+                alert(`Slides scroller "${title}" created successfully!`);
+                await renderSlideScrollersList();
+            } catch (err) {
+                console.error(err);
+                alert("Error creating slide scroller: " + err.message);
+            }
+        });
+    }
+
+    if (manageSlideScrollerSelect) {
+        manageSlideScrollerSelect.addEventListener('change', (e) => {
+            showScrollerSlides(e.target.value);
+        });
+    }
+
+    async function showScrollerSlides(secId) {
+        const sections = await DB.getSlideSections();
+        const sec = sections.find(s => s.id === secId);
+        if (!sec) return;
+
+        if (addSlideFormTitle) addSlideFormTitle.textContent = `Add Slide Link to ${sec.title}`;
+        if (addSlideManagementForm) addSlideManagementForm.style.display = 'block';
+        if (scrollerSlidesPlaceholder) scrollerSlidesPlaceholder.style.display = 'none';
+        if (scrollerSlidesListContainer) scrollerSlidesListContainer.style.display = 'block';
+
+        renderScrollerSlidesTable(secId);
+    }
+
+    async function renderScrollerSlidesTable(secId) {
+        if (!scrollerSlidesTableBody) return;
+        scrollerSlidesTableBody.innerHTML = '';
+        const slides = await DB.getSlides();
+        const secSlides = slides.filter(s => s.category === secId);
+
+        if (secSlides.length === 0) {
+            scrollerSlidesTableBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--text-light);">No slides added to this section yet.</td></tr>';
+            return;
+        }
+
+        secSlides.forEach(slide => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><strong>${window.escapeHTML(slide.title || 'Untitled')}</strong></td>
+                <td><a href="${slide.link}" target="_blank" style="word-break: break-all; font-size: 0.85rem; color: var(--primary-light); text-decoration: none;">${window.escapeHTML(slide.link || 'No Link')}</a></td>
+                <td style="text-align: right; display: flex; gap: 0.3rem; justify-content: flex-end;">
+                    <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;" onclick="editSlide('${slide.id}')">Edit</button>
+                    <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; color: #dc2626; border-color: #dc2626;" onclick="deleteSlide('${slide.id}')">Remove</button>
+                </td>
+            `;
+            scrollerSlidesTableBody.appendChild(tr);
+        });
+    }
+
+    if (addSlideManagementForm) {
+        addSlideManagementForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const secId = manageSlideScrollerSelect ? manageSlideScrollerSelect.value : '';
+            if (!secId) return alert("Select a slides scroller first.");
+
+            const title = managementSlideTitleInput.value.trim();
+            const link = managementSlideLinkInput.value.trim();
+            if (!title || !link) return alert("All fields are required.");
+
+            try {
+                const slides = await DB.getSlides();
+                slides.push({
+                    id: 'slide-' + Date.now(),
+                    category: secId,
+                    title: title,
+                    link: link,
+                    addedBy: 'admin'
+                });
+                await DB.setSlides(slides);
+                managementSlideTitleInput.value = '';
+                managementSlideLinkInput.value = '';
+                alert("Slide link added successfully!");
+                await renderScrollerSlidesTable(secId);
+            } catch (err) {
+                console.error(err);
+                alert("Error adding slide link: " + err.message);
+            }
+        });
+    }
+
+    window.editSlide = async (slideId) => {
+        const slides = await DB.getSlides();
+        const slide = slides.find(s => s.id === slideId);
+        if (!slide) return;
+
+        const newTitle = prompt("Enter new title for slide:", slide.title);
+        if (newTitle === null) return;
+        const newLink = prompt("Enter new presentation link/URL for slide:", slide.link);
+        if (newLink === null) return;
+
+        if (newTitle.trim() === '' || newLink.trim() === '') {
+            return alert("Title and link cannot be empty.");
+        }
+
+        slide.title = newTitle.trim();
+        slide.link = newLink.trim();
+        await DB.setSlides(slides);
+        alert("Slide updated successfully!");
+        if (manageSlideScrollerSelect) {
+            await renderScrollerSlidesTable(manageSlideScrollerSelect.value);
+        }
+    };
+
+    window.deleteSlide = async (slideId) => {
+        if (!confirm("Are you sure you want to remove this slide link?")) return;
+        try {
+            let slides = await DB.getSlides();
+            slides = slides.filter(s => s.id !== slideId);
+            await DB.setSlides(slides);
+            alert("Slide link removed successfully!");
+            if (manageSlideScrollerSelect) {
+                await renderScrollerSlidesTable(manageSlideScrollerSelect.value);
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Error deleting slide: " + err.message);
+        }
+    };
+
     // === Admin Attendance Dashboard ===
     const adminAttendanceDateInput = document.getElementById('adminAttendanceDate');
     const adminAttendanceFormTableBody = document.querySelector('#adminAttendanceFormTable tbody');
@@ -2121,6 +2588,24 @@ async function initAdminDashboard() {
             } catch (err) {
                 console.error(err);
                 alert("Error saving attendance: " + err.message);
+            }
+        });
+    }
+
+    const clearAllAttendanceBtn = document.getElementById('clearAllAttendanceBtn');
+    if (clearAllAttendanceBtn) {
+        clearAllAttendanceBtn.addEventListener('click', async () => {
+            const confirmed = confirm("Are you sure you want to clean/delete ALL previous attendance records of all students? This will remove all previous attendance history and cannot be undone.");
+            if (!confirmed) return;
+
+            try {
+                await DB.setAttendance([]);
+                alert("All previous attendance records have been cleaned successfully!");
+                await renderAdminAttendanceForm();
+                await renderAdminAttendanceOverviewTable();
+            } catch (err) {
+                console.error("Error clearing attendance:", err);
+                alert("Error clearing attendance: " + err.message);
             }
         });
     }
@@ -2269,6 +2754,8 @@ async function initAdminDashboard() {
     await renderCourses();
     await calculateFinancials();
     await renderScrollersList();
+    await renderNoteScrollersList();
+    await renderSlideScrollersList();
     await renderAdminAttendanceForm();
     await renderAdminAttendanceOverviewTable();
 }

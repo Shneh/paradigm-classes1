@@ -6,282 +6,67 @@
   "alumni": {
     "list": [
       {
+        "password": "paradigm@123",
+        "class": "XI",
+        "personalPhone": "",
         "dateOfJoining": "2026-05-19",
-        "feePayments": [],
-        "password": "paradigm@123",
-        "convertedOn": "2026-05-23",
-        "fatherPhone": "",
+        "fees": 1200,
         "id": "s120",
-        "personalPhone": "",
-        "motherPhone": "9627002726",
         "name": "Asad Hussain",
-        "fees": 1200,
-        "class": "XI"
-      },
-      {
-        "motherPhone": "8126888706",
-        "personalPhone": "",
-        "name": "Aditi Panwar",
-        "fees": 1200,
-        "class": "XII",
-        "dateOfJoining": "2026-05-20",
-        "convertedOn": "2026-05-23",
-        "password": "paradigm@123",
+        "fatherPhone": "",
         "feePayments": [],
-        "fatherPhone": "9410351514",
-        "id": "s121"
+        "motherPhone": "9627002726",
+        "convertedOn": "2026-05-23"
       },
       {
-        "dateOfJoining": "2026-04-14",
-        "convertedOn": "2026-05-29",
-        "password": "rashmyi307",
+        "dateOfJoining": "2026-05-20",
+        "personalPhone": "",
+        "fatherPhone": "9410351514",
+        "feePayments": [],
+        "motherPhone": "8126888706",
+        "convertedOn": "2026-05-23",
+        "fees": 1200,
+        "name": "Aditi Panwar",
+        "password": "paradigm@123",
+        "id": "s121",
+        "class": "XII"
+      },
+      {
+        "class": "X",
         "feePayments": [
           {
-            "paidOn": "2026-04-23",
             "cycleStart": "2026-04-14",
             "markedBy": "Admin",
-            "finePaid": 0
+            "finePaid": 0,
+            "paidOn": "2026-04-23"
           }
         ],
-        "fatherPhone": "",
-        "id": "s108",
         "motherPhone": "",
-        "personalPhone": "",
+        "password": "rashmyi307",
         "name": "Rashmi Negi",
-        "class": "X",
-        "fees": 1300
+        "id": "s108",
+        "fatherPhone": "",
+        "fees": 1300,
+        "convertedOn": "2026-05-29",
+        "dateOfJoining": "2026-04-14",
+        "personalPhone": ""
       },
       {
-        "class": "X",
-        "fees": 1400,
-        "motherPhone": "7906459560",
+        "dateOfJoining": "2026-05-04",
         "personalPhone": "",
-        "name": "Sonakshi Rawat",
         "id": "s112",
+        "feePayments": [],
+        "motherPhone": "7906459560",
         "fatherPhone": "9058920995",
         "convertedOn": "2026-06-01",
-        "feePayments": [],
+        "name": "Sonakshi Rawat",
+        "fees": 1400,
         "password": "sonakshi_S22",
-        "dateOfJoining": "2026-05-04"
-      }
-    ]
-  },
-  "announcement": {
-    "enabled": true,
-    "text": "Welcome to Paradigm Classes! Admissions are now open for the academic session 2026-2027. Enroll today!  | Fees for Integrated Batches are different from displayed ones. Kindly contact admin/teacher."
-  },
-  "attendance": {
-    "list": [
-      {
-        "takenBy": "t203",
-        "records": {
-          "s107": "present",
-          "s101": "present",
-          "s116": "present",
-          "s102": "present",
-          "s113": "present",
-          "s119": "present",
-          "s118": "present",
-          "s114": "present",
-          "s103": "present",
-          "s105": "absent",
-          "s110": "present",
-          "s106": "present",
-          "s104": "absent",
-          "s109": "present",
-          "s111": "present",
-          "s115": "present"
-        },
-        "date": "2026-06-03"
+        "class": "X"
       },
       {
-        "date": "2026-06-04",
-        "records": {
-          "s119": "present",
-          "s113": "present",
-          "s118": "present",
-          "s107": "absent",
-          "s102": "present",
-          "s116": "present",
-          "s101": "present",
-          "s109": "present",
-          "s106": "present",
-          "s104": "present",
-          "s115": "absent",
-          "s111": "present",
-          "s103": "present",
-          "s114": "present",
-          "s110": "present",
-          "s105": "absent"
-        },
-        "takenBy": "t203"
-      }
-    ]
-  },
-  "courses": {
-    "list": [
-      {
-        "features": [
-          "Mathematics mastery",
-          "GAT preparation",
-          "SSB interview guidance"
-        ],
-        "title": "NDA Preparation + SSB",
-        "id": "course-nda",
-        "fees": 3000,
-        "description": "Specialized coaching for NDA aspirants with focus on Mathematics and General Ability Test."
-      },
-      {
-        "description": "Build a strong foundation in Physics, Chemistry, and Mathematics for board exams and future competitive preparations.",
-        "fees": 1500,
-        "id": "course-mpuz26tm",
-        "features": [
-          "RD Sharma-based curriculum",
-          "Regular practice tests",
-          "Board exam preparation"
-        ],
-        "title": "X FOUNDATION"
-      },
-      {
-        "title": "XI Math",
-        "features": [
-          "Board + Competitive focus",
-          "Advanced problem solving",
-          "Regular mock tests"
-        ],
-        "id": "course-mpuz4p28",
-        "fees": 1000,
-        "description": "Comprehensive coaching for board exams with special focus on building concepts for competitive exams."
-      },
-      {
-        "fees": 1100,
-        "id": "course-mpuz56ou",
-        "features": [
-          "Board + Competitive focus",
-          "Advanced problem solving",
-          "Regular mock tests"
-        ],
-        "title": "XII Math",
-        "description": "Comprehensive coaching for board exams with special focus on building concepts for competitive exams."
-      },
-      {
-        "title": "JEE (Main & Advanced)",
-        "features": [
-          "Topic-wise tests",
-          "Previous year papers",
-          "Full-length mock tests"
-        ],
-        "fees": 3000,
-        "id": "course-mpuz671s",
-        "description": "Specialized coaching for JEE aspirants with focus on conceptual clarity and problem-solving skills."
-      }
-    ]
-  },
-  "salaries": {
-    "list": [
-      {
-        "month": "2026-04",
-        "id": 1,
-        "teacherId": "t202",
-        "dateIssued": "2026-04-09",
-        "amount": 1000
-      },
-      {
-        "month": "2026-04",
-        "dateIssued": "2026-04-09",
-        "amount": 1600,
-        "teacherId": "t203",
-        "id": 2
-      },
-      {
-        "dateIssued": "2026-04-13",
-        "amount": 1000,
-        "id": 3,
-        "teacherId": "t202",
-        "month": "2026-04"
-      },
-      {
-        "month": "2026-04",
-        "teacherId": "t203",
-        "id": 4,
-        "dateIssued": "2026-04-13",
-        "amount": 1600
-      },
-      {
-        "dateIssued": "2026-04-18",
-        "amount": 2000,
-        "id": 5,
-        "teacherId": "t203",
-        "month": "2026-04"
-      },
-      {
-        "month": "2026-04",
-        "dateIssued": "2026-04-20",
-        "amount": 1400,
-        "teacherId": "t203",
-        "id": 6
-      },
-      {
-        "month": "2026-04",
-        "dateIssued": "2026-04-30",
-        "amount": 2095,
-        "teacherId": "t202",
-        "id": 7
-      },
-      {
-        "month": "2026-05",
-        "dateIssued": "2026-05-15",
-        "amount": 1000,
-        "teacherId": "t202",
-        "id": 8
-      },
-      {
-        "month": "2026-05",
-        "id": 9,
-        "teacherId": "t203",
-        "dateIssued": "2026-05-16",
-        "amount": 1550
-      },
-      {
-        "month": "2026-05",
-        "teacherId": "t203",
-        "id": 10,
-        "amount": 2500,
-        "dateIssued": "2026-05-16"
-      },
-      {
-        "month": "2026-05",
-        "amount": 1550,
-        "dateIssued": "2026-05-17",
-        "teacherId": "t203",
-        "id": 11
-      },
-      {
-        "month": "2026-05",
-        "id": 12,
-        "teacherId": "t203",
-        "dateIssued": "2026-05-18",
-        "amount": 1200
-      },
-      {
-        "dateIssued": "2026-05-29",
-        "amount": 4670,
-        "teacherId": "t202",
-        "id": 13,
-        "month": "2026-05"
-      },
-      {
-        "id": 14,
-        "teacherId": "t203",
-        "amount": 1452,
-        "dateIssued": "2026-06-01",
-        "month": "2026-06"
-      }
-    ]
-  },
-  "students": {
-    "list": [
-      {
+        "dateOfJoining": "2026-04-18",
+        "personalPhone": "",
         "feeSplits": [
           {
             "percentage": 35,
@@ -292,13 +77,42 @@
             "teacherId": "t203"
           }
         ],
-        "fees": 1400,
         "class": "X",
-        "personalPhone": "9411339696",
-        "motherPhone": "8126356597",
+        "password": "paradigm@123",
+        "id": "s107",
+        "motherPhone": "8958060015",
+        "feePayments": [
+          {
+            "cycleStart": "2026-04-18",
+            "markedBy": "Admin",
+            "paidOn": "2026-04-19",
+            "finePaid": 0
+          }
+        ],
+        "fatherPhone": "8279427180",
+        "convertedOn": "2026-06-12",
+        "name": "Lavanya Pegwal",
+        "fees": 1400
+      },
+      {
         "name": "Samiksha Ghildiyal",
+        "password": "waffle",
+        "fees": 1400,
         "id": "s101",
+        "dateOfJoining": "2026-04-18",
+        "personalPhone": "9411339696",
+        "class": "X",
         "fatherPhone": "7060590660",
+        "feeSplits": [
+          {
+            "percentage": 35,
+            "teacherId": "t202"
+          },
+          {
+            "teacherId": "t203",
+            "percentage": 65
+          }
+        ],
         "feePayments": [
           {
             "cycleStart": "2026-04-18",
@@ -307,214 +121,125 @@
             "markedBy": "Admin"
           },
           {
+            "cycleStart": "2026-05-18",
             "markedBy": "Admin",
-            "finePaid": 0,
             "paidOn": "2026-05-17",
-            "cycleStart": "2026-05-18"
+            "finePaid": 0
           }
         ],
-        "password": "waffle",
-        "dateOfJoining": "2026-04-18"
+        "motherPhone": "8126356597",
+        "convertedOn": "2026-06-23"
       },
       {
+        "password": "akkibhai",
+        "id": "s102",
+        "convertedOn": "2026-06-23",
         "name": "Abhinav Rana",
-        "personalPhone": "",
+        "fatherPhone": "7248584090",
+        "feePayments": [
+          {
+            "markedBy": "Admin",
+            "cycleStart": "2026-04-11",
+            "finePaid": 0,
+            "paidOn": "2026-04-12"
+          },
+          {
+            "finePaid": 0,
+            "markedBy": "Admin",
+            "cycleStart": "2026-05-11",
+            "paidOn": "2026-05-13"
+          }
+        ],
         "motherPhone": "8958102151",
         "fees": 1300,
         "class": "X",
         "feeSplits": [
           {
-            "teacherId": "t202",
-            "percentage": 35
-          },
-          {
-            "teacherId": "t203",
-            "percentage": 65
-          }
-        ],
-        "feePayments": [
-          {
-            "paidOn": "2026-04-12",
-            "cycleStart": "2026-04-11",
-            "markedBy": "Admin",
-            "finePaid": 0
-          }
-        ],
-        "password": "akkibhai",
-        "dateOfJoining": "2026-04-11",
-        "id": "s102",
-        "fatherPhone": "7248584090"
-      },
-      {
-        "name": "Aditi Giroti",
-        "personalPhone": "8475021138",
-        "motherPhone": "9627793897",
-        "fees": 1300,
-        "class": "X",
-        "feeSplits": [
-          {
-            "teacherId": "t202",
-            "percentage": 35
-          },
-          {
-            "teacherId": "t203",
-            "percentage": 65
-          }
-        ],
-        "feePayments": [
-          {
-            "markedBy": "Admin",
-            "finePaid": 0,
-            "paidOn": "2026-04-13",
-            "cycleStart": "2026-04-09"
-          },
-          {
-            "finePaid": 0,
-            "markedBy": "Admin",
-            "cycleStart": "2026-05-09",
-            "paidOn": "2026-05-12"
-          }
-        ],
-        "password": "8475021138@aditi",
-        "dateOfJoining": "2026-04-09",
-        "id": "s103",
-        "fatherPhone": "9719581086"
-      },
-      {
-        "password": "ayushsanu",
-        "feePayments": [
-          {
-            "markedBy": "Admin",
-            "finePaid": 0,
-            "paidOn": "2026-04-07",
-            "cycleStart": "2026-04-04"
-          },
-          {
-            "markedBy": "Admin",
-            "finePaid": 0,
-            "paidOn": "2026-05-07",
-            "cycleStart": "2026-05-04"
-          }
-        ],
-        "dateOfJoining": "2026-04-04",
-        "id": "s104",
-        "fatherPhone": "",
-        "personalPhone": "",
-        "motherPhone": "9675703897",
-        "name": "Ayush Rawat",
-        "feeSplits": [
-          {
-            "teacherId": "t202",
-            "percentage": 50
-          },
-          {
-            "teacherId": "t203",
-            "percentage": 50
-          }
-        ],
-        "class": "X",
-        "fees": 1000
-      },
-      {
-        "fees": 1300,
-        "class": "X",
-        "feeSplits": [
-          {
             "percentage": 35,
             "teacherId": "t202"
-          },
-          {
-            "teacherId": "t203",
-            "percentage": 65
-          }
-        ],
-        "name": "Harshit Maithani",
-        "motherPhone": "8979717523",
-        "personalPhone": "",
-        "id": "s105",
-        "fatherPhone": "9720437635",
-        "feePayments": [
-          {
-            "paidOn": "2026-04-13",
-            "cycleStart": "2026-04-03",
-            "markedBy": "Admin",
-            "finePaid": 150
-          },
-          {
-            "finePaid": 0,
-            "markedBy": "Admin",
-            "cycleStart": "2026-05-03",
-            "paidOn": "2026-05-04"
-          }
-        ],
-        "password": "maakali",
-        "dateOfJoining": "2026-04-03"
-      },
-      {
-        "personalPhone": "",
-        "motherPhone": "9719815881",
-        "name": "Anshi Rana",
-        "feeSplits": [
-          {
-            "percentage": 35,
-            "teacherId": "t202"
-          },
-          {
-            "teacherId": "t203",
-            "percentage": 65
-          }
-        ],
-        "class": "X",
-        "fees": 1300,
-        "dateOfJoining": "2026-04-09",
-        "feePayments": [
-          {
-            "paidOn": "2026-04-04",
-            "cycleStart": "2026-04-09",
-            "markedBy": "Admin",
-            "finePaid": 0
-          },
-          {
-            "markedBy": "Admin",
-            "finePaid": 0,
-            "paidOn": "2026-05-12",
-            "cycleStart": "2026-05-09"
-          }
-        ],
-        "password": "paradigm@123",
-        "fatherPhone": "",
-        "id": "s106"
-      },
-      {
-        "fatherPhone": "8279427180",
-        "id": "s107",
-        "dateOfJoining": "2026-04-18",
-        "feePayments": [
-          {
-            "finePaid": 0,
-            "markedBy": "Admin",
-            "cycleStart": "2026-04-18",
-            "paidOn": "2026-04-19"
-          }
-        ],
-        "password": "paradigm@123",
-        "feeSplits": [
-          {
-            "teacherId": "t202",
-            "percentage": 35
           },
           {
             "percentage": 65,
             "teacherId": "t203"
           }
         ],
-        "fees": 1400,
-        "class": "X",
-        "motherPhone": "8958060015",
         "personalPhone": "",
-        "name": "Lavanya Pegwal"
+        "dateOfJoining": "2026-04-11"
       },
       {
+        "fatherPhone": "9719581086",
+        "feePayments": [
+          {
+            "paidOn": "2026-04-13",
+            "markedBy": "Admin",
+            "cycleStart": "2026-04-09",
+            "finePaid": 0
+          },
+          {
+            "paidOn": "2026-05-12",
+            "finePaid": 0,
+            "cycleStart": "2026-05-09",
+            "markedBy": "Admin"
+          }
+        ],
+        "motherPhone": "9627793897",
+        "convertedOn": "2026-06-23",
+        "feeSplits": [
+          {
+            "percentage": 35,
+            "teacherId": "t202"
+          },
+          {
+            "teacherId": "t203",
+            "percentage": 65
+          }
+        ],
+        "class": "X",
+        "personalPhone": "8475021138",
+        "dateOfJoining": "2026-04-09",
+        "fees": 1300,
+        "name": "Aditi Giroti",
+        "password": "8475021138@aditi",
+        "id": "s103"
+      },
+      {
+        "convertedOn": "2026-06-23",
+        "motherPhone": "8979717523",
+        "feePayments": [
+          {
+            "markedBy": "Admin",
+            "paidOn": "2026-04-13",
+            "cycleStart": "2026-04-03",
+            "finePaid": 150
+          },
+          {
+            "markedBy": "Admin",
+            "finePaid": 0,
+            "cycleStart": "2026-05-03",
+            "paidOn": "2026-05-04"
+          }
+        ],
+        "fatherPhone": "9720437635",
+        "id": "s105",
+        "dateOfJoining": "2026-04-03",
+        "personalPhone": "",
+        "class": "X",
+        "name": "Harshit Maithani",
+        "feeSplits": [
+          {
+            "percentage": 35,
+            "teacherId": "t202"
+          },
+          {
+            "teacherId": "t203",
+            "percentage": 65
+          }
+        ],
+        "password": "maakali",
+        "fees": 1300
+      },
+      {
+        "motherPhone": "",
         "feePayments": [
           {
             "markedBy": "Admin",
@@ -524,29 +249,165 @@
           },
           {
             "paidOn": "2026-05-06",
-            "cycleStart": "2026-05-03",
             "markedBy": "Admin",
-            "finePaid": 0
+            "finePaid": 0,
+            "cycleStart": "2026-05-03"
           }
         ],
-        "password": "khushi8954",
-        "dateOfJoining": "2026-04-03",
-        "id": "s109",
         "fatherPhone": "8954340847",
+        "fees": 1300,
+        "password": "khushi8954",
+        "convertedOn": "2026-06-23",
         "name": "Khushi Senwal",
         "personalPhone": "",
-        "motherPhone": "",
-        "class": "X",
-        "fees": 1300,
+        "dateOfJoining": "2026-04-03",
+        "id": "s109",
         "feeSplits": [
           {
             "teacherId": "t202",
             "percentage": 35
           },
           {
-            "percentage": 65,
+            "teacherId": "t203",
+            "percentage": 65
+          }
+        ],
+        "class": "X"
+      },
+      {
+        "convertedOn": "2026-08-06",
+        "name": "Sagar Rawat",
+        "fatherPhone": "7983178233",
+        "feeSplits": [
+          {
+            "teacherId": "t203",
+            "percentage": 100
+          }
+        ],
+        "personalPhone": "",
+        "id": "s111",
+        "class": "X",
+        "password": "sagarrawat",
+        "feePayments": [
+          {
+            "markedBy": "Admin",
+            "paidOn": "2026-05-05",
+            "finePaid": 0,
+            "cycleStart": "2026-05-01"
+          },
+          {
+            "markedBy": "Admin",
+            "paidOn": "2026-06-02",
+            "cycleStart": "2026-05-31",
+            "finePaid": 0
+          },
+          {
+            "cycleStart": "2026-06-30",
+            "paidOn": "2026-07-09",
+            "markedBy": "Admin",
+            "finePaid": 120
+          }
+        ],
+        "motherPhone": "6396217516",
+        "fees": 1400,
+        "lecturePermissions": [
+          "C104",
+          "C103",
+          "C102",
+          "C101"
+        ],
+        "dateOfJoining": "2026-05-01"
+      },
+      {
+        "feeSplits": [
+          {
+            "percentage": 100,
             "teacherId": "t203"
           }
+        ],
+        "class": "NDA",
+        "id": "s119",
+        "name": "Priyanshu Bisht",
+        "dateOfJoining": "2026-05-16",
+        "password": "14711471",
+        "feePayments": [
+          {
+            "markedBy": "Admin",
+            "paidOn": "2026-05-16",
+            "cycleStart": "2026-05-16",
+            "finePaid": 0
+          },
+          {
+            "cycleStart": "2026-06-15",
+            "finePaid": 0,
+            "paidOn": "2026-06-19",
+            "markedBy": "Admin"
+          },
+          {
+            "paidOn": "2026-07-18",
+            "markedBy": "Admin",
+            "finePaid": 0,
+            "cycleStart": "2026-07-15"
+          }
+        ],
+        "motherPhone": "9760059009",
+        "completedLectures": [
+          "C110::Introduction 01 : Introduction",
+          "C109::001 Basic_of_English_Grammar_01___Basic_of_English_Grammar_1",
+          "C109::007 Subject_Verb_Agreement_02___Subject_verb_agreement_2_||_",
+          "C109::006 Subject Verb Agreement 01 _ Subject verb agreement -1",
+          "C109::004 Root Words 01 _ Root Words - 1",
+          "C109::003 Basic_of_English_Grammar_03___Basic_of_English_Grammar_3",
+          "C109::002 Basic of English Grammar 02 _ Basic of English Grammar -2",
+          "C109::005 Root Words 02 _ Root Words -2",
+          "C110::DEMO LECTURE",
+          "C110::Making of Indian Constitution 01 : Making of Indian Constitution",
+          "C110::Constituent Assembly 01 : Constituent Assembly",
+          "C110::Schedules of Indian Constitution 01 : Schedules of Indian Constitution",
+          "C110::Borrowing and Salient Features of Indian Constitution 01 : Borrowing and Salient Features of Indian Constitution",
+          "C110::Preamble 01 : Preamble",
+          "C110::Fundamental Rights 01 : Fundamental Rights (Part 01)",
+          "C110::Fundamental Rights 02 : Fundamental Rights (Part 02)",
+          "C110::Writs and Fundamental Duties 01 : Writs and Fundamental Duties",
+          "C110::Writs and Fundamental Duties 02 : Writs and Fundamental Duties (Part 02)  Extra Lecture  NO MCQ Quiz",
+          "C110::DPSP 01 : DPSP",
+          "C112::Unit and Measurement 01 : Unit and Measurement",
+          "C110::Union and Citizenship 01 : Union and Citizenship",
+          "C110::Parliament 01 : Parliament || No MCQ Quiz",
+          "C110::Writs and Fundamental Duties 03 : Writs and Fundamental Duties (Part 03)  Extra Lecture",
+          "C110::Parliament 02 : Parliament (Part 02)",
+          "C110::State Lagislature 01 : State Lagislature",
+          "C112::Unit and Measurement 02 : Unit and Measurement",
+          "C112::Unit and Measurement : Solution to MCQ Quiz",
+          "C112::Motion in 1D 01 : Motion in 1D",
+          "C110::State Lagislature 02 : State Lagislature (Part 02)  NO MCQ Quiz  Extra Lecture",
+          "C110::Election Process 01 : Election Process || Recorded",
+          "C110::SC and HC 01 : SC and HC",
+          "C110::Amendments And Panchsheel 01 : Amendments & Panchsheel",
+          "C110::Panchayat Raj and Muncipalties 01 : Panchayat Raj and Muncipalties",
+          "C110::Vice President and Governor 01 : Vice President and Governor",
+          "C110::President 01 : President",
+          "C110::CAG and AGI 01 : CAG and AGI",
+          "C112::Motion in 1D 02 _ Motion in 1D (Part 2) || No MCQ Quiz",
+          "C112::Motion in 1D 03 _ Motion in 1D (Part 3)",
+          "C112::Motion in 1D _ Solution to MCQ Quiz",
+          "C112::Newtons_Laws_of_Motion_01___Newtons_laws_of_motion_Part_",
+          "C112::Newtons_Laws_of_Motion_02___Newtons_laws_of_motion_Part_",
+          "C112::Newtons_Laws_of_Motion_03___Newtons_laws_of_motion_Part_",
+          "C112::Newtons Laws of Motion 04 _ Newtons laws of motion (Part",
+          "C112::Newtons Laws of Motion _ Solution to MCQ Quiz"
+        ],
+        "fees": 2500,
+        "personalPhone": "8979033718",
+        "convertedOn": "2026-08-22",
+        "fatherPhone": "8218752720",
+        "lecturePermissions": [
+          "C109",
+          "C110",
+          "C111",
+          "C112",
+          "C113",
+          "C114"
         ]
       },
       {
@@ -556,9 +417,1353 @@
             "teacherId": "t203"
           }
         ],
-        "id": "s110",
-        "fees": 2000,
+        "motherPhone": "8800423967",
+        "feePayments": [
+          {
+            "finePaid": 0,
+            "cycleStart": "2026-05-04",
+            "markedBy": "Admin",
+            "paidOn": "2026-05-08"
+          },
+          {
+            "cycleStart": "2026-06-03",
+            "markedBy": "Shneh Rawat",
+            "paidOn": "2026-06-09",
+            "finePaid": 30
+          },
+          {
+            "cycleStart": "2026-07-03",
+            "finePaid": 0,
+            "paidOn": "2026-07-06",
+            "markedBy": "Admin"
+          },
+          {
+            "paidOn": "2026-08-05",
+            "markedBy": "Admin",
+            "cycleStart": "2026-08-02",
+            "finePaid": 0
+          }
+        ],
+        "password": "paradigm@123",
+        "class": "X",
+        "completedLectures": [
+          "C101::LIFE PROCESSES 01"
+        ],
+        "personalPhone": "",
+        "rewardedLectures": [
+          "C101::LIFE PROCESSES 01"
+        ],
+        "name": "Yuktika Negi",
+        "coins": 10,
+        "lecturePermissions": [
+          "C101",
+          "C102",
+          "C103",
+          "C104"
+        ],
+        "fatherPhone": "7678691088",
+        "convertedOn": "2026-09-04",
+        "dateOfJoining": "2026-05-04",
+        "fees": 1400,
+        "id": "s113",
+        "notes": [
+          {
+            "authorRole": "admin",
+            "authorName": "Admin",
+            "date": "03 SEPTEMBER 2026",
+            "text": "UNINFORMED LEAVE",
+            "id": "note_1788449312482_4e4g",
+            "createdAt": "2026-09-03T15:28:32.482Z"
+          }
+        ]
+      },
+      {
+        "coins": 20,
+        "completedLectures": [
+          "C101::LIFE PROCESSES 01",
+          "C101::LIFE PROCESSES 02"
+        ],
+        "password": "paradigm@123",
+        "fees": 1400,
+        "personalPhone": "",
+        "class": "X",
+        "feeSplits": [
+          {
+            "teacherId": "t203",
+            "percentage": 100
+          }
+        ],
+        "id": "s114",
+        "motherPhone": "7817030337",
+        "feePayments": [
+          {
+            "paidOn": "2026-05-09",
+            "cycleStart": "2026-05-04",
+            "finePaid": 0,
+            "markedBy": "Admin"
+          },
+          {
+            "finePaid": 0,
+            "paidOn": "2026-06-08",
+            "cycleStart": "2026-06-03",
+            "markedBy": "Shneh Rawat"
+          },
+          {
+            "finePaid": 0,
+            "paidOn": "2026-07-08",
+            "markedBy": "Admin",
+            "cycleStart": "2026-07-03"
+          },
+          {
+            "finePaid": 30,
+            "paidOn": "2026-08-08",
+            "cycleStart": "2026-08-02",
+            "markedBy": "Admin"
+          }
+        ],
+        "rewardedLectures": [
+          "C101::LIFE PROCESSES 01",
+          "C101::LIFE PROCESSES 02"
+        ],
+        "lecturePermissions": [
+          "C101",
+          "C102",
+          "C103",
+          "C104"
+        ],
+        "notes": [
+          {
+            "text": "UNINFORMED LEAVE",
+            "authorRole": "admin",
+            "authorName": "Admin",
+            "id": "note_1788449318266_jj81",
+            "createdAt": "2026-09-03T15:28:38.266Z",
+            "date": "03 SEPTEMBER 2026"
+          }
+        ],
+        "dateOfJoining": "2026-05-04",
+        "name": "Aisha Kaintura",
+        "convertedOn": "2026-09-04",
+        "fatherPhone": ""
+      },
+      {
+        "balance": 0,
+        "rewardedLectures": [
+          "C101::LIFE PROCESSES 01",
+          "C101::LIFE PROCESSES 02",
+          "C101::LIFE PROCESSES 03",
+          "C101::LIFE PROCESSES 05",
+          "C101::LIFE PROCESSES 06",
+          "C101::LIFE PROCESSES 08",
+          "C101::LIFE PROCESSES 11",
+          "C101::LIFE PROCESSES 12"
+        ],
+        "fees": 1500,
+        "dateOfJoining": "2026-07-24",
+        "id": "s123",
+        "totalPayableFee": 3270,
+        "feePaid": 3270,
+        "convertedOn": "2026-09-30",
+        "fatherPhone": "",
+        "password": "rishu28062010",
+        "notes": [
+          {
+            "text": "UNINFORMED LEAVE",
+            "authorName": "Admin",
+            "id": "note_1788449326555_uqby",
+            "createdAt": "2026-09-03T15:28:46.555Z",
+            "authorRole": "admin",
+            "date": "03 SEPTEMBER 2026"
+          }
+        ],
+        "name": "Rishav Padiyar",
+        "completedLectures": [
+          "C101::LIFE PROCESSES 01",
+          "C101::LIFE PROCESSES 02",
+          "C101::LIFE PROCESSES 03",
+          "C101::LIFE PROCESSES 05",
+          "C101::LIFE PROCESSES 06",
+          "C101::LIFE PROCESSES 08",
+          "C101::LIFE PROCESSES 11",
+          "C101::LIFE PROCESSES 12"
+        ],
+        "feeSplits": [
+          {
+            "teacherId": "t203",
+            "percentage": 100
+          }
+        ],
+        "personalPhone": "6396338661",
+        "class": "X",
+        "coins": 80,
+        "motherPhone": "8954027905",
+        "feePayments": [
+          {
+            "markedBy": "Admin",
+            "cycleStart": "2026-07-24",
+            "paidOn": "2026-08-07",
+            "finePaid": 270
+          },
+          {
+            "cycleStart": "2026-08-23",
+            "feePaid": 1500,
+            "totalPayableFee": 1500,
+            "finePaid": 0,
+            "paidOn": "2026-08-25",
+            "markedBy": "Admin",
+            "balance": 0
+          }
+        ],
+        "lecturePermissions": [
+          "C101",
+          "C102",
+          "C103",
+          "C104"
+        ]
+      },
+      {
+        "fatherPhone": "9917094040",
+        "feePaid": 13190,
+        "personalPhone": "7302042808",
+        "balance": 0,
+        "password": "iamdevil",
+        "coins": 580,
         "class": "XII",
+        "feeSplits": [
+          {
+            "teacherId": "t203",
+            "percentage": 100
+          }
+        ],
+        "fees": 2500,
+        "id": "s116",
+        "totalPayableFee": 13520,
+        "motherPhone": "9634237408",
+        "feePayments": [
+          {
+            "finePaid": 300,
+            "cycleStart": "2026-05-13",
+            "paidOn": "2026-05-28",
+            "markedBy": "Admin"
+          },
+          {
+            "markedBy": "Admin",
+            "paidOn": "2026-06-18",
+            "finePaid": 30,
+            "cycleStart": "2026-06-12"
+          },
+          {
+            "markedBy": "Admin",
+            "cycleStart": "2026-07-12",
+            "finePaid": 210,
+            "paidOn": "2026-07-24"
+          },
+          {
+            "cycleStart": "2026-08-11",
+            "balance": 330,
+            "finePaid": 300,
+            "totalPayableFee": 2830,
+            "feePaid": 2500,
+            "markedBy": "Admin",
+            "paidOn": "2026-08-26"
+          },
+          {
+            "finePaid": 150,
+            "cycleStart": "2026-09-10",
+            "feePaid": 2650,
+            "balance": 0,
+            "paidOn": "2026-09-20",
+            "totalPayableFee": 2650,
+            "markedBy": "Admin"
+          }
+        ],
+        "dateOfJoining": "2026-05-13",
+        "notes": [
+          {
+            "date": "03 SEPTEMBER 2026",
+            "authorRole": "admin",
+            "authorName": "Admin",
+            "createdAt": "2026-09-03T15:28:06.877Z",
+            "id": "note_1788449286877_999d",
+            "text": "UNINFORMED LEAVE"
+          },
+          {
+            "date": "04 SEPTEMBER 2026",
+            "authorRole": "admin",
+            "id": "note_1788528591439_zn5o",
+            "authorName": "Admin",
+            "createdAt": "2026-09-04T13:29:51.439Z",
+            "text": "UNINFORMED LEAVE"
+          }
+        ],
+        "completedLectures": [
+          "C109::001 Basic_of_English_Grammar_01___Basic_of_English_Grammar_1",
+          "C109::002 Basic of English Grammar 02 _ Basic of English Grammar -2",
+          "C109::003 Basic_of_English_Grammar_03___Basic_of_English_Grammar_3",
+          "C109::004 Root Words 01 _ Root Words - 1",
+          "C109::005 Root Words 02 _ Root Words -2",
+          "C109::006 Subject Verb Agreement 01 _ Subject verb agreement -1",
+          "C109::007 Subject_Verb_Agreement_02___Subject_verb_agreement_2_||_",
+          "C109::008 Tenses 01 _ Tenses - 1",
+          "C109::009 Tenses 02 _ Tenses (Part 2) || Rescheduled",
+          "C109::010 Tenses 03 _ Tenses (Part 3) || Rescheduled",
+          "C109::011- NOUNS 01",
+          "C109::012 Nouns 02 _ Nouns (Part 02) || (Recorded)",
+          "C109::013 Pronoun 01 _ Pronoun (Part 01)",
+          "C109::014 Pronoun 02 _ Pronoun (Part 02)",
+          "C109::015 Synonyms_and_Antonyms_01___Synonyms_and_Antonyms_Part_1_",
+          "C109::016 Synonyms and Antonyms 02 _ Synonyms and Antonyms (Part 02)",
+          "C109::017 Adjectives 01 _ Adjectives (Part 01) || Recorded",
+          "C110::Introduction 01 : Introduction",
+          "C110::Making of Indian Constitution 01 : Making of Indian Constitution",
+          "C110::Constituent Assembly 01 : Constituent Assembly",
+          "C110::Schedules of Indian Constitution 01 : Schedules of Indian Constitution",
+          "C110::Borrowing and Salient Features of Indian Constitution 01 : Borrowing and Salient Features of Indian Constitution",
+          "C110::Preamble 01 : Preamble",
+          "C110::Fundamental Rights 01 : Fundamental Rights (Part 01)",
+          "C110::Fundamental Rights 02 : Fundamental Rights (Part 02)",
+          "C110::Writs and Fundamental Duties 01 : Writs and Fundamental Duties",
+          "C110::Writs and Fundamental Duties 02 : Writs and Fundamental Duties (Part 02)  Extra Lecture  NO MCQ Quiz",
+          "C110::Writs and Fundamental Duties 03 : Writs and Fundamental Duties (Part 03)  Extra Lecture",
+          "C110::DPSP 01 : DPSP",
+          "C110::Union and Citizenship 01 : Union and Citizenship",
+          "C110::Parliament 02 : Parliament (Part 02)",
+          "C110::Parliament 01 : Parliament || No MCQ Quiz",
+          "C111::Origin of Human 01 _ Origin of Human",
+          "C111::Indus_Valley_Civilization_01___Indus_Valley_Civilization",
+          "C111::Indus_Valley_Civilization_02___Indus_Valley_Civilization",
+          "C111::Indus_Valley_Civilization_03___Indus_Valley_Civilization",
+          "C111::Title: Vedic Civilization 01 : Vedic Civilization -1",
+          "C111::Vedic Civilization 02 _ Vedic Civilization -2",
+          "C111::Religious Movement 01 : Religious Movement",
+          "C111::Religious Movements 02 : Religious Movements- 2",
+          "C111::Mahajanapadas/Foreign Invasions 01 : Mahajanapadas/Foreign Invasions",
+          "C111::Mauryan Empire 01 : Mauryan Empire (Part -1)",
+          "C111::Title: Mauryan Empire 02 : Mauryan Empire (Part -2)",
+          "C111::Post Mauryan Age 01 : Post Mauryan Age -1",
+          "C111::Post Mauryan Age 02 : Post Mauryan Age -2",
+          "C111::Post Mauryan Age 03 : Post Mauryan Age -3",
+          "C111::Gupta Empire 01 : Gupta Empire -1",
+          "C111::Gupta Empire 02 : Gupta Empire (Part 2)",
+          "C111::Post Gupta Age 01 : Post Gupta Age -1 || Recorded",
+          "C111::Post Gupta Age 02 : Post Gupta Age -2",
+          "C111::Sangam Era 01 : Sangam Era",
+          "C114::Cell 01 _ Introduction & Cell (Part 1)",
+          "C114::Cell 03",
+          "C114::Cell 02",
+          "C114::Cell 04",
+          "C114::Animal_Tissues_01",
+          "C114::Animal_Tissues_02",
+          "C114::Plant Tissues 01"
+        ],
+        "lecturePermissions": [
+          "C109",
+          "C110",
+          "C111",
+          "C112",
+          "C113",
+          "C114"
+        ],
+        "rewardedLectures": [
+          "C109::001 Basic_of_English_Grammar_01___Basic_of_English_Grammar_1",
+          "C109::002 Basic of English Grammar 02 _ Basic of English Grammar -2",
+          "C109::003 Basic_of_English_Grammar_03___Basic_of_English_Grammar_3",
+          "C109::004 Root Words 01 _ Root Words - 1",
+          "C109::005 Root Words 02 _ Root Words -2",
+          "C109::006 Subject Verb Agreement 01 _ Subject verb agreement -1",
+          "C109::007 Subject_Verb_Agreement_02___Subject_verb_agreement_2_||_",
+          "C109::008 Tenses 01 _ Tenses - 1",
+          "C109::009 Tenses 02 _ Tenses (Part 2) || Rescheduled",
+          "C109::010 Tenses 03 _ Tenses (Part 3) || Rescheduled",
+          "C109::011- NOUNS 01",
+          "C109::012 Nouns 02 _ Nouns (Part 02) || (Recorded)",
+          "C109::013 Pronoun 01 _ Pronoun (Part 01)",
+          "C109::014 Pronoun 02 _ Pronoun (Part 02)",
+          "C109::015 Synonyms_and_Antonyms_01___Synonyms_and_Antonyms_Part_1_",
+          "C109::016 Synonyms and Antonyms 02 _ Synonyms and Antonyms (Part 02)",
+          "C109::017 Adjectives 01 _ Adjectives (Part 01) || Recorded",
+          "C110::Introduction 01 : Introduction",
+          "C110::Making of Indian Constitution 01 : Making of Indian Constitution",
+          "C110::Constituent Assembly 01 : Constituent Assembly",
+          "C110::Schedules of Indian Constitution 01 : Schedules of Indian Constitution",
+          "C110::Borrowing and Salient Features of Indian Constitution 01 : Borrowing and Salient Features of Indian Constitution",
+          "C110::Preamble 01 : Preamble",
+          "C110::Fundamental Rights 01 : Fundamental Rights (Part 01)",
+          "C110::Fundamental Rights 02 : Fundamental Rights (Part 02)",
+          "C110::Writs and Fundamental Duties 01 : Writs and Fundamental Duties",
+          "C110::Writs and Fundamental Duties 02 : Writs and Fundamental Duties (Part 02)  Extra Lecture  NO MCQ Quiz",
+          "C110::Writs and Fundamental Duties 03 : Writs and Fundamental Duties (Part 03)  Extra Lecture",
+          "C110::DPSP 01 : DPSP",
+          "C110::Union and Citizenship 01 : Union and Citizenship",
+          "C110::Parliament 02 : Parliament (Part 02)",
+          "C110::Parliament 01 : Parliament || No MCQ Quiz",
+          "C111::Origin of Human 01 _ Origin of Human",
+          "C111::Indus_Valley_Civilization_01___Indus_Valley_Civilization",
+          "C111::Indus_Valley_Civilization_02___Indus_Valley_Civilization",
+          "C111::Indus_Valley_Civilization_03___Indus_Valley_Civilization",
+          "C111::Title: Vedic Civilization 01 : Vedic Civilization -1",
+          "C111::Vedic Civilization 02 _ Vedic Civilization -2",
+          "C111::Religious Movement 01 : Religious Movement",
+          "C111::Religious Movements 02 : Religious Movements- 2",
+          "C111::Mahajanapadas/Foreign Invasions 01 : Mahajanapadas/Foreign Invasions",
+          "C111::Mauryan Empire 01 : Mauryan Empire (Part -1)",
+          "C111::Title: Mauryan Empire 02 : Mauryan Empire (Part -2)",
+          "C111::Post Mauryan Age 01 : Post Mauryan Age -1",
+          "C111::Post Mauryan Age 02 : Post Mauryan Age -2",
+          "C111::Post Mauryan Age 03 : Post Mauryan Age -3",
+          "C111::Gupta Empire 01 : Gupta Empire -1",
+          "C111::Gupta Empire 02 : Gupta Empire (Part 2)",
+          "C111::Post Gupta Age 01 : Post Gupta Age -1 || Recorded",
+          "C111::Post Gupta Age 02 : Post Gupta Age -2",
+          "C111::Sangam Era 01 : Sangam Era",
+          "C114::Cell 01 _ Introduction & Cell (Part 1)",
+          "C114::Cell 03",
+          "C114::Cell 02",
+          "C114::Cell 04",
+          "C114::Animal_Tissues_01",
+          "C114::Animal_Tissues_02",
+          "C114::Plant Tissues 01"
+        ],
+        "name": "Naman Bhandari",
+        "convertedOn": "2026-10-22"
+      }
+    ]
+  },
+  "announcement": {
+    "text": "Welcome to Paradigm Classes! Admissions open for batch 2026-27.",
+    "enabled": true
+  },
+  "attendance": {
+    "list": [
+      {
+        "date": "2026-10-29",
+        "records": {
+          "s104": "present",
+          "s106": "present",
+          "s110": "present",
+          "s115": "absent",
+          "s118": "absent",
+          "s120": "present",
+          "s121": "absent",
+          "s122": "present",
+          "s124": "absent",
+          "s125": "present",
+          "s126": "absent",
+          "s127": "absent",
+          "s128": "present",
+          "s129": "present"
+        },
+        "takenBy": "Admin"
+      }
+    ]
+  },
+  "courses": {
+    "list": [
+      {
+        "fees": 3000,
+        "title": "NDA Preparation + SSB",
+        "description": "Specialized coaching for NDA aspirants with focus on Mathematics and General Ability Test.",
+        "id": "course-nda",
+        "features": [
+          "Mathematics mastery",
+          "GAT preparation",
+          "SSB interview guidance"
+        ]
+      },
+      {
+        "description": "Build a strong foundation in Physics, Chemistry, and Mathematics for board exams and future competitive preparations.",
+        "id": "course-mpuz26tm",
+        "features": [
+          "RD Sharma-based curriculum",
+          "Regular practice tests",
+          "Board exam preparation"
+        ],
+        "fees": 1500,
+        "title": "X FOUNDATION"
+      },
+      {
+        "fees": 1000,
+        "title": "XI Math",
+        "description": "Comprehensive coaching for board exams with special focus on building concepts for competitive exams.",
+        "id": "course-mpuz4p28",
+        "features": [
+          "Board + Competitive focus",
+          "Advanced problem solving",
+          "Regular mock tests"
+        ]
+      },
+      {
+        "description": "Comprehensive coaching for board exams with special focus on building concepts for competitive exams.",
+        "id": "course-mpuz56ou",
+        "features": [
+          "Board + Competitive focus",
+          "Advanced problem solving",
+          "Regular mock tests"
+        ],
+        "fees": 1100,
+        "title": "XII Math"
+      },
+      {
+        "features": [
+          "Topic-wise tests",
+          "Previous year papers",
+          "Full-length mock tests"
+        ],
+        "id": "course-mpuz671s",
+        "description": "Specialized coaching for JEE aspirants with focus on conceptual clarity and problem-solving skills.",
+        "title": "JEE (Main & Advanced)",
+        "fees": 3000
+      }
+    ]
+  },
+  "noteSections": {
+    "list": [
+      {
+        "id": "sec_ix_chem",
+        "title": "Chemistry (Class IX)"
+      },
+      {
+        "id": "sec_ix_phy",
+        "title": "Physics (Class IX)"
+      },
+      {
+        "id": "sec_ix_bio",
+        "title": "Biology (Class IX)"
+      },
+      {
+        "id": "sec_x_chem",
+        "title": "Chemistry (Class X)"
+      },
+      {
+        "id": "sec_x_phy",
+        "title": "Physics (Class X)"
+      },
+      {
+        "id": "sec_xii_phy_ch1",
+        "title": "Class XII Physics - CH 1 Electric Fields and Charges"
+      },
+      {
+        "id": "sec_xii_phy_ch2",
+        "title": "Class XII Physics - CH 2 Electrostatic Potential and Capacitance"
+      }
+    ]
+  },
+  "notes": {
+    "list": [
+      {
+        "id": "n1",
+        "sectionId": "sec_ix_chem",
+        "title": "Chemistry CH 3 Atoms & Molecules",
+        "link": "Notes/IX_SCIENCE/ATOMSANDMOLECULES.pdf"
+      },
+      {
+        "id": "n2",
+        "sectionId": "sec_ix_chem",
+        "title": "Chemistry CH 4 Structure of Atom",
+        "link": "Notes/IX_SCIENCE/STRUCTUREOFATOMS.pdf"
+      },
+      {
+        "id": "n3",
+        "sectionId": "sec_ix_phy",
+        "title": "Physics CH 3 Gravitation",
+        "link": "Notes/IX_SCIENCE/GRAVITATION.pdf"
+      },
+      {
+        "id": "n4",
+        "sectionId": "sec_ix_phy",
+        "title": "Physics CH 4 Work, Energy & Power",
+        "link": "Notes/IX_SCIENCE/WORKENERGYANDPOWER.pdf"
+      },
+      {
+        "id": "n5",
+        "sectionId": "sec_ix_bio",
+        "title": "Biology CH 1 The Fundamental Unit of Life - Tissues",
+        "link": "Notes/IX_SCIENCE/TISSUE.pdf"
+      },
+      {
+        "id": "n6",
+        "sectionId": "sec_ix_bio",
+        "title": "Biology CH 5 Why Do We Fall Ill?",
+        "link": "Notes/IX_SCIENCE/WHYDOWEFALLILL.pdf"
+      },
+      {
+        "id": "n7",
+        "sectionId": "sec_x_chem",
+        "title": "Chemistry CH 1 Chemical Reactions & Equations",
+        "link": "notes/X_Science/Chemistry CH 1 Chemical Reactions & Equations.pdf"
+      },
+      {
+        "id": "n8",
+        "sectionId": "sec_x_chem",
+        "title": "Chemistry CH 2 Acids, Bases & Salts",
+        "link": "notes/X_Science/Chemistry CH 2 Acids, Bases & Salts.pdf"
+      },
+      {
+        "id": "n9",
+        "sectionId": "sec_x_chem",
+        "title": "Chemistry CH 3 Metals & Non Metals",
+        "link": "notes/X_Science/Chemistry CH 3 Metals & Non Metals.pdf"
+      },
+      {
+        "id": "n10",
+        "sectionId": "sec_x_chem",
+        "title": "Chemistry CH 4 Carbon & Its Compounds",
+        "link": "notes/X_Science/Chemistry CH 4 Carbon & Its Compounds.pdf"
+      },
+      {
+        "id": "n11",
+        "sectionId": "sec_x_chem",
+        "title": "Carbon and Its Compounds (My Personal)",
+        "link": "notes/X_Science/Carbon & Its Compounds.pdf"
+      },
+      {
+        "id": "n12",
+        "sectionId": "sec_x_phy",
+        "title": "Physics CH 1 Electricity",
+        "link": "notes/X_Science/Physics CH 1 Electricity.pdf"
+      },
+      {
+        "id": "n13",
+        "sectionId": "sec_x_phy",
+        "title": "Physics CH 2 Magnetic Effect of Electric Current",
+        "link": "notes/X_Science/Physics CH 2 Magnetic Effect of Electric Current.pdf"
+      },
+      {
+        "id": "n14",
+        "sectionId": "sec_x_phy",
+        "title": "Physics CH 3 Reflection",
+        "link": "notes/X_Science/Physics CH 3 Reflection.pdf"
+      },
+      {
+        "id": "n15",
+        "sectionId": "sec_x_phy",
+        "title": "Physics CH 4 Refraction",
+        "link": "notes/X_Science/Physics CH 4 Refraction.pdf"
+      },
+      {
+        "id": "n16",
+        "sectionId": "sec_x_phy",
+        "title": "Physics CH 5 Eye & the Colourful World",
+        "link": "notes/X_Science/Physics CH 5 Eye & the Colourful World.pdf"
+      },
+      {
+        "id": "n17",
+        "sectionId": "sec_xii_phy_ch1",
+        "title": "Chemistry CH 1 Chemical Reactions & Equations",
+        "link": "notes/X_Science/Chemistry CH 1 Chemical Reactions & Equations.pdf"
+      },
+      {
+        "id": "n18",
+        "sectionId": "sec_xii_phy_ch2",
+        "title": "Physics CH 1 Electricity",
+        "link": "notes/X_Science/Physics CH 1 Electricity.pdf"
+      }
+    ]
+  },
+  "salaries": {
+    "list": [
+      {
+        "amount": 1300,
+        "id": 1,
+        "teacherId": "t203",
+        "dateIssued": "2026-07-02",
+        "month": "2026-07"
+      },
+      {
+        "month": "2026-07",
+        "teacherId": "t203",
+        "amount": 1000,
+        "dateIssued": "2026-07-06",
+        "id": 2
+      },
+      {
+        "amount": 1400,
+        "id": 3,
+        "teacherId": "t203",
+        "dateIssued": "2026-07-06",
+        "month": "2026-07"
+      },
+      {
+        "id": 4,
+        "amount": 2900,
+        "teacherId": "t203",
+        "month": "2026-07",
+        "dateIssued": "2026-07-08"
+      },
+      {
+        "amount": 1400,
+        "teacherId": "t203",
+        "id": 5,
+        "month": "2026-07",
+        "dateIssued": "2026-07-09"
+      },
+      {
+        "month": "2026-07",
+        "dateIssued": "2026-07-16",
+        "teacherId": "t203",
+        "amount": 2000,
+        "id": 6
+      },
+      {
+        "dateIssued": "2026-07-16",
+        "id": 7,
+        "amount": 2500,
+        "teacherId": "t203",
+        "month": "2026-07"
+      },
+      {
+        "dateIssued": "2026-07-18",
+        "id": 8,
+        "month": "2026-07",
+        "teacherId": "t203",
+        "amount": 1200
+      },
+      {
+        "dateIssued": "2026-07-21",
+        "month": "2026-07",
+        "amount": 2500,
+        "teacherId": "t203",
+        "id": 9
+      },
+      {
+        "teacherId": "t203",
+        "dateIssued": "2026-07-25",
+        "id": 10,
+        "amount": 2500,
+        "month": "2026-07"
+      },
+      {
+        "amount": 6500,
+        "id": 11,
+        "teacherId": "t203",
+        "month": "2026-08",
+        "dateIssued": "2026-08-07"
+      },
+      {
+        "amount": 1200,
+        "dateIssued": "2026-08-18",
+        "id": 12,
+        "note": "Fee share (100%) from student Muskan Gussain (s118)",
+        "teacherId": "t203",
+        "month": "2026-08"
+      },
+      {
+        "teacherId": "t203",
+        "month": "2026-08",
+        "id": 13,
+        "amount": 2500,
+        "dateIssued": "2026-08-26",
+        "note": "Fee share (100%) from student Naman Bhandari (s116)"
+      },
+      {
+        "dateIssued": "2026-08-26",
+        "teacherId": "t203",
+        "amount": 2500,
+        "id": 14,
+        "note": "Fee share (100%) from student Naman Bhandari (s116)",
+        "month": "2026-08"
+      },
+      {
+        "dateIssued": "2026-08-02",
+        "teacherId": "t203",
+        "id": 15,
+        "month": "2026-08",
+        "note": "Fee share (100%) from student Harshit Maithani (s120)",
+        "amount": 1500
+      },
+      {
+        "month": "2026-07",
+        "note": "Fee share (100%) from student Lavanya Pegwal (s121)",
+        "id": 16,
+        "dateIssued": "2026-07-04",
+        "amount": 1500,
+        "teacherId": "t203"
+      },
+      {
+        "month": "2026-08",
+        "id": 17,
+        "dateIssued": "2026-08-03",
+        "teacherId": "t203",
+        "amount": 2220,
+        "note": "Fee share (100%) from student Lavanya Pegwal (s121)"
+      },
+      {
+        "dateIssued": "2026-08-29",
+        "month": "2026-08",
+        "teacherId": "t203",
+        "id": 18,
+        "amount": 1380,
+        "note": "Fee share (100%) from student ANSHUL NEGI (s124)"
+      },
+      {
+        "dateIssued": "2026-09-08",
+        "month": "2026-09",
+        "note": "Fee share (100%) from student Ayush Rawat (s104)",
+        "teacherId": "t203",
+        "id": 19,
+        "amount": 1060
+      },
+      {
+        "amount": 1590,
+        "teacherId": "t203",
+        "dateIssued": "2026-09-07",
+        "note": "Fee share (100%) from student Harshit Maithani (s120)",
+        "month": "2026-09",
+        "id": 20
+      },
+      {
+        "id": 21,
+        "note": "Fee share (100%) from student Abhinav Rana (s122)",
+        "month": "2026-08",
+        "dateIssued": "2026-08-08",
+        "teacherId": "t203",
+        "amount": 1500
+      },
+      {
+        "teacherId": "t203",
+        "month": "2026-09",
+        "note": "Fee share (100%) from student Anshi Rana (s106)",
+        "amount": 1300,
+        "id": 22,
+        "dateIssued": "2026-09-10"
+      },
+      {
+        "amount": 2000,
+        "teacherId": "t203",
+        "id": 23,
+        "month": "2026-09",
+        "note": "Fee share (100%) from student Harshita Negi (s110)",
+        "dateIssued": "2026-09-13"
+      },
+      {
+        "dateIssued": "2026-08-25",
+        "note": "Fee share (100%) from student Rishav Padiyar (s123)",
+        "amount": 1500,
+        "month": "2026-08",
+        "id": 24,
+        "teacherId": "t203"
+      },
+      {
+        "id": 25,
+        "note": "Fee share (100%) from student Abhay Joshi (s125)",
+        "month": "2026-09",
+        "amount": 1500,
+        "teacherId": "t203",
+        "dateIssued": "2026-09-15"
+      },
+      {
+        "amount": 2500,
+        "teacherId": "t203",
+        "note": "Fee share (100%) from student Soumil Bartwal (s115)",
+        "month": "2026-09",
+        "id": 26,
+        "dateIssued": "2026-09-13"
+      },
+      {
+        "dateIssued": "2026-09-18",
+        "id": 27,
+        "amount": 1230,
+        "teacherId": "t203",
+        "note": "Fee share (100%) from student Muskan Gussain (s118)",
+        "month": "2026-09"
+      },
+      {
+        "amount": 1530,
+        "note": "Fee share (100%) from student Anshul Negi (s124)",
+        "teacherId": "t203",
+        "dateIssued": "2026-10-03",
+        "month": "2026-10",
+        "id": 28
+      },
+      {
+        "amount": 2650,
+        "note": "Fee share (100%) from student Naman Bhandari (s116)",
+        "dateIssued": "2026-09-20",
+        "month": "2026-09",
+        "teacherId": "t203",
+        "id": 29
+      },
+      {
+        "month": "2026-10",
+        "note": "Fee share (100%) from student Ayush Rawat (s104)",
+        "dateIssued": "2026-10-08",
+        "teacherId": "t203",
+        "id": 30,
+        "amount": 1060
+      },
+      {
+        "teacherId": "t203",
+        "month": "2026-10",
+        "amount": 2370,
+        "note": "Fee share (100%) from student Abhinav Rana (s122)",
+        "id": 31,
+        "dateIssued": "2026-10-08"
+      },
+      {
+        "dateIssued": "2026-10-12",
+        "month": "2026-10",
+        "id": 32,
+        "teacherId": "t203",
+        "amount": 2000,
+        "note": "Fee share (100%) from student Harshita Negi (s110)"
+      },
+      {
+        "amount": 2500,
+        "note": "Fee share (100%) from student Soumil Bartwal (s115)",
+        "dateIssued": "2026-10-12",
+        "teacherId": "t203",
+        "month": "2026-10",
+        "id": 33
+      },
+      {
+        "id": 34,
+        "month": "2026-10",
+        "teacherId": "t203",
+        "dateIssued": "2026-10-03",
+        "note": "Fee share (100%) from student Harshit Maithani (s120)",
+        "amount": 1500
+      },
+      {
+        "teacherId": "t203",
+        "month": "2026-10",
+        "note": "Fee share (100%) from student Abhay Joshi (s125)",
+        "amount": 1500,
+        "id": 35,
+        "dateIssued": "2026-10-15"
+      },
+      {
+        "month": "2026-10",
+        "teacherId": "t203",
+        "note": "Fee share (100%) from student Anshi Rana (s106)",
+        "id": 36,
+        "amount": 1480,
+        "dateIssued": "2026-10-17"
+      },
+      {
+        "id": 37,
+        "teacherId": "t203",
+        "month": "2026-10",
+        "amount": 1200,
+        "dateIssued": "2026-10-17",
+        "note": "Fee share (100%) from student Muskan Gussain (s118)"
+      }
+    ]
+  },
+  "slideSections": {
+    "list": [
+      {
+        "id": "IX",
+        "title": "Class IX Slides"
+      },
+      {
+        "id": "X",
+        "title": "Class X Slides"
+      },
+      {
+        "id": "XI",
+        "title": "Class XI Slides"
+      },
+      {
+        "id": "XII",
+        "title": "Class XII Slides"
+      },
+      {
+        "id": "MISC",
+        "title": "Miscellaneous (MISC) Slides"
+      }
+    ]
+  },
+  "slides": {
+    "list": [
+      {
+        "link": "https://docs.google.com/presentation/d/10WUTyj71Wz-R1MwVXaC_16-E92ZGuR-ZJXiowrivcqs/edit?usp=sharing",
+        "title": "MATHS: REAL NUMBERS",
+        "addedBy": "admin",
+        "category": "X",
+        "id": "slide-1782893920480"
+      },
+      {
+        "category": "XII",
+        "id": "slide-1782894008680",
+        "link": "https://docs.google.com/presentation/d/1GtwUWGU8fwNxfHmIn1InxdEed5E1bwsp7ROF5D7W8Ts/edit?usp=sharing",
+        "addedBy": "admin",
+        "title": "MATHS: REALTION AND FUNCTION"
+      },
+      {
+        "id": "slide-1782894051978",
+        "title": "MATHS: INVERSE TRIGONOMETRIC FUNCTIONS",
+        "link": "https://docs.google.com/presentation/d/10wzbyfouunIN98xhEHQw0-kjocI3S6qTHuirTePYl00/edit?usp=sharing",
+        "addedBy": "admin",
+        "category": "XII"
+      },
+      {
+        "addedBy": "admin",
+        "link": "https://docs.google.com/presentation/d/1e1AYKM-gBdFcLnMZUqwZF0fhi7PooLjVHHyYP7GMPns/edit?usp=sharing",
+        "id": "slide-1782894107612",
+        "title": "MATHS: CONTINUITY AND DIFFERENTIABILITY",
+        "category": "XII"
+      },
+      {
+        "title": "MATHS: AP",
+        "category": "X",
+        "id": "slide-1782894179321",
+        "link": "https://docs.google.com/presentation/d/15VSIfdf8T8w-RpbeJJVyDC6EejBuJxH28Om_y3WENHo/edit?usp=sharing",
+        "addedBy": "admin"
+      },
+      {
+        "category": "XI",
+        "title": "MATHS: TRIGONOMETRY",
+        "id": "slide-1782894548500",
+        "addedBy": "admin",
+        "link": "https://docs.google.com/presentation/d/16z_v4xR6MrSlvd9DdX206rhz88njJ2TND2p2Hv4FvYA/edit?usp=sharing"
+      },
+      {
+        "link": "https://docs.google.com/presentation/d/1dLuZZ0NcAKczP9_5r3n1PHi2M6XoDFsBYm5gn7AXPLs/edit?usp=sharing",
+        "title": "MATHS- DIFFERENTIATION",
+        "addedBy": "t203",
+        "category": "XII",
+        "id": "slide-1782997495915"
+      },
+      {
+        "title": "SCIENCE: ACID, BASES AND SALTS",
+        "id": "slide-1783154896869",
+        "link": "https://docs.google.com/presentation/d/1f_NeC4E71kNM4yweHMHElVdv4zlB4s9IhTwHzSb6aMo/edit?usp=sharing",
+        "category": "X",
+        "addedBy": "admin"
+      },
+      {
+        "title": "MATHS: TRIANGLES",
+        "category": "X",
+        "id": "slide-1784283857115",
+        "link": "https://docs.google.com/presentation/d/1xnlxy155w8fnusPg23j-g6rDhqI2LkRo5eLZ5ZfeZvU/edit?usp=sharing",
+        "addedBy": "admin"
+      },
+      {
+        "id": "slide-1784902766114",
+        "addedBy": "admin",
+        "category": "XI",
+        "title": "MATHS: COMPLEX NUMBERS",
+        "link": "https://docs.google.com/presentation/d/1HWKk4H6LSjGogsBpJn8NpHFwIM8XvHjE4VGDxsQniEE/edit?usp=sharing"
+      },
+      {
+        "id": "slide-1785649366817",
+        "category": "XII",
+        "link": "https://docs.google.com/presentation/d/1SYSnHXuqEmGL58e_497CYY8mCrzjd0k0LZzHW0OV-RE/edit?slide=id.g3f9807d157f_0_0#slide=id.g3f9807d157f_0_0",
+        "addedBy": "admin",
+        "title": "MATHS: APPLICATIONS OF DERIVATIVES"
+      },
+      {
+        "category": "X",
+        "id": "slide-1786254674028",
+        "addedBy": "t203",
+        "title": "PHYSICS- ELECTRICITY",
+        "link": "https://docs.google.com/presentation/d/1N4LbrX8hRe-Mia9iTVx4dM78PxKDtCsHajg0jJIQuWc/edit?usp=sharing"
+      },
+      {
+        "link": "https://docs.google.com/presentation/d/1Tn5Fe3FYYIbNjQXtYHXfqGezsfNeBaQRaR09TRKnS7g/edit?usp=sharing",
+        "addedBy": "t203",
+        "category": "XI",
+        "title": "MATHS- PERMUTATIONS",
+        "id": "slide-1786538299860"
+      },
+      {
+        "id": "slide-1786779839770",
+        "addedBy": "admin",
+        "link": "https://docs.google.com/presentation/d/1J7sMndMMBJ1j1MK60xTTUFLbc_vFyzt0/edit?usp=sharing&ouid=104184934720268530487&rtpof=true&sd=true",
+        "category": "X",
+        "title": "MATHS: TRIGONOMETRY"
+      },
+      {
+        "link": "https://docs.google.com/presentation/d/1JFXHrA8_1Gtt3eNXRD2bV-HoZgKpXM6y9IPQtGwjieA/edit?usp=sharing",
+        "addedBy": "admin",
+        "title": "Maths- SEQUENCE AND SERIES",
+        "id": "slide-1787833641682",
+        "category": "XI"
+      },
+      {
+        "addedBy": "admin",
+        "id": "slide-1788440435110",
+        "link": "https://docs.google.com/presentation/d/1JgJztY0ZpkTGYKYUmFblVBc4OaxAsb8IaCu10GrL5-Q/edit?usp=sharing",
+        "title": "MATHS- INDEFINTE INTEGRALS",
+        "category": "XII"
+      },
+      {
+        "id": "slide-1788780929226",
+        "title": "MATHS- HEIGHTS AND DISTANCES",
+        "link": "https://docs.google.com/presentation/d/1wal1iMMHlOL7GAwje0COGUfa-fV9DEGDrKyWDygzbJ0/edit?usp=sharing",
+        "category": "X",
+        "addedBy": "admin"
+      },
+      {
+        "category": "MISC",
+        "id": "slide-1789314728673",
+        "title": "COMPUTER NETWORKS QUESTION BANK (GATE CSIT)",
+        "link": "https://docs.google.com/document/d/16H09XifTREq0BzP8MqykqZplBDc7bcBhVJSyNAfsdDI/edit?usp=sharing",
+        "addedBy": "admin"
+      },
+      {
+        "title": "OS",
+        "addedBy": "admin",
+        "category": "MISC",
+        "id": "slide-1790576239172",
+        "link": "https://docs.google.com/document/d/1V3J3zeGiKHaS5E5PA6Jt1CZGjyw8_4WlVa8RvyT0Thk/edit?usp=sharing"
+      },
+      {
+        "category": "MISC",
+        "id": "slide-1790576329048",
+        "title": "CN",
+        "addedBy": "admin",
+        "link": "https://docs.google.com/document/d/1u0Wm3AKJiMxwY6MfMuk0oa38K-s5erttNS54rsKT4eQ/edit?usp=sharing"
+      },
+      {
+        "id": "slide-1791475942188",
+        "category": "IX",
+        "link": "https://drive.google.com/file/d/1d7ttt9wGsqtV76iIqsUZJPBPtCznaNc2/view?usp=sharing",
+        "addedBy": "t203",
+        "title": "DATA STRUCTURES"
+      },
+      {
+        "link": "https://drive.google.com/file/d/1jLT9dkWkq__OG6wa9Xpu2RI-lZkYFMua/view?usp=sharing",
+        "title": "THEORY OF COMPUTATION",
+        "category": "IX",
+        "id": "slide-1791476212210",
+        "addedBy": "t203"
+      },
+      {
+        "title": "COMBINATIONS",
+        "id": "slide-1791956934205",
+        "link": "https://docs.google.com/presentation/d/1owKzAnPfZkVfgVaVqWrawC3hX7531SF0A995QqQxLbU/edit?usp=sharing",
+        "category": "XI",
+        "addedBy": "t203"
+      },
+      {
+        "addedBy": "admin",
+        "category": "XII",
+        "title": "MATHS- DEFINITE INTEGRALS",
+        "id": "slide-1792130453813",
+        "link": "https://docs.google.com/presentation/d/1hmFIMiKfVLestgdoUDDPvruGatebGZYX_zHtWd0-py4/edit?usp=sharing"
+      },
+      {
+        "addedBy": "admin",
+        "link": "https://docs.google.com/presentation/d/1yNueiDhrLcvuFQ5W2rc9QD_-RoZLyEZ1A7WO9trG2UE/edit?usp=sharing",
+        "category": "XI",
+        "id": "slide-1792748073522",
+        "title": "MATHS- STRAIGHT LINES"
+      },
+      {
+        "id": "slide-1793180695577",
+        "title": "ICSE MATH: PYTHAGORAS THEOREM",
+        "link": "https://docs.google.com/presentation/d/1ie7P_qcHVgXArVNxWSwu5T9eAdb08qWLZBfqOSS5PdQ/edit?usp=sharing",
+        "category": "IX",
+        "addedBy": "admin"
+      }
+    ]
+  },
+  "students": {
+    "list": [
+      {
+        "motherPhone": "9675703897",
+        "balance": 0,
+        "completedLectures": [
+          "C101::LIFE PROCESSES 01"
+        ],
+        "coins": 10,
+        "feePaid": 7120,
+        "fees": 1000,
+        "personalPhone": "",
+        "rewardedLectures": [
+          "C101::LIFE PROCESSES 01"
+        ],
+        "feeSplits": [
+          {
+            "percentage": 100,
+            "teacherId": "t203"
+          }
+        ],
+        "id": "s104",
+        "password": "ayushsanu",
+        "class": "X",
+        "totalPayableFee": 7120,
+        "lecturePermissions": [
+          "C101",
+          "C102",
+          "C103",
+          "C104"
+        ],
+        "feePayments": [
+          {
+            "markedBy": "Admin",
+            "finePaid": 0,
+            "cycleStart": "2026-04-04",
+            "paidOn": "2026-04-07"
+          },
+          {
+            "paidOn": "2026-05-07",
+            "finePaid": 0,
+            "cycleStart": "2026-05-04",
+            "markedBy": "Admin"
+          },
+          {
+            "finePaid": 0,
+            "cycleStart": "2026-06-03",
+            "markedBy": "Admin",
+            "paidOn": "2026-06-07"
+          },
+          {
+            "paidOn": "2026-07-05",
+            "cycleStart": "2026-07-03",
+            "finePaid": 0,
+            "markedBy": "Admin"
+          },
+          {
+            "paidOn": "2026-08-06",
+            "cycleStart": "2026-08-02",
+            "markedBy": "Admin",
+            "finePaid": 0
+          },
+          {
+            "feePaid": 1060,
+            "paidOn": "2026-09-08",
+            "finePaid": 60,
+            "totalPayableFee": 1060,
+            "cycleStart": "2026-09-01",
+            "balance": 0,
+            "markedBy": "Admin"
+          },
+          {
+            "paidOn": "2026-10-08",
+            "finePaid": 60,
+            "feePaid": 1060,
+            "markedBy": "Admin",
+            "cycleStart": "2026-10-01",
+            "balance": 0,
+            "totalPayableFee": 1060
+          }
+        ],
+        "dateOfJoining": "2026-04-04",
+        "name": "Ayush Rawat",
+        "fatherPhone": ""
+      },
+      {
+        "name": "Anshi Rana",
+        "feePaid": 9280,
+        "dateOfJoining": "2026-04-09",
+        "completedLectures": [],
+        "motherPhone": "9719815881",
+        "balance": 0,
+        "password": "Anshi",
+        "personalPhone": "",
+        "fees": 1300,
+        "fatherPhone": "",
+        "totalPayableFee": 9280,
+        "class": "X",
+        "feeSplits": [
+          {
+            "percentage": 100,
+            "teacherId": "t203"
+          }
+        ],
+        "lecturePermissions": [
+          "C104",
+          "C103",
+          "C102",
+          "C101"
+        ],
+        "feePayments": [
+          {
+            "paidOn": "2026-04-04",
+            "markedBy": "Admin",
+            "finePaid": 0,
+            "cycleStart": "2026-04-09"
+          },
+          {
+            "markedBy": "Admin",
+            "finePaid": 0,
+            "paidOn": "2026-05-12",
+            "cycleStart": "2026-05-09"
+          },
+          {
+            "cycleStart": "2026-06-08",
+            "paidOn": "2026-06-10",
+            "finePaid": 0,
+            "markedBy": "Shneh Rawat"
+          },
+          {
+            "markedBy": "Admin",
+            "paidOn": "2026-07-09",
+            "cycleStart": "2026-07-08",
+            "finePaid": 0
+          },
+          {
+            "paidOn": "2026-08-07",
+            "markedBy": "Admin",
+            "finePaid": 0,
+            "cycleStart": "2026-08-07"
+          },
+          {
+            "totalPayableFee": 1300,
+            "paidOn": "2026-09-10",
+            "markedBy": "Admin",
+            "balance": 0,
+            "feePaid": 1300,
+            "finePaid": 0,
+            "cycleStart": "2026-09-06"
+          },
+          {
+            "markedBy": "Admin",
+            "cycleStart": "2026-10-06",
+            "balance": 0,
+            "paidOn": "2026-10-17",
+            "totalPayableFee": 1480,
+            "finePaid": 180,
+            "feePaid": 1480
+          }
+        ],
+        "id": "s106"
+      },
+      {
+        "password": "harshita29",
+        "rewardedLectures": [
+          "C108::LECTURE 1 (ELECTRIC CHARGES AND FIELDS)",
+          "C108::LECTURE 2 (ELECTRIC CHARGES AND FIELDS)",
+          "C108::LECTURE 3 (ELECTRIC CHARGES AND FIELDS)",
+          "C108::LECTURE 4 (ELECTRIC CHARGES AND FIELDS)",
+          "C108::LECTURE 5 (ELECTRIC CHARGES AND FIELDS)",
+          "C108::LECTURE 6 (ELECTRIC CHARGES AND FIELDS)",
+          "C108::LECTURE 7 (ELECTRIC CHARGES AND FIELDS)",
+          "C108::LECTURE 8 (ELECTRIC CHARGES AND FIELDS)",
+          "C108::LECTURE 9 (ELECTRIC CHARGES AND FIELDS)",
+          "C108::LECTURE 10 (ELECTRIC CHARGES AND FIELDS)",
+          "C108::LECTURE 11 (ELECTRIC CHARGES AND FIELDS)",
+          "C108::LECTURE 12 (ELECTRIC CHARGES AND FIELDS)",
+          "C107::LECTURE 1 (SOLUTIONS)",
+          "C107::LECTURE 2 (SOLUTIONS)",
+          "C107::LECTURE 3 (SOLUTIONS)",
+          "C107::LECTURE 8 (SOLUTIONS)",
+          "C107::LECTURE 6 (SOLUTIONS)",
+          "C107::LECTURE 7 (SOLUTIONS)",
+          "C107::LECTURE 5 (SOLUTIONS)",
+          "C107::LECTURE 4 (SOLUTIONS)",
+          "C107::LECTURE 9 (SOLUTIONS)",
+          "C107::LECTURE 10 (SOLUTIONS)",
+          "C108::LECTURE 13 (ELECTRIC CHARGES AND FIELDS)",
+          "C107::LECTURE 12 (SOLUTIONS)",
+          "C107::LECTURE 11 (SOLUTIONS)",
+          "C107::LECTURE 13 (SOLUTIONS)",
+          "C107::LECTURE 14 (SOLUTIONS)",
+          "C107::LECTURE 1 (ELECTROCHEMISTRY)",
+          "C108::LECTURE 14 (ELECTRIC CHARGES AND FIELDS)"
+        ],
+        "fees": 2000,
+        "dateOfJoining": "2026-04-13",
+        "motherPhone": "9410357308",
+        "totalPayableFee": 14000,
+        "class": "XII",
+        "personalPhone": "9286954376",
+        "lecturePermissions": [
+          "C107",
+          "C108"
+        ],
         "feePayments": [
           {
             "paidOn": "2026-04-15",
@@ -567,377 +1772,3627 @@
             "finePaid": 0
           },
           {
+            "finePaid": 0,
             "cycleStart": "2026-05-13",
-            "paidOn": "2026-05-14",
-            "finePaid": 0,
-            "markedBy": "Admin"
-          }
-        ],
-        "password": "harshita29",
-        "name": "Harshita Negi",
-        "dateOfJoining": "2026-04-13"
-      },
-      {
-        "personalPhone": "",
-        "motherPhone": "6396217516",
-        "name": "Sagar Rawat",
-        "feeSplits": [
-          {
-            "percentage": 35,
-            "teacherId": "t202"
-          },
-          {
-            "percentage": 65,
-            "teacherId": "t203"
-          }
-        ],
-        "class": "X",
-        "fees": 1400,
-        "dateOfJoining": "2026-05-01",
-        "feePayments": [
-          {
-            "cycleStart": "2026-05-01",
-            "paidOn": "2026-05-05",
-            "finePaid": 0,
-            "markedBy": "Admin"
-          }
-        ],
-        "password": "sagarrawat",
-        "fatherPhone": "7983178233",
-        "id": "s111"
-      },
-      {
-        "dateOfJoining": "2026-05-04",
-        "feePayments": [
-          {
-            "paidOn": "2026-05-08",
-            "cycleStart": "2026-05-04",
             "markedBy": "Admin",
-            "finePaid": 0
+            "paidOn": "2026-05-14"
+          },
+          {
+            "markedBy": "Shneh Rawat",
+            "finePaid": 0,
+            "cycleStart": "2026-06-12",
+            "paidOn": "2026-06-12"
+          },
+          {
+            "finePaid": 0,
+            "markedBy": "Admin",
+            "paidOn": "2026-07-12",
+            "cycleStart": "2026-07-12"
+          },
+          {
+            "cycleStart": "2026-08-11",
+            "markedBy": "Admin",
+            "finePaid": 0,
+            "paidOn": "2026-08-11"
+          },
+          {
+            "cycleStart": "2026-09-10",
+            "totalPayableFee": 2000,
+            "feePaid": 2000,
+            "finePaid": 0,
+            "paidOn": "2026-09-13",
+            "balance": 0,
+            "markedBy": "Admin"
+          },
+          {
+            "totalPayableFee": 2000,
+            "cycleStart": "2026-10-10",
+            "finePaid": 0,
+            "feePaid": 2000,
+            "balance": 0,
+            "markedBy": "Admin",
+            "paidOn": "2026-10-12"
           }
         ],
-        "password": "yukiti 90",
-        "fatherPhone": "7678691088",
-        "id": "s113",
-        "personalPhone": "",
-        "motherPhone": "8800423967",
-        "name": "Yuktika Negi",
-        "feeSplits": [
+        "balance": 0,
+        "notes": [
           {
-            "percentage": 35,
-            "teacherId": "t202"
-          },
+            "text": "+20 Coins for getting highest marks in math(P&C) test.",
+            "date": "03 SEPTEMBER 2026",
+            "id": "note_1788449260153_12yh",
+            "authorName": "Admin",
+            "authorRole": "admin",
+            "createdAt": "2026-09-03T15:27:40.153Z"
+          }
+        ],
+        "coins": 310,
+        "name": "Harshita Negi",
+        "completedLectures": [
+          "C108::LECTURE 1 (ELECTRIC CHARGES AND FIELDS)",
+          "C108::LECTURE 2 (ELECTRIC CHARGES AND FIELDS)",
+          "C108::LECTURE 3 (ELECTRIC CHARGES AND FIELDS)",
+          "C108::LECTURE 4 (ELECTRIC CHARGES AND FIELDS)",
+          "C108::LECTURE 5 (ELECTRIC CHARGES AND FIELDS)",
+          "C108::LECTURE 6 (ELECTRIC CHARGES AND FIELDS)",
+          "C108::LECTURE 7 (ELECTRIC CHARGES AND FIELDS)",
+          "C108::LECTURE 8 (ELECTRIC CHARGES AND FIELDS)",
+          "C108::LECTURE 9 (ELECTRIC CHARGES AND FIELDS)",
+          "C108::LECTURE 10 (ELECTRIC CHARGES AND FIELDS)",
+          "C108::LECTURE 11 (ELECTRIC CHARGES AND FIELDS)",
+          "C108::LECTURE 12 (ELECTRIC CHARGES AND FIELDS)",
+          "C107::LECTURE 1 (SOLUTIONS)",
+          "C107::LECTURE 2 (SOLUTIONS)",
+          "C107::LECTURE 3 (SOLUTIONS)",
+          "C107::LECTURE 8 (SOLUTIONS)",
+          "C107::LECTURE 6 (SOLUTIONS)",
+          "C107::LECTURE 7 (SOLUTIONS)",
+          "C107::LECTURE 5 (SOLUTIONS)",
+          "C107::LECTURE 4 (SOLUTIONS)",
+          "C107::LECTURE 9 (SOLUTIONS)",
+          "C107::LECTURE 10 (SOLUTIONS)",
+          "C108::LECTURE 13 (ELECTRIC CHARGES AND FIELDS)",
+          "C107::LECTURE 12 (SOLUTIONS)",
+          "C107::LECTURE 11 (SOLUTIONS)",
+          "C107::LECTURE 13 (SOLUTIONS)",
+          "C107::LECTURE 14 (SOLUTIONS)",
+          "C107::LECTURE 1 (ELECTROCHEMISTRY)",
+          "C108::LECTURE 14 (ELECTRIC CHARGES AND FIELDS)"
+        ],
+        "fatherPhone": "6398635384",
+        "feePaid": 14000,
+        "id": "s110",
+        "feeSplits": [
           {
             "teacherId": "t203",
-            "percentage": 65
-          }
-        ],
-        "fees": 1400,
-        "class": "X"
-      },
-      {
-        "dateOfJoining": "2026-05-04",
-        "password": "aisha @123",
-        "feePayments": [
-          {
-            "cycleStart": "2026-05-04",
-            "paidOn": "2026-05-09",
-            "finePaid": 0,
-            "markedBy": "Admin"
-          }
-        ],
-        "fatherPhone": "",
-        "id": "s114",
-        "name": "Aisha Kaintura",
-        "personalPhone": "",
-        "motherPhone": "7817030337",
-        "class": "X",
-        "fees": 1400,
-        "feeSplits": [
-          {
-            "teacherId": "t202",
-            "percentage": 35
-          },
-          {
-            "percentage": 65,
-            "teacherId": "t203"
+            "percentage": 100
           }
         ]
       },
       {
-        "dateOfJoining": "2026-05-13",
         "feePayments": [
           {
             "markedBy": "Admin",
-            "finePaid": 210,
             "paidOn": "2026-05-25",
+            "finePaid": 210,
             "cycleStart": "2026-05-13"
-          }
-        ],
-        "password": "soumil@123",
-        "fatherPhone": "9927972182",
-        "id": "s115",
-        "personalPhone": "9520273690",
-        "motherPhone": "8076466227",
-        "name": "Soumil Bartwal",
-        "feeSplits": [
+          },
           {
-            "teacherId": "t203",
-            "percentage": 100
-          }
-        ],
-        "fees": 2500,
-        "class": "NDA"
-      },
-      {
-        "name": "Naman Bhandari",
-        "personalPhone": "7302042808",
-        "motherPhone": "9634237408",
-        "fees": 2500,
-        "class": "NDA",
-        "feeSplits": [
-          {
-            "teacherId": "t203",
-            "percentage": 100
-          }
-        ],
-        "dateOfJoining": "2026-05-13",
-        "password": "iamdevil",
-        "feePayments": [
-          {
-            "finePaid": 300,
+            "paidOn": "2026-06-12",
+            "finePaid": 0,
             "markedBy": "Admin",
-            "cycleStart": "2026-05-13",
-            "paidOn": "2026-05-28"
-          }
-        ],
-        "fatherPhone": "9917094040",
-        "id": "s116"
-      },
-      {
-        "fatherPhone": "6395218052",
-        "id": "s118",
-        "dateOfJoining": "2026-05-15",
-        "feePayments": [
+            "cycleStart": "2026-06-12"
+          },
           {
             "markedBy": "Admin",
             "finePaid": 0,
-            "paidOn": "2026-05-18",
-            "cycleStart": "2026-05-15"
+            "cycleStart": "2026-07-12",
+            "paidOn": "2026-07-13"
+          },
+          {
+            "paidOn": "2026-08-10",
+            "finePaid": 0,
+            "cycleStart": "2026-08-11",
+            "markedBy": "Admin"
+          },
+          {
+            "totalPayableFee": 2500,
+            "markedBy": "Admin",
+            "balance": 0,
+            "paidOn": "2026-09-13",
+            "cycleStart": "2026-09-10",
+            "finePaid": 0,
+            "feePaid": 2500
+          },
+          {
+            "cycleStart": "2026-10-10",
+            "balance": 0,
+            "markedBy": "Admin",
+            "paidOn": "2026-10-12",
+            "finePaid": 0,
+            "totalPayableFee": 2500,
+            "feePaid": 2500
           }
         ],
+        "totalPayableFee": 15210,
+        "fees": 2500,
+        "feeSplits": [
+          {
+            "teacherId": "t203",
+            "percentage": 100
+          }
+        ],
+        "feePaid": 15210,
+        "personalPhone": "9520273690",
+        "class": "XII",
+        "rewardedLectures": [
+          "C110::Introduction 01 : Introduction",
+          "C110::Making of Indian Constitution 01 : Making of Indian Constitution",
+          "C110::Constituent Assembly 01 : Constituent Assembly",
+          "C110::Schedules of Indian Constitution 01 : Schedules of Indian Constitution",
+          "C110::Borrowing and Salient Features of Indian Constitution 01 : Borrowing and Salient Features of Indian Constitution",
+          "C109::001 Basic_of_English_Grammar_01___Basic_of_English_Grammar_1",
+          "C109::002 Basic of English Grammar 02 _ Basic of English Grammar -2",
+          "C109::003 Basic_of_English_Grammar_03___Basic_of_English_Grammar_3",
+          "C109::004 Root Words 01 _ Root Words - 1",
+          "C109::005 Root Words 02 _ Root Words -2",
+          "C109::008 Tenses 01 _ Tenses - 1",
+          "C109::009 Tenses 02 _ Tenses (Part 2) || Rescheduled",
+          "C109::010 Tenses 03 _ Tenses (Part 3) || Rescheduled",
+          "C109::011- NOUNS 01",
+          "C109::012 Nouns 02 _ Nouns (Part 02) || (Recorded)",
+          "C109::013 Pronoun 01 _ Pronoun (Part 01)",
+          "C109::014 Pronoun 02 _ Pronoun (Part 02)",
+          "C109::015 Synonyms_and_Antonyms_01___Synonyms_and_Antonyms_Part_1_",
+          "C109::016 Synonyms and Antonyms 02 _ Synonyms and Antonyms (Part 02)",
+          "C109::017 Adjectives 01 _ Adjectives (Part 01) || Recorded",
+          "C109::006 Subject Verb Agreement 01 _ Subject verb agreement -1",
+          "C110::Preamble 01 : Preamble",
+          "C110::Fundamental Rights 01 : Fundamental Rights (Part 01)",
+          "C110::Fundamental Rights 02 : Fundamental Rights (Part 02)",
+          "C110::DPSP 01 : DPSP",
+          "C110::Union and Citizenship 01 : Union and Citizenship",
+          "C110::Parliament 01 : Parliament || No MCQ Quiz",
+          "C110::Parliament 02 : Parliament (Part 02)",
+          "C110::Election Process 01 : Election Process || Recorded",
+          "C109::007 Subject_Verb_Agreement_02___Subject_verb_agreement_2_||_",
+          "C111::Indus_Valley_Civilization_01___Indus_Valley_Civilization",
+          "C111::Indus_Valley_Civilization_02___Indus_Valley_Civilization",
+          "C111::Indus_Valley_Civilization_03___Indus_Valley_Civilization",
+          "C111::Title: Vedic Civilization 01 : Vedic Civilization -1",
+          "C111::Vedic Civilization 02 _ Vedic Civilization -2",
+          "C111::Religious Movement 01 : Religious Movement",
+          "C111::Religious Movements 02 : Religious Movements- 2",
+          "C110::DEMO LECTURE"
+        ],
+        "fatherPhone": "9927972182",
+        "balance": 0,
+        "dateOfJoining": "2026-05-13",
+        "name": "Soumil Bartwal",
+        "lecturePermissions": [
+          "C109",
+          "C110",
+          "C111",
+          "C112",
+          "C113",
+          "C114"
+        ],
+        "id": "s115",
+        "motherPhone": "8076466227",
+        "completedLectures": [
+          "C110::Introduction 01 : Introduction",
+          "C110::Making of Indian Constitution 01 : Making of Indian Constitution",
+          "C110::Constituent Assembly 01 : Constituent Assembly",
+          "C110::Schedules of Indian Constitution 01 : Schedules of Indian Constitution",
+          "C110::Borrowing and Salient Features of Indian Constitution 01 : Borrowing and Salient Features of Indian Constitution",
+          "C109::001 Basic_of_English_Grammar_01___Basic_of_English_Grammar_1",
+          "C109::002 Basic of English Grammar 02 _ Basic of English Grammar -2",
+          "C109::003 Basic_of_English_Grammar_03___Basic_of_English_Grammar_3",
+          "C109::004 Root Words 01 _ Root Words - 1",
+          "C109::005 Root Words 02 _ Root Words -2",
+          "C109::008 Tenses 01 _ Tenses - 1",
+          "C109::009 Tenses 02 _ Tenses (Part 2) || Rescheduled",
+          "C109::010 Tenses 03 _ Tenses (Part 3) || Rescheduled",
+          "C109::011- NOUNS 01",
+          "C109::012 Nouns 02 _ Nouns (Part 02) || (Recorded)",
+          "C109::013 Pronoun 01 _ Pronoun (Part 01)",
+          "C109::014 Pronoun 02 _ Pronoun (Part 02)",
+          "C109::015 Synonyms_and_Antonyms_01___Synonyms_and_Antonyms_Part_1_",
+          "C109::016 Synonyms and Antonyms 02 _ Synonyms and Antonyms (Part 02)",
+          "C109::017 Adjectives 01 _ Adjectives (Part 01) || Recorded",
+          "C109::006 Subject Verb Agreement 01 _ Subject verb agreement -1",
+          "C110::Preamble 01 : Preamble",
+          "C110::Fundamental Rights 01 : Fundamental Rights (Part 01)",
+          "C110::Fundamental Rights 02 : Fundamental Rights (Part 02)",
+          "C110::DPSP 01 : DPSP",
+          "C110::Union and Citizenship 01 : Union and Citizenship",
+          "C110::Parliament 01 : Parliament || No MCQ Quiz",
+          "C110::Parliament 02 : Parliament (Part 02)",
+          "C110::Election Process 01 : Election Process || Recorded",
+          "C109::007 Subject_Verb_Agreement_02___Subject_verb_agreement_2_||_",
+          "C111::Indus_Valley_Civilization_01___Indus_Valley_Civilization",
+          "C111::Indus_Valley_Civilization_02___Indus_Valley_Civilization",
+          "C111::Indus_Valley_Civilization_03___Indus_Valley_Civilization",
+          "C111::Title: Vedic Civilization 01 : Vedic Civilization -1",
+          "C111::Vedic Civilization 02 _ Vedic Civilization -2",
+          "C111::Religious Movement 01 : Religious Movement",
+          "C111::Religious Movements 02 : Religious Movements- 2",
+          "C110::DEMO LECTURE"
+        ],
+        "coins": 380,
+        "notes": [
+          {
+            "date": "03 SEPTEMBER 2026",
+            "id": "note_1788449299648_v7lt",
+            "text": "UNINFORMED LEAVE",
+            "createdAt": "2026-09-03T15:28:19.648Z",
+            "authorRole": "admin",
+            "authorName": "Admin"
+          }
+        ],
+        "password": "soumil@123"
+      },
+      {
+        "feePayments": [
+          {
+            "markedBy": "Admin",
+            "cycleStart": "2026-05-15",
+            "paidOn": "2026-05-18",
+            "finePaid": 0
+          },
+          {
+            "markedBy": "Admin",
+            "cycleStart": "2026-06-14",
+            "finePaid": 0,
+            "paidOn": "2026-06-19"
+          },
+          {
+            "paidOn": "2026-07-17",
+            "finePaid": 0,
+            "markedBy": "Admin",
+            "cycleStart": "2026-07-14"
+          },
+          {
+            "totalPayableFee": 1200,
+            "markedBy": "Admin",
+            "balance": 0,
+            "finePaid": 0,
+            "feePaid": 1200,
+            "cycleStart": "2026-08-13",
+            "paidOn": "2026-08-18"
+          },
+          {
+            "feePaid": 1230,
+            "markedBy": "Admin",
+            "paidOn": "2026-09-18",
+            "cycleStart": "2026-09-12",
+            "finePaid": 30,
+            "balance": 0,
+            "totalPayableFee": 1230
+          },
+          {
+            "balance": 0,
+            "paidOn": "2026-10-17",
+            "markedBy": "Admin",
+            "cycleStart": "2026-10-12",
+            "totalPayableFee": 1200,
+            "feePaid": 1200,
+            "finePaid": 0
+          }
+        ],
+        "id": "s118",
+        "feeSplits": [
+          {
+            "teacherId": "t203",
+            "percentage": 100
+          }
+        ],
+        "name": "Muskan Gussain",
+        "coins": 1120,
+        "completedLectures": [
+          "C105::LECTURE 1 (MOLE CONCEPT)",
+          "C105::LECTURE 2 (MOLE CONCEPT)",
+          "C105::LECTURE 3 (MOLE CONCEPT)",
+          "C105::LECTURE 4 (MOLE CONCEPT)",
+          "C105::LECTURE 5 (MOLE CONCEPT)",
+          "C105::LECTURE 6 (MOLE CONCEPT)",
+          "C105::LECTURE 7 (MOLE CONCEPT)",
+          "C105::LECTURE 8 (MOLE CONCEPT)",
+          "C105::LECTURE 9 (MOLE CONCEPT)",
+          "C105::LECTURE 10 (MOLE CONCEPT)",
+          "C106::LECTURE 1 (UNITS AND MEASUREMENT)",
+          "C106::LECTURE 2 (UNITS AND MEASUREMENT)",
+          "C106::LECTURE 3 (UNITS AND MEASUREMENT)",
+          "C106::LECTURE 4 (UNITS AND MEASUREMENT)",
+          "C106::LECTURE 5 (UNITS AND MEASUREMENT)",
+          "C106::LECTURE 6 (UNITS AND MEASUREMENT)",
+          "C106::LECTURE 7 (UNITS AND MEASUREMENT)",
+          "C106::LECTURE 8 (UNITS AND MEASUREMENT)",
+          "C106::LECTURE 9 (UNITS AND MEASUREMENT)",
+          "C106::LECTURE 10 (UNITS AND MEASUREMENT)",
+          "C106::LECTURE 11 (UNITS AND MEASUREMENT)",
+          "C106::LECTURE 12 (UNITS AND MEASUREMENT)",
+          "C106::LECTURE 13 (UNITS AND MEASUREMENT)",
+          "C106::MATHEMATICAL TOOL 01",
+          "C106::MATHEMATICAL TOOL 02",
+          "C105::LECTURE 11 (MOLE CONCEPT)",
+          "C106::MATHEMATICAL TOOL 03",
+          "C106::MATHEMATICAL TOOL 04",
+          "C105::LECTURE 1 (STRUCTURE OF ATOMS)",
+          "C105::LECTURE 2 (STRUCTURE OF ATOMS)",
+          "C106::MATHEMATICAL TOOL 05",
+          "C106::MATHEMATICAL TOOL 06",
+          "C105::LECTURE 3 (STRUCTURE OF ATOMS)",
+          "C105::LECTURE 4 (STRUCTURE OF ATOMS)",
+          "C105::LECTURE 5 (STRUCTURE OF ATOMS)",
+          "C105::LECTURE 6 (STRUCTURE OF ATOMS)",
+          "C106::MATHEMATICAL TOOL 07",
+          "C105::LECTURE 7 (STRUCTURE OF ATOMS)",
+          "C106::MATHEMATICAL TOOL 08",
+          "C106::MATHEMATICAL TOOL 09",
+          "C105::LECTURE 9 (STRUCTURE OF ATOMS)",
+          "C106::MATHEMATICAL TOOL 10",
+          "C105::LECTURE 10 (STRUCTURE OF ATOMS)",
+          "C105::LECTURE 11 (STRUCTURE OF ATOMS)",
+          "C106::MATHEMATICAL TOOL 11",
+          "C106::MOTION IN ONE DIMENSION 01",
+          "C106::MOTION IN ONE DIMENSIONS 02",
+          "C105::LECTURE 12 (STRUCTURE OF ATOMS)",
+          "C106::MOTION IN ONE DIMENSION 03",
+          "C106::MOTION IN ONE DIMENSION 04",
+          "C105::LECTURE 13 (STRUCTURE OF ATOMS)",
+          "C105::LECTURE 14 (STRUCTURE OF ATOMS)",
+          "C106::MOTION IN ONE DIMENSION 05",
+          "C105::LECTURE 15 (STRUCTURE OF ATOMS)",
+          "C105::LECTURE 16 (STRUCTURE OF ATOMS)",
+          "C106::MOTION IN ONE DIMENSION 06",
+          "C106::MOTION IN ONE DIMENSION 07",
+          "C106::MOTION IN ONE DIMENSION 08",
+          "C105::LECTURE 17 (STRUCTURE OF ATOMS)",
+          "C105::LECTURE 1 (PERIODIC TABLE)",
+          "C106::MOTION IN ONE DIMENSION 09",
+          "C106::MOTION IN ONE DIMENSION 10",
+          "C106::MOTION IN ONE DIMENSION 11",
+          "C106::MOTION IN ONE DIMENSION 12",
+          "C106::MOTION IN ONE DIMENSION 13",
+          "C105::LECTURE 2 (PERIODIC TABLE)",
+          "C105::LECTURE 3 (PERIODIC TABLE)",
+          "C105::LECTURE 4 (PERIODIC TABLE)",
+          "C106::LECTURE 1 (MOTION IN 2D)",
+          "C106::LECTURE 2 (MOTION IN 2D)",
+          "C106::LECTURE 3 (MOTION IN 2D)",
+          "C106::LECTURE 4 (MOTION IN 2D)",
+          "C105::LECTURE 5 (PERIODIC TABLE)",
+          "C106::LECTURE 5 (MOTION IN 2D)",
+          "C106::LECTURE 6 (MOTION IN 2D)",
+          "C105::LECTURE 6 (PERIODIC TABLE)",
+          "C105::LECTURE 7 (PERIODIC TABLE)",
+          "C106::LECTURE 7 (MOTION IN 2D)",
+          "C106::LECTURE 8 (MOTION IN 2D)",
+          "C105::LECTURE 8 (PERIODIC TABLE)",
+          "C105::LECTURE 9 (PERIODIC TABLE)",
+          "C106::LECTURE 9 (MOTION IN 2D)",
+          "C106::LECTURE 10 (MOTION IN 2D)",
+          "C106::LECTURE 11 (MOTION IN 2D)",
+          "C105::LECTURE 10 (PERIODIC TABLE)",
+          "C105::LECTURE 11 (PERIODIC TABLE)",
+          "C106::LECTURE 12 (MOTION IN 2D)",
+          "C106::LECTURE 13 (MOTION IN 2D)",
+          "C105::LECTURE 12 (PERIODIC TABLE)",
+          "C105::LECTURE 13 (PERIODIC TABLE)",
+          "C106::LECTURE 14 (MOTION IN 2D)",
+          "C106::LECTURE 1 LAWS OF MOTION",
+          "C106::LECTURE 2 LAWS OF MOTION",
+          "C105::LECTURE 14 (PERIODIC TABLE)",
+          "C106::LECTURE 3 LAWS OF MOTION",
+          "C105::LECTURE 15 (PERIODIC TABLE)",
+          "C105::LECTURE 01 CHEMICAL BONDING",
+          "C106::LECTURE 4 LAWS OF MOTION",
+          "C106::LECTURE 5 LAWS OF MOTION",
+          "C105::LECTURE 02 CHEMICAL BONDING",
+          "C106::LECTURE 6 LAWS OF MOTION",
+          "C105::LECTURE 03 CHEMICAL BONDING",
+          "C106::LECTURE 7 LAWS OF MOTION",
+          "C106::LECTURE 8 LAWS OF MOTION",
+          "C105::LECTURE 04 CHEMICAL BONDING",
+          "C106::LECTURE 9 LAWS OF MOTION",
+          "C106::LECTURE 10 LAWS OF MOTION",
+          "C105::LECTURE 05 CHEMICAL BONDING",
+          "C105::LECTURE 06 CHEMICAL BONDING",
+          "C105::LECTURE 07 CHEMICAL BONDING",
+          "C106::LECTURE 18 LAWS OF MOTION",
+          "C106::LECTURE 19 LAWS OF MOTION"
+        ],
+        "fatherPhone": "6395218052",
+        "dateOfJoining": "2026-05-15",
+        "class": "XI",
+        "motherPhone": "8279893159",
+        "lecturePermissions": [
+          "C106",
+          "C105"
+        ],
+        "balance": 0,
+        "feePaid": 7230,
+        "totalPayableFee": 7230,
         "password": "muskan gusain 2312",
+        "personalPhone": "9258954184",
+        "fees": 1200,
+        "rewardedLectures": [
+          "C106::LECTURE 6 (MOTION IN 2D)",
+          "C105::LECTURE 1 (MOLE CONCEPT)",
+          "C105::LECTURE 2 (MOLE CONCEPT)",
+          "C105::LECTURE 3 (MOLE CONCEPT)",
+          "C105::LECTURE 4 (MOLE CONCEPT)",
+          "C105::LECTURE 5 (MOLE CONCEPT)",
+          "C105::LECTURE 6 (MOLE CONCEPT)",
+          "C105::LECTURE 7 (MOLE CONCEPT)",
+          "C105::LECTURE 8 (MOLE CONCEPT)",
+          "C105::LECTURE 9 (MOLE CONCEPT)",
+          "C105::LECTURE 10 (MOLE CONCEPT)",
+          "C106::LECTURE 1 (UNITS AND MEASUREMENT)",
+          "C106::LECTURE 2 (UNITS AND MEASUREMENT)",
+          "C106::LECTURE 3 (UNITS AND MEASUREMENT)",
+          "C106::LECTURE 4 (UNITS AND MEASUREMENT)",
+          "C106::LECTURE 5 (UNITS AND MEASUREMENT)",
+          "C106::LECTURE 6 (UNITS AND MEASUREMENT)",
+          "C106::LECTURE 7 (UNITS AND MEASUREMENT)",
+          "C106::LECTURE 8 (UNITS AND MEASUREMENT)",
+          "C106::LECTURE 9 (UNITS AND MEASUREMENT)",
+          "C106::LECTURE 10 (UNITS AND MEASUREMENT)",
+          "C106::LECTURE 11 (UNITS AND MEASUREMENT)",
+          "C106::LECTURE 12 (UNITS AND MEASUREMENT)",
+          "C106::LECTURE 13 (UNITS AND MEASUREMENT)",
+          "C106::MATHEMATICAL TOOL 01",
+          "C106::MATHEMATICAL TOOL 02",
+          "C105::LECTURE 11 (MOLE CONCEPT)",
+          "C106::MATHEMATICAL TOOL 03",
+          "C106::MATHEMATICAL TOOL 04",
+          "C105::LECTURE 1 (STRUCTURE OF ATOMS)",
+          "C105::LECTURE 2 (STRUCTURE OF ATOMS)",
+          "C106::MATHEMATICAL TOOL 05",
+          "C106::MATHEMATICAL TOOL 06",
+          "C105::LECTURE 3 (STRUCTURE OF ATOMS)",
+          "C105::LECTURE 4 (STRUCTURE OF ATOMS)",
+          "C105::LECTURE 5 (STRUCTURE OF ATOMS)",
+          "C105::LECTURE 6 (STRUCTURE OF ATOMS)",
+          "C106::MATHEMATICAL TOOL 07",
+          "C105::LECTURE 7 (STRUCTURE OF ATOMS)",
+          "C106::MATHEMATICAL TOOL 08",
+          "C106::MATHEMATICAL TOOL 09",
+          "C105::LECTURE 9 (STRUCTURE OF ATOMS)",
+          "C106::MATHEMATICAL TOOL 10",
+          "C105::LECTURE 10 (STRUCTURE OF ATOMS)",
+          "C105::LECTURE 11 (STRUCTURE OF ATOMS)",
+          "C106::MATHEMATICAL TOOL 11",
+          "C106::MOTION IN ONE DIMENSION 01",
+          "C106::MOTION IN ONE DIMENSIONS 02",
+          "C105::LECTURE 12 (STRUCTURE OF ATOMS)",
+          "C106::MOTION IN ONE DIMENSION 03",
+          "C106::MOTION IN ONE DIMENSION 04",
+          "C105::LECTURE 13 (STRUCTURE OF ATOMS)",
+          "C105::LECTURE 14 (STRUCTURE OF ATOMS)",
+          "C106::MOTION IN ONE DIMENSION 05",
+          "C105::LECTURE 15 (STRUCTURE OF ATOMS)",
+          "C105::LECTURE 16 (STRUCTURE OF ATOMS)",
+          "C106::MOTION IN ONE DIMENSION 06",
+          "C106::MOTION IN ONE DIMENSION 07",
+          "C106::MOTION IN ONE DIMENSION 08",
+          "C105::LECTURE 17 (STRUCTURE OF ATOMS)",
+          "C105::LECTURE 1 (PERIODIC TABLE)",
+          "C106::MOTION IN ONE DIMENSION 09",
+          "C106::MOTION IN ONE DIMENSION 10",
+          "C106::MOTION IN ONE DIMENSION 11",
+          "C106::MOTION IN ONE DIMENSION 12",
+          "C106::MOTION IN ONE DIMENSION 13",
+          "C105::LECTURE 2 (PERIODIC TABLE)",
+          "C105::LECTURE 3 (PERIODIC TABLE)",
+          "C105::LECTURE 4 (PERIODIC TABLE)",
+          "C106::LECTURE 1 (MOTION IN 2D)",
+          "C106::LECTURE 2 (MOTION IN 2D)",
+          "C106::LECTURE 3 (MOTION IN 2D)",
+          "C106::LECTURE 4 (MOTION IN 2D)",
+          "C105::LECTURE 5 (PERIODIC TABLE)",
+          "C106::LECTURE 5 (MOTION IN 2D)",
+          "C105::LECTURE 6 (PERIODIC TABLE)",
+          "C105::LECTURE 7 (PERIODIC TABLE)",
+          "C106::LECTURE 7 (MOTION IN 2D)",
+          "C106::LECTURE 8 (MOTION IN 2D)",
+          "C105::LECTURE 8 (PERIODIC TABLE)",
+          "C105::LECTURE 9 (PERIODIC TABLE)",
+          "C106::LECTURE 9 (MOTION IN 2D)",
+          "C106::LECTURE 10 (MOTION IN 2D)",
+          "C106::LECTURE 11 (MOTION IN 2D)",
+          "C105::LECTURE 10 (PERIODIC TABLE)",
+          "C105::LECTURE 11 (PERIODIC TABLE)",
+          "C106::LECTURE 12 (MOTION IN 2D)",
+          "C106::LECTURE 13 (MOTION IN 2D)",
+          "C105::LECTURE 12 (PERIODIC TABLE)",
+          "C105::LECTURE 13 (PERIODIC TABLE)",
+          "C106::LECTURE 14 (MOTION IN 2D)",
+          "C106::LECTURE 1 LAWS OF MOTION",
+          "C106::LECTURE 2 LAWS OF MOTION",
+          "C105::LECTURE 14 (PERIODIC TABLE)",
+          "C106::LECTURE 3 LAWS OF MOTION",
+          "C105::LECTURE 15 (PERIODIC TABLE)",
+          "C105::LECTURE 01 CHEMICAL BONDING",
+          "C106::LECTURE 4 LAWS OF MOTION",
+          "C106::LECTURE 5 LAWS OF MOTION",
+          "C105::LECTURE 02 CHEMICAL BONDING",
+          "C106::LECTURE 6 LAWS OF MOTION",
+          "C105::LECTURE 03 CHEMICAL BONDING",
+          "C106::LECTURE 7 LAWS OF MOTION",
+          "C106::LECTURE 8 LAWS OF MOTION",
+          "C105::LECTURE 04 CHEMICAL BONDING",
+          "C106::LECTURE 9 LAWS OF MOTION",
+          "C106::LECTURE 10 LAWS OF MOTION",
+          "C105::LECTURE 05 CHEMICAL BONDING",
+          "C105::LECTURE 06 CHEMICAL BONDING",
+          "C105::LECTURE 07 CHEMICAL BONDING",
+          "C106::LECTURE 18 LAWS OF MOTION",
+          "C106::LECTURE 19 LAWS OF MOTION"
+        ]
+      },
+      {
+        "name": "Harshit Maithani",
+        "id": "s120",
+        "lecturePermissions": [
+          "C101",
+          "C102",
+          "C103",
+          "C104"
+        ],
+        "dateOfJoining": "2026-07-01",
+        "feePayments": [
+          {
+            "finePaid": 0,
+            "markedBy": "Admin",
+            "paidOn": "2026-07-05",
+            "cycleStart": "2026-07-01"
+          },
+          {
+            "paidOn": "2026-08-02",
+            "feePaid": 1500,
+            "finePaid": 0,
+            "cycleStart": "2026-07-31",
+            "totalPayableFee": 2160,
+            "markedBy": "Admin",
+            "balance": 660
+          },
+          {
+            "paidOn": "2026-09-07",
+            "finePaid": 90,
+            "feePaid": 1590,
+            "balance": 0,
+            "totalPayableFee": 1590,
+            "markedBy": "Admin",
+            "cycleStart": "2026-08-30"
+          },
+          {
+            "markedBy": "Admin",
+            "feePaid": 1500,
+            "totalPayableFee": 1500,
+            "cycleStart": "2026-09-29",
+            "balance": 0,
+            "paidOn": "2026-10-03",
+            "finePaid": 0
+          }
+        ],
+        "feePaid": 6090,
+        "balance": 0,
+        "feeSplits": [
+          {
+            "teacherId": "t203",
+            "percentage": 100
+          }
+        ],
+        "totalPayableFee": 6750,
+        "personalPhone": "",
+        "fatherPhone": "9720437635",
+        "password": "maakali",
+        "class": "X",
+        "fees": 1500,
+        "motherPhone": "8979717523",
+        "completedLectures": [
+          "C101::LIFE PROCESSES 01",
+          "C101::LIFE PROCESSES 02",
+          "C102::RISE OF NATIONALISM IN EUROPE LECTURE 01",
+          "C101::LIFE PROCESSES 03"
+        ],
+        "coins": 40,
+        "rewardedLectures": [
+          "C101::LIFE PROCESSES 01",
+          "C101::LIFE PROCESSES 02",
+          "C102::RISE OF NATIONALISM IN EUROPE LECTURE 01",
+          "C101::LIFE PROCESSES 03"
+        ]
+      },
+      {
+        "dateOfJoining": "2026-07-02",
+        "motherPhone": "8958060015",
+        "balance": 1620,
+        "lecturePermissions": [
+          "C101",
+          "C102",
+          "C103",
+          "C104"
+        ],
+        "name": "Lavanya Pegwal",
+        "password": "lavanya27",
+        "personalPhone": "",
         "feeSplits": [
           {
             "percentage": 100,
             "teacherId": "t203"
           }
+        ],
+        "feePaid": 3720,
+        "class": "X",
+        "totalPayableFee": 5340,
+        "notes": [
+          {
+            "date": "03 SEPTEMBER 2026",
+            "id": "note_1788449334834_npit",
+            "text": "UNINFORMED LEAVE",
+            "authorName": "Admin",
+            "authorRole": "admin",
+            "createdAt": "2026-09-03T15:28:54.834Z"
+          }
+        ],
+        "fees": 1500,
+        "feePayments": [
+          {
+            "balance": 1620,
+            "markedBy": "Admin",
+            "cycleStart": "2026-07-02",
+            "paidOn": "2026-07-04",
+            "totalPayableFee": 3120,
+            "feePaid": 1500,
+            "finePaid": 0
+          },
+          {
+            "cycleStart": "2026-08-01",
+            "markedBy": "Admin",
+            "paidOn": "2026-08-03",
+            "balance": 0,
+            "totalPayableFee": 2220,
+            "finePaid": 0,
+            "feePaid": 2220
+          }
+        ],
+        "id": "s121",
+        "fatherPhone": "8279427180"
+      },
+      {
+        "fatherPhone": "7248584090",
+        "rewardedLectures": [
+          "C101::LIFE PROCESSES 01",
+          "C101::LIFE PROCESSES 02",
+          "C101::LIFE PROCESSES 03",
+          "C101::LIFE PROCESSES 04",
+          "C101::LIFE PROCESSES 05",
+          "C101::LIFE PROCESSES 06",
+          "C101::LIFE PROCESSES 07",
+          "C101::LIFE PROCESSES 08",
+          "C101::LIFE PROCESSES 09",
+          "C101::LIFE PROCESSES 10",
+          "C101::LIFE PROCESSES 11",
+          "C101::LIFE PROCESSES 12"
+        ],
+        "name": "Abhinav Rana",
+        "feePayments": [
+          {
+            "paidOn": "2026-07-10",
+            "cycleStart": "2026-07-06",
+            "markedBy": "Admin",
+            "finePaid": 0
+          },
+          {
+            "feePaid": 1500,
+            "cycleStart": "2026-08-05",
+            "markedBy": "Admin",
+            "totalPayableFee": 1500,
+            "finePaid": 0,
+            "paidOn": "2026-08-08",
+            "balance": 0
+          },
+          {
+            "paidOn": "2026-10-08",
+            "balance": 0,
+            "totalPayableFee": 2370,
+            "markedBy": "Admin",
+            "feePaid": 2370,
+            "cycleStart": "2026-09-04",
+            "finePaid": 870
+          }
+        ],
+        "coins": 120,
+        "password": "akkibhai",
+        "completedLectures": [
+          "C101::LIFE PROCESSES 01",
+          "C101::LIFE PROCESSES 02",
+          "C101::LIFE PROCESSES 03",
+          "C101::LIFE PROCESSES 04",
+          "C101::LIFE PROCESSES 05",
+          "C101::LIFE PROCESSES 06",
+          "C101::LIFE PROCESSES 07",
+          "C101::LIFE PROCESSES 08",
+          "C101::LIFE PROCESSES 09",
+          "C101::LIFE PROCESSES 10",
+          "C101::LIFE PROCESSES 11",
+          "C101::LIFE PROCESSES 12"
+        ],
+        "lecturePermissions": [
+          "C101",
+          "C102",
+          "C103",
+          "C104"
+        ],
+        "class": "X",
+        "feePaid": 5370,
+        "dateOfJoining": "2026-07-06",
+        "fees": 1500,
+        "feeSplits": [
+          {
+            "teacherId": "t203",
+            "percentage": 100
+          }
+        ],
+        "balance": 0,
+        "id": "s122",
+        "motherPhone": "8958102151",
+        "personalPhone": "",
+        "totalPayableFee": 5370
+      },
+      {
+        "motherPhone": "8859329107",
+        "id": "s124",
+        "lecturePermissions": [
+          "C105",
+          "C106",
+          "C109"
         ],
         "class": "XI",
+        "feePaid": 2910,
+        "dateOfJoining": "2026-08-18",
+        "password": "anshul1824",
         "fees": 1200,
-        "personalPhone": "9258954184",
-        "motherPhone": "8279893159",
-        "name": "Muskan Gussain"
+        "balance": 0,
+        "personalPhone": "",
+        "completedLectures": [
+          "C105::LECTURE 1 (MOLE CONCEPT)",
+          "C105::LECTURE 3 (MOLE CONCEPT)",
+          "C105::LECTURE 2 (MOLE CONCEPT)",
+          "C105::LECTURE 4 (MOLE CONCEPT)",
+          "C105::LECTURE 5 (MOLE CONCEPT)",
+          "C105::LECTURE 6 (MOLE CONCEPT)",
+          "C105::LECTURE 7 (MOLE CONCEPT)",
+          "C105::LECTURE 9 (MOLE CONCEPT)"
+        ],
+        "feePayments": [
+          {
+            "feePaid": 1380,
+            "cycleStart": "2026-08-18",
+            "totalPayableFee": 1380,
+            "paidOn": "2026-08-29",
+            "markedBy": "Admin",
+            "balance": 0,
+            "finePaid": 180
+          },
+          {
+            "balance": 0,
+            "finePaid": 330,
+            "totalPayableFee": 1530,
+            "cycleStart": "2026-09-17",
+            "markedBy": "Admin",
+            "paidOn": "2026-10-03",
+            "feePaid": 1530
+          }
+        ],
+        "rewardedLectures": [
+          "C105::LECTURE 1 (MOLE CONCEPT)",
+          "C105::LECTURE 3 (MOLE CONCEPT)",
+          "C105::LECTURE 2 (MOLE CONCEPT)",
+          "C105::LECTURE 4 (MOLE CONCEPT)",
+          "C105::LECTURE 5 (MOLE CONCEPT)",
+          "C105::LECTURE 6 (MOLE CONCEPT)",
+          "C105::LECTURE 7 (MOLE CONCEPT)",
+          "C105::LECTURE 9 (MOLE CONCEPT)"
+        ],
+        "totalPayableFee": 2910,
+        "name": "Anshul Negi",
+        "coins": 80,
+        "fatherPhone": "9250164647",
+        "feeSplits": [
+          {
+            "teacherId": "t203",
+            "percentage": 100
+          }
+        ]
       },
       {
-        "fees": 2500,
-        "class": "NDA",
+        "dateOfJoining": "2026-08-31",
+        "totalPayableFee": 3000,
+        "name": "Abhay Joshi",
+        "class": "XII",
+        "fatherPhone": "",
+        "personalPhone": "8266995633",
+        "feePayments": [
+          {
+            "totalPayableFee": 1500,
+            "feePaid": 1500,
+            "finePaid": 300,
+            "paidOn": "2026-09-15",
+            "cycleStart": "2026-08-31",
+            "balance": 0,
+            "markedBy": "Admin"
+          },
+          {
+            "markedBy": "Admin",
+            "balance": 0,
+            "cycleStart": "2026-09-30",
+            "paidOn": "2026-10-15",
+            "totalPayableFee": 1500,
+            "finePaid": 300,
+            "feePaid": 1500
+          }
+        ],
+        "feePaid": 3000,
+        "id": "s125",
         "feeSplits": [
           {
             "percentage": 100,
             "teacherId": "t203"
           }
         ],
-        "name": "Priyanshu Bisht",
-        "motherPhone": "9760059009",
-        "personalPhone": "8979033718",
-        "id": "s119",
-        "fatherPhone": "8218752720",
-        "password": "14711471",
+        "fees": 1200,
+        "password": "paradigm@123",
+        "balance": 0,
+        "motherPhone": "6397162651",
+        "lecturePermissions": [
+          "C107",
+          "C108"
+        ]
+      },
+      {
         "feePayments": [
           {
-            "finePaid": 0,
+            "cycleStart": "2026-09-24",
+            "balance": 0,
+            "totalPayableFee": 0,
             "markedBy": "Admin",
-            "cycleStart": "2026-05-16",
-            "paidOn": "2026-05-16"
+            "paidOn": "2026-09-25",
+            "feePaid": 0,
+            "finePaid": 0
           }
         ],
-        "dateOfJoining": "2026-05-16"
+        "feePaid": 0,
+        "fees": 0,
+        "fatherPhone": "",
+        "password": "aayubhai",
+        "balance": 0,
+        "feeSplits": [],
+        "id": "s126",
+        "motherPhone": "",
+        "personalPhone": "",
+        "class": "X",
+        "totalPayableFee": 0,
+        "name": "AAYU RAWAT",
+        "lecturePermissions": [
+          "C101",
+          "C102",
+          "C103",
+          "C104"
+        ],
+        "dateOfJoining": "2026-09-24"
+      },
+      {
+        "feePayments": [],
+        "personalPhone": "",
+        "password": "paradigm@123",
+        "motherPhone": "9760987583",
+        "fees": 1200,
+        "name": "Ayush Singh",
+        "class": "XI",
+        "fatherPhone": "",
+        "feeSplits": [
+          {
+            "percentage": 100,
+            "teacherId": "t203"
+          }
+        ],
+        "id": "s127",
+        "dateOfJoining": "2026-10-20"
+      },
+      {
+        "fees": 2000,
+        "motherPhone": "7906394093",
+        "name": "PANKHUDI THAPA",
+        "feePayments": [],
+        "dateOfJoining": "2026-10-25",
+        "password": "paradigm@123",
+        "feeSplits": [
+          {
+            "teacherId": "t203",
+            "percentage": 100
+          }
+        ],
+        "fatherPhone": "",
+        "id": "s128",
+        "personalPhone": "",
+        "class": "IX ICSE"
+      },
+      {
+        "dateOfJoining": "2026-10-25",
+        "id": "s129",
+        "fatherPhone": "8218752720",
+        "name": "NISHIKA BISHT",
+        "password": "paradigm@123",
+        "fees": 2000,
+        "motherPhone": "9760059009",
+        "personalPhone": "",
+        "class": "IX ICSE",
+        "feePayments": [],
+        "feeSplits": [
+          {
+            "teacherId": "t203",
+            "percentage": 100
+          }
+        ]
       }
     ]
   },
   "teachers": {
     "list": [
       {
-        "name": "Harshita Semwal",
-        "id": "t202",
-        "password": "paradigmhunny678",
-        "currentSalary": 5670
-      },
-      {
+        "name": "Shneh Rawat",
         "currentSalary": 22430,
         "password": "shneh@1234",
-        "id": "t203",
-        "name": "Shneh Rawat"
+        "id": "t203"
       }
     ]
   },
   "tests": {
     "list": [
       {
-        "date": "2026-05-24",
-        "subject": "MATH 04",
-        "published": true,
-        "id": 3,
         "maxMarks": 40,
         "marks": [
           {
-            "studentId": "s101",
-            "mark": 6
+            "studentId": "s110",
+            "mark": 21
           },
           {
-            "studentId": "s102",
-            "mark": 4
+            "mark": 8,
+            "studentId": "s115"
           },
           {
-            "studentId": "s103",
-            "mark": 4
+            "mark": 9,
+            "studentId": "s116"
           },
+          {
+            "studentId": "s125",
+            "mark": 8
+          }
+        ],
+        "targetClass": "XII",
+        "subject": "ITF",
+        "date": "2026-10-15",
+        "id": 26,
+        "published": true
+      },
+      {
+        "subject": "FUNCTIONS",
+        "date": "2026-10-15",
+        "maxMarks": 40,
+        "id": 25,
+        "marks": [
+          {
+            "studentId": "s118",
+            "mark": 12
+          },
+          {
+            "mark": 4,
+            "studentId": "s124"
+          }
+        ],
+        "targetClass": "XI",
+        "published": true
+      },
+      {
+        "marks": [
           {
             "studentId": "s104",
-            "mark": 5
+            "mark": 8
           },
           {
-            "studentId": "s105",
-            "mark": 5
+            "mark": 13,
+            "studentId": "s106"
           },
           {
-            "studentId": "s106",
-            "mark": 6
-          },
-          {
-            "studentId": "s107",
-            "mark": 0
-          },
-          {
-            "studentId": "s108",
-            "mark": 0
-          },
-          {
-            "studentId": "s109",
-            "mark": 1
-          },
-          {
-            "studentId": "s110",
-            "mark": 19
-          },
-          {
-            "studentId": "s111",
+            "studentId": "s120",
             "mark": 4
           },
           {
-            "studentId": "s112",
+            "studentId": "s121",
+            "mark": 6
+          },
+          {
+            "studentId": "s122",
+            "mark": 12
+          }
+        ],
+        "published": true,
+        "maxMarks": 30,
+        "date": "2026-10-15",
+        "id": 24,
+        "subject": "TRIGO",
+        "targetClass": "X"
+      },
+      {
+        "date": "2026-10-15",
+        "targetClass": "X",
+        "marks": [
+          {
+            "studentId": "s104",
             "mark": 11
           },
           {
-            "studentId": "s113",
-            "mark": 2
+            "studentId": "s106",
+            "mark": 0
           },
           {
-            "studentId": "s114",
-            "mark": 4
+            "studentId": "s120",
+            "mark": 12
+          },
+          {
+            "studentId": "s121",
+            "mark": 5
+          },
+          {
+            "studentId": "s122",
+            "mark": 1
+          }
+        ],
+        "maxMarks": 40,
+        "published": true,
+        "id": 23,
+        "subject": "AOT"
+      },
+      {
+        "marks": [
+          {
+            "studentId": "s118",
+            "mark": 25
+          },
+          {
+            "studentId": "s124",
+            "mark": 14
+          }
+        ],
+        "date": "2026-10-06",
+        "id": 22,
+        "targetClass": "XI",
+        "published": true,
+        "subject": "SETS & RELATIONS",
+        "maxMarks": 40
+      },
+      {
+        "marks": [
+          {
+            "mark": 27,
+            "studentId": "s110"
           },
           {
             "studentId": "s115",
-            "mark": 5
+            "mark": 4
+          },
+          {
+            "mark": 16,
+            "studentId": "s116"
+          },
+          {
+            "studentId": "s125",
+            "mark": 23
+          }
+        ],
+        "date": "2026-10-06",
+        "maxMarks": 40,
+        "id": 21,
+        "targetClass": "XII",
+        "subject": "REL & FUNC",
+        "published": true
+      },
+      {
+        "subject": "P&C",
+        "marks": [
+          {
+            "studentId": "s115",
+            "mark": 14
           },
           {
             "studentId": "s116",
+            "mark": 0
+          }
+        ],
+        "id": 20,
+        "date": "2026-09-01",
+        "published": true,
+        "targetClass": "NDA",
+        "maxMarks": 40
+      },
+      {
+        "maxMarks": 30,
+        "id": 19,
+        "date": "2026-09-01",
+        "marks": [
+          {
+            "studentId": "s104",
+            "mark": 10
+          },
+          {
+            "studentId": "s106",
             "mark": 2
           },
           {
-            "studentId": "s118",
-            "mark": 31
+            "mark": 6,
+            "studentId": "s113"
           },
           {
-            "studentId": "s119",
-            "mark": 5
+            "mark": 0,
+            "studentId": "s114"
+          },
+          {
+            "studentId": "s120",
+            "mark": 8
+          },
+          {
+            "mark": 2,
+            "studentId": "s121"
+          },
+          {
+            "studentId": "s122",
+            "mark": 3
+          },
+          {
+            "mark": 1,
+            "studentId": "s123"
+          }
+        ],
+        "subject": "ELECTRICITY",
+        "targetClass": "X",
+        "published": true
+      },
+      {
+        "published": true,
+        "targetClass": "XI",
+        "marks": [
+          {
+            "studentId": "s118",
+            "mark": 23
+          },
+          {
+            "mark": 26,
+            "studentId": "s124"
+          }
+        ],
+        "id": 17,
+        "subject": "P&C",
+        "maxMarks": 40,
+        "date": "2026-09-01"
+      },
+      {
+        "marks": [
+          {
+            "studentId": "s104",
+            "mark": 21
+          },
+          {
+            "mark": 12,
+            "studentId": "s106"
+          },
+          {
+            "studentId": "s113",
+            "mark": 4
+          },
+          {
+            "mark": 6,
+            "studentId": "s114"
+          },
+          {
+            "studentId": "s120",
+            "mark": 7
+          },
+          {
+            "studentId": "s121",
+            "mark": 9
+          },
+          {
+            "mark": 12,
+            "studentId": "s122"
+          },
+          {
+            "mark": 8,
+            "studentId": "s123"
+          }
+        ],
+        "date": "2026-08-18",
+        "subject": "MATH 1-5+Triangles",
+        "targetClass": "X",
+        "maxMarks": 80,
+        "published": true,
+        "id": 13
+      }
+    ]
+  },
+  "videoLectures": {
+    "list": [
+      {
+        "id": "C101",
+        "videos": [
+          {
+            "title": "LIFE PROCESSES 01",
+            "link": "https://t.me/c/3964281243/20"
+          },
+          {
+            "title": "LIFE PROCESSES 02",
+            "link": "https://t.me/c/3964281243/21"
+          },
+          {
+            "title": "LIFE PROCESSES 03",
+            "link": "https://t.me/c/3964281243/22"
+          },
+          {
+            "title": "LIFE PROCESSES 04",
+            "link": "https://t.me/c/3964281243/23"
+          },
+          {
+            "link": "https://t.me/c/3964281243/24",
+            "title": "LIFE PROCESSES 05"
+          },
+          {
+            "link": "https://t.me/c/3964281243/25",
+            "title": "LIFE PROCESSES 06"
+          },
+          {
+            "link": "https://t.me/c/3964281243/26",
+            "title": "LIFE PROCESSES 07"
+          },
+          {
+            "link": "https://t.me/c/3964281243/27",
+            "title": "LIFE PROCESSES 08"
+          },
+          {
+            "title": "LIFE PROCESSES 09",
+            "link": "https://t.me/c/3964281243/28"
+          },
+          {
+            "title": "LIFE PROCESSES 10",
+            "link": "https://t.me/c/3964281243/29"
+          },
+          {
+            "title": "LIFE PROCESSES 11",
+            "link": "https://t.me/c/3964281243/30"
+          },
+          {
+            "title": "LIFE PROCESSES 12",
+            "link": "https://t.me/c/3964281243/31"
+          },
+          {
+            "title": "CONTROL & COORDINATION 01",
+            "link": "https://t.me/c/3964281243/32"
+          },
+          {
+            "title": "CONTROL & COORDINATION 02",
+            "link": "https://t.me/c/3964281243/33"
+          },
+          {
+            "title": "CONTROL & COORDINATION 03",
+            "link": "https://t.me/c/3964281243/34"
+          },
+          {
+            "link": "https://t.me/c/3964281243/35",
+            "title": "CONTROL & COORDINATION 04"
+          },
+          {
+            "link": "https://t.me/c/3964281243/36",
+            "title": "CONTROL & COORDINATION 05"
+          },
+          {
+            "title": "CONTROL & COORDINATION 06",
+            "link": "https://t.me/c/3964281243/37"
+          },
+          {
+            "link": "https://t.me/c/3964281243/38",
+            "title": "CONTROL & COORDINATION 07"
+          },
+          {
+            "title": "HOW DO ORG REPRODUCE 01",
+            "link": "https://t.me/c/3964281243/39"
+          },
+          {
+            "link": "https://t.me/c/3964281243/40",
+            "title": "HOW DO ORG REPRODUCE 02"
+          },
+          {
+            "title": "HOW DO ORG REPRODUCE 03",
+            "link": "https://t.me/c/3964281243/41"
+          },
+          {
+            "title": "HOW DO ORG REPRODUCE 04",
+            "link": "https://t.me/c/3964281243/42"
+          },
+          {
+            "title": "HOW DO ORG REPRODUCE 05",
+            "link": "https://t.me/c/3964281243/43"
+          },
+          {
+            "link": "https://t.me/c/3964281243/44",
+            "title": "HOW DO ORG REPRODUCE 06"
+          },
+          {
+            "title": "HOW DO ORG REPRODUCE 07",
+            "link": "https://t.me/c/3964281243/45"
+          },
+          {
+            "link": "https://t.me/c/3964281243/46",
+            "title": "HOW DO ORG REPRODUCE 08"
+          },
+          {
+            "link": "https://t.me/c/3964281243/47",
+            "title": "HOW DO ORG REPRODUCE 09"
+          },
+          {
+            "title": "HEREDITY 01",
+            "link": "https://t.me/c/3964281243/48"
+          },
+          {
+            "title": "HEREDITY 02",
+            "link": "https://t.me/c/3964281243/49"
+          },
+          {
+            "link": "https://t.me/c/3964281243/50",
+            "title": "HEREDITY 03"
+          },
+          {
+            "title": "HEREDITY 04",
+            "link": "https://t.me/c/3964281243/51"
+          },
+          {
+            "title": "HEREDITY 05",
+            "link": "https://t.me/c/3964281243/52"
+          },
+          {
+            "link": "https://t.me/c/3964281243/53",
+            "title": "HEREDITY 06"
+          },
+          {
+            "title": "OUR ENV 01",
+            "link": "https://t.me/c/3964281243/54"
+          },
+          {
+            "link": "https://t.me/c/3964281243/55",
+            "title": "OUR ENV 02"
+          },
+          {
+            "link": "https://t.me/c/3964281243/56",
+            "title": "OUR ENV 03"
+          }
+        ],
+        "title": "Class X(BIO)"
+      },
+      {
+        "videos": [
+          {
+            "title": "RISE OF NATIONALISM IN EUROPE LECTURE 01",
+            "link": "https://t.me/c/3964281243/57"
+          },
+          {
+            "link": "https://t.me/c/3964281243/58",
+            "title": "RISE OF NATIONALISM IN EUROPE LECTURE 02"
+          },
+          {
+            "link": "https://t.me/c/3964281243/59",
+            "title": "RISE OF NATIONALISM IN EUROPE LECTURE 03"
+          },
+          {
+            "link": "https://t.me/c/3964281243/60",
+            "title": "RISE OF NATIONALISM IN EUROPE LECTURE 04"
+          },
+          {
+            "title": "RISE OF NATIONALISM IN EUROPE LECTURE 05",
+            "link": "https://t.me/c/3964281243/61"
+          },
+          {
+            "link": "https://t.me/c/3964281243/62",
+            "title": "RISE OF NATIONALISM IN EUROPE LECTURE 06"
+          },
+          {
+            "link": "https://t.me/c/3964281243/63",
+            "title": "RISE OF NATIONALISM IN EUROPE LECTURE 07"
+          },
+          {
+            "link": "https://t.me/c/3964281243/64",
+            "title": "NATIONALISM IN INDIA LECTURE 01"
+          },
+          {
+            "title": "NATIONALISM IN INDIA LECTURE 02",
+            "link": "https://t.me/c/3964281243/65"
+          },
+          {
+            "link": "https://t.me/c/3964281243/66",
+            "title": "NATIONALISM IN INDIA LECTURE 03"
+          },
+          {
+            "link": "https://t.me/c/3964281243/67",
+            "title": "NATIONALISM IN INDIA LECTURE 04"
+          },
+          {
+            "link": "https://t.me/c/3964281243/68",
+            "title": "NATIONALISM IN INDIA LECTURE 05"
+          },
+          {
+            "title": "NATIONALISM IN INDIA LECTURE 06",
+            "link": "https://t.me/c/3964281243/69"
+          },
+          {
+            "title": "NATIONALISM IN INDIA LECTURE 07",
+            "link": "https://t.me/c/3964281243/70"
+          },
+          {
+            "link": "https://t.me/c/3964281243/71",
+            "title": "NATIONALISM IN INDIA LECTURE 08"
+          },
+          {
+            "link": "https://t.me/c/3964281243/72",
+            "title": "The Making Of The Global World (ONE SHOT)"
+          },
+          {
+            "link": "https://t.me/c/3964281243/73",
+            "title": "Print Culture And The Modern World LECTURE 01"
+          },
+          {
+            "link": "https://t.me/c/3964281243/74",
+            "title": "Print Culture And The Modern World LECTURE 02"
+          },
+          {
+            "link": "https://t.me/c/3964281243/75",
+            "title": "Print Culture And The Modern World LECTURE 03"
+          },
+          {
+            "link": "https://t.me/c/3964281243/76",
+            "title": "Print Culture And The Modern World LECTURE 04"
+          },
+          {
+            "title": "Print Culture And The Modern World LECTURE 05",
+            "link": "https://t.me/c/3964281243/77"
+          },
+          {
+            "title": "Print Culture And The Modern World LECTURE 06",
+            "link": "https://t.me/c/3964281243/78"
+          },
+          {
+            "link": "https://t.me/c/3964281243/79",
+            "title": "The Age Of Industrialisation LECTURE 01"
+          }
+        ],
+        "title": "Class X(SST)",
+        "id": "C102"
+      },
+      {
+        "title": "Class X(ENGLISH)",
+        "videos": [],
+        "id": "C103"
+      },
+      {
+        "title": "Class X(HINDI)",
+        "videos": [],
+        "id": "C104"
+      },
+      {
+        "title": "Class XI/JEE/NEET – CHEMISTRY",
+        "id": "C105",
+        "videos": [
+          {
+            "link": "https://youtu.be/lRZjIRrUtKo",
+            "title": "LECTURE 1 (MOLE CONCEPT)"
+          },
+          {
+            "link": "https://youtu.be/ImC6dJTQ450",
+            "title": "LECTURE 2 (MOLE CONCEPT)"
+          },
+          {
+            "link": "https://youtu.be/zv-ce-c-lYc",
+            "title": "LECTURE 3 (MOLE CONCEPT)"
+          },
+          {
+            "title": "LECTURE 4 (MOLE CONCEPT)",
+            "link": "https://youtu.be/4geULeBmNoA"
+          },
+          {
+            "link": "https://youtu.be/354nFq0YDD8",
+            "title": "LECTURE 5 (MOLE CONCEPT)"
+          },
+          {
+            "title": "LECTURE 6 (MOLE CONCEPT)",
+            "link": "https://youtu.be/jWSdvbsMn2U"
+          },
+          {
+            "title": "LECTURE 7 (MOLE CONCEPT)",
+            "link": "https://youtu.be/xAC9eqEYunM"
+          },
+          {
+            "link": "",
+            "title": "LECTURE 8 (MOLE CONCEPT)"
+          },
+          {
+            "link": "https://youtu.be/j_Vz9arKr3s",
+            "title": "LECTURE 9 (MOLE CONCEPT)"
+          },
+          {
+            "link": "https://youtu.be/4lRv5ZwejJY",
+            "title": "LECTURE 10 (MOLE CONCEPT)"
+          },
+          {
+            "link": "https://youtu.be/t_oQiiU8QRQ",
+            "title": "LECTURE 11 (MOLE CONCEPT)"
+          },
+          {
+            "link": "https://youtu.be/wGNFncDooaw",
+            "title": "LECTURE 12 (MOLE CONCEPT)"
+          },
+          {
+            "title": "LECTURE 13 (MOLE CONCEPT)",
+            "link": "https://youtu.be/4KisbLnQFhM"
+          },
+          {
+            "title": "LECTURE 14 (MOLE CONCEPT)",
+            "link": "https://youtu.be/md3cr-wiaik"
+          },
+          {
+            "link": "",
+            "title": "LECTURE 15 (MOLE CONCEPT)"
+          },
+          {
+            "title": "LECTURE 16 (MOLE CONCEPT)",
+            "link": "https://youtu.be/0UYs1GkwWQk"
+          },
+          {
+            "title": "LECTURE 17 (MOLE CONCEPT)",
+            "link": "https://youtu.be/JdbQGmmo-9k"
+          },
+          {
+            "link": "https://youtu.be/HfR6rasMZi0",
+            "title": "LECTURE 18 (MOLE CONCEPT)"
+          },
+          {
+            "link": "https://youtu.be/Ncit8kuoVs8",
+            "title": "LECTURE 19 (MOLE CONCEPT)"
+          },
+          {
+            "link": "https://youtu.be/g3Vq9IPipI8",
+            "title": "LECTURE 20 (MOLE CONCEPT)"
+          },
+          {
+            "link": "https://youtu.be/yIYJFSm06lY",
+            "title": "LECTURE 21 (MOLE CONCEPT)"
+          },
+          {
+            "title": "LECTURE 1 (STRUCTURE OF ATOMS)",
+            "link": "https://youtu.be/6r11IC31azc"
+          },
+          {
+            "link": "https://youtu.be/6y1gcln7imY",
+            "title": "LECTURE 2 (STRUCTURE OF ATOMS)"
+          },
+          {
+            "title": "LECTURE 3 (STRUCTURE OF ATOMS)",
+            "link": "https://youtu.be/dDAV7KIkpI4"
+          },
+          {
+            "link": "https://youtu.be/WQVvmHJQzJM",
+            "title": "LECTURE 4 (STRUCTURE OF ATOMS)"
+          },
+          {
+            "title": "LECTURE 5 (STRUCTURE OF ATOMS)",
+            "link": "https://youtu.be/2vDL-HgRaiw"
+          },
+          {
+            "title": "LECTURE 6 (STRUCTURE OF ATOMS)",
+            "link": "https://youtu.be/_dc3bAkjPpc"
+          },
+          {
+            "link": "https://youtu.be/cQXduIQwxiQ",
+            "title": "LECTURE 7 (STRUCTURE OF ATOMS)"
+          },
+          {
+            "link": "",
+            "title": "LECTURE 8 (STRUCTURE OF ATOMS)"
+          },
+          {
+            "link": "https://youtu.be/mNzFQ5SR2tU",
+            "title": "LECTURE 9 (STRUCTURE OF ATOMS)"
+          },
+          {
+            "link": "https://youtu.be/8HxJri_-EW4",
+            "title": "LECTURE 10 (STRUCTURE OF ATOMS)"
+          },
+          {
+            "title": "LECTURE 11 (STRUCTURE OF ATOMS)",
+            "link": "https://youtu.be/RhR50AHP8RA"
+          },
+          {
+            "title": "LECTURE 12 (STRUCTURE OF ATOMS)",
+            "link": "https://youtu.be/16z1gcln7imY"
+          },
+          {
+            "link": "https://youtu.be/17z1gcln7imY",
+            "title": "LECTURE 13 (STRUCTURE OF ATOMS)"
+          },
+          {
+            "link": "https://youtu.be/rw6uAkdvZGI",
+            "title": "LECTURE 14 (STRUCTURE OF ATOMS)"
+          },
+          {
+            "title": "LECTURE 15 (STRUCTURE OF ATOMS)",
+            "link": "https://youtu.be/MZwkWFtfcaI"
+          },
+          {
+            "title": "LECTURE 16 (STRUCTURE OF ATOMS)",
+            "link": "https://youtu.be/3mDA-NkxiPI"
+          },
+          {
+            "link": "https://youtu.be/tUoMtQh5Uus",
+            "title": "LECTURE 17 (STRUCTURE OF ATOMS)"
+          },
+          {
+            "link": "https://youtu.be/6maBgI0XwXk",
+            "title": "LECTURE 1 (PERIODIC TABLE)"
+          },
+          {
+            "title": "LECTURE 2 (PERIODIC TABLE)",
+            "link": "https://youtu.be/mhuAAdCVZGY"
+          },
+          {
+            "link": "https://youtu.be/xeaIZLy3-wQ",
+            "title": "LECTURE 3 (PERIODIC TABLE)"
+          },
+          {
+            "link": "https://youtu.be/vBFGLmjvxaY",
+            "title": "LECTURE 4 (PERIODIC TABLE)"
+          },
+          {
+            "title": "LECTURE 5 (PERIODIC TABLE)",
+            "link": "https://youtu.be/AyD6uBCd0h8"
+          },
+          {
+            "link": "https://youtu.be/ospt_YUeSZM",
+            "title": "LECTURE 6 (PERIODIC TABLE)"
+          },
+          {
+            "link": "https://youtu.be/fPzuM9j9PEU",
+            "title": "LECTURE 7 (PERIODIC TABLE)"
+          },
+          {
+            "link": "https://youtu.be/SdKQVhaklcU",
+            "title": "LECTURE 8 (PERIODIC TABLE)"
+          },
+          {
+            "link": "https://youtu.be/F5M5xgOilxU",
+            "title": "LECTURE 9 (PERIODIC TABLE)"
+          },
+          {
+            "title": "LECTURE 10 (PERIODIC TABLE)",
+            "link": "https://youtu.be/DY3cDNjRcoQ"
+          },
+          {
+            "title": "LECTURE 11 (PERIODIC TABLE)",
+            "link": "https://youtu.be/UM6MRK2xHHo"
+          },
+          {
+            "title": "LECTURE 12 (PERIODIC TABLE)",
+            "link": "https://youtu.be/vqWfb49fiYU"
+          },
+          {
+            "link": "https://youtu.be/WwoMW00pQMU",
+            "title": "LECTURE 13 (PERIODIC TABLE)"
+          },
+          {
+            "title": "LECTURE 14 (PERIODIC TABLE)",
+            "link": "https://youtu.be/G3ZHlGsD_qM"
+          },
+          {
+            "title": "LECTURE 15 (PERIODIC TABLE)",
+            "link": "https://www.telegram.com"
+          },
+          {
+            "title": "LECTURE 01 CHEMICAL BONDING",
+            "link": "https://youtu.be/Di70ZC_lsGk"
+          },
+          {
+            "title": "LECTURE 02 CHEMICAL BONDING",
+            "link": "https://youtu.be/xumBnmqvmuA"
+          },
+          {
+            "link": "https://youtu.be/GVJvRuFLyJw",
+            "title": "LECTURE 03 CHEMICAL BONDING"
+          },
+          {
+            "link": "https://youtu.be/OG_mMxcapYs",
+            "title": "LECTURE 04 CHEMICAL BONDING"
+          },
+          {
+            "link": "https://youtu.be/_wL-SlbFQcM",
+            "title": "LECTURE 05 CHEMICAL BONDING"
+          },
+          {
+            "title": "LECTURE 06 CHEMICAL BONDING",
+            "link": "https://www.telegram.com"
+          },
+          {
+            "link": "https://youtu.be/31BIAn14kxg",
+            "title": "LECTURE 07 CHEMICAL BONDING"
+          },
+          {
+            "link": "https://youtu.be/n3YQj5mdWvI",
+            "title": "LECTURE 08 CHEMICAL BONDING"
+          },
+          {
+            "link": "https://youtu.be/xIltiMIv2z0",
+            "title": "LECTURE 09 CHEMICAL BONDING"
+          },
+          {
+            "link": "https://youtu.be/HHmceHEzffQ",
+            "title": "LECTURE 10 CHEMICAL BONDING"
+          },
+          {
+            "title": "LECTURE 11 CHEMICAL BONDING",
+            "link": "https://youtu.be/Of242z0M4Ws"
+          },
+          {
+            "title": "LECTURE 12 CHEMICAL BONDING",
+            "link": "https://youtu.be/TX8EXvbC4O4"
+          },
+          {
+            "title": "LECTURE 13 CHEMICAL BONDING",
+            "link": "https://youtu.be/horzr3F1AoI"
+          },
+          {
+            "title": "LECTURE 14 CHEMICAL BONDING",
+            "link": "https://youtu.be/horzr3F1AoI"
+          },
+          {
+            "title": "LECTURE 15 CHEMICAL BONDING",
+            "link": "https://youtu.be/3WQ6ViIGqhA"
+          },
+          {
+            "title": "LECTURE 16 CHEMICAL BONDING",
+            "link": "https://youtu.be/GRmMERHA5K4"
+          },
+          {
+            "title": "LECTURE 17 CHEMICAL BONDING",
+            "link": "https://youtu.be/yJMJPzSjt6I"
+          },
+          {
+            "title": "LECTURE 18 CHEMICAL BONDING",
+            "link": "https://youtu.be/svGdcTnvbIU"
+          },
+          {
+            "title": "LECTURE 19 CHEMICAL BONDING",
+            "link": "https://youtu.be/LU1ZvmzVOKw"
+          },
+          {
+            "title": "LECTURE 20 CHEMICAL BONDING",
+            "link": "https://youtu.be/izYT-dLTZHc"
+          },
+          {
+            "title": "LECTURE 21 CHEMICAL BONDING",
+            "link": "https://youtu.be/1TOaA6mmP-M"
+          },
+          {
+            "title": "LECTURE 22 CHEMICAL BONDING",
+            "link": "https://youtu.be/W3BorT7B0qY"
+          },
+          {
+            "title": "LECTURE 23 CHEMICAL BONDING",
+            "link": "https://youtu.be/aaGW0xNJTdQ"
+          },
+          {
+            "title": "LECTURE 24 CHEMICAL BONDING",
+            "link": "https://youtu.be/5a7fhsYGSYE"
+          },
+          {
+            "title": "LECTURE 01 STATE OF MATTER",
+            "link": "https://youtu.be/ZJ5YqkjCQlY"
           }
         ]
       },
       {
-        "maxMarks": 30,
-        "id": 2,
-        "marks": [
+        "videos": [
           {
-            "studentId": "s101",
-            "mark": 23
+            "link": "https://youtu.be/5sA9uo8qtUs",
+            "title": "LECTURE 1 (UNITS AND MEASUREMENT)"
           },
           {
-            "studentId": "s102",
-            "mark": 6
+            "title": "LECTURE 2 (UNITS AND MEASUREMENT)",
+            "link": "https://youtu.be/K6lDYzrAt2g"
           },
           {
-            "studentId": "s103",
-            "mark": 15
+            "title": "LECTURE 3 (UNITS AND MEASUREMENT)",
+            "link": "https://youtu.be/lSHp1owwcI4"
           },
           {
-            "mark": 16,
-            "studentId": "s104"
+            "link": "https://youtu.be/AQeBWrmG228",
+            "title": "LECTURE 4 (UNITS AND MEASUREMENT)"
           },
           {
-            "mark": 14,
-            "studentId": "s105"
+            "title": "LECTURE 5 (UNITS AND MEASUREMENT)",
+            "link": "https://youtu.be/fRVU1FB8kVE"
           },
           {
-            "studentId": "s106",
-            "mark": 17
+            "link": "https://youtu.be/COmsdLA4X_0",
+            "title": "LECTURE 6 (UNITS AND MEASUREMENT)"
           },
           {
-            "mark": 5,
-            "studentId": "s108"
+            "title": "LECTURE 7 (UNITS AND MEASUREMENT)",
+            "link": "https://youtu.be/I1xoz7cbTGc"
           },
           {
-            "mark": 24,
-            "studentId": "s110"
+            "link": "https://youtu.be/RpximulrhWk",
+            "title": "LECTURE 8 (UNITS AND MEASUREMENT)"
+          },
+          {
+            "link": "https://stream.testuk.org/media/8Sbf0Y2UObtsy34z3TA4p1T3sRpXqNVMULMMrc2zr0E5ZGv-2NHp1cplKWGbvE2V6iZitO7fnc0z6gq1_Tr4cUAGDfmAFW3IfLJK5crxYeuxeOsRJYmCIkZiw9XqmC2V00RtCVHUKRKU4qFpD7cxfg-xoITygxdOYKwvnVnMI0zbVTqiwmZLSA32Q3TpwWroQSz8ncKSLR2pc1nFz26LOku0xcqbkoaOM7eUiBz2oQMYqn2Mwu6Zflp_BlMzZjiAU3XXZGLDpDtA5-qV4ozq67es9Nhlc2xGgNX9B9t6W9ZT0GWVoOGr5YVimbf7BDA084uFd6C-hRUSZGEdcV3hpupX3SvbAmIJar0bA79oIxMXSLd8cglHkr6hgrxxAFh9e2pKYZWhQNNUqhWHSuEu7CjO3DYekwQXFYT0cujS1Dq6Ykyk377fRSxULvQC6NdksXLEy-BQxs930ML1CWhXQuHS1rslLcWg2BZ1Lzl7lt4lh5U2k4lSQlM5daLOD_gt3NrqoWVh7oZh9Ltx0dQUA_yCP8hLQZgW0z_6sB0H0RK8hMnYKuKlTg1Lf8KPM-AyBDpi1GlEl1GS0mixUgRT3W5B6Q88Pu9quuoVIVUcbKtuR_w6FwpBQpuuFlE4C3hREwhT8D3r0ONv2c3cuz5Ihk1Es_3fIFR1P1HTiSiRUAjhZHniSOWpRROMf876Fx8_EUKSY7DGYW40u-bsViYbRlRAYphe8BewqyZOgRil2iP7PPv4p2ejKPuHaNQGVpLcntbC4sCS9TB0qfTp_YDbRfPBEJRlocuQ9xdbdOk1M885qzBkOG6wiywFkLep7V1SkHpW-5WieRZWN7HXKsZTYwSVj6PpLuXWpx8-w4znXvvmqADD8f1lIA93cFVDJsiN1o6Rg6X0grSIBB86NV5NqjyASDRe7L4Zk_QzY-XEhuERER6QPWTWJN_yt0SZ_3nhDyAT0HapLBu3zWhhcFtFjdum-Oe694WiyBxhFyJ7dkiC8q9NKJJuYLfKUQIfgi60zDjyn9MrDkzsD21T9FGfjBN9KwJUPHlr3MsGdbvIHonGJJsjnjvDGt96DQ3yt92NEwGLXNp9L2vfVSpCgxKUSvTKf3vPU-aTrFIzI0swuDZ7pH350Z4YTtDDJSTyt-w-aEBw9wZz-XFdjXsYWcTiwkpKWoz7j2GCdW4ytnFSApV_XeK-ID-sG_4h_b402S627tj6nCOiccyoqzrLw0SFBs7FoZKD5Z_MtnyPAwJfbcCgghSDE2gXq-MGC9W8GB7UwTr9REG6p3HlWVK4jiQMlXZLZ2Zv1Cxvct4UisrCgqjdi42mTfVkGg5NaIqj9zfmZkzKgF4AUoymJdfOgD4SLqABHyoy7vegWHN7vUvUK0Jv5I5X6OQnqpNE5HWtlu5Xt_PgPEfk9WmAq4MEaFYoWIy01vDexCNxmnb5lLsNEWOvGR6_QmxrKIPLt5mvMutA27ZcuIRrvrk4vPlrJa4tMy0Sm7rxflzC0rQfEJ00e05PSmOt_nc5EN6pAY9BdSbFoanfFK18VOspwTXuIim0pseT-usqA5Qf8yh_PzUienZpREYywqRfSOBveCDl-ZTNPoXRyxyvSXATpckKfqL2ArYWPsr2yMWDEwhpjjM2nfJhC7hiTUfpmsqC9RSpxLctM4vydc0G5kXvcvHpymRLW54a0nqLnFaOust9M0-DYHgm5vzdoOXUH5t7QlRQe-TDnM53BblbX0LGVhRXGuAV6uRY_7HMOls99oT-mAaMPI0wfvr9DNh9hKN6y-F8_CpNdyvpcbRbry607_EnM5KFYA",
+            "title": "LECTURE 9 (UNITS AND MEASUREMENT)"
+          },
+          {
+            "link": "https://youtu.be/KT_3TW4aCKo",
+            "title": "LECTURE 10 (UNITS AND MEASUREMENT)"
+          },
+          {
+            "link": "https://youtu.be/zy2JVXGjN9o",
+            "title": "LECTURE 11 (UNITS AND MEASUREMENT)"
+          },
+          {
+            "link": "https://youtu.be/urxLCs9FNFc",
+            "title": "LECTURE 12 (UNITS AND MEASUREMENT)"
+          },
+          {
+            "link": "https://youtu.be/-U94CXQfzys",
+            "title": "LECTURE 13 (UNITS AND MEASUREMENT)"
+          },
+          {
+            "link": "https://youtu.be/9IcVp49B4q4",
+            "title": "MATHEMATICAL TOOL 01"
+          },
+          {
+            "link": "https://youtu.be/w945y_oMuYw",
+            "title": "MATHEMATICAL TOOL 02"
+          },
+          {
+            "title": "MATHEMATICAL TOOL 03",
+            "link": "https://youtu.be/Ng2Ce04i_3s"
+          },
+          {
+            "title": "MATHEMATICAL TOOL 04",
+            "link": "https://youtu.be/u0fDHq4i_34"
+          },
+          {
+            "title": "MATHEMATICAL TOOL 05",
+            "link": "https://youtu.be/W-FMmmGzQEs"
+          },
+          {
+            "title": "MATHEMATICAL TOOL 06",
+            "link": "https://youtu.be/S_5Xts7zooY"
+          },
+          {
+            "link": "https://youtu.be/zuEsnX1l51Y",
+            "title": "MATHEMATICAL TOOL 07"
+          },
+          {
+            "link": "https://youtu.be/5bCBtqm7D84",
+            "title": "MATHEMATICAL TOOL 08"
+          },
+          {
+            "title": "MATHEMATICAL TOOL 09",
+            "link": "https://youtu.be/IY6wQOZU_1c"
+          },
+          {
+            "link": "https://youtu.be/moZQm08fnG8",
+            "title": "MATHEMATICAL TOOL 10"
+          },
+          {
+            "link": "https://youtu.be/FB7HWlk37MA",
+            "title": "MATHEMATICAL TOOL 11"
+          },
+          {
+            "title": "MOTION IN ONE DIMENSION 01",
+            "link": "https://youtu.be/fGrcG8Ihq3Q"
+          },
+          {
+            "link": "https://youtu.be/HRtgq3OD8ZE",
+            "title": "MOTION IN ONE DIMENSIONS 02"
+          },
+          {
+            "link": "https://youtu.be/GVettpFVJcw",
+            "title": "MOTION IN ONE DIMENSION 03"
+          },
+          {
+            "link": "https://youtu.be/R8weNAyqQ0g",
+            "title": "MOTION IN ONE DIMENSION 04"
+          },
+          {
+            "title": "MOTION IN ONE DIMENSION 05",
+            "link": "https://youtu.be/9t2XnZvUbIU"
+          },
+          {
+            "title": "MOTION IN ONE DIMENSION 06",
+            "link": "https://youtu.be/k2Pb-OER6DE"
+          },
+          {
+            "link": "https://youtu.be/SOMYrI4D2iM",
+            "title": "MOTION IN ONE DIMENSION 07"
+          },
+          {
+            "link": "https://youtu.be/kz1u5Os4Jk4",
+            "title": "MOTION IN ONE DIMENSION 08"
+          },
+          {
+            "title": "MOTION IN ONE DIMENSION 09",
+            "link": "https://youtu.be/5_MFys7irDU"
+          },
+          {
+            "title": "MOTION IN ONE DIMENSION 10",
+            "link": "https://youtu.be/WA7OxcrPPY4"
+          },
+          {
+            "title": "MOTION IN ONE DIMENSION 11",
+            "link": "https://youtu.be/ob0SjbvTitU"
+          },
+          {
+            "title": "MOTION IN ONE DIMENSION 12",
+            "link": "https://youtu.be/auOmRTUDtNc"
+          },
+          {
+            "link": "https://youtu.be/9MLB8oEzet4",
+            "title": "MOTION IN ONE DIMENSION 13"
+          },
+          {
+            "title": "MOTION IN ONE DIMENSION 14",
+            "link": "https://youtu.be/em_k6A5Ph2Y"
+          },
+          {
+            "link": "https://youtu.be/3O_JrH4CV6w",
+            "title": "MOTION IN ONE DIMENSION 15"
+          },
+          {
+            "title": "MOTION IN ONE DIMENSION 16",
+            "link": "https://youtu.be/fw9nugvx0u0"
+          },
+          {
+            "title": "LECTURE 1 (MOTION IN 2D)",
+            "link": "https://youtu.be/qSvcsqkOobU"
+          },
+          {
+            "title": "LECTURE 2 (MOTION IN 2D)",
+            "link": "https://youtu.be/aMtgIeT-2U8"
+          },
+          {
+            "title": "LECTURE 3 (MOTION IN 2D)",
+            "link": "https://youtu.be/RuDaCvoAmCo"
+          },
+          {
+            "link": "https://youtu.be/5YzdMdE2qzE",
+            "title": "LECTURE 4 (MOTION IN 2D)"
+          },
+          {
+            "link": "https://youtu.be/rWCa41Ka0wU",
+            "title": "LECTURE 5 (MOTION IN 2D)"
+          },
+          {
+            "link": "https://youtu.be/EjxsAGRDmRQ",
+            "title": "LECTURE 6 (MOTION IN 2D)"
+          },
+          {
+            "title": "LECTURE 7 (MOTION IN 2D)",
+            "link": "https://youtu.be/hV6PrsnOcNE"
+          },
+          {
+            "title": "LECTURE 8 (MOTION IN 2D)",
+            "link": "https://youtu.be/Jr8aBHs7sP4"
+          },
+          {
+            "link": "https://youtu.be/SyqhdDukIE0",
+            "title": "LECTURE 9 (MOTION IN 2D)"
+          },
+          {
+            "title": "LECTURE 10 (MOTION IN 2D)",
+            "link": "https://youtu.be/KRd8-AkzBIs"
+          },
+          {
+            "link": "https://youtu.be/KRd8-AkzBIs",
+            "title": "LECTURE 11 (MOTION IN 2D)"
+          },
+          {
+            "link": "https://youtu.be/c9Ll3gJkZ5s",
+            "title": "LECTURE 12 (MOTION IN 2D)"
+          },
+          {
+            "link": "https://youtu.be/tLK18uXpb_c",
+            "title": "LECTURE 13 (MOTION IN 2D)"
+          },
+          {
+            "link": "https://youtu.be/EAASN-x9NVo",
+            "title": "LECTURE 14 (MOTION IN 2D)"
+          },
+          {
+            "link": "https://youtu.be/MP-2NGqkfHo",
+            "title": "LECTURE 15 (MOTION IN 2D)"
+          },
+          {
+            "link": "https://youtu.be/4f8-1LcniNY",
+            "title": "LECTURE 16 (MOTION IN 2D)"
+          },
+          {
+            "title": "LECTURE 17 (MOTION IN 2D)",
+            "link": "https://youtu.be/U6WdYAElX_c"
+          },
+          {
+            "link": "https://youtu.be/A5kSalB_t8k",
+            "title": "LECTURE 1 LAWS OF MOTION"
+          },
+          {
+            "link": "https://youtu.be/A5kSalB_t8k",
+            "title": "LECTURE 2 LAWS OF MOTION"
+          },
+          {
+            "title": "LECTURE 3 LAWS OF MOTION",
+            "link": "https://youtu.be/psSggA9pQ9Q"
+          },
+          {
+            "title": "LECTURE 4 LAWS OF MOTION",
+            "link": "https://youtu.be/AYreP4A_OcM"
+          },
+          {
+            "title": "LECTURE 5 LAWS OF MOTION",
+            "link": "https://youtu.be/ohJwQPF2s1c"
+          },
+          {
+            "title": "LECTURE 6 LAWS OF MOTION",
+            "link": "https://youtu.be/_cuYDYGxjI4"
+          },
+          {
+            "title": "LECTURE 7 LAWS OF MOTION",
+            "link": "https://youtu.be/IX9AVmZBJn8"
+          },
+          {
+            "title": "LECTURE 8 LAWS OF MOTION",
+            "link": "https://youtu.be/wALArjHhYUc"
+          },
+          {
+            "title": "LECTURE 9 LAWS OF MOTION",
+            "link": "https://youtu.be/YA8Dw2yFb_Y"
+          },
+          {
+            "title": "LECTURE 10 LAWS OF MOTION",
+            "link": "https://youtu.be/ySs4wf1y4aA"
+          },
+          {
+            "title": "LECTURE 11 LAWS OF MOTION",
+            "link": "https://youtu.be/jeJmpGveseg"
+          },
+          {
+            "title": "LECTURE 12 LAWS OF MOTION",
+            "link": "https://youtu.be/uSB-N5ULiQc"
+          },
+          {
+            "title": "LECTURE 13 LAWS OF MOTION",
+            "link": "https://youtu.be/CP_1vUCJ6Ik"
+          },
+          {
+            "title": "LECTURE 14 LAWS OF MOTION",
+            "link": "https://youtu.be/CP_1vUCJ6Ik"
+          },
+          {
+            "title": "LECTURE 15 LAWS OF MOTION",
+            "link": "https://youtu.be/CP_1vUCJ6Ik"
+          },
+          {
+            "title": "LECTURE 16 LAWS OF MOTION",
+            "link": "https://youtu.be/cgRJkJF3sI8"
+          },
+          {
+            "title": "LECTURE 17 LAWS OF MOTION",
+            "link": "https://youtu.be/L_3BSOlaRMU"
+          },
+          {
+            "title": "LECTURE 18 LAWS OF MOTION",
+            "link": "https://youtu.be/wrxlbu6pgYc"
+          },
+          {
+            "title": "LECTURE 19 LAWS OF MOTION",
+            "link": "https://youtu.be/V6pJ3JOS3nM"
+          },
+          {
+            "title": "LECTURE 20 LAWS OF MOTION",
+            "link": "https://youtu.be/abskHhwu6Ek"
+          },
+          {
+            "title": "LECTURE 21 LAWS OF MOTION",
+            "link": "https://youtu.be/prf-KZUY3b8"
+          },
+          {
+            "title": "CIRCULAR MOTION 01",
+            "link": "https://youtu.be/nW_uJpHAzOs"
           }
         ],
-        "published": true,
-        "subject": "CHEM(1)",
-        "date": "2026-05-01"
+        "id": "C106",
+        "title": "Class XI/JEE/NEET – PHYSICS"
       },
       {
-        "date": "2026-04-18",
-        "maxMarks": 30,
-        "id": 1,
-        "marks": [
+        "videos": [
           {
-            "mark": 8,
-            "studentId": "s102"
+            "link": "https://youtu.be/vYT-_lfdPGc",
+            "title": "LECTURE 1 (SOLUTIONS)"
           },
           {
-            "mark": 12,
-            "studentId": "s103"
+            "title": "LECTURE 2 (SOLUTIONS)",
+            "link": "https://youtu.be/DOtnkfAySWY"
           },
           {
-            "mark": 23,
-            "studentId": "s104"
+            "title": "LECTURE 3 (SOLUTIONS)",
+            "link": "https://youtu.be/7hv59VopnqQ"
           },
           {
-            "mark": 14,
-            "studentId": "s105"
+            "link": "https://youtu.be/HjSNOvxYJxw",
+            "title": "LECTURE 4 (SOLUTIONS)"
           },
           {
-            "studentId": "s106",
-            "mark": 7
+            "link": "https://youtu.be/DEr_segeW3s",
+            "title": "LECTURE 5 (SOLUTIONS)"
+          },
+          {
+            "title": "LECTURE 6 (SOLUTIONS)",
+            "link": "https://youtu.be/HY33b7x1Rek"
+          },
+          {
+            "link": "https://youtu.be/g64o_lS5Rb8",
+            "title": "LECTURE 7 (SOLUTIONS)"
+          },
+          {
+            "title": "LECTURE 8 (SOLUTIONS)",
+            "link": "https://youtu.be/JnbzkLlYD4Q"
+          },
+          {
+            "link": "https://youtu.be/GjcgTfDmN5U",
+            "title": "LECTURE 9 (SOLUTIONS)"
+          },
+          {
+            "title": "LECTURE 10 (SOLUTIONS)",
+            "link": "https://youtu.be/In3vdKhpjnA"
+          },
+          {
+            "title": "LECTURE 11 (SOLUTIONS)",
+            "link": "https://youtu.be/Zwwv76ZpVZg"
+          },
+          {
+            "link": "https://youtu.be/9iLwZ_fskyY",
+            "title": "LECTURE 12 (SOLUTIONS)"
+          },
+          {
+            "link": "https://youtu.be/kHdqMi2x77g",
+            "title": "LECTURE 13 (SOLUTIONS)"
+          },
+          {
+            "title": "LECTURE 14 (SOLUTIONS)",
+            "link": "https://youtu.be/b0PsArgPS0k"
+          },
+          {
+            "link": "https://stream.testuk.org/schedule-details?batchId=6779345c20fa0756e4a7fd08&subjectId=69beb2d1fa18934d859e3648&scheduleId=69f213103cb53e178c695ffe&tap=video",
+            "title": "LECTURE 15 (SOLUTIONS)"
+          },
+          {
+            "title": "LECTURE 16 (SOLUTIONS)",
+            "link": "https://youtu.be/p6iJAEh3N4U"
+          },
+          {
+            "link": "https://youtu.be/Nt-CyqJnohA",
+            "title": "LECTURE 1 (CHEMICAL KINETICS)"
+          },
+          {
+            "title": "LECTURE 2 (CHEMICAL KINETICS)",
+            "link": "https://youtu.be/biP2i-QyZ7I"
+          },
+          {
+            "title": "LECTURE 3 (CHEMICAL KINETICS)",
+            "link": "https://youtu.be/VXc7ARIPCaY"
+          },
+          {
+            "link": "https://youtu.be/2Q_xGGg0dEs",
+            "title": "LECTURE 4 (CHEMICAL KINETICS)"
+          },
+          {
+            "link": "https://youtu.be/-exn9oVfX7E",
+            "title": "LECTURE 5 (CHEMICAL KINETICS)"
+          },
+          {
+            "title": "LECTURE 6 (CHEMICAL KINETICS)",
+            "link": "https://youtu.be/Tq__jC596aw"
+          },
+          {
+            "link": "https://youtu.be/C-WJTGdcER4",
+            "title": "LECTURE 7 (CHEMICAL KINETICS)"
+          },
+          {
+            "link": "https://youtu.be/jbofGIRELRQ",
+            "title": "LECTURE 8 (CHEMICAL KINETICS)"
+          },
+          {
+            "link": "https://youtu.be/ZTtzeaKxGow",
+            "title": "LECTURE 9 (CHEMICAL KINETICS)"
+          },
+          {
+            "title": "LECTURE 10 (CHEMICAL KINETICS)",
+            "link": "https://youtu.be/_zQGUIOuc_w"
+          },
+          {
+            "link": "https://youtu.be/Pm19bY7ljW0",
+            "title": "LECTURE 11 (CHEMICAL KINETICS)"
+          },
+          {
+            "title": "LECTURE 12 (CHEMICAL KINETICS)",
+            "link": "https://youtu.be/Tx79Fg4gevI"
+          },
+          {
+            "title": "LECTURE 13 (CHEMICAL KINETICS)",
+            "link": "https://youtu.be/hTjVz2eRJQQ"
+          },
+          {
+            "link": "https://youtu.be/Ug_CNym92Co",
+            "title": "LECTURE 1 (ELECTROCHEMISTRY)"
+          },
+          {
+            "title": "LECTURE 2 (ELECTROCHEMISTRY)",
+            "link": "https://youtu.be/PJ_SmC56cf0"
+          },
+          {
+            "title": "LECTURE 3 (ELECTROCHEMISTRY)",
+            "link": "https://youtu.be/KFt695O_GFw"
+          },
+          {
+            "title": "LECTURE 4 (ELECTROCHEMISTRY)",
+            "link": "https://youtu.be/_i_0wQkVyMs"
+          },
+          {
+            "title": "LECTURE 5 (ELECTROCHEMISTRY)",
+            "link": "https://youtu.be/PTvs2o1lVG8"
+          },
+          {
+            "link": "https://youtu.be/10hyc3zT3_w",
+            "title": "LECTURE 6 (ELECTROCHEMISTRY)"
+          },
+          {
+            "title": "LECTURE 7 (ELECTROCHEMISTRY)",
+            "link": "https://youtu.be/ePrmxJBvli0"
+          },
+          {
+            "title": "LECTURE 8 (ELECTROCHEMISTRY)",
+            "link": "https://youtu.be/DJVUc58aXow"
+          },
+          {
+            "link": "https://youtu.be/XhsGQJe0pUc",
+            "title": "LECTURE 9 (ELECTROCHEMISTRY)"
+          },
+          {
+            "link": "https://youtu.be/DL5bOfT3JFY",
+            "title": "LECTURE 10 (ELECTROCHEMISTRY)"
+          },
+          {
+            "link": "https://youtu.be/VGCaoHEPZyI",
+            "title": "LECTURE 11 (ELECTROCHEMISTRY)"
+          },
+          {
+            "link": "https://youtu.be/imLpdLRcJAY",
+            "title": "LECTURE 1 (ISOMERISM)"
+          },
+          {
+            "link": "https://youtu.be/kVAqvbo6hBo",
+            "title": "LECTURE 2 (ISOMERISM)"
+          },
+          {
+            "title": "LECTURE 3 (ISOMERISM)",
+            "link": "https://youtu.be/EU4OC7bDI_A"
+          },
+          {
+            "link": "https://youtu.be/IPW9qYTlHA4",
+            "title": "LECTURE 4 (ISOMERISM)"
+          },
+          {
+            "link": "https://youtu.be/take7soD1PY",
+            "title": "LECTURE 5 (ISOMERISM)"
+          },
+          {
+            "title": "LECTURE 6 (ISOMERISM)",
+            "link": "https://youtu.be/GjN0_i7D3ac"
+          },
+          {
+            "title": "LECTURE 1 (OPTICAL ISOMERISM)",
+            "link": "https://youtu.be/qwXOJnkBo44"
+          },
+          {
+            "link": "https://youtu.be/c7goupf58vs",
+            "title": "LECTURE 2 (OPTICAL ISOMERISM)"
+          },
+          {
+            "link": "https://abc.com",
+            "title": "LECTURE 3 (OPTICAL ISOMERISM)"
+          },
+          {
+            "title": "LECTURE 4 (OPTICAL ISOMERISM)",
+            "link": "https://youtu.be/VTKmw2CD68A"
+          },
+          {
+            "title": "LECTURE 5 (OPTICAL ISOMERISM)",
+            "link": "https://youtu.be/nyLrgmFkRWY"
+          },
+          {
+            "title": "LECTURE 6 (OPTICAL ISOMERISM)",
+            "link": "https://youtu.be/YTHoYJuYfzY"
+          },
+          {
+            "title": "LECTURE 7 (OPTICAL ISOMERISM)",
+            "link": "https://youtu.be/XH3IdQA7dv0"
+          },
+          {
+            "link": "https://youtu.be/5IvQ_29vca4",
+            "title": "LECTURE 8 (OPTICAL ISOMERISM)"
+          },
+          {
+            "link": "https://youtu.be/Bee887nc2a0",
+            "title": "LECTURE 9 (OPTICAL ISOMERISM)"
+          },
+          {
+            "title": "LECTURE 10 (OPTICAL ISOMERISM)",
+            "link": "https://youtu.be/EpflNn1dHvg"
+          },
+          {
+            "link": "https://youtu.be/TnPxGmHOKU8",
+            "title": "LECTURE 11 (OPTICAL ISOMERISM)"
+          },
+          {
+            "title": "LECTURE 12 (OPTICAL ISOMERISM)",
+            "link": "https://youtu.be/4NbioMpTu7w"
+          },
+          {
+            "title": "LECTURE 13 (OPTICAL ISOMERISM)",
+            "link": "https://youtu.be/qi1D61Qfwvs"
+          },
+          {
+            "link": "https://youtu.be/B5LOcDezF_g",
+            "title": "LECTURE 01 (HYDROCARBON)"
+          },
+          {
+            "link": "https://youtu.be/5q3sFsmzIZA",
+            "title": "LECTURE 02 (HYDROCARBON)"
+          },
+          {
+            "title": "LECTURE 03 (HYDROCARBON)",
+            "link": "https://youtu.be/4Rb3vNYBYv8"
+          },
+          {
+            "link": "https://youtu.be/7koUwjXNgSU",
+            "title": "LECTURE 04 (HYDROCARBON)"
+          },
+          {
+            "title": "LECTURE 05 (HYDROCARBON)",
+            "link": "https://youtu.be/MZCsjMixGE4"
+          },
+          {
+            "title": "LECTURE 06 (HYDROCARBON)",
+            "link": "https://youtu.be/jOWWx9uFu0c"
+          },
+          {
+            "link": "https://youtu.be/FnEx0NLThy8",
+            "title": "LECTURE 07 (HYDROCARBON)"
+          },
+          {
+            "link": "https://youtu.be/7tfdjxms0Lw",
+            "title": "LECTURE 08 (HYDROCARBON)"
+          },
+          {
+            "link": "https://youtu.be/wSJi1BKr_oI",
+            "title": "LECTURE 09 (HYDROCARBON)"
+          },
+          {
+            "title": "LECTURE 10 (HYDROCARBON)",
+            "link": "https://youtu.be/fOsAIKNbYTk"
+          },
+          {
+            "title": "LECTURE 11 (HYDROCARBON)",
+            "link": "https://youtu.be/u7yiKygu9CQ"
+          },
+          {
+            "title": "LECTURE 12 (HYDROCARBON)",
+            "link": "https://youtu.be/58kzvLKezFI"
+          },
+          {
+            "link": "https://youtu.be/skaD7Jdxb70",
+            "title": "LECTURE 13 (HYDROCARBON)"
+          },
+          {
+            "title": "LECTURE 14 (HYDROCARBON)",
+            "link": "https://youtu.be/o36mo5NidDY"
+          },
+          {
+            "title": "LECTURE 15 (HYDROCARBON)",
+            "link": "https://youtu.be/qgyPp5hw2h8"
+          },
+          {
+            "title": "LECTURE 16 (HYDROCARBON)",
+            "link": "https://youtu.be/qgyPp5hw2h8"
+          },
+          {
+            "title": "LECTURE 17 (HYDROCARBON)",
+            "link": "https://youtu.be/_3Uh2FcoSZU"
+          },
+          {
+            "title": "LECTURE 18 (HYDROCARBON)",
+            "link": "https://youtu.be/Nj-c9toOwQg"
+          },
+          {
+            "link": "https://youtu.be/XdmRDUKJjXs",
+            "title": "LECTURE 01 (HALOALKANES AND HALOARENES)"
+          },
+          {
+            "link": "https://youtu.be/l773iSaauEs",
+            "title": "LECTURE 02 (HALOALKANES AND HALOARENES)"
+          },
+          {
+            "title": "LECTURE 03 (HALOALKANES AND HALOARENES)",
+            "link": "https://youtu.be/Dka_87PA1rs"
+          },
+          {
+            "title": "LECTURE 04 (HALOALKANES AND HALOARENES)",
+            "link": "https://youtu.be/OgCtgZKjw8M"
+          },
+          {
+            "title": "LECTURE 05 (HALOALKANES AND HALOARENES)",
+            "link": "https://youtu.be/wI-KsSNOB7M"
+          },
+          {
+            "title": "LECTURE 06 (HALOALKANES AND HALOARENES)",
+            "link": "https://youtu.be/Vkt4GXfSzD0"
+          },
+          {
+            "title": "LECTURE 07 (HALOALKANES AND HALOARENES)",
+            "link": "https://youtu.be/CnfxTspu1Nk"
+          },
+          {
+            "title": "LECTURE 08 (HALOALKANES AND HALOARENES)",
+            "link": "https://youtu.be/iv3yO9az1gw"
+          },
+          {
+            "title": "LECTURE 09 (HALOALKANES AND HALOARENES)",
+            "link": "https://youtu.be/WVc1Mro3PMg"
+          },
+          {
+            "title": "LECTURE 10 (HALOALKANES AND HALOARENES)",
+            "link": "https://youtu.be/UCtNixh_EnU"
+          },
+          {
+            "title": "LECTURE 11 (HALOALKANES AND HALOARENES)",
+            "link": "https://youtu.be/b_4rttfGyCM"
+          },
+          {
+            "title": "LECTURE 12 (HALOALKANES AND HALOARENES)",
+            "link": "https://youtu.be/HeXKx5NIoy4"
+          },
+          {
+            "title": "LECTURE 13 (HALOALKANES AND HALOARENES)",
+            "link": "https://youtu.be/xkUYQijfdBs"
+          },
+          {
+            "title": "LECTURE 01 (ALCOHOL, PHENOL AND ETHER)",
+            "link": "https://youtu.be/NmEXNXMENxg"
           }
         ],
-        "published": true,
-        "subject": "MATH(1)"
+        "title": "Class XII/JEE/NEET – CHEMISTRY",
+        "id": "C107"
+      },
+      {
+        "title": "Class XII/JEE/NEET – PHYSICS",
+        "id": "C108",
+        "videos": [
+          {
+            "link": "https://youtu.be/ijKuUes2Okw",
+            "title": "LECTURE 1 (ELECTRIC CHARGES AND FIELDS)"
+          },
+          {
+            "link": "https://youtu.be/pw_tPgHGx7s",
+            "title": "LECTURE 2 (ELECTRIC CHARGES AND FIELDS)"
+          },
+          {
+            "link": "https://youtu.be/G7D_T-57Vr8",
+            "title": "LECTURE 3 (ELECTRIC CHARGES AND FIELDS)"
+          },
+          {
+            "link": "https://youtu.be/KfSMz7l3F5E",
+            "title": "LECTURE 4 (ELECTRIC CHARGES AND FIELDS)"
+          },
+          {
+            "title": "LECTURE 5 (ELECTRIC CHARGES AND FIELDS)",
+            "link": "https://youtu.be/6L4nX2QVn-Q"
+          },
+          {
+            "title": "LECTURE 6 (ELECTRIC CHARGES AND FIELDS)",
+            "link": "https://youtu.be/56iSH49pO78"
+          },
+          {
+            "link": "https://youtu.be/eMPXzaUMbnY",
+            "title": "LECTURE 7 (ELECTRIC CHARGES AND FIELDS)"
+          },
+          {
+            "title": "LECTURE 8 (ELECTRIC CHARGES AND FIELDS)",
+            "link": "https://youtu.be/rIatKi4lr_k"
+          },
+          {
+            "title": "LECTURE 9 (ELECTRIC CHARGES AND FIELDS)",
+            "link": "https://youtu.be/24RoXOUmao4"
+          },
+          {
+            "link": "https://youtu.be/lkhQbQQwx5U3",
+            "title": "LECTURE 10 (ELECTRIC CHARGES AND FIELDS)"
+          },
+          {
+            "link": "https://youtu.be/MKbVdNrMzP4",
+            "title": "LECTURE 11 (ELECTRIC CHARGES AND FIELDS)"
+          },
+          {
+            "title": "LECTURE 12 (ELECTRIC CHARGES AND FIELDS)",
+            "link": "https://youtu.be/Uh_I_nJsEGA"
+          },
+          {
+            "link": "https://youtu.be/q26kWOhTpGQ",
+            "title": "LECTURE 13 (ELECTRIC CHARGES AND FIELDS)"
+          },
+          {
+            "link": "https://youtu.be/G9GAb0Yhbr0",
+            "title": "LECTURE 14 (ELECTRIC CHARGES AND FIELDS)"
+          },
+          {
+            "link": "https://youtu.be/KApsbsVZ5so",
+            "title": "LECTURE 15 (ELECTRIC CHARGES AND FIELDS)"
+          },
+          {
+            "title": "LECTURE 16 (ELECTRIC CHARGES AND FIELDS)",
+            "link": "https://youtu.be/aOBkdm6rVLU"
+          },
+          {
+            "title": "LECTURE 17 (ELECTRIC CHARGES AND FIELDS)",
+            "link": "https://youtu.be/Rv1oI-70sGM"
+          },
+          {
+            "link": "https://youtu.be/b4l7uE1i_qg",
+            "title": "LECTURE 18 (ELECTRIC CHARGES AND FIELDS)"
+          },
+          {
+            "link": "https://youtu.be/6Zf-Y6aJbU8",
+            "title": "LECTURE 19 (ELECTRIC CHARGES AND FIELDS)"
+          },
+          {
+            "link": "https://youtu.be/KITvXGkCfvw",
+            "title": "LECTURE 20 (ELECTRIC CHARGES AND FIELDS)"
+          },
+          {
+            "title": "LECTURE 21 (ELECTRIC CHARGES AND FIELDS)",
+            "link": "https://youtu.be/ntLVMOQDEo8"
+          },
+          {
+            "link": "https://youtu.be/cyUAlesZ-d4",
+            "title": "LECTURE 22 (ELECTRIC CHARGES AND FIELDS)"
+          },
+          {
+            "title": "LECTURE 23 (ELECTRIC CHARGES AND FIELDS)",
+            "link": "https://youtu.be/tsdjCB8Rg6Y"
+          },
+          {
+            "title": "LECTURE 24 (ELECTRIC CHARGES AND FIELDS)",
+            "link": "https://youtu.be/HOhtLxWKt8U"
+          },
+          {
+            "title": "LECTURE 25 (ELECTRIC CHARGES AND FIELDS)",
+            "link": "https://youtu.be/qJuPWa-0PC4"
+          },
+          {
+            "title": "LECTURE 26 (ELECTRIC CHARGES AND FIELDS)",
+            "link": "https://youtu.be/PwFdSaEa1e4"
+          },
+          {
+            "link": "https://stream.testuk.org/subjects?batchId=6779345c20fa0756e4a7fd08&batchName=Lakshya+JEE+2027",
+            "title": "LECTURE 27 (ELECTRIC CHARGES AND FIELDS)"
+          },
+          {
+            "title": "",
+            "link": "https://stream.testuk.org/subjects?batchId=6779345c20fa0756e4a7fd08&batchName=Lakshya+JEE+2027"
+          },
+          {
+            "link": "https://youtu.be/W1kgWO-C2Gw",
+            "title": "LECTURE 1 (ELECTRIC POTENTIAL AND DIPOLE)"
+          },
+          {
+            "title": "LECTURE 2 (ELECTRIC POTENTIAL AND DIPOLE)",
+            "link": "https://youtu.be/x8RU_0pgk_s"
+          },
+          {
+            "link": "https://tinyurl.com/Lakshya-Live",
+            "title": "LECTURE 3 (ELECTRIC POTENTIAL AND DIPOLE)"
+          },
+          {
+            "title": "LECTURE 4 (ELECTRIC POTENTIAL AND DIPOLE)",
+            "link": "https://youtu.be/yiB_ITwuT88"
+          },
+          {
+            "title": "LECTURE 5 (ELECTRIC POTENTIAL AND DIPOLE)",
+            "link": "https://youtu.be/QBGH2IHMo14"
+          },
+          {
+            "title": "LECTURE 6 (ELECTRIC POTENTIAL AND DIPOLE)",
+            "link": "https://youtu.be/tVBpEtNNdb8"
+          },
+          {
+            "title": "LECTURE 7 (ELECTRIC POTENTIAL AND DIPOLE)",
+            "link": "https://youtu.be/-OGHiM0pA58"
+          },
+          {
+            "link": "https://youtu.be/Jz0d0QCpjqM",
+            "title": "LECTURE 8 (ELECTRIC POTENTIAL AND DIPOLE)"
+          },
+          {
+            "title": "LECTURE 9 (ELECTRIC POTENTIAL AND DIPOLE)",
+            "link": "https://youtu.be/OPkGTLoTSak"
+          },
+          {
+            "link": "https://youtu.be/6idXu5xpQd4",
+            "title": "LECTURE 10 (ELECTRIC POTENTIAL AND DIPOLE)"
+          },
+          {
+            "title": "LECTURE 11 (ELECTRIC POTENTIAL AND DIPOLE)",
+            "link": "https://youtu.be/0tg2Ou-2Cfc"
+          },
+          {
+            "link": "https://youtu.be/TjRGU_-1S50",
+            "title": "LECTURE 12 (ELECTRIC POTENTIAL AND DIPOLE)"
+          },
+          {
+            "link": "https://youtu.be/VO0hirODCU0",
+            "title": "LECTURE 13 (ELECTRIC POTENTIAL AND DIPOLE)"
+          },
+          {
+            "link": "https://youtu.be/vBukWS4D6pg",
+            "title": "LECTURE 14 (ELECTRIC POTENTIAL AND DIPOLE)"
+          },
+          {
+            "title": "LECTURE 15 (ELECTRIC POTENTIAL AND DIPOLE)",
+            "link": "https://youtu.be/q3tjY3ffoyE"
+          },
+          {
+            "link": "https://youtu.be/RiGoZgbHUno",
+            "title": "LECTURE 01 (CURRENT ELECTRICITY)"
+          },
+          {
+            "title": "LECTURE 02 (CURRENT ELECTRICITY)",
+            "link": "https://youtu.be/sgWQWcJ3KOU"
+          },
+          {
+            "title": "LECTURE 03 (CURRENT ELECTRICITY)",
+            "link": "https://youtu.be/S44fgCaVi8U"
+          },
+          {
+            "link": "https://youtu.be/_ADn9FiO-JI",
+            "title": "LECTURE 04 (CURRENT ELECTRICITY)"
+          },
+          {
+            "link": "https://youtu.be/1K1SXdHF4Tk",
+            "title": "LECTURE 05 (CURRENT ELECTRICITY)"
+          },
+          {
+            "link": "https://youtu.be/_4JVxJLYvAs",
+            "title": "LECTURE 06 (CURRENT ELECTRICITY)"
+          },
+          {
+            "title": "LECTURE 07 (CURRENT ELECTRICITY)",
+            "link": "https://youtu.be/C5ZjVgnlbKU"
+          },
+          {
+            "title": "LECTURE 08 (CURRENT ELECTRICITY)",
+            "link": "https://youtu.be/OWQRVnr263A"
+          },
+          {
+            "title": "LECTURE 09 (CURRENT ELECTRICITY)",
+            "link": "https://youtu.be/Yva9KK5uFHk"
+          },
+          {
+            "link": "https://youtu.be/30Kj14sarVY",
+            "title": "LECTURE 10 (CURRENT ELECTRICITY)"
+          },
+          {
+            "title": "LECTURE 11 (CURRENT ELECTRICITY)",
+            "link": "https://youtu.be/PaqsmpGuNBA"
+          },
+          {
+            "link": "https://youtu.be/VY-x381nBeA",
+            "title": "LECTURE 12 (CURRENT ELECTRICITY)"
+          },
+          {
+            "link": "https://youtu.be/WvcPBmh-nmk",
+            "title": "LECTURE 01 (CAPACITANCE)"
+          },
+          {
+            "link": "https://youtu.be/D8u66fgmFXM",
+            "title": "LECTURE 02 (CAPACITANCE)"
+          },
+          {
+            "link": "https://youtu.be/9n_sNOJmPQI",
+            "title": "LECTURE 03 (CAPACITANCE)"
+          },
+          {
+            "link": "https://youtu.be/9n_sNOJmPQI",
+            "title": "LECTURE 04 (CAPACITANCE)"
+          },
+          {
+            "title": "LECTURE 05 (CAPACITANCE)",
+            "link": "https://youtu.be/01c7pWh2Jn0"
+          },
+          {
+            "link": "https://youtu.be/TPR2Q3jRJ1g",
+            "title": "LECTURE 06 (CAPACITANCE)"
+          },
+          {
+            "link": "https://youtu.be/JaN9o3u1MWI",
+            "title": "LECTURE 07 (CAPACITANCE)"
+          },
+          {
+            "title": "LECTURE 08 (CAPACITANCE)",
+            "link": "https://youtu.be/NciOAgkzoMw"
+          },
+          {
+            "title": "LECTURE 09 (CAPACITANCE)",
+            "link": "https://youtu.be/F4_XeTkLts0"
+          },
+          {
+            "title": "LECTURE 10 (CAPACITANCE)",
+            "link": "https://youtu.be/Oq6hZXsefho"
+          },
+          {
+            "title": "LECTURE 01 MOVING CHARGES AND MAGNETISM",
+            "link": "https://youtu.be/WCJygdFSUBA"
+          },
+          {
+            "title": "LECTURE 02 MOVING CHARGES AND MAGNETISM",
+            "link": "https://youtu.be/63IbpSrwhD8"
+          },
+          {
+            "title": "LECTURE 03 MOVING CHARGES AND MAGNETISM",
+            "link": "https://youtu.be/-WaDC35V6d8"
+          },
+          {
+            "title": "LECTURE 04 MOVING CHARGES AND MAGNETISM",
+            "link": "https://youtu.be/DjBfqYVs6IE"
+          },
+          {
+            "title": "LECTURE 05 MOVING CHARGES AND MAGNETISM",
+            "link": "https://youtu.be/zoOo9QFVZQQ"
+          },
+          {
+            "title": "LECTURE 06 MOVING CHARGES AND MAGNETISM",
+            "link": "https://youtu.be/ex91ekILEGY"
+          },
+          {
+            "title": "LECTURE 07 MOVING CHARGES AND MAGNETISM",
+            "link": "https://youtu.be/R_q5GjjWQ6E"
+          },
+          {
+            "title": "LECTURE 08 MOVING CHARGES AND MAGNETISM",
+            "link": "https://youtu.be/gIviLV77yYY"
+          }
+        ]
+      },
+      {
+        "id": "C109",
+        "videos": [
+          {
+            "link": "https://t.me/c/3870652528/2",
+            "title": "001 Basic_of_English_Grammar_01___Basic_of_English_Grammar_1"
+          },
+          {
+            "link": "https://t.me/c/3870652528/3",
+            "title": "002 Basic of English Grammar 02 _ Basic of English Grammar -2"
+          },
+          {
+            "link": "https://t.me/c/3870652528/4",
+            "title": "003 Basic_of_English_Grammar_03___Basic_of_English_Grammar_3"
+          },
+          {
+            "link": "https://t.me/c/3870652528/5",
+            "title": "004 Root Words 01 _ Root Words - 1"
+          },
+          {
+            "title": "005 Root Words 02 _ Root Words -2",
+            "link": "https://t.me/c/3870652528/6"
+          },
+          {
+            "link": "https://t.me/c/3870652528/7",
+            "title": "006 Subject Verb Agreement 01 _ Subject verb agreement -1"
+          },
+          {
+            "title": "007 Subject_Verb_Agreement_02___Subject_verb_agreement_2_||_",
+            "link": "https://t.me/c/3870652528/8"
+          },
+          {
+            "title": "008 Tenses 01 _ Tenses - 1",
+            "link": "https://t.me/c/3870652528/9"
+          },
+          {
+            "title": "009 Tenses 02 _ Tenses (Part 2) || Rescheduled",
+            "link": "https://t.me/c/3870652528/10"
+          },
+          {
+            "title": "010 Tenses 03 _ Tenses (Part 3) || Rescheduled",
+            "link": "https://t.me/c/3870652528/11"
+          },
+          {
+            "title": "011- NOUNS 01",
+            "link": "https://t.me/c/3870652528/12"
+          },
+          {
+            "link": "https://t.me/c/3870652528/13",
+            "title": "012 Nouns 02 _ Nouns (Part 02) || (Recorded)"
+          },
+          {
+            "title": "013 Pronoun 01 _ Pronoun (Part 01)",
+            "link": "https://t.me/c/3870652528/14"
+          },
+          {
+            "title": "014 Pronoun 02 _ Pronoun (Part 02)",
+            "link": "https://t.me/c/3870652528/15"
+          },
+          {
+            "link": "https://t.me/c/3870652528/16",
+            "title": "015 Synonyms_and_Antonyms_01___Synonyms_and_Antonyms_Part_1_"
+          },
+          {
+            "link": "https://t.me/c/3870652528/17",
+            "title": "016 Synonyms and Antonyms 02 _ Synonyms and Antonyms (Part 02)"
+          },
+          {
+            "title": "017 Adjectives 01 _ Adjectives (Part 01) || Recorded",
+            "link": "https://t.me/c/3870652528/18"
+          }
+        ],
+        "title": "NDA- ENGLISH (MANEKSHAW BATCH)"
+      },
+      {
+        "title": "NDA- INDIAN POLITY (MANEKSHAW BATCH)",
+        "videos": [
+          {
+            "title": "DEMO LECTURE",
+            "link": "https://t.me/c/3870652528/51"
+          },
+          {
+            "link": "https://t.me/c/3870652528/52",
+            "title": "Introduction 01 : Introduction"
+          },
+          {
+            "title": "Making of Indian Constitution 01 : Making of Indian Constitution",
+            "link": "https://t.me/c/3870652528/53"
+          },
+          {
+            "title": "Constituent Assembly 01 : Constituent Assembly",
+            "link": "https://t.me/c/3870652528/54"
+          },
+          {
+            "title": "Schedules of Indian Constitution 01 : Schedules of Indian Constitution",
+            "link": "https://t.me/c/3870652528/55"
+          },
+          {
+            "link": "https://t.me/c/3870652528/56",
+            "title": "Borrowing and Salient Features of Indian Constitution 01 : Borrowing and Salient Features of Indian Constitution"
+          },
+          {
+            "title": "Preamble 01 : Preamble",
+            "link": "https://t.me/c/3870652528/57"
+          },
+          {
+            "link": "https://t.me/c/3870652528/58",
+            "title": "Fundamental Rights 01 : Fundamental Rights (Part 01)"
+          },
+          {
+            "link": "https://t.me/c/3870652528/59",
+            "title": "Fundamental Rights 02 : Fundamental Rights (Part 02)"
+          },
+          {
+            "title": "Writs and Fundamental Duties 01 : Writs and Fundamental Duties",
+            "link": "https://t.me/c/3870652528/60"
+          },
+          {
+            "title": "Writs and Fundamental Duties 02 : Writs and Fundamental Duties (Part 02)  Extra Lecture  NO MCQ Quiz",
+            "link": "https://t.me/c/3870652528/61"
+          },
+          {
+            "title": "Writs and Fundamental Duties 03 : Writs and Fundamental Duties (Part 03)  Extra Lecture",
+            "link": "https://t.me/c/3870652528/62"
+          },
+          {
+            "title": "DPSP 01 : DPSP",
+            "link": "https://t.me/c/3870652528/63"
+          },
+          {
+            "link": "https://t.me/c/3870652528/64",
+            "title": "Union and Citizenship 01 : Union and Citizenship"
+          },
+          {
+            "title": "Parliament 01 : Parliament || No MCQ Quiz",
+            "link": "https://t.me/c/3870652528/65"
+          },
+          {
+            "link": "https://t.me/c/3870652528/66",
+            "title": "Parliament 02 : Parliament (Part 02)"
+          },
+          {
+            "link": "https://t.me/c/3870652528/67",
+            "title": "State Lagislature 01 : State Lagislature"
+          },
+          {
+            "link": "https://t.me/c/3870652528/68",
+            "title": "State Lagislature 02 : State Lagislature (Part 02)  NO MCQ Quiz  Extra Lecture"
+          },
+          {
+            "title": "Election Process 01 : Election Process || Recorded",
+            "link": "https://t.me/c/3870652528/69"
+          },
+          {
+            "title": "CAG and AGI 01 : CAG and AGI",
+            "link": "https://t.me/c/3870652528/70"
+          },
+          {
+            "title": "President 01 : President",
+            "link": "https://t.me/c/3870652528/71"
+          },
+          {
+            "title": "Vice President and Governor 01 : Vice President and Governor",
+            "link": "https://t.me/c/3870652528/72"
+          },
+          {
+            "link": "https://t.me/c/3870652528/73",
+            "title": "Panchayat Raj and Muncipalties 01 : Panchayat Raj and Muncipalties"
+          },
+          {
+            "link": "https://t.me/c/3870652528/74",
+            "title": "Amendments And Panchsheel 01 : Amendments & Panchsheel"
+          },
+          {
+            "title": "SC and HC 01 : SC and HC",
+            "link": "https://t.me/c/3870652528/75"
+          }
+        ],
+        "id": "C110"
+      },
+      {
+        "videos": [
+          {
+            "title": "Origin of Human 01 _ Origin of Human",
+            "link": "https://t.me/c/3870652528/77"
+          },
+          {
+            "title": "Indus_Valley_Civilization_01___Indus_Valley_Civilization",
+            "link": "https://t.me/c/3870652528/78"
+          },
+          {
+            "link": "https://t.me/c/3870652528/79",
+            "title": "Indus_Valley_Civilization_02___Indus_Valley_Civilization"
+          },
+          {
+            "title": "Indus_Valley_Civilization_03___Indus_Valley_Civilization",
+            "link": "https://t.me/c/3870652528/80"
+          },
+          {
+            "link": "https://t.me/c/3870652528/81",
+            "title": "Title: Vedic Civilization 01 : Vedic Civilization -1"
+          },
+          {
+            "title": "Vedic Civilization 02 _ Vedic Civilization -2",
+            "link": "https://t.me/c/3870652528/82"
+          },
+          {
+            "title": "Religious Movement 01 : Religious Movement",
+            "link": "https://t.me/c/3870652528/83"
+          },
+          {
+            "title": "Religious Movements 02 : Religious Movements- 2",
+            "link": "https://t.me/c/3870652528/84"
+          },
+          {
+            "link": "https://t.me/c/3870652528/85",
+            "title": "Mahajanapadas/Foreign Invasions 01 : Mahajanapadas/Foreign Invasions"
+          },
+          {
+            "title": "Mauryan Empire 01 : Mauryan Empire (Part -1)",
+            "link": "https://t.me/c/3870652528/86"
+          },
+          {
+            "link": "https://t.me/c/3870652528/87",
+            "title": "Title: Mauryan Empire 02 : Mauryan Empire (Part -2)"
+          },
+          {
+            "link": "https://t.me/c/3870652528/88",
+            "title": "Post Mauryan Age 01 : Post Mauryan Age -1"
+          },
+          {
+            "link": "https://t.me/c/3870652528/89",
+            "title": "Post Mauryan Age 02 : Post Mauryan Age -2"
+          },
+          {
+            "title": "Post Mauryan Age 03 : Post Mauryan Age -3",
+            "link": "https://t.me/c/3870652528/90"
+          },
+          {
+            "link": "https://t.me/c/3870652528/91",
+            "title": "Gupta Empire 01 : Gupta Empire -1"
+          },
+          {
+            "link": "https://t.me/c/3870652528/92",
+            "title": "Gupta Empire 02 : Gupta Empire (Part 2)"
+          },
+          {
+            "title": "Post Gupta Age 01 : Post Gupta Age -1 || Recorded",
+            "link": "https://t.me/c/3870652528/93"
+          },
+          {
+            "link": "https://t.me/c/3870652528/94",
+            "title": "Post Gupta Age 02 : Post Gupta Age -2"
+          },
+          {
+            "title": "Sangam Era 01 : Sangam Era",
+            "link": "https://t.me/c/3870652528/95"
+          },
+          {
+            "title": "Rajput Period 01 : Rajput Period",
+            "link": "https://t.me/c/3870652528/96"
+          },
+          {
+            "title": "Rajput Period 02 : Rajput Period -2",
+            "link": "https://t.me/c/3870652528/97"
+          },
+          {
+            "title": "Establishment of Sultanate 01 : Establishment of Sultanate -1",
+            "link": "https://t.me/c/3870652528/98"
+          },
+          {
+            "link": "https://t.me/c/3870652528/99",
+            "title": "Establishment of Sultanate 02 : Establishment of Sultanate -2"
+          },
+          {
+            "link": "https://t.me/c/3870652528/100",
+            "title": "Expansion of Sultanate 01 : Expansion of Sultanate"
+          },
+          {
+            "title": "Decline of sultanate 01 : Decline of sultanate",
+            "link": "https://t.me/c/3870652528/101"
+          },
+          {
+            "title": "Decline of sultanate 02 : Decline of sultanate (Part 2)",
+            "link": "https://t.me/c/3870652528/102"
+          },
+          {
+            "link": "https://t.me/c/3870652528/103",
+            "title": "Vijaynagar Empire 01 : Vijaynagar Empire"
+          },
+          {
+            "link": "https://t.me/c/3870652528/104",
+            "title": "Bhakti Movement 01 : Bhakti Movement"
+          },
+          {
+            "title": "Rise of Mughals 01 : Rise of Mughals",
+            "link": "https://t.me/c/3870652528/105"
+          },
+          {
+            "title": "Expansion of Mughal empire 01 : Expansion of Mughal empire -1",
+            "link": "https://t.me/c/3870652528/106"
+          },
+          {
+            "link": "https://t.me/c/3870652528/107",
+            "title": "Expansion of Mughal empire 02 : Expansion of Mughal empire -2"
+          },
+          {
+            "title": "Aurangzeb and Decline of Mughals 01 : Aurangzeb and Decline of Mughals",
+            "link": "https://t.me/c/3870652528/108"
+          },
+          {
+            "title": "Aurangzeb and Decline of Mughals 02 : Aurangzeb and Decline of Mughals (Part 02) || Extra Lecture",
+            "link": "https://t.me/c/3870652528/109"
+          },
+          {
+            "link": "https://t.me/c/3870652528/110",
+            "title": "The Rise of Maratha empire under Shivaji 01 : The Rise of Maratha empire under Shivaji"
+          },
+          {
+            "link": "https://t.me/c/3870652528/111",
+            "title": "The Rise of Maratha empire under Shivaji 02 : The Rise of Maratha empire under Shivaji -2"
+          },
+          {
+            "link": "https://t.me/c/3870652528/112",
+            "title": "3rd Battle of Panipat 1761 01 : 3rd Battle of Panipat 1761"
+          },
+          {
+            "title": "Arrival of Europeans in India 01 : Arrival of Europeans in India",
+            "link": "https://t.me/c/3870652528/113"
+          },
+          {
+            "link": "https://t.me/c/3870652528/117",
+            "title": "British conquest in India 01 : British conquest in India -1"
+          },
+          {
+            "link": "https://t.me/c/3870652528/119",
+            "title": "British conquest in India 02 : British conquest in India -2"
+          }
+        ],
+        "title": "NDA- HISTORY (MANEKSHAW BATCH)",
+        "id": "C111"
+      },
+      {
+        "id": "C112",
+        "title": "NDA- PHYSICS (MANEKSHAW BATCH)",
+        "videos": [
+          {
+            "link": "https://t.me/c/3870652528/120",
+            "title": "Unit and Measurement 01 : Unit and Measurement"
+          },
+          {
+            "link": "https://t.me/c/3870652528/121",
+            "title": "Unit and Measurement 02 : Unit and Measurement"
+          },
+          {
+            "title": "Unit and Measurement : Solution to MCQ Quiz",
+            "link": "https://t.me/c/3870652528/122"
+          },
+          {
+            "link": "https://t.me/c/3870652528/123",
+            "title": "Motion in 1D 01 : Motion in 1D"
+          },
+          {
+            "title": "Motion in 1D 02 _ Motion in 1D (Part 2) || No MCQ Quiz",
+            "link": "https://t.me/c/3870652528/125"
+          },
+          {
+            "title": "Motion in 1D 03 _ Motion in 1D (Part 3)",
+            "link": "https://t.me/c/3870652528/126"
+          },
+          {
+            "title": "Motion in 1D _ Solution to MCQ Quiz",
+            "link": "https://t.me/c/3870652528/127"
+          },
+          {
+            "title": "Newtons_Laws_of_Motion_01___Newtons_laws_of_motion_Part_",
+            "link": "https://t.me/c/3870652528/128"
+          },
+          {
+            "title": "Newtons_Laws_of_Motion_02___Newtons_laws_of_motion_Part_",
+            "link": "https://t.me/c/3870652528/129"
+          },
+          {
+            "link": "https://t.me/c/3870652528/130",
+            "title": "Newtons_Laws_of_Motion_03___Newtons_laws_of_motion_Part_"
+          },
+          {
+            "link": "https://t.me/c/3870652528/131",
+            "title": "Newtons Laws of Motion 04 _ Newtons laws of motion (Part"
+          },
+          {
+            "title": "Newtons Laws of Motion _ Solution to MCQ Quiz",
+            "link": "https://t.me/c/3870652528/132"
+          },
+          {
+            "link": "https://t.me/c/3870652528/133",
+            "title": "Friction 01"
+          },
+          {
+            "link": "https://t.me/c/3870652528/134",
+            "title": "Friction 02 _ Friction (Part 2"
+          },
+          {
+            "link": "https://t.me/c/3870652528/135",
+            "title": "Friction_03_Friction,_collision,_lever,_Projectile_motio"
+          },
+          {
+            "link": "https://t.me/c/3870652528/136",
+            "title": "Relative_Velocity,_Average_Velocity,_Projectile_Motion_01"
+          },
+          {
+            "title": "Relative_Velocity,_Average_Velocity,_Projectile_Motion_0-2",
+            "link": "https://t.me/c/3870652528/137"
+          },
+          {
+            "title": "Work_Power_Energy_01___Work_Power_Energy_1_||_No_MCQ_Qui",
+            "link": "https://t.me/c/3870652528/138"
+          },
+          {
+            "link": "https://t.me/c/3870652528/139",
+            "title": "Work Power Energy 02 _ Work Power Energy -2 || Reschedul"
+          },
+          {
+            "link": "https://t.me/c/3870652528/140",
+            "title": "Work_Power_Energy_03___Work_Power_Energy_3_||_No_MCQ_Qui"
+          },
+          {
+            "link": "https://t.me/c/3870652528/141",
+            "title": "Basics_of_Rotational_Motion_01___Basics_of_Rotational_Mo"
+          },
+          {
+            "link": "https://t.me/c/3870652528/142",
+            "title": "Basics_of_Rotational_Motion_02___Basics_of_Rotational_Mo"
+          },
+          {
+            "link": "https://t.me/c/3870652528/143",
+            "title": "Gravitation 01 _ Gravitation (Part 01) || No MCQ Quiz"
+          },
+          {
+            "link": "https://t.me/c/3870652528/144",
+            "title": "Gravitation 02 _ Gravitation (Part 02)"
+          },
+          {
+            "title": "Gravitation 03 _ Gravitation (Part 03)",
+            "link": "https://t.me/c/3870652528/145"
+          },
+          {
+            "link": "https://t.me/c/3870652528/146",
+            "title": "Sound_and_Waves_01_Sound_and_Waves_Part_01_||_No_MCQ_Qui"
+          },
+          {
+            "title": "Sound_and_Waves_02_Sound_and_Waves_Part_02_||_No_MCQ_Qui",
+            "link": "https://t.me/c/3870652528/147"
+          },
+          {
+            "title": "Sound_and_Waves_03_Sound_and_Waves_Part_03_||",
+            "link": "https://t.me/c/3870652528/148"
+          },
+          {
+            "link": "https://t.me/c/3870652528/149",
+            "title": "Sound_and_Waves_04_Sound_and_Waves_Part_04_||_Extra_Lect"
+          },
+          {
+            "link": "https://t.me/c/3870652528/150",
+            "title": "Current_Electricity_01_Current_Electricity_Part_1_||"
+          },
+          {
+            "link": "https://t.me/c/3870652528/151",
+            "title": "Current_Electricity_02___Current_Electricity_Part_02_||_"
+          },
+          {
+            "title": "Current Electricity 03 _ Current Electricity (Part- 03)",
+            "link": "https://t.me/c/3870652528/152"
+          },
+          {
+            "title": "Current_Electricity_04___Current_Electricity_Part_4_||_N",
+            "link": "https://t.me/c/3870652528/153"
+          },
+          {
+            "title": "Current_Electricity_05___Current_Electricity_Part_05_||_",
+            "link": "https://t.me/c/3870652528/154"
+          },
+          {
+            "title": "Current_Electricity_06___Current_Electricity_Part_06_||_",
+            "link": "https://t.me/c/3870652528/155"
+          },
+          {
+            "link": "https://t.me/c/3870652528/156",
+            "title": "Electrostatics 01 _ Electrostatics (Part 01) || No MCQ Q"
+          },
+          {
+            "link": "https://t.me/c/3870652528/157",
+            "title": "Electrostatics 02 _ Electrostatics (Part 02) || No MCQ Q"
+          },
+          {
+            "link": "https://t.me/c/3870652528/158",
+            "title": "Electrostatics 03 Electrostatics (Part 3)"
+          },
+          {
+            "link": "https://t.me/c/3870652528/159",
+            "title": "Electrostatics_04_Electrostatics_Part_04_Extra_Lecture_N"
+          },
+          {
+            "link": "https://t.me/c/3870652528/160",
+            "title": "Electrostatics_05_Electrostatics_Part_05_Extra_Lecture_N"
+          },
+          {
+            "link": "https://t.me/c/3870652528/161",
+            "title": "Electrostatics_06_Electrostatics_Part_06_Extra_Lecture_N"
+          },
+          {
+            "link": "https://t.me/c/3870652528/162",
+            "title": "Electrostatics_07___Electrostatics_Part_07_||_Extra_Lect"
+          },
+          {
+            "title": "Electromagnetism_01_Electromagnetism_Part_01_||_No_MCQ_Q",
+            "link": "https://t.me/c/3870652528/163"
+          },
+          {
+            "link": "https://t.me/c/3870652528/164",
+            "title": "Electromagnetism_02_Electromagnetism_Part_2_||_No_MCQ_Qu"
+          },
+          {
+            "link": "https://t.me/c/3870652528/165",
+            "title": "Electromagnetism 03 _ Electromagnetism (Part 3)"
+          },
+          {
+            "link": "https://t.me/c/3870652528/166",
+            "title": "Electromagnetism_04_biot_savart_law_||_Recorded_Extra_Le"
+          },
+          {
+            "link": "https://t.me/c/3870652528/167",
+            "title": "Light 01 _ Light || No MCQ Quiz"
+          },
+          {
+            "link": "https://t.me/c/3870652528/168",
+            "title": "Light 02 _ Light (Part 2) || No MCQ Quiz"
+          },
+          {
+            "link": "https://t.me/c/3870652528/169",
+            "title": "Light 03 _ Light (Part 3) || Extra Lecture"
+          },
+          {
+            "link": "https://t.me/c/3870652528/170",
+            "title": "Light_04_Light_Part_04_||_Extra_Class_||_No_MCQ_Quiz_||_"
+          },
+          {
+            "title": "Hydrodynamics 01 _ Hydrodynamics  Recorded  No MCQ Q",
+            "link": "https://t.me/c/3870652528/171"
+          },
+          {
+            "title": "Hydrodynamics_02___Hydrodynamics_Part_2_||_Recorded_||_N",
+            "link": "https://t.me/c/3870652528/172"
+          },
+          {
+            "title": "Heat_And_Thermodynamics_01___Heat_And_Thermodynamics_||_",
+            "link": "https://t.me/c/3870652528/173"
+          },
+          {
+            "link": "https://t.me/c/3870652528/174",
+            "title": "Heat_And_Thermodynamics_01___Heat_And_Thermodynamics_||_"
+          },
+          {
+            "title": "Practice_Session_01_Practice_Session_||_Extra_Lecture_||",
+            "link": "https://t.me/c/3870652528/175"
+          }
+        ]
+      },
+      {
+        "videos": [
+          {
+            "title": "Introduction 01 _ Introduction || NO MCQ Quiz",
+            "link": "https://t.me/c/3870652528/176"
+          },
+          {
+            "title": "Matter_and_Its_State_01___Matter_and_Its_State_Part_01_|",
+            "link": "https://t.me/c/3870652528/177"
+          },
+          {
+            "title": "Matter and Its State 02 _ Matter and Its State (Part 02)",
+            "link": "https://t.me/c/3870652528/178"
+          },
+          {
+            "link": "https://t.me/c/3870652528/179",
+            "title": "Matter_and_Its_State_04___Separation_Technique_of_Mixtur"
+          },
+          {
+            "title": "Atomic_Structure_of_Matter_01___Atomic_Structure_of_Matt",
+            "link": "https://t.me/c/3870652528/180"
+          },
+          {
+            "link": "https://t.me/c/3870652528/181",
+            "title": "Atomic_Structure_of_Matter_02___Atomic_Structure_of_Matt"
+          },
+          {
+            "link": "https://t.me/c/3870652528/182",
+            "title": "Valency_and_Its_Electronic_Configuration_01___Valency_an"
+          },
+          {
+            "title": "Chemical_Reaction_01___Chemical_Reaction_Part_01",
+            "link": "https://t.me/c/3870652528/183"
+          },
+          {
+            "link": "https://t.me/c/3870652528/184",
+            "title": "Chemical_Reaction_02___Chemical_Reaction_Part_02"
+          },
+          {
+            "title": "Chemical_Reactions_03___Chemical_Reactions_Part_03_||_Ex",
+            "link": "https://t.me/c/3870652528/185"
+          },
+          {
+            "link": "https://t.me/c/3870652528/186",
+            "title": "Periodic Table 01 _ Periodic Table (Part 01)"
+          },
+          {
+            "link": "https://t.me/c/3870652528/187",
+            "title": "Periodic Table 02 _ Periodic Table (Part 02)"
+          },
+          {
+            "title": "Periodic Table 03 _ Periodic Table (Part 03)",
+            "link": "https://t.me/c/3870652528/188"
+          },
+          {
+            "link": "https://t.me/c/3870652528/189",
+            "title": "Metals_and_Non_Metals_01___Metals_and_Non_Metals"
+          },
+          {
+            "title": "Metals and Non Metals 02 _ Metals and Non Metals (Part 02)",
+            "link": "https://t.me/c/3870652528/190"
+          },
+          {
+            "link": "https://t.me/c/3870652528/191",
+            "title": "Non_Metals_and_Its_Compound_01___Non_Metals_and_Its_Comp"
+          },
+          {
+            "title": "Chemical Bonding 01 _ Chemical Bonding || No MCQ Quiz",
+            "link": "https://t.me/c/3870652528/192"
+          },
+          {
+            "title": "Chemical Bonding 02 _ Chemical Bonding (Part 02)",
+            "link": "https://t.me/c/3870652528/193"
+          },
+          {
+            "link": "https://t.me/c/3870652528/194",
+            "title": "Acid,_Base_and_Salts_01___Acid,_Base_and_Salts_||_No_MCQ"
+          },
+          {
+            "link": "https://t.me/c/3870652528/195",
+            "title": "Acid, Base and Salts 02"
+          },
+          {
+            "link": "https://t.me/c/3870652528/196",
+            "title": "Acid,_Base_and_Salts_03"
+          },
+          {
+            "title": "Chemistry in Human Life 01",
+            "link": "https://t.me/c/3870652528/197"
+          },
+          {
+            "title": "Various_Elements_and_Their_Uses_With_Property_01",
+            "link": "https://t.me/c/3870652528/198"
+          },
+          {
+            "link": "https://t.me/c/3870652528/199",
+            "title": "Concentration Terms 01"
+          },
+          {
+            "title": "Concentrations_Terms_02",
+            "link": "https://t.me/c/3870652528/200"
+          },
+          {
+            "link": "https://t.me/c/3870652528/201",
+            "title": "Concentrations_Terms_03"
+          },
+          {
+            "link": "https://t.me/c/3870652528/202",
+            "title": "Concentrations_Terms_04"
+          },
+          {
+            "title": "Carbon_and_Its_Compound_01",
+            "link": "https://t.me/c/3870652528/203"
+          },
+          {
+            "title": "Carbon_and_Its_Compound_02",
+            "link": "https://t.me/c/3870652528/204"
+          },
+          {
+            "title": "Radioactivity,_Fuel,_Electrochemistry_01",
+            "link": "https://t.me/c/3870652528/205"
+          },
+          {
+            "link": "https://t.me/c/3870652528/206",
+            "title": "Oxidation_number_01"
+          }
+        ],
+        "title": "NDA- CHEMISTRY (MANEKSHAW BATCH)",
+        "id": "C113"
+      },
+      {
+        "videos": [
+          {
+            "title": "Cell 01 _ Introduction & Cell (Part 1)",
+            "link": "https://t.me/c/3870652528/207"
+          },
+          {
+            "title": "Cell 02",
+            "link": "https://t.me/c/3870652528/208"
+          },
+          {
+            "title": "Cell 03",
+            "link": "https://t.me/c/3870652528/209"
+          },
+          {
+            "link": "https://t.me/c/3870652528/210",
+            "title": "Cell 04"
+          },
+          {
+            "title": "Animal_Tissues_01",
+            "link": "https://t.me/c/3870652528/211"
+          },
+          {
+            "link": "https://t.me/c/3870652528/212",
+            "title": "Animal_Tissues_02"
+          },
+          {
+            "link": "https://t.me/c/3870652528/213",
+            "title": "Plant Tissues 01"
+          },
+          {
+            "link": "https://t.me/c/3870652528/214",
+            "title": "Life Processes 01"
+          },
+          {
+            "link": "https://t.me/c/3870652528/215",
+            "title": "Life Processes 02"
+          },
+          {
+            "link": "https://t.me/c/3870652528/216",
+            "title": "Life Processes 03"
+          },
+          {
+            "link": "https://t.me/c/3870652528/217",
+            "title": "Life Processes 04"
+          },
+          {
+            "title": "Life Processes 05",
+            "link": "https://t.me/c/3870652528/218"
+          },
+          {
+            "link": "https://t.me/c/3870652528/219",
+            "title": "Control_and_Coordination_in_Animals_01"
+          },
+          {
+            "title": "Reproduction 01",
+            "link": "https://t.me/c/3870652528/220"
+          },
+          {
+            "title": "Reproduction 02",
+            "link": "https://t.me/c/3870652528/221"
+          },
+          {
+            "link": "https://t.me/c/3870652528/222",
+            "title": "Reproduction 03"
+          },
+          {
+            "link": "https://t.me/c/3870652528/223",
+            "title": "Diversity 01"
+          },
+          {
+            "title": "Diversity 02",
+            "link": "https://t.me/c/3870652528/224"
+          },
+          {
+            "title": "Diversity 03",
+            "link": "https://t.me/c/3870652528/225"
+          },
+          {
+            "title": "Human Health and Diseases 01",
+            "link": "https://t.me/c/3870652528/226"
+          },
+          {
+            "link": "https://t.me/c/3870652528/227",
+            "title": "Important_Vitamins_and_Minerals_01"
+          },
+          {
+            "link": "https://t.me/c/3870652528/228",
+            "title": "Genetics 01"
+          },
+          {
+            "title": "Miscellaneous_01",
+            "link": "https://t.me/c/3870652528/229"
+          }
+        ],
+        "id": "C114",
+        "title": "NDA- BIOLOGY (MANEKSHAW BATCH)"
       }
     ]
   },
   "visitors": {
-    "count": 548
+    "count": 1412
   }
 }

@@ -124,6 +124,101 @@ const DB = {
     getSlides: async () => await getList('slides'),
     setSlides: async (slides) => await setList('slides', slides),
 
+    getSlideSections: async () => {
+        try {
+            const list = await getList('slideSections');
+            if (!list || list.length === 0) {
+                const defaultSections = [
+                    { id: "IX", title: "Class IX Slides" },
+                    { id: "X", title: "Class X Slides" },
+                    { id: "XI", title: "Class XI Slides" },
+                    { id: "XII", title: "Class XII Slides" },
+                    { id: "MISC", title: "Miscellaneous (MISC) Slides" }
+                ];
+                await setList('slideSections', defaultSections);
+                return defaultSections;
+            }
+            return list;
+        } catch (e) {
+            console.error("Error getting slideSections:", e);
+            return [
+                { id: "IX", title: "Class IX Slides" },
+                { id: "X", title: "Class X Slides" },
+                { id: "XI", title: "Class XI Slides" },
+                { id: "XII", title: "Class XII Slides" },
+                { id: "MISC", title: "Miscellaneous (MISC) Slides" }
+            ];
+        }
+    },
+    setSlideSections: async (sections) => await setList('slideSections', sections),
+
+    getNoteSections: async () => {
+        try {
+            const list = await getList('noteSections');
+            if (!list || list.length === 0) {
+                const defaultNoteSections = [
+                    { id: "sec_ix_chem", title: "Chemistry (Class IX)" },
+                    { id: "sec_ix_phy", title: "Physics (Class IX)" },
+                    { id: "sec_ix_bio", title: "Biology (Class IX)" },
+                    { id: "sec_x_chem", title: "Chemistry (Class X)" },
+                    { id: "sec_x_phy", title: "Physics (Class X)" },
+                    { id: "sec_xii_phy_ch1", title: "Class XII Physics - CH 1 Electric Fields and Charges" },
+                    { id: "sec_xii_phy_ch2", title: "Class XII Physics - CH 2 Electrostatic Potential and Capacitance" }
+                ];
+                await setList('noteSections', defaultNoteSections);
+                return defaultNoteSections;
+            }
+            return list;
+        } catch (e) {
+            console.error("Error getting noteSections:", e);
+            return [
+                { id: "sec_ix_chem", title: "Chemistry (Class IX)" },
+                { id: "sec_ix_phy", title: "Physics (Class IX)" },
+                { id: "sec_ix_bio", title: "Biology (Class IX)" },
+                { id: "sec_x_chem", title: "Chemistry (Class X)" },
+                { id: "sec_x_phy", title: "Physics (Class X)" },
+                { id: "sec_xii_phy_ch1", title: "Class XII Physics - CH 1 Electric Fields and Charges" },
+                { id: "sec_xii_phy_ch2", title: "Class XII Physics - CH 2 Electrostatic Potential and Capacitance" }
+            ];
+        }
+    },
+    setNoteSections: async (sections) => await setList('noteSections', sections),
+
+    getNotes: async () => {
+        try {
+            const list = await getList('notes');
+            if (!list || list.length === 0) {
+                const defaultNotes = [
+                    { id: "n1", sectionId: "sec_ix_chem", title: "Chemistry CH 3 Atoms & Molecules", link: "Notes/IX_SCIENCE/ATOMSANDMOLECULES.pdf" },
+                    { id: "n2", sectionId: "sec_ix_chem", title: "Chemistry CH 4 Structure of Atom", link: "Notes/IX_SCIENCE/STRUCTUREOFATOMS.pdf" },
+                    { id: "n3", sectionId: "sec_ix_phy", title: "Physics CH 3 Gravitation", link: "Notes/IX_SCIENCE/GRAVITATION.pdf" },
+                    { id: "n4", sectionId: "sec_ix_phy", title: "Physics CH 4 Work, Energy & Power", link: "Notes/IX_SCIENCE/WORKENERGYANDPOWER.pdf" },
+                    { id: "n5", sectionId: "sec_ix_bio", title: "Biology CH 1 The Fundamental Unit of Life - Tissues", link: "Notes/IX_SCIENCE/TISSUE.pdf" },
+                    { id: "n6", sectionId: "sec_ix_bio", title: "Biology CH 5 Why Do We Fall Ill?", link: "Notes/IX_SCIENCE/WHYDOWEFALLILL.pdf" },
+                    { id: "n7", sectionId: "sec_x_chem", title: "Chemistry CH 1 Chemical Reactions & Equations", link: "notes/X_Science/Chemistry CH 1 Chemical Reactions & Equations.pdf" },
+                    { id: "n8", sectionId: "sec_x_chem", title: "Chemistry CH 2 Acids, Bases & Salts", link: "notes/X_Science/Chemistry CH 2 Acids, Bases & Salts.pdf" },
+                    { id: "n9", sectionId: "sec_x_chem", title: "Chemistry CH 3 Metals & Non Metals", link: "notes/X_Science/Chemistry CH 3 Metals & Non Metals.pdf" },
+                    { id: "n10", sectionId: "sec_x_chem", title: "Chemistry CH 4 Carbon & Its Compounds", link: "notes/X_Science/Chemistry CH 4 Carbon & Its Compounds.pdf" },
+                    { id: "n11", sectionId: "sec_x_chem", title: "Carbon and Its Compounds (My Personal)", link: "notes/X_Science/Carbon & Its Compounds.pdf" },
+                    { id: "n12", sectionId: "sec_x_phy", title: "Physics CH 1 Electricity", link: "notes/X_Science/Physics CH 1 Electricity.pdf" },
+                    { id: "n13", sectionId: "sec_x_phy", title: "Physics CH 2 Magnetic Effect of Electric Current", link: "notes/X_Science/Physics CH 2 Magnetic Effect of Electric Current.pdf" },
+                    { id: "n14", sectionId: "sec_x_phy", title: "Physics CH 3 Reflection", link: "notes/X_Science/Physics CH 3 Reflection.pdf" },
+                    { id: "n15", sectionId: "sec_x_phy", title: "Physics CH 4 Refraction", link: "notes/X_Science/Physics CH 4 Refraction.pdf" },
+                    { id: "n16", sectionId: "sec_x_phy", title: "Physics CH 5 Eye & the Colourful World", link: "notes/X_Science/Physics CH 5 Eye & the Colourful World.pdf" },
+                    { id: "n17", sectionId: "sec_xii_phy_ch1", title: "Chemistry CH 1 Chemical Reactions & Equations", link: "notes/X_Science/Chemistry CH 1 Chemical Reactions & Equations.pdf" },
+                    { id: "n18", sectionId: "sec_xii_phy_ch2", title: "Physics CH 1 Electricity", link: "notes/X_Science/Physics CH 1 Electricity.pdf" }
+                ];
+                await setList('notes', defaultNotes);
+                return defaultNotes;
+            }
+            return list;
+        } catch (e) {
+            console.error("Error getting notes:", e);
+            return [];
+        }
+    },
+    setNotes: async (notes) => await setList('notes', notes),
+
     getVideoLectures: async () => {
         try {
             const list = await getList('videoLectures');

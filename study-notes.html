@@ -53,198 +53,57 @@
     </nav>
 
 
- <!-- Study Notes Section FOR CLASS IX  -->
-<section class="faq" style="padding-top: 7rem;">
-  <div class="container">
-    <div class="section-header">
-      <h2 class="section-title">Study Notes - Class IX Science </h2>
-      <p class="section-subtitle">Chapter-wise PDF notes</p>
-    </div>
-    <div class="faq-container">
-      <div class="faq-item">
-        <button class="faq-question">
-          <span>Chemistry (Class IX)</span>
-          <svg class="faq-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
-        </button>
-        <div class="faq-answer">
-          <p>
-            <a href="Notes/IX_SCIENCE/ATOMSANDMOLECULES.pdf" target="_blank" download>
-              Chemistry CH 3 Atoms & Molecules
-            </a>
-            <br>
-            <a href="Notes/IX_SCIENCE/STRUCTUREOFATOMS.pdf" target="_blank" download>
-              Chemistry CH 4 Structure of Atom
-            </a>
-          
-          </p>
-        </div>
+  <!-- Study Notes Section -->
+  <section class="faq" style="padding-top: 5rem; padding-bottom: 5rem; min-height: 80vh;">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Study Notes</h2>
+        <p class="section-subtitle">Access chapter-wise PDF and study notes links.</p>
       </div>
 
-      <div class="faq-item">
-        <button class="faq-question">
-          <span>Physics (Class IX)</span>
-          <svg class="faq-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
-        </button>
-        <div class="faq-answer">
-          <p>
-            <a href="Notes/IX_SCIENCE/GRAVITATION.pdf" target="_blank" download>
-              Physics CH 3 Gravitation
-            </a>
-            <br>
-            <a href="Notes/IX_SCIENCE/WORKENERGYANDPOWER.pdf" target="_blank" download>
-              Physics CH 4 Work, Energy & Power
-            </a>
-            
-          </p>
-          </p>
+      <!-- Add Notes Link & Section Card (visible only to teacher and admin) -->
+      <div id="addNoteCard" class="card" style="display: none; max-width: 650px; margin: 0 auto 3rem auto; padding: 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-md);">
+        <div style="display: flex; gap: 0.5rem; border-bottom: 2px solid var(--gray-200); padding-bottom: 0.75rem; margin-bottom: 1.5rem;">
+          <button id="tabBtnAddNote" type="button" class="btn" style="background: var(--primary-color); color: white; padding: 0.4rem 1rem; font-size: 0.9rem; font-weight: 600; border-radius: var(--radius-md);">Add Note Link</button>
+          <button id="tabBtnAddNoteSection" type="button" class="btn btn-outline" style="padding: 0.4rem 1rem; font-size: 0.9rem; font-weight: 600; border-radius: var(--radius-md);">+ Add New Section (Scroller)</button>
         </div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question">
-          <span>Biology (Class IX)</span>
-          <svg class="faq-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
-        </button>
-        <div class="faq-answer">
-          <p>
-            <a href="Notes/IX_SCIENCE/TISSUE.pdf" target="_blank" download>
-              Biology CH 1 The Fundamental Unit of Life - Tissues
-            </a>
-            <br>
-            <a href="Notes/IX_SCIENCE/WHYDOWEFALLILL.pdf" target="_blank" download>
-              Biology CH 5 Why Do We Fall Ill?
-            </a>
-            
-          </p>
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-  <!-- Study Notes Section FOR CLASS X  -->
-  <section class="faq" style="padding-top: 0rem;">
-  <div class="container">
-    <div class="section-header">
-      <h2 class="section-title">Study Notes - Class X Science </h2>
-      <p class="section-subtitle">Chapter-wise PDF notes</p>
-    </div>
-    <div class="faq-container">
-      <div class="faq-item">
-        <button class="faq-question">
-          <span>Chemistry (Class X)</span>
-          <svg class="faq-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
-        </button>
-        <div class="faq-answer">
-          <p>
-            <a href="notes/X_Science/Chemistry CH 1 Chemical Reactions & Equations.pdf" target="_blank" download>
-              Chemistry CH 1 Chemical Reactions & Equations
-            </a>
-            <br>
-            <a href="notes/X_Science/Chemistry CH 2 Acids, Bases & Salts.pdf" target="_blank" download>
-              Chemistry CH 2 Acids, Bases & Salts
-            </a>
-            <br>
-            <a href="notes/X_Science/Chemistry CH 3 Metals & Non Metals.pdf" target="_blank" download>
-              Chemistry CH 3 Metals & Non Metals
-            </a>
-            <br>
-            <a href="notes/X_Science/Chemistry CH 4 Carbon & Its Compounds.pdf" target="_blank" download>
-              Chemistry CH 4 Carbon & Its Compounds
-            </a>
-            <br>
-            <a href="notes/X_Science/Carbon & Its Compounds.pdf" target="_blank" download>
-              Carbon and Its Compounds (My Personal)
-            </a>
-          </p>
-        </div>
+
+        <!-- Form 1: Add Note Link -->
+        <form id="add-note-form">
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label for="noteTitle" style="display: block; font-weight: 500; margin-bottom: 0.25rem;">Note Title / Topic</label>
+            <input type="text" id="noteTitle" class="form-input" placeholder="e.g. Chemistry CH 5 Periodic Classification" required style="width: 100%; border-color: var(--gray-300);">
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label for="noteLink" style="display: block; font-weight: 500; margin-bottom: 0.25rem;">Note PDF / Drive Link URL</label>
+            <input type="text" id="noteLink" class="form-input" placeholder="e.g. https://... or Notes/..." required style="width: 100%; border-color: var(--gray-300);">
+          </div>
+          <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label for="noteSection" style="display: block; font-weight: 500; margin-bottom: 0.25rem;">Section / Class</label>
+            <select id="noteSection" class="form-input" required style="width: 100%; border-color: var(--gray-300); background: white;">
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Add Note Link</button>
+        </form>
+
+        <!-- Form 2: Add Note Section (Scroller) -->
+        <form id="add-note-section-form" style="display: none;">
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label for="newNoteSectionTitle" style="display: block; font-weight: 500; margin-bottom: 0.25rem;">Section / Class Name</label>
+            <input type="text" id="newNoteSectionTitle" class="form-input" placeholder="e.g. Class XI Maths or Class VIII Science" required style="width: 100%; border-color: var(--gray-300);">
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 1.25rem;">Creating a section adds a new accordion scroller to this Study Notes page.</p>
+          <button type="submit" class="btn btn-primary btn-block">Create Section</button>
+        </form>
       </div>
 
-      <div class="faq-item">
-        <button class="faq-question">
-          <span>Physics (Class X)</span>
-          <svg class="faq-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
-        </button>
-        <div class="faq-answer">
-          <p>
-            <a href="notes/X_Science/Physics CH 1 Electricity.pdf" target="_blank" download>
-              Physics CH 1 Electricity
-            </a>
-            <br>
-            <a href="notes/X_Science/Physics CH 2 Magnetic Effect of Electric Current.pdf" target="_blank" download>
-              Physics CH 2 Magnetic Effect of Electric Current
-            </a>
-            <br>
-            <a href="notes/X_Science/Physics CH 3 Reflection.pdf" target="_blank" download>
-              Physics CH 3 Reflection
-            </a>
-            <br>
-            <a href="notes/X_Science/Physics CH 4 Refraction.pdf" target="_blank" download>
-              Physics CH 4 Refraction
-            </a>
-            <br>
-            <a href="notes/X_Science/Physics CH 5 Eye & the Colourful World.pdf" target="_blank" download>
-              Physics CH 5 Eye & the Colourful World
-            </a>
-          </p>
-          </p>
-        </div>
+      <!-- Notes Accordions Container -->
+      <div class="faq-container" id="notesFaqContainer" style="max-width: 800px; margin: 0 auto;">
+        <div style="text-align: center; padding: 2rem; color: var(--text-light);">Loading study notes...</div>
       </div>
     </div>
-  </div>
-</section>
-  <!-- Study Notes Section FOR CLASS XII  -->
-      <section class="faq" >
-  <div class="container">
-    <div class="section-header">
-      <h2 class="section-title">Study Notes - Class XII Physics </h2>
-      <p class="section-subtitle">Chapter-wise PDF notes</p>
-    </div>
-    <div class="faq-container">
-      <div class="faq-item">
-        <button class="faq-question">
-          <span>CH 1 ELECTRIC FIELDS AND CHARGES</span>
-          <svg class="faq-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
-        </button>
-        <div class="faq-answer">
-          <p>
-            <a href="notes/X_Science/Chemistry CH 1 Chemical Reactions & Equations.pdf" target="_blank" download>
-              Chemistry CH 1 Chemical Reactions & Equations
-            </a>
-          </p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-question">
-          <span>CH 2 ELECTROSTATIC POTENTIAL AND CAPACITANCE</span>
-          <svg class="faq-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
-        </button>
-        <div class="faq-answer">
-          <p>
-            <a href="notes/X_Science/Physics CH 1 Electricity.pdf" target="_blank" download>
-              Physics CH 1 Electricity
-            </a>
-          </p>
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+  </section>
 
 <!-- Contact Section -->
 <section class="contact" data-aos="fade-up" id="contact">
@@ -407,25 +266,293 @@
 <script src="js/db.js"></script>
 <script src="js/auth.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const user = typeof DB !== 'undefined' ? DB.getCurrentUser() : null;
-        if (!user) {
-            alert("Please login to access Study Notes.");
-            window.location.href = 'login.html';
-            return;
+    document.addEventListener('DOMContentLoaded', async () => {
+        let currentUser = null;
+        try {
+            currentUser = typeof DB !== 'undefined' ? DB.getCurrentUser() : null;
+            if (!currentUser || (currentUser.role !== 'student' && currentUser.role !== 'teacher' && currentUser.role !== 'admin')) {
+                alert("Please login to access Study Notes.");
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Update CTA in nav
+            const navCta = document.querySelector('.nav-cta a');
+            const mobileCta = document.querySelector('.mobile-cta');
+            const dashboardUrl = currentUser.role === 'teacher' ? 'teacher-dashboard.html' : 
+                                 (currentUser.role === 'admin' ? 'admin-dashboard.html' : 'student-dashboard.html');
+            if (navCta) {
+                navCta.textContent = "DASHBOARD";
+                navCta.href = dashboardUrl;
+            }
+            if (mobileCta) {
+                mobileCta.textContent = "DASHBOARD";
+                mobileCta.href = dashboardUrl;
+            }
+
+            // Show management card for teacher or admin
+            const addNoteCard = document.getElementById('addNoteCard');
+            if ((currentUser.role === 'teacher' || currentUser.role === 'admin') && addNoteCard) {
+                addNoteCard.style.display = 'block';
+            }
+
+            // Tabs for Add Note vs Add Section
+            const tabBtnAddNote = document.getElementById('tabBtnAddNote');
+            const tabBtnAddNoteSection = document.getElementById('tabBtnAddNoteSection');
+            const addNoteForm = document.getElementById('add-note-form');
+            const addNoteSectionForm = document.getElementById('add-note-section-form');
+
+            if (currentUser.role !== 'admin' && tabBtnAddNoteSection) {
+                tabBtnAddNoteSection.style.display = 'none';
+            }
+
+            if (tabBtnAddNote && tabBtnAddNoteSection && addNoteForm && addNoteSectionForm) {
+                tabBtnAddNote.addEventListener('click', () => {
+                    tabBtnAddNote.style.background = 'var(--primary-color)';
+                    tabBtnAddNote.style.color = 'white';
+                    tabBtnAddNote.classList.remove('btn-outline');
+                    tabBtnAddNoteSection.style.background = 'transparent';
+                    tabBtnAddNoteSection.style.color = 'inherit';
+                    tabBtnAddNoteSection.classList.add('btn-outline');
+
+                    addNoteForm.style.display = 'block';
+                    addNoteSectionForm.style.display = 'none';
+                });
+
+                tabBtnAddNoteSection.addEventListener('click', () => {
+                    tabBtnAddNoteSection.style.background = 'var(--primary-color)';
+                    tabBtnAddNoteSection.style.color = 'white';
+                    tabBtnAddNoteSection.classList.remove('btn-outline');
+                    tabBtnAddNote.style.background = 'transparent';
+                    tabBtnAddNote.style.color = 'inherit';
+                    tabBtnAddNote.classList.add('btn-outline');
+
+                    addNoteSectionForm.style.display = 'block';
+                    addNoteForm.style.display = 'none';
+                });
+            }
+
+            // Add Note Section form submission
+            if (addNoteSectionForm) {
+                addNoteSectionForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    const newTitle = document.getElementById('newNoteSectionTitle').value.trim();
+                    if (!newTitle) return alert("Please enter a section/class name.");
+
+                    try {
+                        const sections = await DB.getNoteSections();
+                        const newId = 'sec_note_' + Date.now();
+                        sections.push({
+                            id: newId,
+                            title: newTitle
+                        });
+                        await DB.setNoteSections(sections);
+                        document.getElementById('newNoteSectionTitle').value = '';
+                        alert(`Section "${newTitle}" created successfully!`);
+                        await renderNotes();
+
+                        // Switch back to Add Note tab
+                        if (tabBtnAddNote) tabBtnAddNote.click();
+                    } catch (err) {
+                        console.error("Error creating note section:", err);
+                        alert("Error creating section: " + err.message);
+                    }
+                });
+            }
+
+            // Add Note link form submission
+            if (addNoteForm) {
+                addNoteForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    const title = document.getElementById('noteTitle').value.trim();
+                    const link = document.getElementById('noteLink').value.trim();
+                    const sectionId = document.getElementById('noteSection').value;
+
+                    if (!title || !link || !sectionId) {
+                        alert("All fields are required.");
+                        return;
+                    }
+
+                    try {
+                        const notes = await DB.getNotes();
+                        const newNote = {
+                            id: 'note_' + Date.now(),
+                            sectionId: sectionId,
+                            title: title,
+                            link: link,
+                            addedBy: currentUser.id,
+                            date: new Date().toISOString()
+                        };
+                        notes.push(newNote);
+                        await DB.setNotes(notes);
+                        addNoteForm.reset();
+                        await renderNotes();
+                        alert("Note link added successfully!");
+                    } catch (err) {
+                        console.error("Error adding note link:", err);
+                        alert("Error adding note link: " + err.message);
+                    }
+                });
+            }
+
+            // Initial render
+            await renderNotes();
+        } catch (e) {
+            console.error("Notes init error:", e);
         }
 
-        const navCta = document.querySelector('.nav-cta a');
-        const mobileCta = document.querySelector('.mobile-cta');
-        const dashboardUrl = user.role === 'teacher' ? 'teacher-dashboard.html' : 
-                             (user.role === 'admin' ? 'admin-dashboard.html' : 'student-dashboard.html');
-        if (navCta) {
-            navCta.textContent = "DASHBOARD";
-            navCta.href = dashboardUrl;
-        }
-        if (mobileCta) {
-            mobileCta.textContent = "DASHBOARD";
-            mobileCta.href = dashboardUrl;
+        async function renderNotes() {
+            const container = document.getElementById('notesFaqContainer');
+            const sectionSelect = document.getElementById('noteSection');
+            if (!container) return;
+
+            try {
+                const sections = await DB.getNoteSections();
+                const notes = await DB.getNotes();
+
+                // Populate section dropdown
+                if (sectionSelect) {
+                    const prevVal = sectionSelect.value;
+                    sectionSelect.innerHTML = '';
+                    sections.forEach(sec => {
+                        const opt = document.createElement('option');
+                        opt.value = sec.id;
+                        opt.textContent = sec.title;
+                        sectionSelect.appendChild(opt);
+                    });
+                    if (prevVal && sections.some(s => s.id === prevVal)) {
+                        sectionSelect.value = prevVal;
+                    }
+                }
+
+                if (sections.length === 0) {
+                    container.innerHTML = '<div style="text-align: center; padding: 2rem; color: var(--text-light); font-style: italic;">No notes sections created yet.</div>';
+                    return;
+                }
+
+                container.innerHTML = sections.map(sec => {
+                    const secNotes = notes.filter(n => n.sectionId === sec.id);
+
+                    let notesHtml = '';
+                    if (secNotes.length === 0) {
+                        notesHtml = '<div style="color: var(--text-light); font-style: italic; padding: 0.5rem 0;">No notes uploaded yet in this section.</div>';
+                    } else {
+                        notesHtml = secNotes.map(note => {
+                            const deleteBtn = (currentUser.role === 'teacher' || currentUser.role === 'admin') ? `
+                                <button class="btn-delete-note" data-note-id="${note.id}" style="background: none; border: none; color: #dc2626; font-size: 0.8rem; font-weight: 600; cursor: pointer; padding: 0.25rem 0.5rem; transition: color 0.2s;">
+                                    Delete
+                                </button>
+                            ` : '';
+
+                            return `
+                                <p style="display: flex; justify-content: space-between; align-items: center; margin: 0.75rem 0; padding-bottom: 0.5rem; border-bottom: 1px solid var(--gray-100);">
+                                    <a href="${note.link}" target="_blank" download style="color: var(--primary-light); font-weight: 500; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                        <span>${window.escapeHTML(note.title)}</span>
+                                    </a>
+                                    ${deleteBtn}
+                                </p>
+                            `;
+                        }).join('');
+                    }
+
+                    let adminSectionActions = '';
+                    if (currentUser.role === 'admin') {
+                        adminSectionActions = `
+                            <div style="display: flex; gap: 0.5rem; margin-top: 1rem; padding-top: 0.75rem; border-top: 1px dashed var(--gray-200); justify-content: flex-end;">
+                                <button class="btn-edit-note-sec" data-sec-id="${sec.id}" style="background: none; border: 1px solid var(--gray-300); border-radius: var(--radius-md); font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem; cursor: pointer;">Edit Section Title</button>
+                                <button class="btn-delete-note-sec" data-sec-id="${sec.id}" style="background: none; border: 1px solid #fca5a5; color: #dc2626; border-radius: var(--radius-md); font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem; cursor: pointer;">Delete Section</button>
+                            </div>
+                        `;
+                    }
+
+                    return `
+                        <div class="faq-item" id="note-sec-${sec.id}">
+                            <button class="faq-question">
+                                <span>${window.escapeHTML(sec.title)}</span>
+                                <svg class="faq-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div class="faq-answer" id="notes-content-${sec.id}">
+                                ${notesHtml}
+                                ${adminSectionActions}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                // Bind Delete Note buttons
+                container.querySelectorAll('.btn-delete-note').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const noteId = e.target.dataset.noteId;
+                        if (confirm('Are you sure you want to delete this note link?')) {
+                            try {
+                                let currentNotes = await DB.getNotes();
+                                currentNotes = currentNotes.filter(n => n.id !== noteId);
+                                await DB.setNotes(currentNotes);
+                                await renderNotes();
+                                alert('Note link deleted successfully.');
+                            } catch (err) {
+                                console.error('Error deleting note:', err);
+                                alert('Error deleting note: ' + err.message);
+                            }
+                        }
+                    });
+                });
+
+                // Bind Edit Section buttons
+                container.querySelectorAll('.btn-edit-note-sec').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const secId = e.target.dataset.secId;
+                        const sec = sections.find(s => s.id === secId);
+                        if (!sec) return;
+                        const newTitle = prompt("Enter new title for this notes section:", sec.title);
+                        if (newTitle === null) return;
+                        const trimmed = newTitle.trim();
+                        if (!trimmed) return alert("Title cannot be empty.");
+
+                        try {
+                            sec.title = trimmed;
+                            await DB.setNoteSections(sections);
+                            alert("Section title updated successfully!");
+                            await renderNotes();
+                        } catch (err) {
+                            console.error(err);
+                            alert("Error updating section: " + err.message);
+                        }
+                    });
+                });
+
+                // Bind Delete Section buttons
+                container.querySelectorAll('.btn-delete-note-sec').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const secId = e.target.dataset.secId;
+                        if (confirm("Are you sure you want to delete this section? All notes in this section will also be removed.")) {
+                            try {
+                                const updatedSections = sections.filter(s => s.id !== secId);
+                                await DB.setNoteSections(updatedSections);
+
+                                let currentNotes = await DB.getNotes();
+                                currentNotes = currentNotes.filter(n => n.sectionId !== secId);
+                                await DB.setNotes(currentNotes);
+
+                                alert("Section deleted successfully!");
+                                await renderNotes();
+                            } catch (err) {
+                                console.error(err);
+                                alert("Error deleting section: " + err.message);
+                            }
+                        }
+                    });
+                });
+
+            } catch (err) {
+                console.error("Error rendering notes:", err);
+                container.innerHTML = '<div style="color: #dc2626; padding: 2rem; text-align: center;">Error loading study notes database.</div>';
+            }
         }
     });
 </script>

@@ -532,6 +532,7 @@
                 <li style="border-top: 1px solid #1e293b; margin-top: 0.75rem; padding-top: 0.75rem; color: #64748b; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding-left: 0.5rem;">Website Navigation</li>
                 <li><a href="index.html" class="menu-item" style="text-decoration: none;"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Home Page</a></li>
                 <li><a href="leaderboard.html" class="menu-item" style="text-decoration: none; color: #f59e0b;"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Leaderboard</a></li>
+                <li><a href="study-notes.html" class="menu-item" style="text-decoration: none;"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> Notes Page</a></li>
                 <li><a href="video-lectures.html" class="menu-item" style="text-decoration: none;"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg> Videos Page</a></li>
                 <li><a href="study-slides.html" class="menu-item" style="text-decoration: none;"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Slides Page</a></li>
                 <li><a href="results.html" class="menu-item" style="text-decoration: none;"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Results Page</a></li>
@@ -556,6 +557,7 @@
                 <div class="topbar-right">
                     <div class="topbar-links">
                         <a href="index.html" class="topbar-link">Home</a>
+                        <a href="study-notes.html" class="topbar-link">Notes</a>
                         <a href="video-lectures.html" class="topbar-link">Videos</a>
                         <a href="study-slides.html" class="topbar-link">Slides</a>
                         <a href="results.html" class="topbar-link">Results</a>
@@ -570,6 +572,7 @@
             <!-- Mobile Top Navigation Ribbon Bar -->
             <div class="mobile-top-ribbon">
                 <a href="index.html" class="topbar-link">Home</a>
+                <a href="study-notes.html" class="topbar-link">Notes</a>
                 <a href="video-lectures.html" class="topbar-link">Videos</a>
                 <a href="study-slides.html" class="topbar-link">Slides</a>
                 <a href="results.html" class="topbar-link">Results</a>
@@ -872,16 +875,22 @@
                             <div style="min-width: 0;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
                                     <h3 style="font-size: 1.25rem; color: var(--text-dark); margin: 0; font-weight: 700;">Attendance Timeline Report</h3>
-                                    <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                        <label for="adminAttendanceSortSelect" style="font-size: 0.85rem; font-weight: 600; margin: 0; white-space: nowrap; color: var(--text-dark);">Sort By:</label>
-                                        <select class="form-input" id="adminAttendanceSortSelect" style="padding: 0.35rem 0.6rem; font-size: 0.85rem; background: white; border-color: var(--gray-300); width: auto; margin: 0;">
-                                            <option value="name-asc">Name (A - Z)</option>
-                                            <option value="name-desc">Name (Z - A)</option>
-                                            <option value="rate-desc">Rate (High to Low)</option>
-                                            <option value="rate-asc">Rate (Low to High)</option>
-                                            <option value="id-asc">ID (Ascending)</option>
-                                            <option value="id-desc">ID (Descending)</option>
-                                        </select>
+                                    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+                                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                            <label for="adminAttendanceSortSelect" style="font-size: 0.85rem; font-weight: 600; margin: 0; white-space: nowrap; color: var(--text-dark);">Sort By:</label>
+                                            <select class="form-input" id="adminAttendanceSortSelect" style="padding: 0.35rem 0.6rem; font-size: 0.85rem; background: white; border-color: var(--gray-300); width: auto; margin: 0;">
+                                                <option value="name-asc">Name (A - Z)</option>
+                                                <option value="name-desc">Name (Z - A)</option>
+                                                <option value="rate-desc">Rate (High to Low)</option>
+                                                <option value="rate-asc">Rate (Low to High)</option>
+                                                <option value="id-asc">ID (Ascending)</option>
+                                                <option value="id-desc">ID (Descending)</option>
+                                            </select>
+                                        </div>
+                                        <button type="button" id="clearAllAttendanceBtn" class="btn" style="background: transparent; color: #dc2626; border: 1.5px solid #dc2626; padding: 0.35rem 0.75rem; font-size: 0.82rem; font-weight: 600; border-radius: var(--radius-md); cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem;" title="Wipe all historical attendance records">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                            Clean All Attendance
+                                        </button>
                                     </div>
                                 </div>
                                 <div style="overflow-x: auto; max-width: 100%; border: 1px solid var(--gray-200); border-radius: var(--radius-md); box-sizing: border-box;">
@@ -999,6 +1008,204 @@
                                 
                                 <div id="scrollerVideosPlaceholder" style="text-align: center; padding: 3rem; color: var(--text-light); border: 2px dashed var(--gray-200); border-radius: var(--radius-md);">
                                     Select a scroller from the dropdown to manage its video links.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ================= Study Notes Scroller & Links Management ================= -->
+                    <div class="card" style="margin-top: 2rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border-bottom: 2px solid var(--gray-200); padding-bottom: 0.75rem; margin-bottom: 1.5rem;">
+                            <div>
+                                <h2 class="card-header" style="color: #b91c1c; border-bottom: none; margin: 0; padding: 0;">Study Notes Scroller & Links Management</h2>
+                                <p class="verbose-text" style="margin: 0.25rem 0 0 0; color: var(--text-light); font-size: 0.95rem;">
+                                    Create new notes accordion sections (scrollers) or add, edit, and delete chapter-wise PDF/notes links.
+                                </p>
+                            </div>
+                            <div>
+                                <a href="study-notes.html" target="_blank" class="btn" style="background: #1e3a8a; color: white; padding: 0.45rem 1rem; font-size: 0.85rem; font-weight: 600; text-decoration: none; border-radius: var(--radius-md); display: inline-flex; align-items: center; gap: 0.4rem;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                    Visit Notes Page
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-grid">
+                            <!-- Left Column: Manage Notes Scrollers -->
+                            <div style="border-right: 1px solid var(--gray-200); padding-right: 1.5rem;">
+                                <h3 style="font-size: 1.2rem; color: var(--text-dark); margin-bottom: 1rem; font-weight: 700;">1. Notes Scrollers / Sections</h3>
+                                
+                                <!-- Create new note scroller form -->
+                                <form id="create-note-scroller-form" style="margin-bottom: 1.5rem;">
+                                    <div class="form-row">
+                                        <div class="form-group" style="flex: 1;">
+                                            <label style="font-size: 0.85rem; font-weight: 600;">Scroller/Section Name</label>
+                                            <input class="form-input" id="newNoteScrollerTitle" type="text" placeholder="e.g. Class XI (Maths)" required style="padding: 0.5rem;">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary" style="background:#b91c1c; border-color:#b91c1c; height: 38px; padding: 0.5rem 1rem;">Create</button>
+                                    </div>
+                                </form>
+                                
+                                <!-- Scrollers list -->
+                                <div style="max-height: 350px; overflow-y: auto; padding-right: 0.5rem;">
+                                    <table class="table" id="noteScrollersListTable" style="margin-top: 0; width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Section Title</th>
+                                                <th style="width: 140px; text-align: right;">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Right Column: Manage Notes in Selected Scroller -->
+                            <div>
+                                <h3 style="font-size: 1.2rem; color: var(--text-dark); margin-bottom: 1rem; font-weight: 700;">2. Notes in Selected Scroller</h3>
+                                
+                                <div class="form-group" style="margin-bottom: 1.5rem;">
+                                    <label style="font-size: 0.85rem; font-weight: 600;">Select Scroller</label>
+                                    <select class="form-input" id="manageNoteScrollerSelect" style="border-color: var(--gray-300); background: white; padding: 0.5rem;">
+                                        <option value="" disabled selected>-- Select a Notes Scroller --</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Add note form -->
+                                <form id="add-note-management-form" style="margin-bottom: 1.5rem; display: none;">
+                                    <h4 id="addNoteFormTitle" style="font-size: 1rem; color: var(--text-dark); margin-bottom: 0.75rem; font-weight: 700;">Add Note Link</h4>
+                                    <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
+                                        <div style="flex: 1; min-width: 200px;">
+                                            <label style="font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Note Title / Topic</label>
+                                            <input class="form-input" id="managementNoteTitle" type="text" placeholder="e.g. Physics CH 1 Kinematics" required style="padding: 0.4rem 0.6rem;">
+                                        </div>
+                                        <div style="flex: 1.5; min-width: 240px;">
+                                            <label style="font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Note Link URL (PDF / Google Drive)</label>
+                                            <input class="form-input" id="managementNoteLink" type="text" placeholder="e.g. https://... or Notes/..." required style="padding: 0.4rem 0.6rem;">
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" style="background:#b91c1c; border-color:#b91c1c; padding: 0.45rem 1.25rem; font-size: 0.85rem;">Save Note Link</button>
+                                </form>
+                                
+                                <!-- Notes list in scroller -->
+                                <div id="scrollerNotesListContainer" style="display: none;">
+                                    <h4 style="font-size: 1rem; color: var(--text-dark); margin-bottom: 0.5rem; font-weight: 700;">Current Notes in Section</h4>
+                                    <div style="max-height: 250px; overflow-y: auto; border: 1px solid var(--gray-200); border-radius: var(--radius-md); padding: 0.5rem;">
+                                        <table class="table" id="scrollerNotesTable" style="margin-top: 0; min-width: 100%;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Note Title</th>
+                                                    <th>URL / Link</th>
+                                                    <th style="width: 120px; text-align: right;">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <div id="scrollerNotesPlaceholder" style="text-align: center; padding: 3rem; color: var(--text-light); border: 2px dashed var(--gray-200); border-radius: var(--radius-md);">
+                                    Select a scroller from the dropdown to manage its note links.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ================= Study Slides Scroller & Links Management ================= -->
+                    <div class="card" style="margin-top: 2rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border-bottom: 2px solid var(--gray-200); padding-bottom: 0.75rem; margin-bottom: 1.5rem;">
+                            <div>
+                                <h2 class="card-header" style="color: #b91c1c; border-bottom: none; margin: 0; padding: 0;">Study Slides Scroller & Links Management</h2>
+                                <p class="verbose-text" style="margin: 0.25rem 0 0 0; color: var(--text-light); font-size: 0.95rem;">
+                                    Create new slide accordion sections (scrollers) or add, edit, and delete presentation links.
+                                </p>
+                            </div>
+                            <div>
+                                <a href="study-slides.html" target="_blank" class="btn" style="background: #1e3a8a; color: white; padding: 0.45rem 1rem; font-size: 0.85rem; font-weight: 600; text-decoration: none; border-radius: var(--radius-md); display: inline-flex; align-items: center; gap: 0.4rem;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                    Visit Slides Page
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-grid">
+                            <!-- Left Column: Manage Slides Scrollers -->
+                            <div style="border-right: 1px solid var(--gray-200); padding-right: 1.5rem;">
+                                <h3 style="font-size: 1.2rem; color: var(--text-dark); margin-bottom: 1rem; font-weight: 700;">1. Slides Scrollers / Sections</h3>
+                                
+                                <!-- Create new slide scroller form -->
+                                <form id="create-slide-scroller-form" style="margin-bottom: 1.5rem;">
+                                    <div class="form-row">
+                                        <div class="form-group" style="flex: 1;">
+                                            <label style="font-size: 0.85rem; font-weight: 600;">Scroller/Section Name</label>
+                                            <input class="form-input" id="newSlideScrollerTitle" type="text" placeholder="e.g. Class VIII Slides" required style="padding: 0.5rem;">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary" style="background:#b91c1c; border-color:#b91c1c; height: 38px; padding: 0.5rem 1rem;">Create</button>
+                                    </div>
+                                </form>
+                                
+                                <!-- Scrollers list -->
+                                <div style="max-height: 350px; overflow-y: auto; padding-right: 0.5rem;">
+                                    <table class="table" id="slideScrollersListTable" style="margin-top: 0; width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Section Title</th>
+                                                <th style="width: 140px; text-align: right;">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Right Column: Manage Slides in Selected Scroller -->
+                            <div>
+                                <h3 style="font-size: 1.2rem; color: var(--text-dark); margin-bottom: 1rem; font-weight: 700;">2. Slides in Selected Scroller</h3>
+                                
+                                <div class="form-group" style="margin-bottom: 1.5rem;">
+                                    <label style="font-size: 0.85rem; font-weight: 600;">Select Scroller</label>
+                                    <select class="form-input" id="manageSlideScrollerSelect" style="border-color: var(--gray-300); background: white; padding: 0.5rem;">
+                                        <option value="" disabled selected>-- Select a Slides Scroller --</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Add slide form -->
+                                <form id="add-slide-management-form" style="margin-bottom: 1.5rem; display: none;">
+                                    <h4 id="addSlideFormTitle" style="font-size: 1rem; color: var(--text-dark); margin-bottom: 0.75rem; font-weight: 700;">Add Slide Link</h4>
+                                    <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
+                                        <div style="flex: 1; min-width: 200px;">
+                                            <label style="font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Slide Title / Topic</label>
+                                            <input class="form-input" id="managementSlideTitle" type="text" placeholder="e.g. Chemical Reactions - Ch 1" required style="padding: 0.4rem 0.6rem;">
+                                        </div>
+                                        <div style="flex: 1.5; min-width: 240px;">
+                                            <label style="font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Presentation URL (Google Slides / Canva)</label>
+                                            <input class="form-input" id="managementSlideLink" type="url" placeholder="e.g. https://docs.google.com/presentation/d/..." required style="padding: 0.4rem 0.6rem;">
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" style="background:#b91c1c; border-color:#b91c1c; padding: 0.45rem 1.25rem; font-size: 0.85rem;">Save Slide Link</button>
+                                </form>
+                                
+                                <!-- Slides list in scroller -->
+                                <div id="scrollerSlidesListContainer" style="display: none;">
+                                    <h4 style="font-size: 1rem; color: var(--text-dark); margin-bottom: 0.5rem; font-weight: 700;">Current Slides in Section</h4>
+                                    <div style="max-height: 250px; overflow-y: auto; border: 1px solid var(--gray-200); border-radius: var(--radius-md); padding: 0.5rem;">
+                                        <table class="table" id="scrollerSlidesTable" style="margin-top: 0; min-width: 100%;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Slide Title</th>
+                                                    <th>URL / Presentation</th>
+                                                    <th style="width: 120px; text-align: right;">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <div id="scrollerSlidesPlaceholder" style="text-align: center; padding: 3rem; color: var(--text-light); border: 2px dashed var(--gray-200); border-radius: var(--radius-md);">
+                                    Select a scroller from the dropdown to manage its slide links.
                                 </div>
                             </div>
                         </div>
