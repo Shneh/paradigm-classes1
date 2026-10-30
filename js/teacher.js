@@ -790,6 +790,115 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    // Teacher Assignment Management Logic
+    async function renderTeacherAssignments() {
+        const container = document.getElementById('teacherAssignmentsList');
+        if (!container) return;
+
+        try {
+            const assignments = await DB.getAssignments();
+            if (assignments.length === 0) {
+                container.innerHTML = '<div style="color:var(--text-light); font-size:0.85rem; padding:0.5rem 0;">No active assignments found. Create one above!</div>';
+                return;
+            }
+
+            container.innerHTML = '';
+            assignments.forEach(asg => {
+                const submissions = asg.submissions || [];
+                const item = document.createElement('div');
+                item.style.cssText = 'background: #f8fafc; border: 1px solid var(--gray-200); border-radius: 8px; padding: 1rem; margin-bottom: 0.75rem;';
+                
+                const subsHtml = submissions.length === 0 
+                    ? '<div style="font-size:0.8rem; color:var(--text-light); font-style:italic; margin-top:0.4rem;">No student submissions yet.</div>'
+                    : `<div style="margin-top:0.5rem; font-size:0.85rem;">
+                        <strong>Submissions (${submissions.length}):</strong>
+                        ${submissions.map(s => `
+                            <div style="background:white; border:1px solid #e2e8f0; border-radius:6px; padding:0.5rem 0.75rem; margin-top:0.35rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.4rem;">
+                                <div>
+                                    <span style="font-weight:700; color:var(--primary-color);">${window.escapeHTML(s.studentName)}</span>
+                                    <span style="font-size:0.75rem; color:#64748b; margin-left:0.3rem;">(${DB.formatDate(s.submittedAt)})</span>
+                                    ${s.notes ? `<div style="font-size:0.8rem; color:#334155; margin-top:2px;">"${window.escapeHTML(s.notes)}"</div>` : ''}
+                                    ${s.link ? `<a href="${s.link}" target="_blank" style="font-size:0.75rem; color:#2563eb; font-weight:600;">View Attachment &rarr;</a>` : ''}
+                                </div>
+                                <span class="badge" style="background:#dcfce7; color:#166534; font-weight:700;">Received</span>
+                            </div>
+                        `).join('')}
+                       </div>`;
+
+                item.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                        <div>
+                            <span style="font-size:0.75rem; font-weight:700; background:#dbeafe; color:#1e40af; padding:0.15rem 0.5rem; border-radius:99px;">Class ${asg.targetClass} &bull; ${asg.subject}</span>
+                            <h4 style="margin: 0.35rem 0 0 0; font-size: 1rem; color: var(--text-dark);">${window.escapeHTML(asg.title)}</h4>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:0.5rem;">
+                            <span style="font-size: 0.75rem; font-weight: 700; color: #b91c1c;">Due: ${DB.formatDate(asg.dueDate)}</span>
+                            <button type="button" class="btn btn-outline delete-asg-btn" data-id="${asg.id}" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; color:#dc2626; border-color:#fca5a5;">Delete</button>
+                        </div>
+                    </div>
+                    ${subsHtml}
+                `;
+                container.appendChild(item);
+            });
+
+            // Bind delete button
+            container.querySelectorAll('.delete-asg-btn').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const id = btn.dataset.id;
+                    if (confirm("Are you sure you want to delete this assignment?")) {
+                        let list = await DB.getAssignments();
+                        list = list.filter(a => a.id !== id);
+                        await DB.setAssignments(list);
+                        renderTeacherAssignments();
+                    }
+                });
+            });
+
+        } catch (e) {
+            console.error("Error rendering assignments:", e);
+        }
+    }
+
+    const addAsgForm = document.getElementById('teacher-add-assignment-form');
+    if (addAsgForm) {
+        addAsgForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('asgTitle').value.trim();
+            const subject = document.getElementById('asgSubject').value.trim();
+            const targetClass = document.getElementById('asgTargetClass').value;
+            const dueDate = document.getElementById('asgDueDate').value;
+            const resourceLink = document.getElementById('asgResourceLink').value.trim();
+            const description = document.getElementById('asgDescription').value.trim();
+
+            if (!title || !subject || !dueDate || !description) return;
+
+            try {
+                const assignments = await DB.getAssignments();
+                const newAsg = {
+                    id: 'asg_' + Date.now(),
+                    title: title,
+                    subject: subject,
+                    targetClass: targetClass,
+                    dueDate: dueDate,
+                    resourceLink: resourceLink,
+                    description: description,
+                    createdAt: new Date().toISOString().split('T')[0],
+                    createdBy: user.name || 'Teacher Shneh Rawat',
+                    submissions: []
+                };
+
+                assignments.unshift(newAsg);
+                await DB.setAssignments(assignments);
+                alert("Assignment successfully published to students!");
+                addAsgForm.reset();
+                renderTeacherAssignments();
+            } catch (err) {
+                console.error("Error publishing assignment:", err);
+                alert("Could not publish assignment: " + err.message);
+            }
+        });
+    }
+
     // Initial render
     await populateTestTargetClasses();
     await renderSalaries();
@@ -797,6 +906,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     await renderFeeStudents();
     await renderAttendanceForm();
     await renderAttendanceOverview();
+    await renderTeacherAssignments();
 
     const salaryMonthSelector = document.getElementById('salaryMonthSelector');
     if (salaryMonthSelector) {

@@ -254,6 +254,380 @@ const DB = {
     getTests: async () => await getList('tests'),
     setTests: async (tests) => await setList('tests', tests),
 
+    getAssignments: async () => {
+        try {
+            const list = await getList('assignments');
+            if (!list || list.length === 0) {
+                const defaultAssignments = [
+                    {
+                        id: "asg_01",
+                        title: "Class X Science - Carbon Compounds Balancing & Isomerism",
+                        subject: "Chemistry",
+                        targetClass: "X",
+                        dueDate: "2026-11-10",
+                        description: "Solve NCERT exercise questions 1 to 12 along with drawing all structural isomers of Pentane and Hexane. Submit clear step-by-step solutions.",
+                        resourceLink: "Notes/X_Science/Carbon & Its Compounds.pdf",
+                        createdAt: "2026-10-25",
+                        createdBy: "Teacher Shneh Rawat",
+                        submissions: []
+                    },
+                    {
+                        id: "asg_02",
+                        title: "Class XII Physics - Gauss Law & Electrostatic Potential Numericals",
+                        subject: "Physics",
+                        targetClass: "XII",
+                        dueDate: "2026-11-12",
+                        description: "Complete numerical problems on electric flux through cylinders and spherical shells from Chapter 1 & 2 workbook.",
+                        resourceLink: "notes/X_Science/Physics CH 1 Electricity.pdf",
+                        createdAt: "2026-10-26",
+                        createdBy: "Teacher Shneh Rawat",
+                        submissions: []
+                    },
+                    {
+                        id: "asg_03",
+                        title: "Class XI Mathematics - Relations, Functions & Domain Calculation",
+                        subject: "Mathematics",
+                        targetClass: "XI",
+                        dueDate: "2026-11-15",
+                        description: "Determine domain and range for given square-root and fractional rational functions. Verify with graphical sketch.",
+                        resourceLink: "",
+                        createdAt: "2026-10-27",
+                        createdBy: "Teacher Shneh Rawat",
+                        submissions: []
+                    },
+                    {
+                        id: "asg_04",
+                        title: "Class IX Science - Atoms and Molecules Mole Concept Sheet",
+                        subject: "Chemistry",
+                        targetClass: "IX",
+                        dueDate: "2026-11-14",
+                        description: "Calculate molar masses and number of Avogadro particles in given gram samples from Chapter 3.",
+                        resourceLink: "Notes/IX_SCIENCE/ATOMSANDMOLECULES.pdf",
+                        createdAt: "2026-10-28",
+                        createdBy: "Teacher Shneh Rawat",
+                        submissions: []
+                    }
+                ];
+                await setList('assignments', defaultAssignments);
+                return defaultAssignments;
+            }
+            return list;
+        } catch (e) {
+            console.error("Error getting assignments:", e);
+            return [];
+        }
+    },
+    setAssignments: async (assignments) => await setList('assignments', assignments),
+
+    getOnlineAssessments: async () => {
+        try {
+            const list = await getList('onlineAssessments');
+            if (!list || list.length === 0) {
+                const defaultAssessments = [
+                    {
+                        id: "exam_01",
+                        title: "Class X Science: Chemical Reactions & Equations Mock Assessment",
+                        targetClass: "X",
+                        subject: "Chemistry",
+                        durationMinutes: 15,
+                        totalMarks: 20,
+                        negativeMarking: 0,
+                        published: true,
+                        questions: [
+                            {
+                                id: 1,
+                                questionText: "Which of the following is an example of an exothermic displacement reaction?",
+                                options: [
+                                    "Reaction of Calcium oxide with water",
+                                    "Reaction of Iron with Copper sulphate solution",
+                                    "Thermite reaction (Fe2O3 + 2Al -> 2Fe + Al2O3)",
+                                    "Decomposition of Lead nitrate"
+                                ],
+                                correctOption: 2,
+                                explanation: "The reaction of Iron(III) oxide with Aluminium is a displacement reaction that releases tremendous heat, melting the iron produced (Thermite process)."
+                            },
+                            {
+                                id: 2,
+                                questionText: "What is the oxidation state change of Manganese in: MnO2 + 4HCl -> MnCl2 + Cl2 + 2H2O?",
+                                options: [
+                                    "+4 to +2 (Reduced)",
+                                    "+2 to +4 (Oxidized)",
+                                    "0 to +2",
+                                    "+4 to 0"
+                                ],
+                                correctOption: 0,
+                                explanation: "MnO2 has Mn in +4 oxidation state, which changes to MnCl2 (+2). Manganese gains electrons and is therefore reduced."
+                            },
+                            {
+                                id: 3,
+                                questionText: "Corrosion of copper forms a green coating of which compound?",
+                                options: [
+                                    "CuSO4",
+                                    "Basic copper carbonate [CuCO3·Cu(OH)2]",
+                                    "CuO",
+                                    "CuCl2"
+                                ],
+                                correctOption: 1,
+                                explanation: "Copper reacts with moist CO2 in air to form a green coating of basic copper carbonate [CuCO3·Cu(OH)2]."
+                            },
+                            {
+                                id: 4,
+                                questionText: "Which gas is flushed in bags of potato chips to prevent rancidity?",
+                                options: [
+                                    "Oxygen",
+                                    "Carbon dioxide",
+                                    "Nitrogen",
+                                    "Argon"
+                                ],
+                                correctOption: 2,
+                                explanation: "Nitrogen is an unreactive inert gas that replaces oxygen in sealed packaging to prevent oxidation and rancidity of oils."
+                            },
+                            {
+                                id: 5,
+                                questionText: "When Ferrous sulphate crystals (green) are heated in a dry test tube, what color residue remains?",
+                                options: [
+                                    "White (Anhydrous FeSO4)",
+                                    "Reddish brown (Fe2O3)",
+                                    "Black (FeO)",
+                                    "Yellow (FeCl3)"
+                                ],
+                                correctOption: 1,
+                                explanation: "2FeSO4(s) --heat--> Fe2O3(s) + SO2(g) + SO3(g). Fe2O3 is reddish-brown ferric oxide."
+                            }
+                        ],
+                        attempts: []
+                    },
+                    {
+                        id: "exam_02",
+                        title: "Class XII Physics: Electrostatics & Coulomb's Law Speed Test",
+                        targetClass: "XII",
+                        subject: "Physics",
+                        durationMinutes: 20,
+                        totalMarks: 20,
+                        negativeMarking: 0.25,
+                        published: true,
+                        questions: [
+                            {
+                                id: 1,
+                                questionText: "The electric flux through a closed Gaussian surface enclosing an electric dipole is:",
+                                options: [
+                                    "q / ε0",
+                                    "2q / ε0",
+                                    "Zero",
+                                    "Infinity"
+                                ],
+                                correctOption: 2,
+                                explanation: "By Gauss's Law, total electric flux equals net enclosed charge divided by ε0. For an electric dipole, q_net = (+q) + (-q) = 0. Therefore, flux = 0."
+                            },
+                            {
+                                id: 2,
+                                questionText: "Two point charges +q and +4q are separated by a distance d. Where should a third charge Q be placed on the line joining them so that the system remains in equilibrium?",
+                                options: [
+                                    "d/3 from +q",
+                                    "d/2 from +q",
+                                    "2d/3 from +q",
+                                    "d/4 from +q"
+                                ],
+                                correctOption: 0,
+                                explanation: "At distance x from +q: k*q*Q / x^2 = k*(4q)*Q / (d-x)^2 => (d-x)^2 = 4x^2 => d - x = 2x => 3x = d => x = d/3."
+                            },
+                            {
+                                id: 3,
+                                questionText: "What is the SI unit of Electric Permittivity of free space (ε0)?",
+                                options: [
+                                    "N·m²/C²",
+                                    "C²/(N·m²)",
+                                    "N/C",
+                                    "V/m"
+                                ],
+                                correctOption: 1,
+                                explanation: "From F = q1*q2 / (4πε0 r²), ε0 = q1*q2 / (4π F r²), which yields units of C² / (N·m²)."
+                            },
+                            {
+                                id: 4,
+                                questionText: "Inside a uniformly charged hollow spherical conductor, the electric field intensity E is:",
+                                options: [
+                                    "Uniform and non-zero",
+                                    "Zero at all interior points",
+                                    "Inversely proportional to distance squared",
+                                    "Proportional to radius"
+                                ],
+                                correctOption: 1,
+                                explanation: "There is no enclosed charge inside any concentric Gaussian surface interior to a hollow conductor, so E = 0 everywhere inside."
+                            },
+                            {
+                                id: 5,
+                                questionText: "The work done in moving an electron between two points on an equipotential surface is:",
+                                options: [
+                                    "1.6 × 10^-19 J",
+                                    "Dependent on the path taken",
+                                    "Zero",
+                                    "Equal to the electric potential"
+                                ],
+                                correctOption: 2,
+                                explanation: "Work done W = q * ΔV. On an equipotential surface, ΔV = 0, so W = 0."
+                            }
+                        ],
+                        attempts: []
+                    },
+                    {
+                        id: "exam_03",
+                        title: "Class XI Mathematics: Functions, Domain & Sets Assessment",
+                        targetClass: "XI",
+                        subject: "Mathematics",
+                        durationMinutes: 15,
+                        totalMarks: 20,
+                        negativeMarking: 0,
+                        published: true,
+                        questions: [
+                            {
+                                id: 1,
+                                questionText: "What is the domain of the real-valued function f(x) = √(9 - x²)?",
+                                options: [
+                                    "(-3, 3)",
+                                    "[-3, 3]",
+                                    "(-∞, -3] ∪ [3, ∞)",
+                                    "[0, 3]"
+                                ],
+                                correctOption: 1,
+                                explanation: "For f(x) to be real, 9 - x² ≥ 0 => x² ≤ 9 => -3 ≤ x ≤ 3. Domain is [-3, 3]."
+                            },
+                            {
+                                id: 2,
+                                questionText: "If A and B are two disjoint non-empty sets, then n(A ∩ B) is equal to:",
+                                options: [
+                                    "0",
+                                    "n(A) + n(B)",
+                                    "1",
+                                    "Undefined"
+                                ],
+                                correctOption: 0,
+                                explanation: "Disjoint sets have no elements in common, meaning A ∩ B = ∅, so n(A ∩ B) = 0."
+                            },
+                            {
+                                id: 3,
+                                questionText: "The range of the function f(x) = |x - 2| / (x - 2) for x ≠ 2 is:",
+                                options: [
+                                    "All Real Numbers (R)",
+                                    "[-1, 1]",
+                                    "{-1, 1}",
+                                    "{0, 1}"
+                                ],
+                                correctOption: 2,
+                                explanation: "For x > 2, (x-2)/(x-2) = +1. For x < 2, -(x-2)/(x-2) = -1. Hence range is the discrete set {-1, 1}."
+                            },
+                            {
+                                id: 4,
+                                questionText: "If a set S has 4 elements, how many non-empty proper subsets does it possess?",
+                                options: [
+                                    "16",
+                                    "15",
+                                    "14",
+                                    "12"
+                                ],
+                                correctOption: 2,
+                                explanation: "Total subsets = 2^4 = 16. Excluding the empty set and the set itself (improper), non-empty proper subsets = 16 - 2 = 14."
+                            },
+                            {
+                                id: 5,
+                                questionText: "Let f(x) = x² and g(x) = 2x + 1. The composite function (f ∘ g)(x) is:",
+                                options: [
+                                    "2x² + 1",
+                                    "4x² + 4x + 1",
+                                    "4x² + 1",
+                                    "2x² + 4x + 1"
+                                ],
+                                correctOption: 1,
+                                explanation: "(f ∘ g)(x) = f(g(x)) = f(2x + 1) = (2x + 1)² = 4x² + 4x + 1."
+                            }
+                        ],
+                        attempts: []
+                    },
+                    {
+                        id: "exam_04",
+                        title: "NDA Mathematics & GAT Speed Mock",
+                        targetClass: "NDA",
+                        subject: "NDA Prep",
+                        durationMinutes: 20,
+                        totalMarks: 25,
+                        negativeMarking: 0.33,
+                        published: true,
+                        questions: [
+                            {
+                                id: 1,
+                                questionText: "What is the value of (1 + i)^4 + (1 - i)^4?",
+                                options: [
+                                    "-8",
+                                    "8",
+                                    "-4",
+                                    "0"
+                                ],
+                                correctOption: 0,
+                                explanation: "(1+i)² = 2i, so (1+i)⁴ = (2i)² = -4. Similarly, (1-i)² = -2i, so (1-i)⁴ = (-2i)² = -4. Total = -4 + (-4) = -8."
+                            },
+                            {
+                                id: 2,
+                                questionText: "In a right-angled triangle ABC with right angle at B, tan A = 3/4. What is the value of sin C?",
+                                options: [
+                                    "3/5",
+                                    "4/5",
+                                    "3/4",
+                                    "5/4"
+                                ],
+                                correctOption: 1,
+                                explanation: "With tan A = 3/4, opposite is 3, adjacent is 4, hypotenuse is 5. Angle C has opposite side AB = 4. Hence sin C = 4/5."
+                            },
+                            {
+                                id: 3,
+                                questionText: "The headquarter of the Indian Naval Academy (INA) is located at:",
+                                options: [
+                                    "Khadakwasla, Pune",
+                                    "Ezhimala, Kerala",
+                                    "Dundigal, Hyderabad",
+                                    "Dehradun, Uttarakhand"
+                                ],
+                                correctOption: 1,
+                                explanation: "The Indian Naval Academy is located at Ezhimala, Kannur district, Kerala."
+                            },
+                            {
+                                id: 4,
+                                questionText: "What is the maximum number of acute angles a convex quadrilateral can possess?",
+                                options: [
+                                    "1",
+                                    "2",
+                                    "3",
+                                    "4"
+                                ],
+                                correctOption: 2,
+                                explanation: "The sum of interior angles is 360°. If it had 4 acute angles (< 90°), their sum would be < 360°, which is impossible. Thus, maximum is 3."
+                            },
+                            {
+                                id: 5,
+                                questionText: "Which article of the Indian Constitution deals with the Right to Equality before Law?",
+                                options: [
+                                    "Article 14",
+                                    "Article 19",
+                                    "Article 21",
+                                    "Article 32"
+                                ],
+                                correctOption: 0,
+                                explanation: "Article 14 ensures equality before the law and equal protection of laws within India."
+                            }
+                        ],
+                        attempts: []
+                    }
+                ];
+                await setList('onlineAssessments', defaultAssessments);
+                return defaultAssessments;
+            }
+            return list;
+        } catch (e) {
+            console.error("Error getting onlineAssessments:", e);
+            return [];
+        }
+    },
+    setOnlineAssessments: async (assessments) => await setList('onlineAssessments', assessments),
+
     formatDate: (dateStr) => {
         if (!dateStr) return '';
         const d = new Date(dateStr);
@@ -407,7 +781,8 @@ async function initNavbarAuth() {
         if (user && user.role) {
             // Logged in state
             const dashboardUrl = user.role === 'teacher' ? 'teacher-dashboard.html' : 
-                                 (user.role === 'admin' ? 'admin-dashboard.html' : 'student-dashboard.html');
+                                 (user.role === 'admin' ? 'admin-dashboard.html' : 
+                                 (user.role === 'parent' ? 'parent-dashboard.html' : 'student-dashboard.html'));
 
             if (navCta && !isDashboardPage) {
                 navCta.style.display = 'flex';

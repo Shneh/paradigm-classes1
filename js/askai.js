@@ -86,6 +86,55 @@ const PARADIGM_AI_CORPUS = [
         title: "Paradigm Classes Tuition & Academy Info",
         keywords: ["paradigm", "fee", "fees", "course", "coaching", "class", "admission", "faculty", "location", "contact"],
         text: "Paradigm Classes is a premier competitive examination coaching institute providing top-tier guidance for Boards (IX–XII), JEE Main & Advanced, NEET, NDA, GATE, and Foundation courses.\n• Key Features: Experienced subject faculty, personalized batch sizes, regular mock testing, interactive slides, video lecture portal, and dynamic fee split transparency.\n• Contact: Visit our main campus or check our live Course Fees Chart for detailed program structures."
+    },
+    {
+        id: "chem_03",
+        domain: "chemistry",
+        title: "Acids, Bases, Salts & pH Scale (Class X)",
+        keywords: ["acid", "base", "salt", "ph", "indicator", "neutralization", "litmus", "sodium", "hydroxide"],
+        text: "Acids release H⁺/H3O⁺ ions in aqueous solutions (pH < 7, sour taste, turn blue litmus red). Bases release OH⁻ ions (pH > 7, bitter taste, soapy touch, turn red litmus blue).\n• Neutralization: Acid + Base → Salt + Water + Heat (e.g., HCl + NaOH → NaCl + H₂O).\n• pH Scale: Measures hydrogen ion concentration: pH = -log[H⁺]. pH 7 is neutral; pH < 7 acidic; pH > 7 basic.\n• Common Salts: Bleaching powder [CaOCl₂], Baking soda [NaHCO₃], Washing soda [Na₂CO₃·10H₂O], Plaster of Paris [CaSO₄·½H₂O]."
+    },
+    {
+        id: "chem_04",
+        domain: "chemistry",
+        title: "Carbon & Its Compounds: Bonding & Isomerism (Class X)",
+        keywords: ["carbon", "covalent", "isomer", "alkane", "alkene", "alkyne", "homologous", "hydrocarbon", "soap"],
+        text: "Carbon forms covalent bonds due to its tetravalency and unique catenation ability:\n• Covalent Bonding: Sharing of electron pairs (Single, Double, Triple bonds).\n• Allotropes: Diamond (tetrahedral 3D network), Graphite (hexagonal layers, conductor), Fullerenes (C-60 buckyball).\n• Hydrocarbons: Alkanes (C_n H_{2n+2}, saturated), Alkenes (C_n H_{2n}, unsaturated), Alkynes (C_n H_{2n-2}, unsaturated).\n• Isomerism: Compounds having identical molecular formulas but different structural arrangements (e.g. n-butane and isobutane)."
+    },
+    {
+        id: "phys_04",
+        domain: "physics",
+        title: "Electricity, Ohm's Law & Resistance Circuits (Class X)",
+        keywords: ["electricity", "current", "voltage", "ohm", "resistance", "resistivity", "joule", "heating", "circuit"],
+        text: "Electric current is the rate of flow of electric charges: I = Q / t (Amperes).\n• Ohm's Law: At constant temperature, V = I · R, where R is resistance.\n• Resistance Factors: R = ρ · (l / A), where ρ is material resistivity, l is length, A is cross-sectional area.\n• Resistor Combinations: Series (R_eq = R₁ + R₂ + ...), Parallel (1/R_eq = 1/R₁ + 1/R₂ + ...).\n• Joule's Heating Effect: Heat generated H = I² · R · t = V · I · t."
+    },
+    {
+        id: "phys_05",
+        domain: "physics",
+        title: "Optics: Reflection, Refraction & Lens Formula (Class X & XII)",
+        keywords: ["optics", "light", "reflection", "refraction", "mirror", "lens", "snell", "focal", "magnification"],
+        text: "Light exhibits wave-particle duality. Key geometric optics laws include:\n• Law of Reflection: Angle of incidence equals angle of reflection (∠i = ∠r).\n• Mirror Formula: 1/f = 1/v + 1/u, Magnification m = -v / u = h_i / h_o.\n• Snell's Law of Refraction: n₁ · sin θ₁ = n₂ · sin θ₂ (Refractive index n = c / v).\n• Lens Formula: 1/f = 1/v - 1/u, Magnification m = v / u."
+    },
+    {
+        id: "phys_06",
+        domain: "physics",
+        title: "Electrostatics, Coulomb's Law & Gauss's Theorem (Class XII)",
+        keywords: ["electrostatics", "coulomb", "charge", "field", "flux", "gauss", "potential", "capacitor"],
+        text: "Electrostatics governs interactions between stationary electric charges:\n• Coulomb's Law: F = (1 / 4πε₀) · (|q₁ · q₂| / r²), where 1/4πε₀ ≈ 8.99×10⁹ N·m²/C².\n• Electric Field: Force per unit positive test charge E = F / q₀ (N/C or V/m).\n• Gauss's Theorem: Total electric flux through any closed Gaussian surface equals enclosed charge divided by permittivity: ∮ E · dA = q_enclosed / ε₀.\n• Inside a hollow conductor in electrostatic equilibrium, electric field E = 0."
+    },
+    {
+        id: "math_03",
+        domain: "math",
+        title: "Trigonometry, Identities & Heights/Distances (Class X & XI)",
+        keywords: ["trigonometry", "sin", "cos", "tan", "identity", "radian", "angle", "triangle", "theta"],
+        text: "Trigonometry relates triangle side ratios and angles:\n• Fundamental Ratios: sin θ = opp/hyp, cos θ = adj/hyp, tan θ = sin θ / cos θ = opp/adj.\n• Pythagorean Identities: sin²θ + cos²θ = 1, 1 + tan²θ = sec²θ, 1 + cot²θ = cosec²θ.\n• Compound Angles: sin(A ± B) = sin A cos B ± cos A sin B, cos(A ± B) = cos A cos B ∓ sin A sin B.\n• Double Angles: sin 2A = 2 sin A cos A, cos 2A = cos²A - sin²A = 2cos²A - 1."
+    },
+    {
+        id: "math_04",
+        domain: "math",
+        title: "Relations, Functions & Domain-Range Analysis (Class XI & XII)",
+        keywords: ["relation", "function", "domain", "range", "injective", "surjective", "bijective", "composite"],
+        text: "Functions are specific mathematical relations mapping every input to a single output:\n• Domain: The set of all real inputs x for which f(x) is real and defined (e.g., denominators ≠ 0, terms under even roots ≥ 0).\n• Range: The complete set of resulting output values f(x).\n• Classification: One-to-one (Injective), Onto (Surjective), Bijective (both Injective and Surjective; invertible).\n• Composite Functions: (f ∘ g)(x) = f(g(x)). Inverse function f⁻¹ exists if and only if f is bijective."
     }
 ];
 

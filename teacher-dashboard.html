@@ -178,6 +178,54 @@
                     </form>
                 </div>
 
+                <!-- Create & Manage Assignments Card -->
+                <div class="card" id="teacher-assignments-card">
+                    <h2 class="card-header">Create Class Assignment</h2>
+                    <form id="teacher-add-assignment-form" style="margin-bottom: 1.5rem;">
+                        <div class="form-group" style="margin-bottom: 0.85rem;">
+                            <label style="display: block; margin-bottom: 0.35rem; font-weight: 500;">Assignment Title</label>
+                            <input class="form-input" id="asgTitle" type="text" required placeholder="e.g. Chapter 2 Exercise & Numerical Problem Set">
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.85rem;">
+                            <div>
+                                <label style="display: block; margin-bottom: 0.35rem; font-weight: 500;">Subject</label>
+                                <input class="form-input" id="asgSubject" type="text" required placeholder="e.g. Physics">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 0.35rem; font-weight: 500;">Target Class</label>
+                                <select class="form-input" id="asgTargetClass" required style="width: 100%; background: white;">
+                                    <option value="All">All Batches</option>
+                                    <option value="IX">Class IX</option>
+                                    <option value="X">Class X</option>
+                                    <option value="XI">Class XI</option>
+                                    <option value="XII">Class XII</option>
+                                    <option value="NDA">NDA Batch</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.85rem;">
+                            <div>
+                                <label style="display: block; margin-bottom: 0.35rem; font-weight: 500;">Due Date</label>
+                                <input class="form-input" id="asgDueDate" type="date" required style="width: 100%; background: white;">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 0.35rem; font-weight: 500;">Resource Link (Optional)</label>
+                                <input class="form-input" id="asgResourceLink" type="text" placeholder="Notes/file.pdf or drive link">
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label style="display: block; margin-bottom: 0.35rem; font-weight: 500;">Instructions / Task Description</label>
+                            <textarea class="form-input" id="asgDescription" rows="3" required placeholder="Describe questions to solve, submission expectations, etc." style="width: 100%;"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Publish Assignment to Students</button>
+                    </form>
+
+                    <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--primary-color); margin-bottom: 0.75rem;">Active Assignments & Submissions</h3>
+                    <div id="teacherAssignmentsList">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+
                 <div class="card">
                     <h2 class="card-header">My Salary History</h2>
                     <div style="overflow-x: auto;">

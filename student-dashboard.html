@@ -3,41 +3,76 @@
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <meta content="Paradigm Classes - Student Dashboard" name="description" />
-    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
+    <meta content="Paradigm Classes - Student Learning Management Portal" name="description" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,800&display=swap" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
-    <title>Student Dashboard - Paradigm Classes</title>
+    <title>Student Portal — Paradigm Classes</title>
     <style>
         :root {
             --primary-color: #1e3a8a;
-            --primary-light: #3b82f6;
-            --text-dark: #1e293b;
+            --primary-light: #2563eb;
+            --text-dark: #0f172a;
             --text-light: #64748b;
             --gray-200: #e2e8f0;
             --gray-300: #cbd5e1;
-            --radius-md: 0.375rem;
-            --radius-lg: 0.5rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
         }
-        .dashboard-container { padding: 8rem 2rem 4rem; max-width: 1000px; margin: 0 auto; min-height: calc(100vh - 80px); }
-        .dashboard-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; border-bottom: 2px solid var(--gray-200); padding-bottom: 1rem; }
-        .card { background: white; padding: 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); margin-bottom: 2rem; }
-        .stat-box { background: white; color: var(--text-dark); padding: 1.5rem; border-radius: var(--radius-md); text-align: center; border: 2px solid var(--gray-200); }
-        .stat-value { font-size: 2.5rem; font-weight: 700; line-height: 1; margin-bottom: 0.5rem; }
-        .stat-label { font-size: 1rem; font-weight: 500; opacity: 0.9; }
-        .table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-        .table th, .table td { padding: 1rem; border-bottom: 1px solid var(--gray-200); text-align: left; }
-        .table th { font-weight: 700; color: var(--primary-color); }
-        .text-right { text-align: right; }
-        @media (max-width: 768px) {
-            .dashboard-container { padding: 6rem 1rem 2rem; }
-            .dashboard-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
-            .card { padding: 1.5rem 1rem; }
-            .stat-box { width: 100%; }
-            .section-title { font-size: 1.6rem; }
+        body {
+            background-color: #f8fafc;
+            font-family: 'Satoshi', sans-serif;
         }
+        .dashboard-container { 
+            padding: 7rem 1.5rem 4rem; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            min-height: calc(100vh - 80px); 
+        }
+        .dashboard-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 2rem; 
+            flex-wrap: wrap; 
+            gap: 1.25rem; 
+            background: white;
+            padding: 1.5rem 1.75rem;
+            border-radius: 16px;
+            border: 1px solid var(--gray-200);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+        .card { 
+            background: white; 
+            padding: 1.75rem; 
+            border-radius: var(--radius-lg); 
+            box-shadow: var(--shadow-md); 
+            margin-bottom: 1.75rem; 
+            border: 1px solid var(--gray-200);
+        }
+        .stat-box { 
+            background: white; 
+            color: var(--text-dark); 
+            padding: 0.75rem 1.25rem; 
+            border-radius: 12px; 
+            text-align: center; 
+            border: 1.5px solid var(--gray-200); 
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            transition: all 0.2s ease;
+        }
+        .stat-box:hover {
+            border-color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+        .stat-value { font-size: 1.5rem; font-weight: 800; line-height: 1.2; margin-bottom: 0.25rem; }
+        .stat-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: var(--text-light); }
+        .table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        .table th, .table td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--gray-200); text-align: left; }
+        .table th { font-weight: 700; color: var(--primary-color); background: #f8fafc; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.02em; }
+        .text-right { text-align: right; }
         
-        /* Collapsible Section styles for Lecture Progress */
+        /* Video & Lecture Rows */
         .lecture-section {
             border: 1px solid var(--gray-200);
             border-radius: var(--radius-md);
@@ -46,57 +81,26 @@
             transition: all 0.2s ease;
             margin-bottom: 0.75rem;
         }
-        .lecture-section:last-child {
-            margin-bottom: 0;
-        }
-        .lecture-section:hover {
-            border-color: var(--primary-light);
-            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.08);
-        }
         .lecture-section-header {
             width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 1.25rem;
+            padding: 0.9rem 1.25rem;
             background: white;
             border: none;
             cursor: pointer;
             text-align: left;
             transition: background-color 0.2s ease;
         }
-        .lecture-section-header:hover {
-            background-color: #f1f5f9;
-        }
+        .lecture-section-header:hover { background-color: #f1f5f9; }
         .lecture-section-title {
-            font-size: 1.05rem;
-            font-weight: 600;
+            font-size: 1rem;
+            font-weight: 700;
             color: var(--text-dark);
             display: flex;
             align-items: center;
             gap: 0.5rem;
-        }
-        .lecture-section-meta {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        .lecture-section-badge {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--primary-color);
-            background: rgba(30, 58, 138, 0.08);
-            padding: 0.25rem 0.75rem;
-            border-radius: 99px;
-        }
-        .lecture-section-arrow {
-            width: 1.25rem;
-            height: 1.25rem;
-            color: var(--text-light);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .lecture-section.active .lecture-section-arrow {
-            transform: rotate(180deg);
         }
         .lecture-section-content {
             height: 0;
@@ -109,112 +113,22 @@
             border-top: 1px solid var(--gray-200);
             padding: 0.5rem 0;
         }
-        
-        /* Video Row styles */
         .video-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0.75rem 1.25rem;
-            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
-            transition: background-color 0.2s ease;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.6);
         }
-        .video-row:last-child {
-            border-bottom: none;
-        }
-        .video-row:hover {
-            background-color: #f1f5f9;
-        }
-        .video-left {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            flex-grow: 1;
-            cursor: pointer;
-        }
-        /* Custom checkbox style */
-        .custom-checkbox-wrapper {
-            position: relative;
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
-        }
-        .custom-checkbox-input {
-            position: absolute;
-            opacity: 0;
-            cursor: pointer;
-            height: 0;
-            width: 0;
-        }
-        .custom-checkmark {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 20px;
-            width: 20px;
-            background-color: white;
-            border: 2px solid var(--gray-300);
-            border-radius: 4px;
-            transition: all 0.2s ease;
-        }
-        .video-left:hover .custom-checkmark {
-            border-color: var(--primary-light);
-        }
-        .video-left.is-locked {
-            cursor: not-allowed !important;
-        }
-        .custom-checkbox-input:disabled {
-            cursor: not-allowed !important;
-        }
-        .custom-checkbox-input:disabled ~ .custom-checkmark {
-            background-color: #15803d !important;
-            border-color: #166534 !important;
-            cursor: not-allowed !important;
-        }
-        .custom-checkbox-input:checked ~ .custom-checkmark {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-        .custom-checkmark:after {
-            content: "";
-            position: absolute;
-            display: none;
-        }
-        .custom-checkbox-input:checked ~ .custom-checkmark:after {
-            display: block;
-        }
-        .custom-checkmark:after {
-            left: 6px;
-            top: 2px;
-            width: 5px;
-            height: 10px;
-            border: solid white;
-            border-width: 0 2px 2px 0;
-            transform: rotate(45deg);
-        }
-        
-        .video-title {
-            font-size: 0.95rem;
-            color: var(--text-dark);
-            font-weight: 500;
-            transition: color 0.2s ease;
-            user-select: none;
-        }
-        .custom-checkbox-input:checked ~ .video-title {
-            color: var(--text-light);
-            text-decoration: line-through;
-        }
-        .video-right {
-            display: flex;
-            align-items: center;
-        }
+        .video-row:last-child { border-bottom: none; }
+        .video-left { display: flex; align-items: center; gap: 0.75rem; flex-grow: 1; }
         .btn-watch {
             display: inline-flex;
             align-items: center;
             gap: 0.25rem;
             padding: 0.35rem 0.75rem;
             font-size: 0.8rem;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--primary-color);
             background: white;
             border: 1px solid var(--primary-light);
@@ -225,58 +139,6 @@
         .btn-watch:hover {
             background: var(--primary-color);
             color: white;
-            border-color: var(--primary-color);
-        }
-        
-        /* Dark mode compatibility updates */
-        body.dark-mode .lecture-section {
-            border-color: #334155;
-            background: #0f172a;
-        }
-        body.dark-mode .lecture-section-header {
-            background-color: #1e293b;
-        }
-        body.dark-mode .lecture-section-header:hover {
-            background-color: #334155;
-        }
-        body.dark-mode .lecture-section-title {
-            color: #f8fafc;
-        }
-        body.dark-mode .lecture-section-badge {
-            color: var(--primary-light);
-            background: rgba(59, 130, 246, 0.15);
-        }
-        body.dark-mode .lecture-section-content {
-            background: #0f172a;
-        }
-        body.dark-mode .lecture-section.active .lecture-section-content {
-            border-top-color: #334155;
-        }
-        body.dark-mode .video-row {
-            border-bottom-color: rgba(71, 85, 105, 0.3);
-        }
-        body.dark-mode .video-row:hover {
-            background-color: #1e293b;
-        }
-        body.dark-mode .custom-checkmark {
-            background-color: #1e293b;
-            border-color: #475569;
-        }
-        body.dark-mode .video-title {
-            color: #e2e8f0;
-        }
-        body.dark-mode .custom-checkbox-input:checked ~ .video-title {
-            color: #64748b;
-        }
-        body.dark-mode .btn-watch {
-            background: #1e293b;
-            color: var(--primary-light);
-            border-color: #475569;
-        }
-        body.dark-mode .btn-watch:hover {
-            background: var(--primary-light);
-            color: white;
-            border-color: var(--primary-light);
         }
     </style>
 </head>
@@ -294,22 +156,22 @@
                 <div class="nav-links">
                     <a class="nav-link" href="index.html">Home</a>
                     <a class="nav-link" href="study-notes.html">Notes</a>
-                    <a class="nav-link" href="video-lectures.html">Videos</a>
                     <a class="nav-link" href="study-slides.html">Slides</a>
                     <a class="nav-link" href="results.html">Results</a>
+                    <a class="nav-link" href="askai.html">Ask AI</a>
                     <a class="nav-link" href="leaderboard.html" style="color: #d97706; font-weight: 700;">Leaderboard</a>
                 </div>
                 <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open Menu">☰</button>
                 <div class="nav-cta">
-                    <button id="logoutBtn" class="btn btn-outline" style="background:#1e3a8a; color:white; border:none; padding: 0.5rem 1rem;">Logout</button>
+                    <button id="logoutBtn" class="btn" style="background:#dc2626; color:white; border:none; padding: 0.5rem 1.25rem; font-weight:700;">Logout</button>
                 </div>
             </div>
             <div class="mobile-menu" id="mobileMenu">
                 <a class="mobile-link" href="index.html">Home</a>
                 <a class="mobile-link" href="study-notes.html">Notes</a>
-                <a class="mobile-link" href="video-lectures.html">Videos</a>
                 <a class="mobile-link" href="study-slides.html">Slides</a>
                 <a class="mobile-link" href="results.html">Results</a>
+                <a class="mobile-link" href="askai.html">Ask AI</a>
                 <a class="mobile-link" href="leaderboard.html" style="color: #d97706; font-weight: 700;">Leaderboard</a>
             </div>
         </div>
@@ -317,179 +179,482 @@
     <div style="margin-top: 80px;"></div>
 
     <div class="dashboard-container">
-        <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.75rem; flex-wrap: wrap; gap: 1rem;">
-            <div>
-                <h1 style="font-size: 1.35rem; font-weight: 700; color: var(--primary-color); margin: 0;" id="welcomeMessage">Welcome, Student</h1>
-                <p style="font-size: 0.825rem; color: var(--text-light); margin: 0.2rem 0 0 0;">View your performance records below.</p>
-            </div>
-            <div style="display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap;">
-                <a href="leaderboard.html" class="stat-box" style="text-decoration: none; padding: 0.5rem 0.85rem; border-radius: 0.65rem; border: 1.5px solid #f59e0b; background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); cursor: pointer; transition: transform 0.2s ease; text-align: center; min-width: 100px;">
-                    <div class="stat-value" id="studentCoins" style="color: #b45309; font-size: 1.1rem; font-weight: 800; line-height: 1.2;">
-                        0 Coins
+        <!-- Student Header Bar -->
+        <div class="dashboard-header">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <div style="width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #1e3a8a, #3b82f6); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 800; box-shadow: 0 4px 10px rgba(30,58,138,0.25);" id="studentAvatar">
+                    S
+                </div>
+                <div>
+                    <div style="display: flex; align-items: center; gap: 0.6rem;">
+                        <h1 style="font-size: 1.45rem; font-weight: 800; color: var(--primary-color); margin: 0;" id="welcomeMessage">Welcome, Student</h1>
+                        <span id="studentClassBadge" style="background: #dbeafe; color: #1e40af; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 99px;">Class</span>
                     </div>
-                    <div class="stat-label" style="color: #92400e; font-weight: 700; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.02em;">Coins</div>
-                </a>
-                <div class="stat-box" style="padding: 0.5rem 0.85rem; border-radius: 0.65rem; border: 1px solid var(--gray-200); background: white; text-align: center; min-width: 110px;">
-                    <div class="stat-value" id="cumulativeScore" style="font-size: 1.1rem; font-weight: 800; color: #1e40af; line-height: 1.2;">0%</div>
-                    <div class="stat-label" style="color: var(--text-light); font-weight: 600; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.02em;">Performance</div>
-                </div>
-                <div class="stat-box" style="padding: 0.5rem 0.85rem; border-radius: 0.65rem; border: 1px solid var(--gray-200); background: white; text-align: center; min-width: 110px;">
-                    <div class="stat-value" id="attendanceRate" style="font-size: 1.1rem; font-weight: 800; color: #166534; line-height: 1.2;">0%</div>
-                    <div class="stat-label" style="color: var(--text-light); font-weight: 600; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.02em;">Attendance</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Quick Academic Portals -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
-            <a href="study-notes.html" class="card" style="text-decoration: none; padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 1rem; border: 1.5px solid var(--gray-200); transition: var(--transition-smooth); background: white;">
-                <div style="width: 48px; height: 48px; border-radius: 12px; background: #dbeafe; color: #2563eb; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                </div>
-                <div>
-                    <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--primary-color); margin: 0;">Study Notes</h3>
-                    <p style="font-size: 0.825rem; color: var(--text-light); margin: 0.15rem 0 0 0;">Access chapter-wise PDFs</p>
-                </div>
-            </a>
-
-            <a href="video-lectures.html" class="card" style="text-decoration: none; padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 1rem; border: 1.5px solid var(--gray-200); transition: var(--transition-smooth); background: white;">
-                <div style="width: 48px; height: 48px; border-radius: 12px; background: #fae8ff; color: #c026d3; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
-                </div>
-                <div>
-                    <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--primary-color); margin: 0;">Video Lectures</h3>
-                    <p style="font-size: 0.825rem; color: var(--text-light); margin: 0.15rem 0 0 0;">Watch videos & earn coins</p>
-                </div>
-            </a>
-
-            <a href="leaderboard.html" class="card" style="text-decoration: none; padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 1rem; border: 1.5px solid var(--gray-200); transition: var(--transition-smooth); background: white;">
-                <div style="width: 48px; height: 48px; border-radius: 12px; background: #fef3c7; color: #b45309; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
-                </div>
-                <div>
-                    <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--primary-color); margin: 0;">Leaderboard</h3>
-                    <p style="font-size: 0.825rem; color: var(--text-light); margin: 0.15rem 0 0 0;">View student rankings</p>
-                </div>
-            </a>
-        </div>
-
-        <!-- Teacher & Admin Notes Card -->
-        <div class="card" id="studentNotesCard" style="margin-bottom: 2rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
-                <h2 style="font-size: 1.35rem; font-weight: 700; color: var(--primary-color); margin: 0; display: flex; align-items: center; gap: 0.5rem;">
-                    📝 Teacher & Admin Notes
-                </h2>
-            </div>
-            <div id="studentNotesContainer">
-                <p style="color: var(--text-light); font-size: 0.9rem; font-style: italic;">Loading notes...</p>
-            </div>
-        </div>
-
-        <!-- Learning & Lecture Progress Card -->
-        <div class="card" id="lectureProgressCard">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
-                <div>
-                    <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--primary-color); margin: 0;">Learning Progress</h2>
-                    <p style="font-size: 0.9rem; color: var(--text-light); margin: 0.25rem 0 0 0;">Track your lecture completion status.</p>
-                </div>
-                <div id="overallLectureProgress" style="font-weight: 700; color: white; background: var(--primary-color); padding: 0.5rem 1rem; border-radius: 99px; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(30, 58, 138, 0.2);">
-                    0 / 0 Completed (0% Done)
+                    <p style="font-size: 0.85rem; color: var(--text-light); margin: 0.25rem 0 0 0;" id="studentEnrollmentInfo">Student ID: ... | Enrolled: ...</p>
                 </div>
             </div>
             
-            <!-- Overall Progress Bar -->
-            <div style="width: 100%; background-color: var(--gray-200); height: 12px; border-radius: 6px; margin-bottom: 2rem; overflow: hidden; position: relative;">
-                <div id="lectureProgressBar" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--primary-light), var(--primary-color)); transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 6px;"></div>
-            </div>
-
-            <!-- List of accessible lecture sections -->
-            <div id="lectureSectionsContainer" style="display: flex; flex-direction: column;">
-                <div style="text-align: center; padding: 2rem; color: var(--text-light);">Loading lecture progress details...</div>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--primary-color); margin-bottom: 1.5rem;">Fee Records</h2>
-            <div style="overflow-x: auto;">
-                <table class="table" id="feeCyclesTable" style="min-width: 600px;">
-                    <thead>
-                        <tr>
-                            <th>Cycle</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th class="text-right">Base Fee</th>
-                            <th class="text-right">Fine</th>
-                            <th class="text-right">Total Fee</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody><!-- Filled by JS --></tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--primary-color); margin-bottom: 1.5rem;">Your Test Results</h2>
-            <div style="overflow-x: auto;">
-                <table class="table" id="resultsTable" style="min-width: 600px;">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Subject</th>
-                            <th class="text-right">Max Marks</th>
-                            <th class="text-right">Obtained Marks</th>
-                            <th class="text-right">Percentage</th>
-                        </tr>
-                    </thead>
-                    <tbody><!-- Filled by JS --></tbody>
-                </table>
-        </div>
-
-        <div class="card" id="attendanceCard">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
-                <div>
-                    <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--primary-color); margin: 0;">Attendance Calendar</h2>
-                    <p style="font-size: 0.85rem; color: var(--text-light); margin: 0.2rem 0 0 0;">Monthly overview of your class attendance</p>
+            <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+                <a href="leaderboard.html" class="stat-box" style="text-decoration: none; border-color: #f59e0b; background: linear-gradient(135deg, #fffbeb, #fef3c7); min-width: 105px;">
+                    <div class="stat-value" id="studentCoins" style="color: #b45309;">0</div>
+                    <div class="stat-label" style="color: #92400e;">Coins</div>
+                </a>
+                <div class="stat-box" style="min-width: 110px;">
+                    <div class="stat-value" id="cumulativeScore" style="color: #1e40af;">0%</div>
+                    <div class="stat-label">Cumulative %</div>
                 </div>
-                <!-- Legend -->
-                <div style="display: flex; align-items: center; gap: 0.85rem; font-size: 0.8rem; font-weight: 600;">
-                    <span style="display: flex; align-items: center; gap: 0.35rem;"><span style="width: 12px; height: 12px; border-radius: 50%; background: #22c55e; border: 1px solid #166534; display: inline-block;"></span> Present</span>
-                    <span style="display: flex; align-items: center; gap: 0.35rem;"><span style="width: 12px; height: 12px; border-radius: 50%; background: #ef4444; border: 1px solid #991b1b; display: inline-block;"></span> Absent</span>
-                    <span style="display: flex; align-items: center; gap: 0.35rem;"><span style="width: 12px; height: 12px; border-radius: 50%; background: #e2e8f0; border: 1px solid #94a3b8; display: inline-block;"></span> N/A</span>
+                <div class="stat-box" style="min-width: 110px;">
+                    <div class="stat-value" id="attendanceRate" style="color: #166534;">0%</div>
+                    <div class="stat-label">Attendance</div>
                 </div>
             </div>
+        </div>
 
-            <!-- Month Controls -->
-            <div style="display: flex; align-items: center; justify-content: space-between; background: var(--gray-100); padding: 0.5rem 0.85rem; border-radius: 0.6rem; margin-bottom: 1rem;">
-                <button type="button" id="prevMonthBtn" class="btn btn-outline" style="padding: 0.25rem 0.65rem; font-size: 0.8rem; min-height: 32px; border-color: var(--gray-300); background: white;">&larr; Prev</button>
-                <span id="calendarMonthTitle" style="font-weight: 700; color: var(--primary-color); font-size: 0.95rem;">Month Year</span>
-                <button type="button" id="nextMonthBtn" class="btn btn-outline" style="padding: 0.25rem 0.65rem; font-size: 0.8rem; min-height: 32px; border-color: var(--gray-300); background: white;">Next &rarr;</button>
-            </div>
+        <!-- LMS Portal Navigation Tabs -->
+        <div class="portal-tabs" id="studentPortalTabs">
+            <button type="button" class="portal-tab-btn active" data-tab="overview">
+                <span>🏠</span> Overview
+            </button>
+            <button type="button" class="portal-tab-btn" data-tab="analytics">
+                <span>📈</span> Performance & Analytics
+            </button>
+            <button type="button" class="portal-tab-btn" data-tab="assessments">
+                <span>📝</span> Online Assessments
+            </button>
+            <button type="button" class="portal-tab-btn" data-tab="assignments">
+                <span>📋</span> Assignments
+            </button>
+            <button type="button" class="portal-tab-btn" data-tab="materials">
+                <span>📚</span> Study Materials
+            </button>
+            <button type="button" class="portal-tab-btn" data-tab="attendance">
+                <span>📅</span> Attendance
+            </button>
+            <button type="button" class="portal-tab-btn" data-tab="fees">
+                <span>💳</span> Fee Ledger
+            </button>
+            <button type="button" class="portal-tab-btn" data-tab="profile">
+                <span>👤</span> Profile & Password
+            </button>
+        </div>
 
-            <!-- Calendar Grid Container -->
-            <div id="attendanceCalendarContainer" style="max-width: 100%; overflow-x: auto;">
-                <div style="min-width: 300px;">
-                    <!-- Weekday Headers -->
-                    <div style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: 700; font-size: 0.75rem; color: var(--text-light); margin-bottom: 0.5rem; text-transform: uppercase;">
-                        <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+        <!-- ================= TAB 1: OVERVIEW ================= -->
+        <div class="portal-tab-pane active" id="tab-overview">
+            <!-- Quick Hub Links -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+                <a href="study-notes.html" class="card" style="text-decoration: none; padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 1rem; margin-bottom: 0;">
+                    <div style="width: 48px; height: 48px; border-radius: 12px; background: #dbeafe; color: #2563eb; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.5rem;">
+                        📖
                     </div>
-                    <!-- Calendar Days Grid -->
-                    <div id="calendarDaysGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.35rem; text-align: center;">
+                    <div>
+                        <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--primary-color); margin: 0;">Study Notes</h3>
+                        <p style="font-size: 0.8rem; color: var(--text-light); margin: 0.15rem 0 0 0;">Chapter-wise PDF downloads</p>
+                    </div>
+                </a>
+
+                <a href="video-lectures.html" class="card" style="text-decoration: none; padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 1rem; margin-bottom: 0;">
+                    <div style="width: 48px; height: 48px; border-radius: 12px; background: #fae8ff; color: #c026d3; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.5rem;">
+                        🎥
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--primary-color); margin: 0;">Video Portal</h3>
+                        <p style="font-size: 0.8rem; color: var(--text-light); margin: 0.15rem 0 0 0;">Watch videos & earn coins</p>
+                    </div>
+                </a>
+
+                <a href="askai.html" class="card" style="text-decoration: none; padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 1rem; margin-bottom: 0;">
+                    <div style="width: 48px; height: 48px; border-radius: 12px; background: #dcfce7; color: #166534; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.5rem;">
+                        🤖
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--primary-color); margin: 0;">Ask AI Tutor</h3>
+                        <p style="font-size: 0.8rem; color: var(--text-light); margin: 0.15rem 0 0 0;">Instant doubt resolution</p>
+                    </div>
+                </a>
+
+                <a href="leaderboard.html" class="card" style="text-decoration: none; padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 1rem; margin-bottom: 0;">
+                    <div style="width: 48px; height: 48px; border-radius: 12px; background: #fef3c7; color: #b45309; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.5rem;">
+                        🏆
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--primary-color); margin: 0;">Leaderboard</h3>
+                        <p style="font-size: 0.8rem; color: var(--text-light); margin: 0.15rem 0 0 0;">Top learners ranking</p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Teacher & Admin Notes -->
+            <div class="card" id="studentNotesCard">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                    <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--primary-color); margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                        📢 Teacher & Admin Announcements
+                    </h2>
+                </div>
+                <div id="studentNotesContainer">
+                    <p style="color: var(--text-light); font-size: 0.9rem; font-style: italic;">Loading notes...</p>
+                </div>
+            </div>
+
+            <!-- Video Progress & Gamified Learning -->
+            <div class="card" id="lectureProgressCard">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+                    <div>
+                        <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--primary-color); margin: 0;">Interactive Video Progress</h2>
+                        <p style="font-size: 0.85rem; color: var(--text-light); margin: 0.2rem 0 0 0;">Check off completed video lectures to earn +10 coins per topic.</p>
+                    </div>
+                    <div id="overallLectureProgress" style="font-weight: 700; color: white; background: var(--primary-color); padding: 0.4rem 0.9rem; border-radius: 99px; font-size: 0.85rem;">
+                        0 / 0 Completed (0% Done)
+                    </div>
+                </div>
+                
+                <div style="width: 100%; background-color: var(--gray-200); height: 10px; border-radius: 6px; margin-bottom: 1.5rem; overflow: hidden;">
+                    <div id="lectureProgressBar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #3b82f6, #1e3a8a); transition: width 0.4s ease; border-radius: 6px;"></div>
+                </div>
+
+                <div id="lectureSectionsContainer">
+                    <div style="text-align: center; padding: 1.5rem; color: var(--text-light);">Loading lectures...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 2: PERFORMANCE & ANALYTICS ================= -->
+        <div class="portal-tab-pane" id="tab-analytics">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--primary-color); margin: 0;">Academic Performance & Score Analytics</h2>
+                    <p style="font-size: 0.85rem; color: var(--text-light); margin: 0.2rem 0 0 0;">Detailed test-wise evaluation and class benchmarks</p>
+                </div>
+                <button type="button" id="openReportCardBtn" class="btn btn-primary" style="gap: 0.5rem; font-weight: 700; padding: 0.6rem 1.4rem;">
+                    <span>📄</span> Download / Print Progress Report Card
+                </button>
+            </div>
+
+            <!-- Analytics Metric Cards -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.75rem;">
+                <div class="card" style="padding: 1.25rem; margin-bottom: 0;">
+                    <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-light); text-transform: uppercase;">Evaluated Tests</div>
+                    <div style="font-size: 1.8rem; font-weight: 800; color: #1e40af; margin-top: 0.35rem;" id="analyticsTotalTests">0</div>
+                    <div style="font-size: 0.75rem; color: #166534; font-weight: 600; margin-top: 0.2rem;">All published test series</div>
+                </div>
+                <div class="card" style="padding: 1.25rem; margin-bottom: 0;">
+                    <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-light); text-transform: uppercase;">Highest Score</div>
+                    <div style="font-size: 1.8rem; font-weight: 800; color: #16a34a; margin-top: 0.35rem;" id="analyticsHighestScore">N/A</div>
+                    <div style="font-size: 0.75rem; color: #64748b; font-weight: 600; margin-top: 0.2rem;" id="analyticsHighestTest">No tests recorded</div>
+                </div>
+                <div class="card" style="padding: 1.25rem; margin-bottom: 0;">
+                    <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-light); text-transform: uppercase;">Class Benchmark Avg</div>
+                    <div style="font-size: 1.8rem; font-weight: 800; color: #d97706; margin-top: 0.35rem;" id="analyticsCohortAvg">N/A</div>
+                    <div style="font-size: 0.75rem; color: #64748b; font-weight: 600; margin-top: 0.2rem;">Average of all batch peers</div>
+                </div>
+                <div class="card" style="padding: 1.25rem; margin-bottom: 0;">
+                    <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-light); text-transform: uppercase;">Calculated Accuracy</div>
+                    <div style="font-size: 1.8rem; font-weight: 800; color: #2563eb; margin-top: 0.35rem;" id="analyticsAccuracy">0%</div>
+                    <div style="font-size: 0.75rem; color: #166534; font-weight: 600; margin-top: 0.2rem;">Obtained / Total Marks</div>
+                </div>
+            </div>
+
+            <!-- Score Trend Visual Chart -->
+            <div class="card">
+                <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--primary-color); margin-bottom: 1rem;">
+                    📊 Performance Trend Over Time
+                </h3>
+                <div id="scoreTrendChartContainer" style="display: flex; align-items: flex-end; gap: 1rem; height: 180px; padding: 1rem 0; border-bottom: 2px solid var(--gray-200); overflow-x: auto;">
+                    <!-- Injected bars -->
+                </div>
+            </div>
+
+            <!-- Results Table -->
+            <div class="card">
+                <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--primary-color); margin-bottom: 1rem;">
+                    Historical Test Results
+                </h3>
+                <div style="overflow-x: auto;">
+                    <table class="table" id="resultsTable" style="min-width: 650px;">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Subject</th>
+                                <th class="text-right">Max Marks</th>
+                                <th class="text-right">Obtained</th>
+                                <th class="text-right">Percentage</th>
+                                <th class="text-right">Batch Avg</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody><!-- Filled by JS --></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Weak Topics & Focus Areas -->
+            <div class="card" id="weakTopicsCard">
+                <h3 style="font-size: 1.15rem; font-weight: 800; color: #b91c1c; margin-bottom: 0.75rem;">
+                    🎯 Recommended Improvement Areas
+                </h3>
+                <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 1rem;">
+                    Topics and test evaluations where your score was below 60%. Prioritize these for chapter revisions.
+                </p>
+                <div id="weakTopicsList">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 3: ONLINE ASSESSMENTS ================= -->
+        <div class="portal-tab-pane" id="tab-assessments">
+            <div style="margin-bottom: 1.5rem;">
+                <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--primary-color); margin: 0;">Online Assessments & Speed Mocks</h2>
+                <p style="font-size: 0.85rem; color: var(--text-light); margin: 0.2rem 0 0 0;">Simulated Computer-Based Testing (CBT) with auto-evaluation and explanations</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;" id="availableAssessmentsGrid">
+                <!-- Available assessments injected by JS -->
+            </div>
+
+            <div class="card">
+                <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--primary-color); margin-bottom: 1rem;">
+                    Past Attempt History
+                </h3>
+                <div style="overflow-x: auto;">
+                    <table class="table" id="assessmentAttemptsTable">
+                        <thead>
+                            <tr>
+                                <th>Assessment</th>
+                                <th>Submitted Date</th>
+                                <th class="text-right">Score</th>
+                                <th class="text-right">Percentage</th>
+                                <th class="text-right">Correct</th>
+                                <th class="text-right">Incorrect</th>
+                            </tr>
+                        </thead>
+                        <tbody><!-- Injected by JS --></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 4: ASSIGNMENTS ================= -->
+        <div class="portal-tab-pane" id="tab-assignments">
+            <div style="margin-bottom: 1.5rem;">
+                <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--primary-color); margin: 0;">Class Assignments & Homework</h2>
+                <p style="font-size: 0.85rem; color: var(--text-light); margin: 0.2rem 0 0 0;">Submit exercise solutions and review feedback from mentors</p>
+            </div>
+
+            <div id="assignmentsListContainer">
+                <!-- Injected by JS -->
+            </div>
+        </div>
+
+        <!-- ================= TAB 5: STUDY MATERIALS ================= -->
+        <div class="portal-tab-pane" id="tab-materials">
+            <div style="margin-bottom: 1.5rem;">
+                <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--primary-color); margin: 0;">Structured Learning Materials</h2>
+                <p style="font-size: 0.85rem; color: var(--text-light); margin: 0.2rem 0 0 0;">Curated chapter PDFs, presentation slides, and revision guides</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+                <div class="card" style="margin-bottom: 0;">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">📚</div>
+                    <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--primary-color); margin-bottom: 0.5rem;">Class Notes (PDF)</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 1.25rem;">Detailed handwritten & typed chapter-wise notes for Physics, Chemistry, and Math.</p>
+                    <a href="study-notes.html" class="btn btn-primary" style="width: 100%;">Browse Notes Archive</a>
+                </div>
+
+                <div class="card" style="margin-bottom: 0;">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">🖥️</div>
+                    <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--primary-color); margin-bottom: 0.5rem;">Presentation Slides</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 1.25rem;">Interactive presentation slides covering concepts, derivations, and formulas.</p>
+                    <a href="study-slides.html" class="btn btn-primary" style="width: 100%;">View Presentation Slides</a>
+                </div>
+
+                <div class="card" style="margin-bottom: 0;">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎥</div>
+                    <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--primary-color); margin-bottom: 0.5rem;">Video Lectures</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 1.25rem;">Watch recorded high-definition topic explanations and practice tutorials.</p>
+                    <a href="video-lectures.html" class="btn btn-primary" style="width: 100%;">Open Video Lectures</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 6: ATTENDANCE ================= -->
+        <div class="portal-tab-pane" id="tab-attendance">
+            <div class="card" id="attendanceCard">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+                    <div>
+                        <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--primary-color); margin: 0;">Attendance Calendar</h2>
+                        <p style="font-size: 0.85rem; color: var(--text-light); margin: 0.2rem 0 0 0;">Monthly class presence records</p>
+                    </div>
+                    <!-- Legend -->
+                    <div style="display: flex; align-items: center; gap: 0.85rem; font-size: 0.8rem; font-weight: 600;">
+                        <span style="display: flex; align-items: center; gap: 0.35rem;"><span style="width: 12px; height: 12px; border-radius: 50%; background: #22c55e; border: 1px solid #166534; display: inline-block;"></span> Present</span>
+                        <span style="display: flex; align-items: center; gap: 0.35rem;"><span style="width: 12px; height: 12px; border-radius: 50%; background: #ef4444; border: 1px solid #991b1b; display: inline-block;"></span> Absent</span>
+                        <span style="display: flex; align-items: center; gap: 0.35rem;"><span style="width: 12px; height: 12px; border-radius: 50%; background: #e2e8f0; border: 1px solid #94a3b8; display: inline-block;"></span> N/A</span>
+                    </div>
+                </div>
+
+                <!-- Month Controls -->
+                <div style="display: flex; align-items: center; justify-content: space-between; background: var(--gray-100); padding: 0.5rem 0.85rem; border-radius: 0.6rem; margin-bottom: 1rem;">
+                    <button type="button" id="prevMonthBtn" class="btn btn-outline" style="padding: 0.25rem 0.65rem; font-size: 0.8rem; min-height: 32px; border-color: var(--gray-300); background: white;">&larr; Prev</button>
+                    <span id="calendarMonthTitle" style="font-weight: 700; color: var(--primary-color); font-size: 0.95rem;">Month Year</span>
+                    <button type="button" id="nextMonthBtn" class="btn btn-outline" style="padding: 0.25rem 0.65rem; font-size: 0.8rem; min-height: 32px; border-color: var(--gray-300); background: white;">Next &rarr;</button>
+                </div>
+
+                <!-- Calendar Grid Container -->
+                <div id="attendanceCalendarContainer" style="max-width: 100%; overflow-x: auto;">
+                    <div style="min-width: 300px;">
+                        <div style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: 700; font-size: 0.75rem; color: var(--text-light); margin-bottom: 0.5rem; text-transform: uppercase;">
+                            <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+                        </div>
+                        <div id="calendarDaysGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.35rem; text-align: center;">
+                            <!-- Filled by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 7: FEE CYCLES ================= -->
+        <div class="portal-tab-pane" id="tab-fees">
+            <div class="card">
+                <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--primary-color); margin-bottom: 1rem;">Monthly Fee Cycles & Receipts</h2>
+                <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 1.5rem;">Transparent 30-day fee cycles, due dates, late fine calculations, and payment receipts.</p>
+                <div style="overflow-x: auto;">
+                    <table class="table" id="feeCyclesTable" style="min-width: 600px;">
+                        <thead>
+                            <tr>
+                                <th>Cycle</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th class="text-right">Base Fee</th>
+                                <th class="text-right">Fine</th>
+                                <th class="text-right">Total Fee</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody><!-- Filled by JS --></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 8: PROFILE & SECURITY ================= -->
+        <div class="portal-tab-pane" id="tab-profile">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+                <div class="card">
+                    <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--primary-color); margin-bottom: 1rem;">Student Information</h2>
+                    <div id="profileDetailsList" style="display: flex; flex-direction: column; gap: 0.85rem; font-size: 0.95rem;">
                         <!-- Filled by JS -->
                     </div>
                 </div>
+
+                <div class="card">
+                    <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--primary-color); margin-bottom: 1rem;">Change Password</h2>
+                    <form id="change-password-form">
+                        <div style="margin-bottom: 1rem;">
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem;">New Password</label>
+                            <input class="form-input" id="newPassword" type="password" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-300); border-radius: var(--radius-md);" placeholder="Enter new strong password">
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="padding: 0.75rem 1.5rem; font-weight: 700;">Update Password</button>
+                    </form>
+                </div>
             </div>
         </div>
+    </div>
 
-        <div class="card">
-            <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--primary-color); margin-bottom: 1.5rem;">Change Password</h2>
-            <form id="change-password-form" style="max-width: 400px;">
+    <!-- ================= SUBMIT ASSIGNMENT MODAL ================= -->
+    <div class="pc-modal-backdrop" id="submitAssignmentModal">
+        <div class="pc-modal-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--primary-color); margin: 0;" id="modalAsgTitle">Submit Assignment</h3>
+                <button type="button" id="closeAsgModalBtn" style="border: none; background: none; font-size: 1.5rem; cursor: pointer; color: #64748b;">&times;</button>
+            </div>
+            <form id="submit-assignment-form">
+                <input type="hidden" id="modalAsgId" />
                 <div style="margin-bottom: 1rem;">
-                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">New Password</label>
-                    <input class="form-input" id="newPassword" type="password" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-300); border-radius: var(--radius-md);">
+                    <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.4rem;">Solution Notes / Answers</label>
+                    <textarea class="form-input" id="asgSubmitNotes" rows="4" style="width: 100%; border: 1.5px solid var(--gray-300); border-radius: 8px; padding: 0.75rem;" placeholder="Type your step-by-step solution, answers, or comments..."></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary" style="background:#1e3a8a; color:white; border:none; padding: 0.75rem 1.5rem; border-radius: var(--radius-md);">Update Password</button>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.4rem;">Google Drive / PDF Solution Link (Optional)</label>
+                    <input type="url" class="form-input" id="asgSubmitLink" style="width: 100%; border: 1.5px solid var(--gray-300); border-radius: 8px; padding: 0.75rem;" placeholder="https://drive.google.com/..." />
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+                    <button type="button" class="btn btn-outline" id="cancelAsgModalBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Submit to Teacher</button>
+                </div>
             </form>
+        </div>
+    </div>
+
+    <!-- ================= PRINTABLE PROGRESS REPORT CARD MODAL ================= -->
+    <div class="pc-modal-backdrop" id="reportCardModal">
+        <div class="pc-modal-card" style="max-width: 750px;">
+            <div class="no-print" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 style="margin: 0; font-size: 1.2rem; font-weight: 800; color: var(--primary-color);">Official Progress Report Card Preview</h3>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button type="button" class="btn btn-primary" onclick="window.print()" style="padding: 0.4rem 1rem; font-size: 0.85rem; font-weight: 700;">
+                        🖨️ Print / Save as PDF
+                    </button>
+                    <button type="button" id="closeReportCardBtn" style="border: none; background: none; font-size: 1.5rem; cursor: pointer; color: #64748b;">&times;</button>
+                </div>
+            </div>
+
+            <!-- Report Card Body -->
+            <div id="printableReportCard" style="background: white; border: 2px solid #0f172a; padding: 2rem; border-radius: 12px; font-family: 'Inter', sans-serif;">
+                <div style="text-align: center; border-bottom: 2px solid #0f172a; padding-bottom: 1.25rem; margin-bottom: 1.5rem;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+                        <img src="images/logo.png" alt="Paradigm Classes" style="height: 48px; width: auto;" />
+                        <h1 style="font-size: 1.6rem; font-weight: 900; color: #0f172a; margin: 0; letter-spacing: -0.02em;">PARADIGM CLASSES</h1>
+                    </div>
+                    <p style="font-size: 0.85rem; font-weight: 700; color: #1e40af; margin: 0; text-transform: uppercase; letter-spacing: 0.05em;">
+                        Student Academic Performance & Comprehensive Progress Report
+                    </p>
+                    <p style="font-size: 0.75rem; color: #64748b; margin: 0.2rem 0 0 0;">Session 2026–2027 | Affiliated Curriculum: Classes IX–XII, JEE, NEET & NDA</p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; font-size: 0.9rem; background: #f8fafc; padding: 1rem; border-radius: 8px;">
+                    <div><strong>Student Name:</strong> <span id="rcStudentName">—</span></div>
+                    <div><strong>Class / Batch:</strong> <span id="rcStudentClass">—</span></div>
+                    <div><strong>Student ID:</strong> <span id="rcStudentId">—</span></div>
+                    <div><strong>Date of Evaluation:</strong> <span id="rcDate">—</span></div>
+                    <div><strong>Attendance Rate:</strong> <span id="rcAttendanceRate" style="color: #166534; font-weight: 700;">—</span></div>
+                    <div><strong>Cumulative Performance:</strong> <span id="rcCumulative" style="color: #1e40af; font-weight: 800;">—</span></div>
+                </div>
+
+                <h4 style="margin: 1rem 0 0.5rem 0; font-size: 0.95rem; text-transform: uppercase; color: #0f172a;">Evaluated Assessment Record</h4>
+                <div style="overflow-x: auto; margin-bottom: 1.5rem;">
+                    <table class="table" id="rcTable" style="margin-top: 0; font-size: 0.85rem;">
+                        <thead>
+                            <tr>
+                                <th>Test Date</th>
+                                <th>Subject</th>
+                                <th class="text-right">Max</th>
+                                <th class="text-right">Obtained</th>
+                                <th class="text-right">%</th>
+                            </tr>
+                        </thead>
+                        <tbody><!-- Filled by JS --></tbody>
+                    </table>
+                </div>
+
+                <div style="background: #f1f5f9; border-left: 4px solid #1e40af; padding: 0.85rem 1rem; border-radius: 6px; font-size: 0.85rem; margin-bottom: 2rem;">
+                    <strong>Mentor Remarks:</strong>
+                    <p id="rcRemarks" style="margin: 0.25rem 0 0 0; color: #334155; line-height: 1.5;">
+                        Demonstrates sincere commitment to concept learning and active session participation. Consistent practice on application numericals is recommended.
+                    </p>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px dashed #cbd5e1; padding-top: 1.5rem; font-size: 0.85rem;">
+                    <div>
+                        <div style="font-weight: 700;">Seal & Verification</div>
+                        <div style="color: #64748b; font-size: 0.75rem;">Paradigm Classes Academic Cell</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-family: cursive; font-size: 1.2rem; color: #1e40af; font-weight: 700;">Shneh Rawat</div>
+                        <div style="font-weight: 700;">Director & Lead Mentor</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

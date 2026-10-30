@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="Paradigm Classes - Parent Portal" name="description" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,800&display=swap" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
+    <title>Parent Portal — Paradigm Classes</title>
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --primary-light: #1e40af;
+            --accent-amber: #d97706;
+            --text-dark: #0f172a;
+            --text-light: #64748b;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+        body {
+            background-color: #f8fafc;
+            font-family: 'Satoshi', sans-serif;
+        }
+        .dashboard-container { 
+            padding: 7rem 1.5rem 4rem; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            min-height: calc(100vh - 80px); 
+        }
+        .dashboard-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 2rem; 
+            flex-wrap: wrap; 
+            gap: 1.25rem; 
+            background: white;
+            padding: 1.5rem 1.75rem;
+            border-radius: 16px;
+            border: 1px solid var(--gray-200);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+        .card { 
+            background: white; 
+            padding: 1.75rem; 
+            border-radius: var(--radius-lg); 
+            box-shadow: var(--shadow-md); 
+            margin-bottom: 1.75rem; 
+            border: 1px solid var(--gray-200);
+        }
+        .stat-box { 
+            background: white; 
+            color: var(--text-dark); 
+            padding: 0.75rem 1.25rem; 
+            border-radius: 12px; 
+            text-align: center; 
+            border: 1.5px solid var(--gray-200); 
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+        .stat-value { font-size: 1.5rem; font-weight: 800; line-height: 1.2; margin-bottom: 0.25rem; }
+        .stat-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: var(--text-light); }
+        .table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        .table th, .table td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--gray-200); text-align: left; }
+        .table th { font-weight: 700; color: #1e40af; background: #f8fafc; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.02em; }
+        .text-right { text-align: right; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="index.html" class="logo" style="text-decoration: none;">
+                    <img alt="Paradigm Classes Logo" class="logo-img" src="images/logo.png" style="height: 40px; width: auto; object-fit: contain; margin-right: 8px;"/>
+                    <div>
+                        <div class="logo-primary">PARADIGM</div>
+                        <div class="logo-secondary">PARENT PORTAL</div>
+                    </div>
+                </a>
+                <div class="nav-links">
+                    <a class="nav-link" href="index.html">Home</a>
+                    <a class="nav-link" href="results.html">Results</a>
+                    <a class="nav-link" href="fees.html">Course Fees</a>
+                    <a class="nav-link" href="faculty.html">Faculty</a>
+                </div>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open Menu">☰</button>
+                <div class="nav-cta">
+                    <button id="logoutBtn" class="btn" style="background:#dc2626; color:white; border:none; padding: 0.5rem 1.25rem; font-weight:700;">Logout</button>
+                </div>
+            </div>
+            <div class="mobile-menu" id="mobileMenu">
+                <a class="mobile-link" href="index.html">Home</a>
+                <a class="mobile-link" href="results.html">Results</a>
+                <a class="mobile-link" href="fees.html">Course Fees</a>
+                <a class="mobile-link" href="faculty.html">Faculty</a>
+            </div>
+        </div>
+    </nav>
+    <div style="margin-top: 80px;"></div>
+
+    <div class="dashboard-container">
+        <!-- Parent Header Bar -->
+        <div class="dashboard-header">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <div style="width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #0f172a, #1e40af); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; box-shadow: 0 4px 10px rgba(15,23,42,0.25);">
+                    👨‍👩‍👧
+                </div>
+                <div>
+                    <div style="display: flex; align-items: center; gap: 0.6rem;">
+                        <h1 style="font-size: 1.45rem; font-weight: 800; color: #0f172a; margin: 0;" id="parentWelcome">Parent Dashboard</h1>
+                        <span id="childClassBadge" style="background: #dbeafe; color: #1e40af; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 99px;">Class</span>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-light); margin: 0.25rem 0 0 0;" id="childSubtitle">
+                        Monitoring academic progress for ...
+                    </p>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+                <div class="stat-box" style="min-width: 110px;">
+                    <div class="stat-value" id="childCumulative" style="color: #1e40af;">0%</div>
+                    <div class="stat-label">Performance</div>
+                </div>
+                <div class="stat-box" style="min-width: 110px;">
+                    <div class="stat-value" id="childAttendance" style="color: #166534;">0%</div>
+                    <div class="stat-label">Attendance</div>
+                </div>
+                <div class="stat-box" style="min-width: 110px;">
+                    <div class="stat-value" id="childFeeStatus" style="font-size: 1.15rem; color: #d97706; padding-top: 0.2rem;">Checking...</div>
+                    <div class="stat-label">Fee Status</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Parent Portal Tabs -->
+        <div class="portal-tabs" id="parentPortalTabs">
+            <button type="button" class="portal-tab-btn active" data-tab="overview">
+                <span>🏠</span> Overview
+            </button>
+            <button type="button" class="portal-tab-btn" data-tab="academics">
+                <span>📈</span> Test Results & Marks
+            </button>
+            <button type="button" class="portal-tab-btn" data-tab="attendance">
+                <span>📅</span> Attendance History
+            </button>
+            <button type="button" class="portal-tab-btn" data-tab="fees">
+                <span>💳</span> Fee Ledger
+            </button>
+            <button type="button" class="portal-tab-btn" data-tab="notes">
+                <span>📢</span> Teacher Feedback
+            </button>
+            <button type="button" class="portal-tab-btn" data-tab="assignments">
+                <span>📋</span> Assignments Status
+            </button>
+        </div>
+
+        <!-- TAB 1: OVERVIEW -->
+        <div class="portal-tab-pane active" id="tab-overview">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                <div class="card" style="margin-bottom: 0;">
+                    <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 0.75rem;">
+                        Child Academic Profile
+                    </h3>
+                    <div id="childProfileSummary" style="display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.9rem;">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+
+                <div class="card" style="margin-bottom: 0;">
+                    <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 0.75rem;">
+                        Quick Contact with Lead Mentor
+                    </h3>
+                    <p style="font-size: 0.85rem; color: var(--text-light); line-height: 1.6; margin-bottom: 1rem;">
+                        Have questions about your child's progress, homework, or upcoming test preparations? Contact our mentor directly.
+                    </p>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.9rem; font-weight: 600;">
+                        <div>👨‍🏫 <strong>Lead Faculty:</strong> Shneh Rawat</div>
+                        <div>📞 <strong>Institute Desk:</strong> +91 9410351514</div>
+                        <div>📍 <strong>Campus:</strong> Main Coaching Center</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Teacher Feedback -->
+            <div class="card">
+                <h3 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem;">
+                    Recent Teacher Feedback & Notes
+                </h3>
+                <div id="parentNotesContainer">
+                    <p style="color: var(--text-light); font-size: 0.9rem;">Loading feedback notes...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: ACADEMICS & RESULTS -->
+        <div class="portal-tab-pane" id="tab-academics">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+                    <div>
+                        <h2 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin: 0;">Evaluated Test Scores</h2>
+                        <p style="font-size: 0.85rem; color: var(--text-light); margin: 0.2rem 0 0 0;">Official test results and peer batch averages</p>
+                    </div>
+                    <button type="button" id="printReportCardBtn" class="btn btn-primary" onclick="window.print()" style="font-weight: 700; font-size: 0.85rem; padding: 0.5rem 1rem;">
+                        🖨️ Print Progress Report Card
+                    </button>
+                </div>
+
+                <div style="overflow-x: auto;">
+                    <table class="table" id="parentResultsTable" style="min-width: 650px;">
+                        <thead>
+                            <tr>
+                                <th>Test Date</th>
+                                <th>Subject</th>
+                                <th class="text-right">Max Marks</th>
+                                <th class="text-right">Marks Obtained</th>
+                                <th class="text-right">Percentage</th>
+                                <th class="text-right">Batch Avg</th>
+                                <th>Performance Rating</th>
+                            </tr>
+                        </thead>
+                        <tbody><!-- Filled by JS --></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: ATTENDANCE -->
+        <div class="portal-tab-pane" id="tab-attendance">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+                    <div>
+                        <h2 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin: 0;">Class Attendance Calendar</h2>
+                        <p style="font-size: 0.85rem; color: var(--text-light); margin: 0.2rem 0 0 0;">Daily presence status tracked by faculty</p>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.85rem; font-size: 0.8rem; font-weight: 600;">
+                        <span style="display: flex; align-items: center; gap: 0.35rem;"><span style="width: 12px; height: 12px; border-radius: 50%; background: #22c55e; border: 1px solid #166534; display: inline-block;"></span> Present</span>
+                        <span style="display: flex; align-items: center; gap: 0.35rem;"><span style="width: 12px; height: 12px; border-radius: 50%; background: #ef4444; border: 1px solid #991b1b; display: inline-block;"></span> Absent</span>
+                    </div>
+                </div>
+
+                <div style="display: flex; align-items: center; justify-content: space-between; background: var(--gray-100); padding: 0.5rem 0.85rem; border-radius: 0.6rem; margin-bottom: 1rem;">
+                    <button type="button" id="parentPrevMonthBtn" class="btn btn-outline" style="padding: 0.25rem 0.65rem; font-size: 0.8rem; min-height: 32px; background: white;">&larr; Prev</button>
+                    <span id="parentCalendarMonthTitle" style="font-weight: 700; color: #0f172a; font-size: 0.95rem;">Month Year</span>
+                    <button type="button" id="parentNextMonthBtn" class="btn btn-outline" style="padding: 0.25rem 0.65rem; font-size: 0.8rem; min-height: 32px; background: white;">Next &rarr;</button>
+                </div>
+
+                <div style="max-width: 100%; overflow-x: auto;">
+                    <div style="min-width: 300px;">
+                        <div style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: 700; font-size: 0.75rem; color: var(--text-light); margin-bottom: 0.5rem; text-transform: uppercase;">
+                            <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+                        </div>
+                        <div id="parentCalendarDaysGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.35rem; text-align: center;">
+                            <!-- Filled by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: FEES -->
+        <div class="portal-tab-pane" id="tab-fees">
+            <div class="card">
+                <h2 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-bottom: 0.5rem;">Fee Ledger & Payment Receipts</h2>
+                <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 1.5rem;">Transparent cycle billing, due dates, and receipts recorded by the administrative office.</p>
+                <div style="overflow-x: auto;">
+                    <table class="table" id="parentFeeCyclesTable" style="min-width: 600px;">
+                        <thead>
+                            <tr>
+                                <th>Cycle</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th class="text-right">Base Fee</th>
+                                <th class="text-right">Fine</th>
+                                <th class="text-right">Total Payable</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody><!-- Filled by JS --></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: NOTES & ANNOUNCEMENTS -->
+        <div class="portal-tab-pane" id="tab-notes">
+            <div class="card">
+                <h2 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem;">Teacher Feedback & Direct Messages</h2>
+                <div id="parentFullNotesList">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 6: ASSIGNMENTS -->
+        <div class="portal-tab-pane" id="tab-assignments">
+            <div class="card">
+                <h2 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem;">Class Assignments & Homework Status</h2>
+                <div id="parentAssignmentsContainer">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = Auth.checkAuth('parent');
+            if (!user) return;
+
+            const targetStudentId = (user.studentId || user.id.replace('p-', '')).toLowerCase();
+
+            // Tab navigation setup
+            const tabBtns = document.querySelectorAll('.portal-tab-btn');
+            const tabPanes = document.querySelectorAll('.portal-tab-pane');
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tabId = btn.dataset.tab;
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabPanes.forEach(p => p.classList.remove('active'));
+                    btn.classList.add('active');
+                    const targetPane = document.getElementById(`tab-${tabId}`);
+                    if (targetPane) targetPane.classList.add('active');
+                });
+            });
+
+            // Load Student Record
+            const students = await DB.getStudents();
+            const student = students.find(s => s.id.toLowerCase() === targetStudentId);
+
+            if (!student) {
+                alert("Linked student record could not be found. Please contact Paradigm Admin.");
+                DB.logout();
+                window.location.href = 'login.html';
+                return;
+            }
+
+            document.getElementById('parentWelcome').textContent = `Welcome, Parent of ${student.name}`;
+            document.getElementById('childClassBadge').textContent = `Class ${student.class || 'N/A'}`;
+            document.getElementById('childSubtitle').textContent = `Monitoring academic records for ${student.name} (ID: ${student.id})`;
+
+            // Profile Summary Card
+            const profileSum = document.getElementById('childProfileSummary');
+            if (profileSum) {
+                profileSum.innerHTML = `
+                    <div><strong>Student Full Name:</strong> ${window.escapeHTML(student.name)}</div>
+                    <div><strong>Enrolled Batch:</strong> Class ${student.class || 'N/A'}</div>
+                    <div><strong>Enrollment Date:</strong> ${DB.formatDate(student.dateOfJoining) || 'Active'}</div>
+                    <div><strong>Father Contact:</strong> ${student.fatherPhone || 'Not recorded'}</div>
+                    <div><strong>Mother Contact:</strong> ${student.motherPhone || 'Not recorded'}</div>
+                    <div><strong>Monthly Base Tuition:</strong> ₹${(student.fees || 0).toLocaleString('en-IN')}</div>
+                `;
+            }
+
+            // 1. Fee Records
+            const feeTableBody = document.querySelector('#parentFeeCyclesTable tbody');
+            const childFeeStatusEl = document.getElementById('childFeeStatus');
+            const payments = student.feePayments || [];
+            const baseFees = student.fees || 0;
+
+            if (feeTableBody && student.dateOfJoining) {
+                let cycleStartDate = new Date(student.dateOfJoining);
+                let cycleNum = 1;
+                const today = new Date();
+                let hasUnpaid = false;
+                feeTableBody.innerHTML = '';
+
+                while (cycleStartDate <= today || cycleNum === 1) {
+                    const startStr = cycleStartDate.toISOString().split('T')[0];
+                    const endCycle = new Date(cycleStartDate);
+                    endCycle.setDate(endCycle.getDate() + 30);
+                    const endStr = endCycle.toISOString().split('T')[0];
+
+                    const paymentRecord = payments.find(p => p.cycleStart === startStr);
+                    const tr = document.createElement('tr');
+
+                    if (paymentRecord) {
+                        const fine = paymentRecord.finePaid || 0;
+                        const totalPaid = baseFees + fine;
+                        tr.innerHTML = `
+                            <td>Cycle ${cycleNum}</td>
+                            <td>${DB.formatDate(startStr)}</td>
+                            <td>${DB.formatDate(endStr)}</td>
+                            <td class="text-right">₹${baseFees.toLocaleString('en-IN')}</td>
+                            <td class="text-right">₹${fine.toLocaleString('en-IN')}</td>
+                            <td class="text-right" style="font-weight:700; color:#166534;">₹${totalPaid.toLocaleString('en-IN')}</td>
+                            <td><span class="badge" style="background:#dcfce7;color:#166534;padding:0.25rem 0.65rem;border-radius:99px;font-weight:700;">Paid</span></td>
+                        `;
+                    } else {
+                        hasUnpaid = true;
+                        const dueDate = new Date(cycleStartDate);
+                        dueDate.setDate(dueDate.getDate() + 5);
+                        const delayDays = Math.max(0, Math.floor((today - dueDate) / (1000 * 60 * 60 * 24)));
+                        const currentFine = delayDays * 30;
+                        const totalDue = baseFees + currentFine;
+                        tr.innerHTML = `
+                            <td>Cycle ${cycleNum}</td>
+                            <td>${DB.formatDate(startStr)}</td>
+                            <td>${DB.formatDate(endStr)}</td>
+                            <td class="text-right">₹${baseFees.toLocaleString('en-IN')}</td>
+                            <td class="text-right">₹${currentFine.toLocaleString('en-IN')}</td>
+                            <td class="text-right" style="font-weight:700; color:#dc2626;">₹${totalDue.toLocaleString('en-IN')}</td>
+                            <td><span class="badge" style="background:#fef08a;color:#854d0e;padding:0.25rem 0.65rem;border-radius:99px;font-weight:700;">Unpaid</span></td>
+                        `;
+                    }
+                    feeTableBody.appendChild(tr);
+                    cycleStartDate = endCycle;
+                    cycleNum++;
+                }
+
+                if (childFeeStatusEl) {
+                    childFeeStatusEl.textContent = hasUnpaid ? 'Payment Due' : 'All Clear';
+                    childFeeStatusEl.style.color = hasUnpaid ? '#dc2626' : '#166534';
+                }
+            }
+
+            // 2. Academics & Results
+            const allTests = await DB.getTests();
+            const publishedTests = allTests.filter(t => t.published);
+            const resTableBody = document.querySelector('#parentResultsTable tbody');
+            let totalMax = 0;
+            let totalObtained = 0;
+            let testCount = 0;
+
+            if (resTableBody) {
+                resTableBody.innerHTML = '';
+                publishedTests.forEach(test => {
+                    const marksList = test.marks || [];
+                    const studentMark = marksList.find(m => m.studentId.toLowerCase() === targetStudentId);
+
+                    let classTotal = 0;
+                    let classCount = 0;
+                    marksList.forEach(m => {
+                        if (typeof m.mark === 'number') {
+                            classTotal += m.mark;
+                            classCount++;
+                        }
+                    });
+                    const classAvgPct = classCount > 0 ? ((classTotal / (classCount * test.maxMarks)) * 100).toFixed(1) : 'N/A';
+
+                    if (studentMark) {
+                        testCount++;
+                        const mark = studentMark.mark;
+                        const max = test.maxMarks;
+                        const percentage = ((mark / max) * 100).toFixed(1);
+                        totalMax += max;
+                        totalObtained += mark;
+
+                        const tr = document.createElement('tr');
+                        const rating = percentage >= 75 ? '<span style="color:#166534; font-weight:700;">Above Average (Excellent)</span>' : (percentage >= 50 ? '<span style="color:#854d0e; font-weight:700;">Satisfactory</span>' : '<span style="color:#dc2626; font-weight:700;">Requires Improvement</span>');
+
+                        tr.innerHTML = `
+                            <td>${DB.formatDate(test.date)}</td>
+                            <td style="font-weight:700;">${window.escapeHTML(test.subject)}</td>
+                            <td class="text-right">${max}</td>
+                            <td class="text-right" style="font-weight:700;">${mark}</td>
+                            <td class="text-right" style="font-weight:800; color:#1e40af;">${percentage}%</td>
+                            <td class="text-right" style="color:var(--text-light); font-weight:600;">${classAvgPct !== 'N/A' ? classAvgPct + '%' : '—'}</td>
+                            <td>${rating}</td>
+                        `;
+                        resTableBody.appendChild(tr);
+                    }
+                });
+
+                if (testCount === 0) {
+                    resTableBody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:1.5rem; color:var(--text-light);">No test evaluations published yet for this student.</td></tr>';
+                    document.getElementById('childCumulative').textContent = 'N/A';
+                } else {
+                    const overallPct = ((totalObtained / totalMax) * 100).toFixed(1);
+                    document.getElementById('childCumulative').textContent = `${overallPct}%`;
+                }
+            }
+
+            // 3. Attendance Calendar
+            const attendanceList = await DB.getAttendance();
+            let totalDays = 0;
+            let presentDays = 0;
+            const attendanceMap = {};
+
+            attendanceList.forEach(day => {
+                if (day.records && day.records[targetStudentId]) {
+                    totalDays++;
+                    const status = day.records[targetStudentId];
+                    if (status === 'present') presentDays++;
+                    attendanceMap[day.date] = { status: status, takenBy: day.takenBy || 'Teacher' };
+                }
+            });
+
+            if (totalDays === 0) {
+                document.getElementById('childAttendance').textContent = 'N/A';
+            } else {
+                const attPct = ((presentDays / totalDays) * 100).toFixed(1);
+                const attEl = document.getElementById('childAttendance');
+                attEl.textContent = `${attPct}%`;
+                attEl.style.color = (presentDays / totalDays) >= 0.75 ? '#166534' : '#b91c1c';
+            }
+
+            let calendarDate = new Date();
+            const calGrid = document.getElementById('parentCalendarDaysGrid');
+            const calTitle = document.getElementById('parentCalendarMonthTitle');
+
+            function drawParentCalendar() {
+                if (!calGrid || !calTitle) return;
+                const year = calendarDate.getFullYear();
+                const month = calendarDate.getMonth();
+                const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                calTitle.textContent = `${monthNames[month]} ${year}`;
+                calGrid.innerHTML = '';
+
+                const firstDayIndex = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+                for (let i = 0; i < firstDayIndex; i++) {
+                    const emptyCell = document.createElement('div');
+                    calGrid.appendChild(emptyCell);
+                }
+
+                for (let d = 1; d <= daysInMonth; d++) {
+                    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                    const rec = attendanceMap[dateStr];
+                    const dayCell = document.createElement('div');
+                    dayCell.style.cssText = 'display:flex; align-items:center; justify-content:center; padding:0.2rem;';
+
+                    const circle = document.createElement('div');
+                    circle.textContent = d;
+                    circle.style.cssText = `
+                        width: 34px; height: 34px; border-radius: 50%;
+                        display: flex; align-items: center; justify-content: center;
+                        font-size: 0.8rem; font-weight: 700; margin: auto;
+                    `;
+
+                    if (rec) {
+                        if (rec.status === 'present') {
+                            circle.style.background = '#dcfce7';
+                            circle.style.color = '#15803d';
+                            circle.style.border = '1.5px solid #22c55e';
+                            circle.title = `${dateStr}: PRESENT (${rec.takenBy})`;
+                        } else {
+                            circle.style.background = '#fee2e2';
+                            circle.style.color = '#b91c1c';
+                            circle.style.border = '1.5px solid #ef4444';
+                            circle.title = `${dateStr}: ABSENT (${rec.takenBy})`;
+                        }
+                    } else {
+                        circle.style.background = '#f1f5f9';
+                        circle.style.color = '#94a3b8';
+                        circle.style.border = '1px solid #cbd5e1';
+                        circle.title = `${dateStr}: N/A`;
+                    }
+
+                    dayCell.appendChild(circle);
+                    calGrid.appendChild(dayCell);
+                }
+            }
+
+            drawParentCalendar();
+
+            document.getElementById('parentPrevMonthBtn').addEventListener('click', () => {
+                calendarDate.setMonth(calendarDate.getMonth() - 1);
+                drawParentCalendar();
+            });
+
+            document.getElementById('parentNextMonthBtn').addEventListener('click', () => {
+                calendarDate.setMonth(calendarDate.getMonth() + 1);
+                drawParentCalendar();
+            });
+
+            // 4. Notes & Teacher Feedback
+            const notes = student.notes || [];
+            const notesContainer = document.getElementById('parentNotesContainer');
+            const fullNotesList = document.getElementById('parentFullNotesList');
+
+            function renderNotesContent(targetEl) {
+                if (!targetEl) return;
+                if (notes.length === 0) {
+                    targetEl.innerHTML = '<div style="color:var(--text-light); font-style:italic; padding:1rem 0;">No individual feedback notes entered by faculty yet.</div>';
+                    return;
+                }
+                targetEl.innerHTML = '';
+                const sorted = [...notes].sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+                sorted.forEach(n => {
+                    const div = document.createElement('div');
+                    div.style.cssText = 'background: white; border: 1px solid #e2e8f0; border-left: 4px solid #1e40af; border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 0.75rem;';
+                    div.innerHTML = `
+                        <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem; font-size:0.8rem; font-weight:700; color:#1e40af;">
+                            <span>Feedback by: ${window.escapeHTML(n.authorName || 'Faculty')} (${n.authorRole || 'Teacher'})</span>
+                            <span style="color:#64748b;">📅 ${n.date || DB.formatDate(n.createdAt)}</span>
+                        </div>
+                        <div style="color:#0f172a; line-height:1.6; font-size:0.95rem; white-space:pre-wrap;">
+                            ${window.escapeHTML(n.text)}
+                        </div>
+                    `;
+                    targetEl.appendChild(div);
+                });
+            }
+
+            renderNotesContent(notesContainer);
+            renderNotesContent(fullNotesList);
+
+            // 5. Assignments Status
+            const asgs = await DB.getAssignments();
+            const parentAsgContainer = document.getElementById('parentAssignmentsContainer');
+            if (parentAsgContainer) {
+                const studentClass = (student.class || '').toUpperCase();
+                const relevantAsgs = asgs.filter(a => !a.targetClass || a.targetClass === 'All' || a.targetClass.toUpperCase() === studentClass);
+
+                if (relevantAsgs.length === 0) {
+                    parentAsgContainer.innerHTML = '<div style="color:var(--text-light); padding:1rem 0;">No active assignments assigned for this class currently.</div>';
+                } else {
+                    parentAsgContainer.innerHTML = '';
+                    relevantAsgs.forEach(a => {
+                        const subs = a.submissions || [];
+                        const mySub = subs.find(s => s.studentId.toLowerCase() === targetStudentId);
+                        const isDone = !!mySub;
+
+                        const row = document.createElement('div');
+                        row.style.cssText = 'background:white; border:1px solid #e2e8f0; border-radius:10px; padding:1.25rem; margin-bottom:1rem;';
+                        row.innerHTML = `
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; flex-wrap:wrap; gap:0.5rem;">
+                                <span style="font-weight:800; color:#0f172a; font-size:1.05rem;">${window.escapeHTML(a.title)} (${a.subject})</span>
+                                <span class="badge" style="background:${isDone ? '#dcfce7' : '#fee2e2'}; color:${isDone ? '#166534' : '#dc2626'}; font-weight:700; padding:0.25rem 0.65rem; border-radius:99px;">
+                                    ${isDone ? `✓ Completed (${DB.formatDate(mySub.submittedAt)})` : 'Pending Submission'}
+                                </span>
+                            </div>
+                            <p style="color:#475569; font-size:0.875rem; margin:0 0 0.5rem 0;">${window.escapeHTML(a.description)}</p>
+                            <div style="font-size:0.8rem; color:#b91c1c; font-weight:700;">📅 Deadline: ${DB.formatDate(a.dueDate)}</div>
+                        `;
+                        parentAsgContainer.appendChild(row);
+                    });
+                }
+            }
+
+            // Logout
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                DB.logout();
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Online Assessment — Paradigm Classes</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,800&display=swap" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
+    <style>
+        :root {
+            --primary-navy: #0f172a;
+            --primary-blue: #1e40af;
+            --accent-amber: #d97706;
+            --status-answered: #16a34a;
+            --status-review: #8b5cf6;
+            --status-unanswered: #94a3b8;
+        }
+        body {
+            background-color: #f1f5f9;
+            font-family: 'Satoshi', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .exam-topbar {
+            background: white;
+            border-bottom: 2px solid #e2e8f0;
+            padding: 0.85rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .timer-badge {
+            background: #fee2e2;
+            color: #dc2626;
+            border: 1.5px solid #f87171;
+            font-size: 1.15rem;
+            font-weight: 800;
+            padding: 0.4rem 1rem;
+            border-radius: 99px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-variant-numeric: tabular-nums;
+        }
+        .timer-badge.warning {
+            animation: pulseWarning 1s infinite;
+        }
+        @keyframes pulseWarning {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.04); background: #fca5a5; }
+            100% { transform: scale(1); }
+        }
+        .exam-layout {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 1.5rem;
+            max-width: 1300px;
+            margin: 1.5rem auto;
+            padding: 0 1rem;
+            flex: 1;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        @media (max-width: 900px) {
+            .exam-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        .question-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 480px;
+        }
+        .palette-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            height: fit-content;
+        }
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            margin-bottom: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #1e293b;
+            background: #f8fafc;
+        }
+        .option-label:hover {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+        .option-label.selected {
+            border-color: #2563eb;
+            background: #dbeafe;
+            color: #1e40af;
+            font-weight: 700;
+        }
+        .option-radio {
+            margin-top: 0.25rem;
+            width: 18px;
+            height: 18px;
+            accent-color: #2563eb;
+        }
+        .q-num-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+            background: #f8fafc;
+            color: #475569;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .q-num-btn:hover {
+            transform: translateY(-2px);
+            border-color: #3b82f6;
+        }
+        .q-num-btn.current {
+            border-color: #1e40af !important;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+        }
+        .q-num-btn.answered {
+            background: #16a34a !important;
+            color: white !important;
+            border-color: #15803d !important;
+        }
+        .q-num-btn.review {
+            background: #8b5cf6 !important;
+            color: white !important;
+            border-color: #7c3aed !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="exam-topbar">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <a href="student-dashboard.html" style="text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                <img src="images/logo.png" alt="Logo" style="height: 36px; width: auto;" />
+                <span style="font-weight: 800; font-size: 1.1rem; color: #0f172a;">PARADIGM CBT</span>
+            </a>
+            <span id="examClassBadge" style="background: #dbeafe; color: #1e40af; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 99px;">Class</span>
+        </div>
+        <div id="examTitleText" style="font-weight: 700; color: #334155; font-size: 1rem; max-width: 400px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
+            Loading Assessment...
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <div class="timer-badge" id="examTimer">
+                <span>⏱️</span>
+                <span id="timerDisplay">00:00</span>
+            </div>
+            <button id="submitExamBtn" class="btn btn-primary" style="background: #16a34a; border-color: #15803d; font-weight: 700; padding: 0.5rem 1.25rem;">
+                Submit Test
+            </button>
+        </div>
+    </div>
+
+    <!-- Active Test View -->
+    <div class="exam-layout" id="examActiveView">
+        <div class="question-card">
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.75rem;">
+                    <div style="font-weight: 800; font-size: 1.15rem; color: #1e40af;" id="questionNumberHeader">
+                        Question 1
+                    </div>
+                    <div style="display: flex; gap: 0.5rem; align-items: center;">
+                        <span id="qMarksBadge" style="font-size: 0.8rem; font-weight: 700; background: #f1f5f9; color: #475569; padding: 0.25rem 0.65rem; border-radius: 6px;">+4 / 0 Marks</span>
+                        <button type="button" id="markReviewBtn" class="btn btn-outline" style="font-size: 0.8rem; padding: 0.3rem 0.75rem; border-color: #8b5cf6; color: #7c3aed;">
+                            ⭐ Mark for Review
+                        </button>
+                    </div>
+                </div>
+
+                <div id="questionText" style="font-size: 1.15rem; font-weight: 600; color: #0f172a; line-height: 1.6; margin-bottom: 1.75rem;">
+                    Loading question text...
+                </div>
+
+                <div id="optionsContainer">
+                    <!-- Options injected here -->
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 1.25rem; margin-top: 1.5rem; flex-wrap: wrap; gap: 0.75rem;">
+                <div style="display: flex; gap: 0.5rem;">
+                    <button type="button" id="prevQBtn" class="btn btn-outline" style="padding: 0.55rem 1.2rem;">
+                        &larr; Previous
+                    </button>
+                    <button type="button" id="nextQBtn" class="btn btn-primary" style="padding: 0.55rem 1.2rem;">
+                        Next &rarr;
+                    </button>
+                </div>
+                <button type="button" id="clearResponseBtn" class="btn btn-outline" style="color: #dc2626; border-color: #fca5a5; font-size: 0.85rem;">
+                    Clear Selection
+                </button>
+            </div>
+        </div>
+
+        <!-- Sidebar Question Palette -->
+        <div class="palette-card">
+            <h3 style="font-size: 1.1rem; font-weight: 800; color: #0f172a; margin-top: 0; margin-bottom: 1rem;">
+                Question Palette
+            </h3>
+            
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.6rem; font-size: 0.8rem; font-weight: 600; margin-bottom: 1.5rem; background: #f8fafc; padding: 0.75rem; border-radius: 10px;">
+                <div style="display: flex; align-items: center; gap: 0.4rem;">
+                    <span style="width: 12px; height: 12px; border-radius: 50%; background: #16a34a; display: inline-block;"></span>
+                    <span id="countAnswered">0 Answered</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.4rem;">
+                    <span style="width: 12px; height: 12px; border-radius: 50%; background: #94a3b8; display: inline-block;"></span>
+                    <span id="countUnanswered">0 Left</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.4rem;">
+                    <span style="width: 12px; height: 12px; border-radius: 50%; background: #8b5cf6; display: inline-block;"></span>
+                    <span id="countReview">0 Review</span>
+                </div>
+            </div>
+
+            <div id="paletteGrid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.6rem;">
+                <!-- Question buttons injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Post-Submission Results & Explanations View -->
+    <div id="examResultView" style="display: none; max-width: 900px; margin: 2rem auto; padding: 0 1rem;">
+        <div class="question-card" style="min-height: auto; margin-bottom: 2rem; text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 0.5rem;">🎉</div>
+            <h2 style="font-size: 1.85rem; font-weight: 800; color: #1e40af; margin-bottom: 0.5rem;" id="resExamTitle">
+                Assessment Submitted Successfully!
+            </h2>
+            <p style="color: #64748b; font-size: 1rem; margin-bottom: 1.5rem;">
+                Your performance and detailed solutions have been recorded.
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 1rem;">
+                    <div style="font-size: 1.6rem; font-weight: 800; color: #1e40af;" id="resScore">0 / 0</div>
+                    <div style="font-size: 0.75rem; color: #64748b; text-transform: uppercase; font-weight: 700;">Score</div>
+                </div>
+                <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 1rem;">
+                    <div style="font-size: 1.6rem; font-weight: 800; color: #16a34a;" id="resPercentage">0%</div>
+                    <div style="font-size: 0.75rem; color: #64748b; text-transform: uppercase; font-weight: 700;">Percentage</div>
+                </div>
+                <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 1rem;">
+                    <div style="font-size: 1.6rem; font-weight: 800; color: #15803d;" id="resCorrect">0</div>
+                    <div style="font-size: 0.75rem; color: #64748b; text-transform: uppercase; font-weight: 700;">Correct</div>
+                </div>
+                <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 1rem;">
+                    <div style="font-size: 1.6rem; font-weight: 800; color: #dc2626;" id="resIncorrect">0</div>
+                    <div style="font-size: 0.75rem; color: #64748b; text-transform: uppercase; font-weight: 700;">Incorrect</div>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: center; gap: 1rem;">
+                <a href="student-dashboard.html" class="btn btn-primary" style="padding: 0.75rem 2rem; font-size: 1rem;">
+                    Return to Student Dashboard
+                </a>
+            </div>
+        </div>
+
+        <!-- Question-by-Question Solution Breakdown -->
+        <h3 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-bottom: 1.25rem;">
+            Detailed Solutions & Explanations
+        </h3>
+        <div id="solutionsList">
+            <!-- Solutions injected here -->
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = Auth.checkAuth('student');
+            if (!user) return;
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const examId = urlParams.get('examId') || 'exam_01';
+
+            const assessments = await DB.getOnlineAssessments();
+            const exam = assessments.find(a => a.id === examId) || assessments[0];
+
+            if (!exam) {
+                alert("Assessment not found. Returning to dashboard.");
+                window.location.href = 'student-dashboard.html';
+                return;
+            }
+
+            document.getElementById('examTitleText').textContent = exam.title;
+            document.getElementById('examClassBadge').textContent = `Class ${exam.targetClass}`;
+
+            const questions = exam.questions || [];
+            let currentIndex = 0;
+            const answers = {}; // { [qId]: optionIndex }
+            const reviewFlags = new Set();
+            let timerSeconds = (exam.durationMinutes || 15) * 60;
+            let timerInterval = null;
+
+            // Timer display
+            const timerDisplay = document.getElementById('timerDisplay');
+            const examTimer = document.getElementById('examTimer');
+
+            function startTimer() {
+                timerInterval = setInterval(() => {
+                    timerSeconds--;
+                    if (timerSeconds <= 0) {
+                        clearInterval(timerInterval);
+                        alert("Time's up! Your assessment is being submitted automatically.");
+                        submitAssessment();
+                        return;
+                    }
+                    const m = Math.floor(timerSeconds / 60);
+                    const s = timerSeconds % 60;
+                    timerDisplay.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+
+                    if (timerSeconds <= 180) {
+                        examTimer.classList.add('warning');
+                    }
+                }, 1000);
+            }
+            startTimer();
+
+            function updatePaletteStats() {
+                let ansCount = Object.keys(answers).length;
+                let revCount = reviewFlags.size;
+                let unansCount = questions.length - ansCount;
+
+                document.getElementById('countAnswered').textContent = `${ansCount} Answered`;
+                document.getElementById('countUnanswered').textContent = `${unansCount} Left`;
+                document.getElementById('countReview').textContent = `${revCount} Review`;
+
+                const paletteGrid = document.getElementById('paletteGrid');
+                paletteGrid.innerHTML = '';
+
+                questions.forEach((q, idx) => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = `q-num-btn ${idx === currentIndex ? 'current' : ''}`;
+                    if (answers[q.id] !== undefined) btn.classList.add('answered');
+                    if (reviewFlags.has(q.id)) btn.classList.add('review');
+                    btn.textContent = idx + 1;
+                    btn.addEventListener('click', () => {
+                        currentIndex = idx;
+                        renderCurrentQuestion();
+                    });
+                    paletteGrid.appendChild(btn);
+                });
+            }
+
+            function renderCurrentQuestion() {
+                const q = questions[currentIndex];
+                if (!q) return;
+
+                document.getElementById('questionNumberHeader').textContent = `Question ${currentIndex + 1} of ${questions.length}`;
+                document.getElementById('questionText').textContent = q.questionText;
+
+                const markBtn = document.getElementById('markReviewBtn');
+                if (reviewFlags.has(q.id)) {
+                    markBtn.textContent = '★ Marked for Review';
+                    markBtn.style.background = '#8b5cf6';
+                    markBtn.style.color = 'white';
+                } else {
+                    markBtn.textContent = '☆ Mark for Review';
+                    markBtn.style.background = 'transparent';
+                    markBtn.style.color = '#7c3aed';
+                }
+
+                const optionsContainer = document.getElementById('optionsContainer');
+                optionsContainer.innerHTML = '';
+
+                const optLetters = ['A', 'B', 'C', 'D'];
+                q.options.forEach((optText, optIdx) => {
+                    const isSelected = answers[q.id] === optIdx;
+                    const label = document.createElement('label');
+                    label.className = `option-label ${isSelected ? 'selected' : ''}`;
+                    label.innerHTML = `
+                        <input type="radio" name="optRadio" class="option-radio" value="${optIdx}" ${isSelected ? 'checked' : ''} />
+                        <div>
+                            <span style="font-weight: 700; margin-right: 0.5rem; color: #1e40af;">(${optLetters[optIdx]})</span>
+                            ${window.escapeHTML(optText)}
+                        </div>
+                    `;
+                    label.addEventListener('click', () => {
+                        answers[q.id] = optIdx;
+                        renderCurrentQuestion();
+                        updatePaletteStats();
+                    });
+                    optionsContainer.appendChild(label);
+                });
+
+                document.getElementById('prevQBtn').disabled = currentIndex === 0;
+                document.getElementById('nextQBtn').textContent = currentIndex === questions.length - 1 ? 'Finish' : 'Next →';
+
+                updatePaletteStats();
+            }
+
+            document.getElementById('prevQBtn').addEventListener('click', () => {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    renderCurrentQuestion();
+                }
+            });
+
+            document.getElementById('nextQBtn').addEventListener('click', () => {
+                if (currentIndex < questions.length - 1) {
+                    currentIndex++;
+                    renderCurrentQuestion();
+                } else {
+                    confirmSubmission();
+                }
+            });
+
+            document.getElementById('clearResponseBtn').addEventListener('click', () => {
+                const q = questions[currentIndex];
+                delete answers[q.id];
+                renderCurrentQuestion();
+                updatePaletteStats();
+            });
+
+            document.getElementById('markReviewBtn').addEventListener('click', () => {
+                const q = questions[currentIndex];
+                if (reviewFlags.has(q.id)) {
+                    reviewFlags.delete(q.id);
+                } else {
+                    reviewFlags.add(q.id);
+                }
+                renderCurrentQuestion();
+            });
+
+            function confirmSubmission() {
+                const answered = Object.keys(answers).length;
+                const total = questions.length;
+                if (confirm(`You have answered ${answered} out of ${total} questions. Do you want to submit your assessment?`)) {
+                    submitAssessment();
+                }
+            }
+
+            document.getElementById('submitExamBtn').addEventListener('click', confirmSubmission);
+
+            async function submitAssessment() {
+                clearInterval(timerInterval);
+
+                let correct = 0;
+                let incorrect = 0;
+                let unattempted = 0;
+                const marksPerQ = Math.round(exam.totalMarks / questions.length) || 4;
+                const negMark = exam.negativeMarking || 0;
+                let score = 0;
+
+                questions.forEach(q => {
+                    const chosen = answers[q.id];
+                    if (chosen === undefined) {
+                        unattempted++;
+                    } else if (chosen === q.correctOption) {
+                        correct++;
+                        score += marksPerQ;
+                    } else {
+                        incorrect++;
+                        score -= (marksPerQ * negMark);
+                    }
+                });
+
+                score = Math.max(0, Math.round(score));
+                const percentage = Math.round((score / exam.totalMarks) * 100);
+
+                // Save attempt to DB
+                try {
+                    const allAssessments = await DB.getOnlineAssessments();
+                    const targetExam = allAssessments.find(a => a.id === exam.id);
+                    if (targetExam) {
+                        if (!targetExam.attempts) targetExam.attempts = [];
+                        targetExam.attempts.push({
+                            studentId: user.id,
+                            studentName: user.name,
+                            score: score,
+                            totalMarks: exam.totalMarks,
+                            percentage: percentage,
+                            correct: correct,
+                            incorrect: incorrect,
+                            unattempted: unattempted,
+                            submittedAt: new Date().toISOString()
+                        });
+                        await DB.setOnlineAssessments(allAssessments);
+                    }
+                } catch (e) {
+                    console.error("Could not save attempt:", e);
+                }
+
+                // Render Results View
+                document.getElementById('examActiveView').style.display = 'none';
+                document.getElementById('examTimer').style.display = 'none';
+                document.getElementById('submitExamBtn').style.display = 'none';
+
+                const resultView = document.getElementById('examResultView');
+                resultView.style.display = 'block';
+
+                document.getElementById('resExamTitle').textContent = exam.title;
+                document.getElementById('resScore').textContent = `${score} / ${exam.totalMarks}`;
+                document.getElementById('resPercentage').textContent = `${percentage}%`;
+                document.getElementById('resCorrect').textContent = correct;
+                document.getElementById('resIncorrect').textContent = incorrect;
+
+                const solContainer = document.getElementById('solutionsList');
+                solContainer.innerHTML = '';
+
+                const optLetters = ['A', 'B', 'C', 'D'];
+                questions.forEach((q, idx) => {
+                    const chosen = answers[q.id];
+                    const isCorrect = chosen === q.correctOption;
+                    const isSkipped = chosen === undefined;
+
+                    const solCard = document.createElement('div');
+                    solCard.style.cssText = `
+                        background: white;
+                        border: 1.5px solid ${isCorrect ? '#22c55e' : (isSkipped ? '#cbd5e1' : '#ef4444')};
+                        border-radius: 12px;
+                        padding: 1.5rem;
+                        margin-bottom: 1.25rem;
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+                    `;
+
+                    let statusBadge = isCorrect 
+                        ? `<span style="background: #dcfce7; color: #166534; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 99px;">✓ Correct (+${marksPerQ})</span>`
+                        : (isSkipped 
+                            ? `<span style="background: #f1f5f9; color: #475569; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 99px;">— Unattempted (0)</span>`
+                            : `<span style="background: #fee2e2; color: #dc2626; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 99px;">✗ Incorrect (-${marksPerQ * negMark})</span>`);
+
+                    solCard.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                            <span style="font-weight: 800; color: #1e40af;">Q${idx + 1}</span>
+                            ${statusBadge}
+                        </div>
+                        <div style="font-size: 1.05rem; font-weight: 600; color: #0f172a; margin-bottom: 1rem;">
+                            ${window.escapeHTML(q.questionText)}
+                        </div>
+                        <div style="font-size: 0.9rem; margin-bottom: 0.75rem;">
+                            <div style="color: ${isCorrect ? '#166534' : '#dc2626'}; font-weight: 600; margin-bottom: 0.25rem;">
+                                Your Answer: ${isSkipped ? 'None' : `(${optLetters[chosen]}) ${window.escapeHTML(q.options[chosen])}`}
+                            </div>
+                            <div style="color: #166534; font-weight: 700;">
+                                Correct Answer: (${optLetters[q.correctOption]}) ${window.escapeHTML(q.options[q.correctOption])}
+                            </div>
+                        </div>
+                        <div style="background: #f8fafc; border-left: 3px solid #3b82f6; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.875rem; color: #334155;">
+                            <strong>Explanation:</strong> ${window.escapeHTML(q.explanation || 'Refer to classroom lecture notes.')}
+                        </div>
+                    `;
+                    solContainer.appendChild(solCard);
+                });
+            }
+
+            renderCurrentQuestion();
+        });
+    </script>
+</body>
+</html>
