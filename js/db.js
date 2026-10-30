@@ -663,6 +663,45 @@ const DB = {
             alert("Database Error setting announcement: " + e.message);
         }
     },
+
+    getAuditLogs: async () => {
+        try {
+            const logs = await getList('auditLogs');
+            return logs || [];
+        } catch (e) {
+            console.warn("Error getting audit logs:", e);
+            return [];
+        }
+    },
+    addAuditLog: async (action, details, user = 'admin') => {
+        try {
+            const logs = await getList('auditLogs');
+            const newLog = {
+                id: 'log_' + Date.now(),
+                action,
+                details,
+                user,
+                timestamp: new Date().toISOString()
+            };
+            logs.unshift(newLog);
+            if (logs.length > 200) logs.length = 200; // keep last 200 logs
+            await setList('auditLogs', logs);
+            return newLog;
+        } catch (e) {
+            console.warn("Error recording audit log:", e);
+        }
+    },
+
+    getClassAnnouncements: async () => {
+        try {
+            const list = await getList('classAnnouncements');
+            return list || [];
+        } catch (e) {
+            console.warn("Error getting class announcements:", e);
+            return [];
+        }
+    },
+    setClassAnnouncements: async (announcements) => await setList('classAnnouncements', announcements),
     
     initData: async () => {
         try {

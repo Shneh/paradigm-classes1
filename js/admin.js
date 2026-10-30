@@ -119,7 +119,17 @@ async function initAdminDashboard() {
         });
     }
 
-    const cachedTab = sessionStorage.getItem('adminActiveTab') || 'attendance';
+    window.switchAdminTab = switchTab;
+    window.closeAdminModal = (modalId) => {
+        const m = document.getElementById(modalId);
+        if (m) m.classList.remove('show');
+    };
+    window.openAdminModal = (modalId) => {
+        const m = document.getElementById(modalId);
+        if (m) m.classList.add('show');
+    };
+
+    const cachedTab = sessionStorage.getItem('adminActiveTab') || 'overview';
     switchTab(cachedTab);
 
     // Helper to calculate teacher dynamic salary
@@ -185,7 +195,7 @@ async function initAdminDashboard() {
 
     // Render Functions
     async function renderStudents() {
-        const students = await DB.getStudents();
+        const allStudents = await DB.getStudents();
         const teachers = await DB.getTeachers();
         studentsTableBody.innerHTML = '';
         
@@ -201,60 +211,8 @@ async function initAdminDashboard() {
         if(grantCoinStudentIdSelect) grantCoinStudentIdSelect.innerHTML = '<option value="" disabled selected>-- Select Student --</option>';
         if(adminNoteStudentIdSelect) adminNoteStudentIdSelect.innerHTML = '<option value="" disabled selected>-- Select Student --</option>';
         
-        students.forEach(student => {
-            const splits = student.feeSplits || [];
-            let splitsHtml = '<div style="font-size:0.85rem; line-height:1.4;">';
-            if (splits.length === 0) {
-                splitsHtml += '<span style="color:var(--text-light); font-style:italic;">None (0%)</span>';
-            } else {
-                splits.forEach(split => {
-                    const teacher = teachers.find(t => t.id.toLowerCase() === split.teacherId.toLowerCase());
-                    const teacherName = teacher ? teacher.name : 'Unknown';
-                    const amount = (student.fees || 0) * split.percentage / 100;
-                    splitsHtml += `<div style="margin-bottom:0.15rem;"><strong>${teacherName}</strong>: ${split.percentage}% (<span style="color:#166534; font-weight:600;">₹${amount.toLocaleString('en-IN')}</span>)</div>`;
-                });
-            }
-            splitsHtml += '</div>';
-
-            const safeId = window.escapeHTML(student.id);
-            const safeName = window.escapeHTML(student.name);
-            const safeClass = window.escapeHTML(student.class || 'N/A');
-            const safePwd = window.escapeHTML(student.password);
-            const safeMotherPhone = window.escapeHTML(student.motherPhone);
-            const safeFatherPhone = window.escapeHTML(student.fatherPhone);
-            const safePersonalPhone = window.escapeHTML(student.personalPhone);
-
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${safeId}</td>
-                <td>${safeName}</td>
-                <td><span class="badge" style="background:#e2e8f0; color:#475569;">${safeClass}</span></td>
-                <td><strong style="color: #b45309; font-size: 0.95rem;">${(student.coins || 0).toLocaleString('en-IN')} Coins</strong></td>
-                <td><div style="font-size:0.85rem; color:var(--text-light); line-height:1.4;">
-                    M: ${safeMotherPhone ? `<a href="tel:${safeMotherPhone}" style="color: var(--primary-light); text-decoration: none;" title="Call Mother">📞 ${safeMotherPhone}</a>` : 'N/A'}<br>
-                    F: ${safeFatherPhone ? `<a href="tel:${safeFatherPhone}" style="color: var(--primary-light); text-decoration: none;" title="Call Father">📞 ${safeFatherPhone}</a>` : 'N/A'}<br>
-                    P: ${safePersonalPhone ? `<a href="tel:${safePersonalPhone}" style="color: var(--primary-light); text-decoration: none;" title="Call Student">📞 ${safePersonalPhone}</a>` : 'N/A'}
-                </div></td>
-                <td>
-                    <div style="display: flex; align-items: center; gap: 0.5rem;">
-                        <span id="pwd-${safeId}" style="font-family: monospace; color: var(--primary-light); display: none;">${safePwd}</span>
-                        <span id="pwd-mask-${safeId}" style="font-family: monospace; color: var(--text-light);">••••••••</span>
-                        <button type="button" class="btn btn-outline" style="padding: 0.2rem; font-size: 0; line-height: 0; border: none; background: transparent; color: var(--text-light); cursor: pointer;" onclick="toggleStudentPassword('${safeId}', this)" title="Toggle Visibility">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                        </button>
-                    </div>
-                </td>
-                <td>${splitsHtml}</td>
-                <td>
-                    <div class="action-buttons" style="display: flex; gap: 0.3rem;">
-                        <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #b45309; border-color: #f59e0b; font-size: 0.8rem;" onclick="quickGrantCoins('${safeId}')" title="Grant Coins">+Coins</button>
-                        <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #1e3a8a; border-color: #1e3a8a; font-size: 0.8rem;" onclick="makeAlumni('${safeId}')" title="Move to Alumni">Alumni</button>
-                        <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #dc2626; border-color: #dc2626; font-size: 0.8rem;" onclick="removeStudent('${safeId}')" title="Permanently Remove">Remove</button>
-                    </div>
-                </td>
-            `;
-            studentsTableBody.appendChild(tr);
-
+        // Populate all student selectors from full list
+        allStudents.forEach(student => {
             if(updateStudentIdSelect) {
                 const opt = document.createElement('option');
                 opt.value = student.id;
@@ -286,6 +244,104 @@ async function initAdminDashboard() {
                 adminNoteStudentIdSelect.appendChild(opt);
             }
         });
+
+        // Filter and sort for the directory table
+        const searchInput = document.getElementById('studentSearchInput');
+        const classFilter = document.getElementById('studentClassFilter');
+        const sortSelect = document.getElementById('studentSortSelect');
+        const activeCountEl = document.getElementById('activeStudentCount');
+
+        const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+        const selectedClass = classFilter ? classFilter.value : 'ALL';
+        const sortMode = sortSelect ? sortSelect.value : 'name-asc';
+
+        let students = allStudents.filter(s => {
+            const matchesQuery = !query || 
+                (s.name && s.name.toLowerCase().includes(query)) ||
+                (s.id && s.id.toLowerCase().includes(query)) ||
+                (s.personalPhone && s.personalPhone.includes(query)) ||
+                (s.fatherPhone && s.fatherPhone.includes(query)) ||
+                (s.motherPhone && s.motherPhone.includes(query));
+
+            const matchesClass = selectedClass === 'ALL' || 
+                (s.class && s.class.trim().toUpperCase() === selectedClass.trim().toUpperCase());
+
+            return matchesQuery && matchesClass;
+        });
+
+        students.sort((a, b) => {
+            if (sortMode === 'name-asc') return (a.name || '').localeCompare(b.name || '');
+            if (sortMode === 'name-desc') return (b.name || '').localeCompare(a.name || '');
+            if (sortMode === 'id-asc') return (a.id || '').localeCompare(b.id || '', undefined, { numeric: true });
+            if (sortMode === 'doj-desc') return new Date(b.dateOfJoining || 0) - new Date(a.dateOfJoining || 0);
+            if (sortMode === 'fees-desc') return (b.fees || 0) - (a.fees || 0);
+            return (a.name || '').localeCompare(b.name || '');
+        });
+
+        if (activeCountEl) {
+            activeCountEl.textContent = students.length;
+        }
+
+        if (students.length === 0) {
+            studentsTableBody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: var(--text-light); padding: 2rem;">No students found matching your criteria.</td></tr>';
+        } else {
+            students.forEach(student => {
+                const splits = student.feeSplits || [];
+                let splitsHtml = '<div style="font-size:0.85rem; line-height:1.4;">';
+                if (splits.length === 0) {
+                    splitsHtml += '<span style="color:var(--text-light); font-style:italic;">None (0%)</span>';
+                } else {
+                    splits.forEach(split => {
+                        const teacher = teachers.find(t => t.id.toLowerCase() === split.teacherId.toLowerCase());
+                        const teacherName = teacher ? teacher.name : 'Unknown';
+                        const amount = (student.fees || 0) * split.percentage / 100;
+                        splitsHtml += `<div style="margin-bottom:0.15rem;"><strong>${teacherName}</strong>: ${split.percentage}% (<span style="color:#166534; font-weight:600;">₹${amount.toLocaleString('en-IN')}</span>)</div>`;
+                    });
+                }
+                splitsHtml += '</div>';
+
+                const safeId = window.escapeHTML(student.id);
+                const safeName = window.escapeHTML(student.name);
+                const safeClass = window.escapeHTML(student.class || 'N/A');
+                const safePwd = window.escapeHTML(student.password);
+                const safeMotherPhone = window.escapeHTML(student.motherPhone);
+                const safeFatherPhone = window.escapeHTML(student.fatherPhone);
+                const safePersonalPhone = window.escapeHTML(student.personalPhone);
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${safeId}</strong></td>
+                    <td><strong>${safeName}</strong></td>
+                    <td><span class="badge" style="background:#e2e8f0; color:#475569;">${safeClass}</span></td>
+                    <td><strong style="color: #b45309; font-size: 0.95rem;">${(student.coins || 0).toLocaleString('en-IN')} Coins</strong></td>
+                    <td><div style="font-size:0.85rem; color:var(--text-light); line-height:1.4;">
+                        M: ${safeMotherPhone ? `<a href="tel:${safeMotherPhone}" style="color: var(--primary-light); text-decoration: none;" title="Call Mother">📞 ${safeMotherPhone}</a>` : 'N/A'}<br>
+                        F: ${safeFatherPhone ? `<a href="tel:${safeFatherPhone}" style="color: var(--primary-light); text-decoration: none;" title="Call Father">📞 ${safeFatherPhone}</a>` : 'N/A'}<br>
+                        P: ${safePersonalPhone ? `<a href="tel:${safePersonalPhone}" style="color: var(--primary-light); text-decoration: none;" title="Call Student">📞 ${safePersonalPhone}</a>` : 'N/A'}
+                    </div></td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span id="pwd-${safeId}" style="font-family: monospace; color: var(--primary-light); display: none;">${safePwd}</span>
+                            <span id="pwd-mask-${safeId}" style="font-family: monospace; color: var(--text-light);">••••••••</span>
+                            <button type="button" class="btn btn-outline" style="padding: 0.2rem; font-size: 0; line-height: 0; border: none; background: transparent; color: var(--text-light); cursor: pointer;" onclick="toggleStudentPassword('${safeId}', this)" title="Toggle Visibility">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            </button>
+                        </div>
+                    </td>
+                    <td>${splitsHtml}</td>
+                    <td>
+                        <div class="action-buttons" style="display: flex; gap: 0.3rem; flex-wrap: wrap; justify-content: flex-end;">
+                            <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #1e3a8a; border-color: #3b82f6; font-size: 0.8rem;" onclick="viewStudentProfile('${safeId}')" title="Full Academic Profile">Profile</button>
+                            <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #0f172a; border-color: #94a3b8; font-size: 0.8rem;" onclick="openStudentEditModal('${safeId}')" title="Quick Edit">Edit</button>
+                            <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #b45309; border-color: #f59e0b; font-size: 0.8rem;" onclick="quickGrantCoins('${safeId}')" title="Grant Coins">+Coins</button>
+                            <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #d97706; border-color: #d97706; font-size: 0.8rem;" onclick="makeAlumni('${safeId}')" title="Move to Alumni">Archive</button>
+                            <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #dc2626; border-color: #dc2626; font-size: 0.8rem;" onclick="removeStudent('${safeId}')" title="Permanently Remove">Delete</button>
+                        </div>
+                    </td>
+                `;
+                studentsTableBody.appendChild(tr);
+            });
+        }
 
         if (prevUpdateId && updateStudentIdSelect && Array.from(updateStudentIdSelect.options).some(o => o.value === prevUpdateId)) {
             updateStudentIdSelect.value = prevUpdateId;
@@ -1333,7 +1389,12 @@ async function initAdminDashboard() {
                     <td class="text-right">₹${fine.toLocaleString('en-IN')}</td>
                     <td class="text-right" style="font-weight: 700; color: #166534;">₹${totalPaid.toLocaleString('en-IN')}</td>
                     <td><span class="badge badge-success" style="background:#dcfce7;color:#166534;">Paid</span><br><small>by ${paymentRecord.markedBy}</small><br><small>on ${DB.formatDate(paymentRecord.paidOn)}</small></td>
-                    <td>-</td>
+                    <td>
+                        <button class="btn btn-outline" style="padding: 0.25rem 0.6rem; font-size: 0.8rem; color: #1e3a8a; border-color: #1e3a8a; display: inline-flex; align-items: center; gap: 0.3rem;" onclick="openAdminFeeReceiptModal('${student.id}', '${startStr}')">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                            Receipt
+                        </button>
+                    </td>
                 `;
             } else {
                 // Compute initial fine based on today
@@ -2734,6 +2795,1168 @@ async function initAdminDashboard() {
         });
     }
 
+    // === OVERVIEW, TESTS, RESULTS, RECEIPTS & AUDIT LOGS IMPLEMENTATION ===
+
+    async function logAdminAudit(action, details) {
+        if (typeof DB.addAuditLog === 'function') {
+            await DB.addAuditLog(action, details, user.id || 'Admin');
+            renderAuditLogs();
+        }
+    }
+
+    async function renderAuditLogs() {
+        if (typeof DB.getAuditLogs !== 'function') return;
+        const logs = await DB.getAuditLogs();
+        const searchInput = document.getElementById('auditSearchInput');
+        const q = searchInput ? searchInput.value.trim().toLowerCase() : '';
+
+        const tbody = document.querySelector('#auditLogsTable tbody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+
+        const filtered = logs.filter(l => !q || (l.action && l.action.toLowerCase().includes(q)) || (l.details && l.details.toLowerCase().includes(q)));
+
+        if (filtered.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-light); padding: 2rem;">No audit logs recorded yet.</td></tr>';
+            return;
+        }
+
+        filtered.slice(0, 50).forEach(l => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td style="font-size: 0.8rem; color: var(--text-light); font-family: monospace;">${new Date(l.timestamp).toLocaleString('en-IN')}</td>
+                <td><span class="badge" style="background:#f1f5f9; color:#0f172a; font-weight:700;">${window.escapeHTML(l.action)}</span></td>
+                <td style="font-size: 0.85rem; color: #334155;">${window.escapeHTML(l.details)}</td>
+                <td><span style="font-size: 0.8rem; font-weight: 600; color: #1e3a8a;">${window.escapeHTML(l.user || 'Admin')}</span></td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    async function renderAdminOverview() {
+        const students = await DB.getStudents();
+        const alumni = await DB.getAlumni();
+        const teachers = await DB.getTeachers();
+        const tests = await DB.getTests();
+        const attendanceList = await DB.getAttendance();
+
+        const totalStudents = students.length + alumni.length;
+        const activeStudents = students.length;
+        const alumniStudents = alumni.length;
+        const publishedTests = tests.filter(t => t.published).length;
+
+        // Unique Batches
+        const batchSet = new Set();
+        students.forEach(s => { if (s.class && s.class.trim()) batchSet.add(s.class.trim().toUpperCase()); });
+        tests.forEach(t => { if (t.targetClass && t.targetClass !== 'All') batchSet.add(t.targetClass.trim().toUpperCase()); });
+        const totalBatches = batchSet.size;
+
+        // Avg Attendance
+        let totalRecords = 0;
+        let presentRecords = 0;
+        attendanceList.forEach(day => {
+            if (day.records) {
+                Object.values(day.records).forEach(st => {
+                    totalRecords++;
+                    if (st === 'present') presentRecords++;
+                });
+            }
+        });
+        const avgAttendance = totalRecords > 0 ? Math.round((presentRecords / totalRecords) * 100) : 0;
+
+        // Expected & Collected Fees
+        let totalExpected = 0;
+        let totalCollected = 0;
+        students.forEach(s => {
+            totalExpected += (s.fees || 0);
+            (s.feePayments || []).forEach(p => {
+                totalCollected += (s.fees || 0) + (p.finePaid || 0);
+            });
+        });
+        alumni.forEach(a => {
+            (a.feePayments || []).forEach(p => {
+                totalCollected += (a.fees || 0) + (p.finePaid || 0);
+            });
+        });
+
+        // Update KPI elements
+        const kpiTotalStudents = document.getElementById('kpiTotalStudents');
+        const kpiActiveStudents = document.getElementById('kpiActiveStudents');
+        const kpiAlumniStudents = document.getElementById('kpiAlumniStudents');
+        const kpiTotalTeachers = document.getElementById('kpiTotalTeachers');
+        const kpiTotalBatches = document.getElementById('kpiTotalBatches');
+        const kpiTotalTests = document.getElementById('kpiTotalTests');
+        const kpiPublishedTests = document.getElementById('kpiPublishedTests');
+        const kpiAvgAttendance = document.getElementById('kpiAvgAttendance');
+        const kpiMonthlyExpected = document.getElementById('kpiMonthlyExpected');
+        const kpiMonthlyCollected = document.getElementById('kpiMonthlyCollected');
+
+        if (kpiTotalStudents) kpiTotalStudents.textContent = totalStudents;
+        if (kpiActiveStudents) kpiActiveStudents.textContent = activeStudents;
+        if (kpiAlumniStudents) kpiAlumniStudents.textContent = alumniStudents;
+        if (kpiTotalTeachers) kpiTotalTeachers.textContent = teachers.length;
+        if (kpiTotalBatches) kpiTotalBatches.textContent = totalBatches;
+        if (kpiTotalTests) kpiTotalTests.textContent = tests.length;
+        if (kpiPublishedTests) kpiPublishedTests.textContent = publishedTests;
+        if (kpiAvgAttendance) kpiAvgAttendance.textContent = `${avgAttendance}%`;
+        if (kpiMonthlyExpected) kpiMonthlyExpected.textContent = `₹${totalExpected.toLocaleString('en-IN')}`;
+        if (kpiMonthlyCollected) kpiMonthlyCollected.textContent = `₹${totalCollected.toLocaleString('en-IN')}`;
+
+        // Class Enrollment Progress Bars
+        const classEnrollmentList = document.getElementById('classEnrollmentList');
+        if (classEnrollmentList) {
+            const classCounts = {};
+            students.forEach(s => {
+                const c = (s.class || 'Other').trim().toUpperCase();
+                classCounts[c] = (classCounts[c] || 0) + 1;
+            });
+            const classesSorted = Object.keys(classCounts).sort((a,b) => a.localeCompare(b, undefined, {numeric: true}));
+            if (classesSorted.length === 0) {
+                classEnrollmentList.innerHTML = '<div style="color:var(--text-light); font-size:0.85rem;">No active students enrolled.</div>';
+            } else {
+                classEnrollmentList.innerHTML = '';
+                classesSorted.forEach(cls => {
+                    const count = classCounts[cls];
+                    const pct = activeStudents > 0 ? Math.round((count / activeStudents) * 100) : 0;
+                    const div = document.createElement('div');
+                    div.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.25rem;">
+                            <span>Class ${window.escapeHTML(cls)}</span>
+                            <span>${count} student${count === 1 ? '' : 's'} (${pct}%)</span>
+                        </div>
+                        <div style="height: 6px; background: #e2e8f0; border-radius: 99px; overflow: hidden;">
+                            <div style="height: 100%; width: ${pct}%; background: #1e3a8a; border-radius: 99px;"></div>
+                        </div>
+                    `;
+                    classEnrollmentList.appendChild(div);
+                });
+            }
+        }
+
+        // Ratios
+        const ratioAttendance = document.getElementById('ratioAttendance');
+        const barAttendance = document.getElementById('barAttendance');
+        if (ratioAttendance) ratioAttendance.textContent = `${avgAttendance}%`;
+        if (barAttendance) barAttendance.style.width = `${avgAttendance}%`;
+
+        const testRatio = tests.length > 0 ? Math.round((publishedTests / tests.length) * 100) : 0;
+        const ratioTests = document.getElementById('ratioTests');
+        const barTests = document.getElementById('barTests');
+        if (ratioTests) ratioTests.textContent = `${testRatio}%`;
+        if (barTests) barTests.style.width = `${testRatio}%`;
+
+        // Recent Students (last 5)
+        const recentStudentsTableBody = document.querySelector('#recentStudentsTable tbody');
+        if (recentStudentsTableBody) {
+            recentStudentsTableBody.innerHTML = '';
+            const sortedStudents = [...students].sort((a,b) => new Date(b.dateOfJoining || 0) - new Date(a.dateOfJoining || 0)).slice(0, 5);
+            if (sortedStudents.length === 0) {
+                recentStudentsTableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-light);">No students enrolled yet.</td></tr>';
+            } else {
+                sortedStudents.forEach(st => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td style="font-weight: 700; color: #1e3a8a;">${window.escapeHTML(st.id)}</td>
+                        <td>${window.escapeHTML(st.name)}</td>
+                        <td><span class="badge" style="background:#f1f5f9; color:#475569;">${window.escapeHTML(st.class || 'N/A')}</span></td>
+                        <td>${DB.formatDate(st.dateOfJoining)}</td>
+                    `;
+                    recentStudentsTableBody.appendChild(tr);
+                });
+            }
+        }
+
+        // Recent Tests (last 5)
+        const recentTestsTableBody = document.querySelector('#recentTestsTable tbody');
+        if (recentTestsTableBody) {
+            recentTestsTableBody.innerHTML = '';
+            const sortedTests = [...tests].sort((a,b) => new Date(b.date || 0) - new Date(a.date || 0)).slice(0, 5);
+            if (sortedTests.length === 0) {
+                recentTestsTableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-light);">No tests created yet.</td></tr>';
+            } else {
+                sortedTests.forEach(t => {
+                    const tr = document.createElement('tr');
+                    const targetClassStr = t.targetClass && t.targetClass !== 'All' ? `Class ${t.targetClass}` : 'All Batches';
+                    const statusBadge = t.published 
+                        ? '<span class="badge badge-success">Published</span>' 
+                        : '<span class="badge badge-warning">Draft</span>';
+                    tr.innerHTML = `
+                        <td style="font-weight: 600;">${window.escapeHTML(t.subject)}</td>
+                        <td><span class="badge" style="background:#eff6ff; color:#1e40af;">${targetClassStr}</span></td>
+                        <td style="font-weight: 700;">${t.maxMarks}m</td>
+                        <td>${statusBadge}</td>
+                    `;
+                    recentTestsTableBody.appendChild(tr);
+                });
+            }
+        }
+    }
+
+    // Student Management Aliases and Modals
+    window.archiveStudent = async (id) => {
+        if (typeof window.makeAlumni === 'function') {
+            await window.makeAlumni(id);
+            await logAdminAudit('Student Archived', `Converted student ID ${id} to Alumni`);
+            await renderAdminOverview();
+        }
+    };
+
+    window.deleteStudent = async (id) => {
+        if (typeof window.removeStudent === 'function') {
+            await window.removeStudent(id);
+            await logAdminAudit('Student Deleted', `Deleted student ID ${id}`);
+            await renderAdminOverview();
+        }
+    };
+
+    window.viewStudentProfile = async (studentId) => {
+        const students = await DB.getStudents();
+        const student = students.find(s => s.id === studentId);
+        if (!student) return;
+
+        const tests = await DB.getTests();
+        const attendanceList = await DB.getAttendance();
+
+        const appearedTests = [];
+        let totalMarksScored = 0;
+        let totalMaxMarks = 0;
+        let highestScore = 0;
+
+        tests.forEach(t => {
+            if (t.marks && t.marks[student.id] !== undefined && t.marks[student.id] !== null) {
+                const score = parseFloat(t.marks[student.id]) || 0;
+                const max = parseFloat(t.maxMarks) || 1;
+                const pct = Math.round((score / max) * 100);
+                totalMarksScored += score;
+                totalMaxMarks += max;
+                if (score > highestScore) highestScore = score;
+                appearedTests.push({
+                    subject: t.subject,
+                    date: t.date,
+                    score,
+                    max,
+                    pct,
+                    targetClass: t.targetClass || 'All'
+                });
+            }
+        });
+
+        const overallPct = totalMaxMarks > 0 ? Math.round((totalMarksScored / totalMaxMarks) * 100) : 0;
+
+        let totalDays = 0;
+        let presentDays = 0;
+        attendanceList.forEach(day => {
+            if (day.records && day.records[student.id]) {
+                totalDays++;
+                if (day.records[student.id] === 'present') presentDays++;
+            }
+        });
+        const attendanceRate = totalDays > 0 ? Math.round((presentDays / totalDays) * 100) : 0;
+
+        const body = document.getElementById('studentProfileModalBody');
+        if (!body) return;
+
+        let testsRowsHtml = '';
+        if (appearedTests.length === 0) {
+            testsRowsHtml = '<tr><td colspan="4" style="text-align: center; color: var(--text-light); padding: 1.5rem;">No test marks recorded for this student yet.</td></tr>';
+        } else {
+            appearedTests.forEach(at => {
+                testsRowsHtml += `
+                    <tr>
+                        <td><strong>${window.escapeHTML(at.subject)}</strong></td>
+                        <td>${DB.formatDate(at.date)}</td>
+                        <td style="font-weight: 700;">${at.score} / ${at.max}</td>
+                        <td><span class="badge ${at.pct >= 75 ? 'badge-success' : (at.pct >= 50 ? 'badge-warning' : 'badge-danger')}">${at.pct}%</span></td>
+                    </tr>
+                `;
+            });
+        }
+
+        body.innerHTML = `
+            <div style="display: flex; gap: 1.5rem; align-items: center; border-bottom: 1px solid var(--gray-200); padding-bottom: 1.25rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                <div style="width: 64px; height: 64px; border-radius: 50%; background: #1e3a8a; color: white; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800;">
+                    ${window.escapeHTML(student.name.charAt(0).toUpperCase())}
+                </div>
+                <div style="flex: 1;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <h2 style="margin: 0; font-size: 1.4rem; color: #0f172a; font-weight: 800;">${window.escapeHTML(student.name)}</h2>
+                        <span class="badge badge-info">Class ${window.escapeHTML(student.class || 'N/A')}</span>
+                    </div>
+                    <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.3rem;">
+                        Student ID: <strong>${window.escapeHTML(student.id)}</strong> · Joined on: <strong>${DB.formatDate(student.dateOfJoining)}</strong>
+                    </div>
+                    <div style="font-size: 0.85rem; color: #334155; margin-top: 0.25rem;">
+                        📞 M: ${student.motherPhone || 'N/A'} · F: ${student.fatherPhone || 'N/A'} · P: ${student.personalPhone || 'N/A'}
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                <div style="background: #f8fafc; border: 1px solid var(--gray-200); border-radius: 8px; padding: 0.75rem; text-align: center;">
+                    <div style="font-size: 0.75rem; color: var(--text-light); text-transform: uppercase; font-weight: 700;">Cumulative %</div>
+                    <div style="font-size: 1.35rem; font-weight: 800; color: #1e3a8a; margin-top: 0.2rem;">${overallPct}%</div>
+                </div>
+                <div style="background: #f8fafc; border: 1px solid var(--gray-200); border-radius: 8px; padding: 0.75rem; text-align: center;">
+                    <div style="font-size: 0.75rem; color: var(--text-light); text-transform: uppercase; font-weight: 700;">Tests Appeared</div>
+                    <div style="font-size: 1.35rem; font-weight: 800; color: #0284c7; margin-top: 0.2rem;">${appearedTests.length}</div>
+                </div>
+                <div style="background: #f8fafc; border: 1px solid var(--gray-200); border-radius: 8px; padding: 0.75rem; text-align: center;">
+                    <div style="font-size: 0.75rem; color: var(--text-light); text-transform: uppercase; font-weight: 700;">Attendance Rate</div>
+                    <div style="font-size: 1.35rem; font-weight: 800; color: ${attendanceRate >= 75 ? '#166534' : '#b91c1c'}; margin-top: 0.2rem;">${attendanceRate}%</div>
+                </div>
+                <div style="background: #f8fafc; border: 1px solid var(--gray-200); border-radius: 8px; padding: 0.75rem; text-align: center;">
+                    <div style="font-size: 0.75rem; color: var(--text-light); text-transform: uppercase; font-weight: 700;">Paradigm Coins</div>
+                    <div style="font-size: 1.35rem; font-weight: 800; color: #d97706; margin-top: 0.2rem;">${(student.coins || 0).toLocaleString('en-IN')}</div>
+                </div>
+            </div>
+
+            <h4 style="font-size: 1rem; color: #0f172a; margin-bottom: 0.5rem; font-weight: 700;">Academic Test Score History</h4>
+            <div style="overflow-x: auto; max-height: 220px; border: 1px solid var(--gray-200); border-radius: 8px; margin-bottom: 1.5rem;">
+                <table class="table" style="margin-top: 0;">
+                    <thead>
+                        <tr>
+                            <th>Test Subject</th>
+                            <th>Date</th>
+                            <th>Marks</th>
+                            <th>Score %</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${testsRowsHtml}
+                    </tbody>
+                </table>
+            </div>
+        `;
+
+        window.openAdminModal('studentProfileModal');
+    };
+
+    window.printStudentProfile = () => {
+        window.print();
+    };
+
+    window.openStudentEditModal = async (studentId) => {
+        const students = await DB.getStudents();
+        const student = students.find(s => s.id === studentId);
+        if (!student) return;
+
+        document.getElementById('editModalStudentId').value = student.id;
+        document.getElementById('editModalStudentName').value = student.name || '';
+        document.getElementById('editModalStudentClass').value = student.class || '';
+        document.getElementById('editModalStudentPassword').value = student.password || '';
+        document.getElementById('editModalStudentFees').value = student.fees || 0;
+        document.getElementById('editModalStudentMotherPhone').value = student.motherPhone || '';
+        document.getElementById('editModalStudentFatherPhone').value = student.fatherPhone || '';
+        document.getElementById('editModalStudentPersonalPhone').value = student.personalPhone || '';
+
+        window.openAdminModal('studentEditModal');
+    };
+
+    const modalEditStudentForm = document.getElementById('modal-edit-student-form');
+    if (modalEditStudentForm) {
+        modalEditStudentForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('editModalStudentId').value;
+            const name = document.getElementById('editModalStudentName').value.trim();
+            const cls = document.getElementById('editModalStudentClass').value.trim();
+            const pwd = document.getElementById('editModalStudentPassword').value.trim();
+            const fees = parseFloat(document.getElementById('editModalStudentFees').value) || 0;
+            const motherPhone = document.getElementById('editModalStudentMotherPhone').value.trim();
+            const fatherPhone = document.getElementById('editModalStudentFatherPhone').value.trim();
+            const personalPhone = document.getElementById('editModalStudentPersonalPhone').value.trim();
+
+            let students = await DB.getStudents();
+            const idx = students.findIndex(s => s.id === id);
+            if (idx !== -1) {
+                students[idx].name = name;
+                students[idx].class = cls;
+                students[idx].password = pwd;
+                students[idx].fees = fees;
+                students[idx].motherPhone = motherPhone;
+                students[idx].fatherPhone = fatherPhone;
+                students[idx].personalPhone = personalPhone;
+
+                await DB.setStudents(students);
+                await logAdminAudit('Edit Student', `Updated profile of student ${name} (${id})`);
+                window.closeAdminModal('studentEditModal');
+                await renderStudents();
+                await renderAdminOverview();
+                alert("Student profile updated successfully!");
+            }
+        });
+    }
+
+    // CSV Export & Import
+    window.exportStudentsCsv = async () => {
+        const students = await DB.getStudents();
+        let csv = 'ID,Name,Class,Password,DateOfJoining,MonthlyFees,MotherPhone,FatherPhone,PersonalPhone,Coins\n';
+        students.forEach(s => {
+            const row = [
+                `"${(s.id || '').replace(/"/g, '""')}"`,
+                `"${(s.name || '').replace(/"/g, '""')}"`,
+                `"${(s.class || '').replace(/"/g, '""')}"`,
+                `"${(s.password || '').replace(/"/g, '""')}"`,
+                `"${(s.dateOfJoining || '')}"`,
+                s.fees || 0,
+                `"${(s.motherPhone || '')}"`,
+                `"${(s.fatherPhone || '')}"`,
+                `"${(s.personalPhone || '')}"`,
+                s.coins || 0
+            ].join(',');
+            csv += row + '\n';
+        });
+
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `paradigm_students_active_${new Date().toISOString().split('T')[0]}.csv`;
+        link.click();
+        logAdminAudit('Export Students CSV', 'Exported active student records to CSV');
+    };
+
+    let pendingCsvStudents = [];
+
+    window.openStudentCsvImportModal = () => {
+        pendingCsvStudents = [];
+        const previewContainer = document.getElementById('csvPreviewContainer');
+        const commitBtn = document.getElementById('commitCsvImportBtn');
+        const fileDisplay = document.getElementById('csvFileNameDisplay');
+        const fileInput = document.getElementById('csvFileInput');
+        if (previewContainer) previewContainer.style.display = 'none';
+        if (commitBtn) commitBtn.style.display = 'none';
+        if (fileDisplay) fileDisplay.textContent = 'No file selected';
+        if (fileInput) fileInput.value = '';
+        window.openAdminModal('studentCsvImportModal');
+    };
+
+    window.handleStudentCsvFileSelect = (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const fileDisplay = document.getElementById('csvFileNameDisplay');
+        if (fileDisplay) fileDisplay.textContent = file.name;
+
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+            const text = e.target.result;
+            const lines = text.split(/\r\n|\n/).filter(l => l.trim().length > 0);
+            if (lines.length <= 1) {
+                alert("CSV file is empty or missing data rows.");
+                return;
+            }
+
+            const existingStudents = await DB.getStudents();
+            let nextIdNum = 101;
+            existingStudents.forEach(s => {
+                const match = s.id.match(/^s(\d+)$/i);
+                if (match) {
+                    const num = parseInt(match[1]);
+                    if (num >= nextIdNum) nextIdNum = num + 1;
+                }
+            });
+
+            pendingCsvStudents = [];
+            const previewTbody = document.querySelector('#csvPreviewTable tbody');
+            if (previewTbody) previewTbody.innerHTML = '';
+
+            for (let i = 1; i < lines.length; i++) {
+                const parts = lines[i].split(',').map(p => p.trim().replace(/^["']|["']$/g, ''));
+                if (parts.length >= 2 && parts[0]) {
+                    const name = parts[0];
+                    const cls = parts[1] || 'X';
+                    const pwd = parts[2] || (name.toLowerCase().replace(/\s+/g, '') + '123');
+                    const fees = parseInt(parts[3]) || 2000;
+                    const motherPhone = parts[4] || '';
+                    const fatherPhone = parts[5] || '';
+                    const personalPhone = parts[6] || '';
+                    const assignedId = `s${nextIdNum++}`;
+
+                    const newStudent = {
+                        id: assignedId,
+                        name,
+                        class: cls,
+                        password: pwd,
+                        fees,
+                        dateOfJoining: new Date().toISOString().split('T')[0],
+                        motherPhone,
+                        fatherPhone,
+                        personalPhone,
+                        coins: 0,
+                        completedLectures: [],
+                        notes: [],
+                        feeSplits: [],
+                        feePayments: []
+                    };
+                    pendingCsvStudents.push(newStudent);
+
+                    if (previewTbody) {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td><strong>${window.escapeHTML(name)}</strong> (${assignedId})</td>
+                            <td>${window.escapeHTML(cls)}</td>
+                            <td>••••••</td>
+                            <td>₹${fees}</td>
+                            <td>${motherPhone || fatherPhone || personalPhone || 'N/A'}</td>
+                        `;
+                        previewTbody.appendChild(tr);
+                    }
+                }
+            }
+
+            const previewContainer = document.getElementById('csvPreviewContainer');
+            const commitBtn = document.getElementById('commitCsvImportBtn');
+            if (previewContainer) previewContainer.style.display = 'block';
+            if (commitBtn) {
+                commitBtn.style.display = 'inline-block';
+                commitBtn.textContent = `Import ${pendingCsvStudents.length} Students`;
+            }
+        };
+        reader.readAsText(file);
+    };
+
+    window.commitStudentCsvImport = async () => {
+        if (pendingCsvStudents.length === 0) return;
+        const students = await DB.getStudents();
+        const updated = [...students, ...pendingCsvStudents];
+        await DB.setStudents(updated);
+        await logAdminAudit('Bulk CSV Import', `Imported ${pendingCsvStudents.length} students via CSV`);
+        window.closeAdminModal('studentCsvImportModal');
+        await renderStudents();
+        await renderAdminOverview();
+        alert(`Successfully imported ${pendingCsvStudents.length} students into Paradigm Classes!`);
+    };
+
+    // Tests & Examinations Management
+    async function renderAdminTests() {
+        const tests = await DB.getTests();
+        const students = await DB.getStudents();
+        const filterSelect = document.getElementById('adminTestFilterClass');
+        const selectedClass = filterSelect ? filterSelect.value : 'ALL';
+        const testsCountEl = document.getElementById('adminTestsCount');
+
+        let filteredTests = tests;
+        if (selectedClass !== 'ALL') {
+            filteredTests = tests.filter(t => {
+                if (!t.targetClass || t.targetClass === 'All') return true;
+                return t.targetClass.trim().toUpperCase() === selectedClass.trim().toUpperCase();
+            });
+        }
+
+        if (testsCountEl) testsCountEl.textContent = filteredTests.length;
+
+        const tableBody = document.querySelector('#adminTestsTable tbody');
+        if (!tableBody) return;
+        tableBody.innerHTML = '';
+
+        if (filteredTests.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: var(--text-light); padding: 2rem;">No tests found matching criteria.</td></tr>';
+            return;
+        }
+
+        filteredTests.forEach(t => {
+            const marksCount = Object.keys(t.marks || {}).length;
+            const targetClassStr = t.targetClass && t.targetClass !== 'All' ? `Class ${t.targetClass}` : 'All Batches';
+            const statusBadge = t.published 
+                ? '<span class="badge badge-success">Published</span>' 
+                : '<span class="badge badge-warning">Draft</span>';
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><strong>#${t.id}</strong></td>
+                <td><strong>${window.escapeHTML(t.subject)}</strong></td>
+                <td><span class="badge" style="background:#eff6ff; color:#1e40af;">${targetClassStr}</span></td>
+                <td>${DB.formatDate(t.date)}</td>
+                <td class="text-right" style="font-weight: 700;">${t.maxMarks}m</td>
+                <td><span class="badge" style="background:#f1f5f9; color:#334155;">${marksCount} marked</span></td>
+                <td>${statusBadge}</td>
+                <td style="text-align: right;">
+                    <div style="display: flex; gap: 0.35rem; justify-content: flex-end; flex-wrap: wrap;">
+                        <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; color: #1e3a8a; border-color: #3b82f6;" onclick="openAdminMarkEntry(${t.id})">Feed Marks</button>
+                        <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; color: ${t.published ? '#b45309' : '#166534'}; border-color: ${t.published ? '#f59e0b' : '#22c55e'};" onclick="togglePublishTest(${t.id})">${t.published ? 'Unpublish' : 'Publish'}</button>
+                        <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; color: #166534; border-color: #22c55e;" onclick="exportTestMarksheetCsv(${t.id})" title="Export Marksheet CSV">CSV</button>
+                        <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; color: #dc2626; border-color: #dc2626;" onclick="removeAdminTest(${t.id})" title="Delete Test">✕</button>
+                    </div>
+                </td>
+            `;
+            tableBody.appendChild(tr);
+        });
+    }
+
+    window.togglePublishTest = async (testId) => {
+        let tests = await DB.getTests();
+        const test = tests.find(t => t.id === testId);
+        if (!test) return;
+        test.published = !test.published;
+        await DB.setTests(tests);
+        await logAdminAudit('Test Publication Toggle', `${test.published ? 'Published' : 'Unpublished'} test "${test.subject}"`);
+        await renderAdminTests();
+        await renderAdminResultsGradebook();
+        await renderAdminOverview();
+    };
+
+    window.removeAdminTest = async (testId) => {
+        if (confirm("Are you sure you want to permanently delete this test and its scores?")) {
+            let tests = await DB.getTests();
+            const test = tests.find(t => t.id === testId);
+            tests = tests.filter(t => t.id !== testId);
+            await DB.setTests(tests);
+            await logAdminAudit('Test Deleted', `Deleted test #${testId} (${test ? test.subject : ''})`);
+            await renderAdminTests();
+            await renderAdminResultsGradebook();
+            await renderAdminOverview();
+        }
+    };
+
+    window.exportTestMarksheetCsv = async (testId) => {
+        const tests = await DB.getTests();
+        const test = tests.find(t => t.id === testId);
+        if (!test) return;
+        const students = await DB.getStudents();
+        let targetStudents = students;
+        if (test.targetClass && test.targetClass !== 'All') {
+            targetStudents = students.filter(s => (s.class || '').trim().toUpperCase() === test.targetClass.trim().toUpperCase());
+        }
+
+        let csv = `StudentID,StudentName,Class,MarksObtained,MaxMarks,Percentage\n`;
+        targetStudents.forEach(st => {
+            const marks = (test.marks && test.marks[st.id] !== undefined) ? test.marks[st.id] : '';
+            const pct = (marks !== '' && test.maxMarks > 0) ? Math.round((parseFloat(marks) / parseFloat(test.maxMarks)) * 100) : '';
+            csv += `"${st.id}","${st.name}","${st.class || ''}",${marks},${test.maxMarks},${pct}\n`;
+        });
+
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `marksheet_test_${test.id}_${test.subject.replace(/[^a-zA-Z0-9]/g, '_')}.csv`;
+        link.click();
+        logAdminAudit('Export Marksheet CSV', `Exported marksheet for test "${test.subject}"`);
+    };
+
+    window.openAdminMarkEntry = async (testId) => {
+        const tests = await DB.getTests();
+        const test = tests.find(t => t.id === testId);
+        if (!test) return;
+
+        document.getElementById('adminMarkEntryCurrentTestId').value = test.id;
+        document.getElementById('adminMarkEntryTestTitle').textContent = `Feed Marks: ${test.subject}`;
+        const targetClassStr = test.targetClass && test.targetClass !== 'All' ? `Class ${test.targetClass}` : 'All Batches';
+        document.getElementById('adminMarkEntryTestMeta').textContent = `Max Marks: ${test.maxMarks} | Target: ${targetClassStr} | Exam Date: ${DB.formatDate(test.date)}`;
+
+        const students = await DB.getStudents();
+        let targetStudents = students;
+        if (test.targetClass && test.targetClass !== 'All') {
+            targetStudents = students.filter(s => (s.class || '').trim().toUpperCase() === test.targetClass.trim().toUpperCase());
+        }
+
+        const countEl = document.getElementById('adminMarkEntryStudentCount');
+        if (countEl) countEl.textContent = `${targetStudents.length} Students in Cohort`;
+
+        const tbody = document.querySelector('#adminMarksEntryTable tbody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+
+        if (targetStudents.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-light); padding: 1.5rem;">No students found in this target class.</td></tr>';
+        } else {
+            targetStudents.forEach(st => {
+                const currentScore = (test.marks && test.marks[st.id] !== undefined) ? test.marks[st.id] : '';
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="font-weight: 700; color: #1e3a8a;">${window.escapeHTML(st.id)}</td>
+                    <td>${window.escapeHTML(st.name)}</td>
+                    <td><span class="badge" style="background:#f1f5f9; color:#475569;">${window.escapeHTML(st.class || 'N/A')}</span></td>
+                    <td style="text-align: right;">
+                        <input type="number" step="0.5" min="0" max="${test.maxMarks}" class="form-input mark-entry-input" data-student-id="${st.id}" value="${currentScore}" placeholder="0 - ${test.maxMarks}" style="width: 100px; text-align: right; padding: 0.35rem 0.5rem; display: inline-block;">
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        window.openAdminModal('adminMarkEntryModal');
+    };
+
+    window.quickFillMarks = (type) => {
+        const testId = parseInt(document.getElementById('adminMarkEntryCurrentTestId').value);
+        const inputs = document.querySelectorAll('.mark-entry-input');
+        if (type === 'clear') {
+            inputs.forEach(inp => inp.value = '');
+        } else if (type === 'full') {
+            DB.getTests().then(tests => {
+                const test = tests.find(t => t.id === testId);
+                if (test) {
+                    inputs.forEach(inp => inp.value = test.maxMarks);
+                }
+            });
+        }
+    };
+
+    window.saveAdminTestMarks = async (publish) => {
+        const testId = parseInt(document.getElementById('adminMarkEntryCurrentTestId').value);
+        if (!testId) return;
+
+        let tests = await DB.getTests();
+        const test = tests.find(t => t.id === testId);
+        if (!test) return;
+
+        if (!test.marks) test.marks = {};
+
+        const inputs = document.querySelectorAll('.mark-entry-input');
+        inputs.forEach(inp => {
+            const sId = inp.dataset.studentId;
+            const val = inp.value.trim();
+            if (val === '') {
+                delete test.marks[sId];
+            } else {
+                test.marks[sId] = parseFloat(val);
+            }
+        });
+
+        if (publish) {
+            test.published = true;
+        }
+
+        await DB.setTests(tests);
+        await logAdminAudit('Marks Saved', `Updated marks for test "${test.subject}" (${Object.keys(test.marks).length} students)${publish ? ' and published' : ''}`);
+        window.closeAdminModal('adminMarkEntryModal');
+        await renderAdminTests();
+        await renderAdminResultsGradebook();
+        await renderAdminOverview();
+        alert(`Test marks saved successfully${publish ? ' and published live to student portal & results page' : ''}!`);
+    };
+
+    const adminCreateTestForm = document.getElementById('admin-create-test-form');
+    if (adminCreateTestForm) {
+        adminCreateTestForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const subject = document.getElementById('adminTestSubject').value.trim();
+            const targetClass = document.getElementById('adminTestTargetClass').value;
+            const maxMarks = parseFloat(document.getElementById('adminTestMaxMarks').value) || 50;
+            const date = document.getElementById('adminTestDate').value;
+
+            let tests = await DB.getTests();
+            const newId = tests.length > 0 ? Math.max(...tests.map(t => t.id || 0)) + 1 : 1;
+            const newTest = {
+                id: newId,
+                subject,
+                targetClass,
+                maxMarks,
+                date,
+                published: false,
+                marks: {}
+            };
+            tests.unshift(newTest);
+            await DB.setTests(tests);
+            await logAdminAudit('Create Test', `Created test #${newId} "${subject}" for Class ${targetClass}`);
+            adminCreateTestForm.reset();
+            await renderAdminTests();
+            await renderAdminOverview();
+            alert(`Test "${subject}" created successfully in draft mode. Click 'Feed Marks' to enter student scores.`);
+        });
+    }
+
+    // Dynamic Results Matrix & Gradebook
+    let currentResultsBatch = 'ALL';
+
+    async function renderAdminResultsGradebook() {
+        const tests = await DB.getTests();
+        const students = await DB.getStudents();
+        const publishedTests = tests.filter(t => t.published);
+
+        // Compute unique batches
+        const batchSet = new Set();
+        students.forEach(s => { if (s.class && s.class.trim()) batchSet.add(s.class.trim().toUpperCase()); });
+        publishedTests.forEach(t => { if (t.targetClass && t.targetClass !== 'All') batchSet.add(t.targetClass.trim().toUpperCase()); });
+        const batches = ['ALL', ...Array.from(batchSet).sort((a,b) => a.localeCompare(b, undefined, {numeric: true}))];
+
+        // Render batch selector pills
+        const batchTabsContainer = document.getElementById('adminResultsBatchTabs');
+        if (batchTabsContainer) {
+            batchTabsContainer.innerHTML = '';
+            batches.forEach(b => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = `btn btn-outline ${currentResultsBatch === b ? 'active' : ''}`;
+                btn.style.cssText = currentResultsBatch === b 
+                    ? 'background: #b91c1c; color: white; border-color: #b91c1c; padding: 0.35rem 0.85rem; font-size: 0.85rem;'
+                    : 'background: white; color: #334155; border-color: var(--gray-300); padding: 0.35rem 0.85rem; font-size: 0.85rem;';
+                btn.textContent = b === 'ALL' ? 'All Batches' : `Class ${b}`;
+                btn.addEventListener('click', () => {
+                    currentResultsBatch = b;
+                    renderAdminResultsGradebook();
+                });
+                batchTabsContainer.appendChild(btn);
+            });
+        }
+
+        // Filter tests for selected batch
+        const activeBatchTests = publishedTests.filter(t => {
+            if (currentResultsBatch === 'ALL') return true;
+            if (!t.targetClass || t.targetClass === 'All') return true;
+            return t.targetClass.trim().toUpperCase() === currentResultsBatch.trim().toUpperCase();
+        });
+
+        // Filter students for selected batch
+        const searchInput = document.getElementById('adminResultsSearchInput');
+        const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+
+        let activeBatchStudents = students.filter(s => {
+            if (currentResultsBatch !== 'ALL') {
+                if ((s.class || '').trim().toUpperCase() !== currentResultsBatch.trim().toUpperCase()) return false;
+            }
+            if (query) {
+                return (s.name && s.name.toLowerCase().includes(query)) || (s.id && s.id.toLowerCase().includes(query));
+            }
+            return true;
+        });
+
+        // Dynamic Header
+        const headerRow = document.getElementById('adminResultsTableHeader');
+        if (headerRow) {
+            let ths = `
+                <th style="width: 60px; text-align: center;">Rank</th>
+                <th style="min-width: 160px;">Student Name</th>
+                <th>ID</th>
+                <th>Class</th>
+            `;
+            activeBatchTests.forEach(t => {
+                ths += `<th style="text-align: right; min-width: 110px;" title="${window.escapeHTML(t.subject)}">${window.escapeHTML(t.subject)}<br><small style="font-weight:normal; font-size:0.75rem;">(${t.maxMarks}m)</small></th>`;
+            });
+            ths += `
+                <th class="text-right" style="text-align: right; min-width: 90px;">Total</th>
+                <th class="text-right" style="text-align: right; min-width: 90px;">Overall %</th>
+                <th style="min-width: 120px;">Grade</th>
+            `;
+            headerRow.innerHTML = ths;
+        }
+
+        // Calculate student score totals for ranking
+        const studentScores = activeBatchStudents.map(student => {
+            let totalScored = 0;
+            let totalMax = 0;
+            const marksMap = {};
+
+            activeBatchTests.forEach(t => {
+                if (t.marks && t.marks[student.id] !== undefined && t.marks[student.id] !== null) {
+                    const sc = parseFloat(t.marks[student.id]);
+                    marksMap[t.id] = sc;
+                    totalScored += sc;
+                    totalMax += parseFloat(t.maxMarks) || 0;
+                } else {
+                    marksMap[t.id] = null;
+                }
+            });
+
+            const pct = totalMax > 0 ? (totalScored / totalMax) * 100 : 0;
+            return {
+                student,
+                marksMap,
+                totalScored,
+                totalMax,
+                pct: Math.round(pct * 10) / 10
+            };
+        });
+
+        // Sort descending by percentage
+        studentScores.sort((a,b) => b.pct - a.pct);
+
+        // Assign ranks with tie handling
+        for (let i = 0; i < studentScores.length; i++) {
+            if (i > 0 && studentScores[i].pct === studentScores[i-1].pct) {
+                studentScores[i].rank = studentScores[i-1].rank;
+            } else {
+                studentScores[i].rank = i + 1;
+            }
+        }
+
+        const tbody = document.querySelector('#adminResultsDynamicTable tbody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+
+        if (studentScores.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="${4 + activeBatchTests.length + 3}" style="text-align: center; color: var(--text-light); padding: 2.5rem;">No student records found for this cohort.</td></tr>`;
+            return;
+        }
+
+        studentScores.forEach(item => {
+            const s = item.student;
+            let rowHtml = `
+                <td style="text-align: center; font-weight: 800; color: ${item.rank <= 3 ? '#b45309' : '#334155'};">
+                    ${item.rank <= 3 ? (item.rank === 1 ? '🥇 1' : (item.rank === 2 ? '🥈 2' : '🥉 3')) : item.rank}
+                </td>
+                <td><strong>${window.escapeHTML(s.name)}</strong></td>
+                <td style="font-family: monospace; color: #1e3a8a;">${window.escapeHTML(s.id)}</td>
+                <td><span class="badge" style="background:#f1f5f9; color:#475569;">${window.escapeHTML(s.class || 'N/A')}</span></td>
+            `;
+
+            // Test marks cells
+            activeBatchTests.forEach(t => {
+                const mark = item.marksMap[t.id];
+                if (mark !== null && mark !== undefined) {
+                    const cellPct = t.maxMarks > 0 ? (mark / t.maxMarks) * 100 : 0;
+                    rowHtml += `<td style="text-align: right; font-weight: 700; color: ${cellPct >= 75 ? '#166534' : (cellPct >= 50 ? '#334155' : '#b91c1c')};">${mark}</td>`;
+                } else {
+                    rowHtml += `<td style="text-align: right; color: var(--text-light); font-style: italic;">-</td>`;
+                }
+            });
+
+            // Overall Total and %
+            const pctBadge = item.pct >= 85 ? 'badge-success' : (item.pct >= 60 ? 'badge-info' : (item.pct >= 40 ? 'badge-warning' : 'badge-danger'));
+            const gradeText = item.pct >= 85 ? 'Outstanding' : (item.pct >= 70 ? 'Distinction' : (item.pct >= 50 ? 'First Class' : 'Needs Focus'));
+
+            rowHtml += `
+                <td style="text-align: right; font-weight: 700;">${item.totalScored} / ${item.totalMax}</td>
+                <td style="text-align: right;"><span class="badge ${pctBadge}">${item.pct}%</span></td>
+                <td><span style="font-size: 0.8rem; font-weight: 600; color: #334155;">${gradeText}</span></td>
+            `;
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = rowHtml;
+            tbody.appendChild(tr);
+        });
+    }
+
+    window.exportResultsGradebookCsv = async () => {
+        const tests = await DB.getTests();
+        const students = await DB.getStudents();
+        const publishedTests = tests.filter(t => t.published);
+
+        let csv = `Rank,StudentName,StudentID,Class,`;
+        publishedTests.forEach(t => {
+            csv += `"${t.subject} (${t.maxMarks}m)",`;
+        });
+        csv += `TotalMarksObtained,TotalMaxMarks,OverallPercentage\n`;
+
+        const scores = students.map(s => {
+            let totalScored = 0;
+            let totalMax = 0;
+            const marks = {};
+            publishedTests.forEach(t => {
+                if (t.marks && t.marks[s.id] !== undefined) {
+                    const sc = parseFloat(t.marks[s.id]) || 0;
+                    marks[t.id] = sc;
+                    totalScored += sc;
+                    totalMax += parseFloat(t.maxMarks) || 0;
+                } else {
+                    marks[t.id] = '';
+                }
+            });
+            const pct = totalMax > 0 ? Math.round((totalScored / totalMax) * 100) : 0;
+            return { s, marks, totalScored, totalMax, pct };
+        });
+
+        scores.sort((a,b) => b.pct - a.pct);
+        scores.forEach((item, idx) => {
+            let row = `${idx + 1},"${item.s.name}","${item.s.id}","${item.s.class || ''}",`;
+            publishedTests.forEach(t => {
+                row += `${item.marks[t.id] !== undefined ? item.marks[t.id] : ''},`;
+            });
+            row += `${item.totalScored},${item.totalMax},${item.pct}%\n`;
+            csv += row;
+        });
+
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `paradigm_gradebook_matrix_${new Date().toISOString().split('T')[0]}.csv`;
+        link.click();
+        logAdminAudit('Export Gradebook CSV', 'Exported dynamic multi-test gradebook to CSV');
+    };
+
+    // Attendance Form Toggle All
+    window.adminMarkAllAttendance = (status) => {
+        const toggles = document.querySelectorAll('.admin-attendance-toggle-group');
+        toggles.forEach(t => {
+            const btn = status === 'present' ? t.querySelector('.p-btn') : t.querySelector('.a-btn');
+            if (btn) btn.click();
+        });
+    };
+
+    // Official Fee Receipt Modal & CSV Export
+    window.openAdminFeeReceiptModal = async (studentId, cycleStart) => {
+        const students = await DB.getStudents();
+        const student = students.find(s => s.id === studentId);
+        if (!student) return;
+
+        const payment = (student.feePayments || []).find(p => p.cycleStart === cycleStart);
+        const baseFee = student.fees || 0;
+        const finePaid = payment ? (payment.finePaid || 0) : 0;
+        const totalPaid = baseFee + finePaid;
+        const receiptNo = `PC-REC-${student.id.toUpperCase()}-${cycleStart.replace(/-/g, '')}`;
+
+        const content = document.getElementById('adminFeeReceiptContent');
+        if (!content) return;
+
+        content.innerHTML = `
+            <div class="receipt-print-wrapper" style="border: 2px solid #1e3a8a; border-radius: 12px; padding: 2rem; background: white;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #b91c1c; padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                    <div>
+                        <h2 style="margin: 0; font-size: 1.5rem; font-weight: 800; color: #1e3a8a; letter-spacing: 0.05em;">PARADIGM CLASSES</h2>
+                        <div style="font-size: 0.8rem; color: #b91c1c; font-weight: 700; letter-spacing: 0.08em;">CENTER FOR ACADEMIC EXCELLENCE</div>
+                        <div style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.25rem;">Reg. Coaching Institute · CBSE Classes IX–XII &amp; NDA Foundation</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <span class="badge badge-success" style="font-size: 0.85rem; padding: 0.35rem 0.75rem;">OFFICIAL RECEIPT</span>
+                        <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-dark); margin-top: 0.4rem;">${receiptNo}</div>
+                        <div style="font-size: 0.8rem; color: var(--text-light);">Date: ${DB.formatDate(payment ? payment.paidOn : new Date().toISOString())}</div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.9rem; margin-bottom: 1.5rem; background: #f8fafc; padding: 1rem; border-radius: 8px;">
+                    <div>
+                        <div style="color: var(--text-light); font-size: 0.8rem;">STUDENT NAME</div>
+                        <div style="font-weight: 700; color: #0f172a;">${window.escapeHTML(student.name)}</div>
+                        <div style="color: var(--text-light); font-size: 0.8rem; margin-top: 0.5rem;">STUDENT ID / CLASS</div>
+                        <div style="font-weight: 600;">${window.escapeHTML(student.id)} (Class ${window.escapeHTML(student.class || 'N/A')})</div>
+                    </div>
+                    <div>
+                        <div style="color: var(--text-light); font-size: 0.8rem;">BILLING CYCLE PERIOD</div>
+                        <div style="font-weight: 700; color: #0f172a;">${DB.formatDate(cycleStart)} to Cycle End</div>
+                        <div style="color: var(--text-light); font-size: 0.8rem; margin-top: 0.5rem;">PAYMENT COLLECTOR</div>
+                        <div style="font-weight: 600;">${window.escapeHTML(payment ? payment.markedBy : 'Administration')}</div>
+                    </div>
+                </div>
+
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 0.9rem;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid var(--gray-300); text-align: left;">
+                            <th style="padding: 0.5rem 0; color: var(--text-light);">Particulars</th>
+                            <th style="padding: 0.5rem 0; text-align: right; color: var(--text-light);">Amount (INR)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid var(--gray-200);">
+                            <td style="padding: 0.6rem 0;">Monthly Tuition Tuition Fee</td>
+                            <td style="padding: 0.6rem 0; text-align: right; font-weight: 600;">₹${baseFee.toLocaleString('en-IN')}</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--gray-200);">
+                            <td style="padding: 0.6rem 0;">Late Fine / Miscellaneous Fee</td>
+                            <td style="padding: 0.6rem 0; text-align: right; font-weight: 600;">₹${finePaid.toLocaleString('en-IN')}</td>
+                        </tr>
+                        <tr style="border-top: 2px solid #0f172a;">
+                            <td style="padding: 0.75rem 0; font-weight: 800; font-size: 1.05rem;">Total Amount Paid</td>
+                            <td style="padding: 0.75rem 0; text-align: right; font-weight: 800; font-size: 1.15rem; color: #166534;">₹${totalPaid.toLocaleString('en-IN')}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 2rem; padding-top: 1rem;">
+                    <div style="font-size: 0.75rem; color: var(--text-light); max-width: 320px;">
+                        This is an official computer-generated receipt from Paradigm Classes ERP. No manual signature required.
+                    </div>
+                    <div style="text-align: center; border-top: 1px dashed #64748b; padding-top: 0.4rem; min-width: 140px;">
+                        <span style="font-size: 0.8rem; font-weight: 700; color: #1e3a8a;">Authorized Signatory</span>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        window.openAdminModal('adminFeeReceiptModal');
+    };
+
+    window.exportFeeLedgerCsv = async () => {
+        const students = await DB.getStudents();
+        let csv = `StudentID,StudentName,Class,MonthlyBaseFee,CycleStart,FinePaid,TotalPaid,PaidOn,Collector\n`;
+        students.forEach(s => {
+            (s.feePayments || []).forEach(p => {
+                const total = (s.fees || 0) + (p.finePaid || 0);
+                csv += `"${s.id}","${s.name}","${s.class || ''}",${s.fees || 0},"${p.cycleStart}",${p.finePaid || 0},${total},"${p.paidOn || ''}","${p.markedBy || ''}"\n`;
+            });
+        });
+
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `paradigm_fee_ledgers_${new Date().toISOString().split('T')[0]}.csv`;
+        link.click();
+        logAdminAudit('Export Fee Ledgers CSV', 'Exported student fee payment records to CSV');
+    };
+
+    // Class Broadcast Announcements
+    async function renderBroadcastsTable() {
+        const broadcasts = await DB.getClassAnnouncements();
+        const tbody = document.querySelector('#broadcastsTable tbody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+
+        if (broadcasts.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-light); padding: 2rem;">No broadcast announcements published yet.</td></tr>';
+            return;
+        }
+
+        broadcasts.forEach(b => {
+            const tr = document.createElement('tr');
+            const pBadge = b.priority === 'Urgent' ? 'badge-danger' : (b.priority === 'Important' ? 'badge-warning' : 'badge-info');
+            tr.innerHTML = `
+                <td>${DB.formatDate(b.date || b.createdAt)}</td>
+                <td><span class="badge" style="background:#eff6ff; color:#1e40af;">Class ${window.escapeHTML(b.targetClass)}</span></td>
+                <td><span class="badge ${pBadge}">${window.escapeHTML(b.priority || 'Normal')}</span></td>
+                <td>
+                    <div style="font-weight: 700; color: #0f172a;">${window.escapeHTML(b.title)}</div>
+                    <div style="font-size: 0.85rem; color: #475569; margin-top: 0.2rem;">${window.escapeHTML(b.message)}</div>
+                </td>
+                <td style="text-align: right;">
+                    <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; color: #dc2626; border-color: #dc2626; font-size: 0.8rem;" onclick="deleteBroadcast('${b.id}')">✕</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    window.deleteBroadcast = async (broadcastId) => {
+        let broadcasts = await DB.getClassAnnouncements();
+        broadcasts = broadcasts.filter(b => b.id !== broadcastId);
+        await DB.setClassAnnouncements(broadcasts);
+        await logAdminAudit('Delete Broadcast', `Deleted class broadcast #${broadcastId}`);
+        await renderBroadcastsTable();
+    };
+
+    const adminBroadcastForm = document.getElementById('admin-broadcast-form');
+    if (adminBroadcastForm) {
+        adminBroadcastForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const targetClass = document.getElementById('broadcastTargetClass').value;
+            const priority = document.getElementById('broadcastPriority').value;
+            const title = document.getElementById('broadcastTitle').value.trim();
+            const message = document.getElementById('broadcastMessage').value.trim();
+
+            const broadcasts = await DB.getClassAnnouncements();
+            const newBroadcast = {
+                id: 'bc_' + Date.now(),
+                targetClass,
+                priority,
+                title,
+                message,
+                date: new Date().toISOString()
+            };
+            broadcasts.unshift(newBroadcast);
+            await DB.setClassAnnouncements(broadcasts);
+            await logAdminAudit('Class Broadcast', `Posted "${title}" for Class ${targetClass}`);
+            adminBroadcastForm.reset();
+            await renderBroadcastsTable();
+            alert("Class broadcast announcement published successfully!");
+        });
+    }
+
+    // Input listeners for real-time search & filters
+    const studentSearchInput = document.getElementById('studentSearchInput');
+    const studentClassFilter = document.getElementById('studentClassFilter');
+    const studentSortSelect = document.getElementById('studentSortSelect');
+
+    if (studentSearchInput) studentSearchInput.addEventListener('input', () => renderStudents());
+    if (studentClassFilter) studentClassFilter.addEventListener('change', () => renderStudents());
+    if (studentSortSelect) studentSortSelect.addEventListener('change', () => renderStudents());
+
+    const adminTestFilterClass = document.getElementById('adminTestFilterClass');
+    if (adminTestFilterClass) adminTestFilterClass.addEventListener('change', () => renderAdminTests());
+
+    const adminResultsSearchInput = document.getElementById('adminResultsSearchInput');
+    if (adminResultsSearchInput) adminResultsSearchInput.addEventListener('input', () => renderAdminResultsGradebook());
+
+    const auditSearchInput = document.getElementById('auditSearchInput');
+    if (auditSearchInput) auditSearchInput.addEventListener('input', () => renderAuditLogs());
+
+    // Navigation & batch progress
     document.getElementById('logoutBtn').addEventListener('click', () => {
         DB.logout();
         window.location.href = 'index.html';
@@ -2746,18 +3969,23 @@ async function initAdminDashboard() {
         });
     }
 
-    // Initial render
+    // Initial render across all modules
+    await renderAdminOverview();
     await renderStudents();
     await renderAlumni();
     await renderTeachers();
     await renderSalaries();
     await renderCourses();
     await calculateFinancials();
+    await renderAdminTests();
+    await renderAdminResultsGradebook();
     await renderScrollersList();
     await renderNoteScrollersList();
     await renderSlideScrollersList();
     await renderAdminAttendanceForm();
     await renderAdminAttendanceOverviewTable();
+    await renderBroadcastsTable();
+    await renderAuditLogs();
 }
 
 if (document.readyState === 'loading') {
