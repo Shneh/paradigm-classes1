@@ -1767,8 +1767,16 @@
                                                 <option value="rate-asc">Rate (Low to High)</option>
                                                 <option value="id-asc">ID (Ascending)</option>
                                                 <option value="id-desc">ID (Descending)</option>
+                                                <option value="class-asc">Class (Ascending)</option>
+                                                <option value="class-desc">Class (Descending)</option>
+                                                <option value="absent-desc">Highest Defaulters (Most Absent)</option>
+                                                <option value="present-desc">Highest Present Days</option>
                                             </select>
                                         </div>
+                                        <button type="button" id="openAttendancePdfModalBtn" class="btn btn-primary" style="background: #1e3a8a; border-color: #1e3a8a; padding: 0.35rem 0.85rem; font-size: 0.82rem; font-weight: 700; border-radius: var(--radius-md); cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem;" title="Export and download attendance as PDF">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                            Download PDF
+                                        </button>
                                         <button type="button" id="clearAllAttendanceBtn" class="btn" style="background: transparent; color: #dc2626; border: 1.5px solid #dc2626; padding: 0.35rem 0.75rem; font-size: 0.82rem; font-weight: 600; border-radius: var(--radius-md); cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem;" title="Wipe all historical attendance records">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                                             Clean All Attendance
@@ -2206,8 +2214,107 @@
             </div>
             <div class="admin-modal-footer no-print">
                 <button class="btn btn-outline" onclick="closeAdminModal('adminFeeReceiptModal')">Close</button>
-                <button class="btn btn-primary" onclick="window.print()" style="background: #1e3a8a; border-color: #1e3a8a;">
+                <button class="btn btn-primary" id="adminDownloadFeeReceiptPdfBtn" style="background: #1e3a8a; border-color: #1e3a8a; display: inline-flex; align-items: center; gap: 0.35rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Download PDF
+                </button>
+                <button class="btn btn-outline" onclick="window.print()" style="display: inline-flex; align-items: center; gap: 0.35rem;">
                     🖨️ Print Receipt
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. Attendance PDF Download Modal -->
+    <div class="admin-modal-overlay" id="adminAttendancePdfModal">
+        <div class="admin-modal-container" style="max-width: 600px;">
+            <div class="admin-modal-header no-print">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <div style="background: #eff6ff; color: #1e3a8a; border-radius: 8px; padding: 0.4rem; display: flex; align-items: center; justify-content: center;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                    </div>
+                    <div>
+                        <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Download Attendance PDF Report</h3>
+                        <p style="margin: 0.15rem 0 0; font-size: 0.78rem; color: #64748b;">Configure sorting order and parameters for official attendance report export.</p>
+                    </div>
+                </div>
+                <button class="admin-modal-close" onclick="closeAdminModal('adminAttendancePdfModal')">✕</button>
+            </div>
+            <div class="admin-modal-body" style="padding: 1.5rem;">
+                <form id="attendancePdfForm" onsubmit="event.preventDefault();">
+                    <div style="margin-bottom: 1.25rem;">
+                        <label for="attPdfSortSelect" style="display: block; font-weight: 700; font-size: 0.85rem; color: #0f172a; margin-bottom: 0.4rem;">
+                            1. Sort Students In Order: <span style="color:#b91c1c;">*</span>
+                        </label>
+                        <select class="form-input" id="attPdfSortSelect" style="width: 100%; padding: 0.55rem 0.75rem; font-size: 0.9rem; background: white; border: 1.5px solid var(--gray-300); border-radius: var(--radius-md);">
+                            <option value="name-asc">Student Name (A to Z)</option>
+                            <option value="name-desc">Student Name (Z to A)</option>
+                            <option value="rate-desc">Attendance Rate (Highest to Lowest)</option>
+                            <option value="rate-asc">Attendance Rate (Lowest to Highest / Defaulters First)</option>
+                            <option value="id-asc">Student ID (Ascending)</option>
+                            <option value="id-desc">Student ID (Descending)</option>
+                            <option value="class-asc">Class / Standard (Ascending: IX → XII)</option>
+                            <option value="class-desc">Class / Standard (Descending: XII → IX)</option>
+                            <option value="absent-desc">Most Absences (Highest Defaulters First)</option>
+                            <option value="present-desc">Highest Presences (Top Attendees First)</option>
+                        </select>
+                        <small style="color: #64748b; font-size: 0.75rem; display: block; margin-top: 0.3rem;">Students in the generated PDF will be sorted strictly in this sequence.</small>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+                        <div>
+                            <label for="attPdfClassFilter" style="display: block; font-weight: 700; font-size: 0.85rem; color: #0f172a; margin-bottom: 0.4rem;">
+                                2. Filter by Class:
+                            </label>
+                            <select class="form-input" id="attPdfClassFilter" style="width: 100%; padding: 0.55rem 0.75rem; font-size: 0.9rem; background: white; border: 1.5px solid var(--gray-300); border-radius: var(--radius-md);">
+                                <option value="all">All Classes (Entire Institute)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="attPdfReportType" style="display: block; font-weight: 700; font-size: 0.85rem; color: #0f172a; margin-bottom: 0.4rem;">
+                                3. Report Format:
+                            </label>
+                            <select class="form-input" id="attPdfReportType" style="width: 100%; padding: 0.55rem 0.75rem; font-size: 0.9rem; background: white; border: 1.5px solid var(--gray-300); border-radius: var(--radius-md);">
+                                <option value="summary">Summary Report (Recommended)</option>
+                                <option value="detailed">Detailed Register (With Daily P/A Grid)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 1.25rem;">
+                        <label for="attPdfDateRangeSelect" style="display: block; font-weight: 700; font-size: 0.85rem; color: #0f172a; margin-bottom: 0.4rem;">
+                            4. Date Period Scope:
+                        </label>
+                        <select class="form-input" id="attPdfDateRangeSelect" style="width: 100%; padding: 0.55rem 0.75rem; font-size: 0.9rem; background: white; border: 1.5px solid var(--gray-300); border-radius: var(--radius-md);">
+                            <option value="all">All Recorded Sessions (Full History)</option>
+                            <option value="current-month">Current Month Sessions</option>
+                            <option value="last-30-days">Last 30 Days</option>
+                            <option value="custom">Custom Date Range...</option>
+                        </select>
+                    </div>
+
+                    <div id="attPdfCustomDateRow" style="display: none; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; background: #f8fafc; padding: 0.85rem; border-radius: var(--radius-md); border: 1px solid var(--gray-300);">
+                        <div>
+                            <label for="attPdfStartDate" style="display: block; font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 0.25rem;">From Date:</label>
+                            <input type="date" id="attPdfStartDate" class="form-input" style="width: 100%; padding: 0.45rem; font-size: 0.85rem; background: white;">
+                        </div>
+                        <div>
+                            <label for="attPdfEndDate" style="display: block; font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 0.25rem;">To Date:</label>
+                            <input type="date" id="attPdfEndDate" class="form-input" style="width: 100%; padding: 0.45rem; font-size: 0.85rem; background: white;">
+                        </div>
+                    </div>
+
+                    <div id="attPdfStatusAlert" style="display: none; padding: 0.75rem; border-radius: 8px; font-size: 0.85rem; margin-top: 1rem; text-align: center;"></div>
+                </form>
+            </div>
+            <div class="admin-modal-footer no-print">
+                <button type="button" class="btn btn-outline" onclick="closeAdminModal('adminAttendancePdfModal')">Cancel</button>
+                <button type="button" class="btn btn-outline" id="printAttendanceReportPreviewBtn" style="display: inline-flex; align-items: center; gap: 0.35rem;">
+                    🖨️ Print / Preview
+                </button>
+                <button type="button" class="btn btn-primary" id="confirmDownloadAttendancePdfBtn" style="background: #1e3a8a; border-color: #1e3a8a; display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 700;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Download PDF
                 </button>
             </div>
         </div>
@@ -2216,8 +2323,10 @@
     <!-- Scripts Loading -->
     <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="js/db.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/pdf-util.js"></script>
     <script src="js/admin.js"></script>
 </body>
 </html>

@@ -2077,15 +2077,17 @@ body {
     to { opacity: 1; transform: scale(1); }
 }
 
-/* Printable Report Card Rules */
+/* Printable Report Card, Receipt & Attendance Report Rules */
 @media print {
     body * {
         visibility: hidden !important;
     }
-    #printableReportCard, #printableReportCard * {
+    #printableReportCard, #printableReportCard *,
+    .receipt-print-wrapper, .receipt-print-wrapper *,
+    #printableAttendanceReport, #printableAttendanceReport * {
         visibility: visible !important;
     }
-    #printableReportCard {
+    #printableReportCard, .receipt-print-wrapper, #printableAttendanceReport {
         position: absolute !important;
         left: 0 !important;
         top: 0 !important;

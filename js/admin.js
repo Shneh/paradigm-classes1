@@ -2718,7 +2718,7 @@ async function initAdminDashboard() {
             return;
         }
 
-        // Compute attendance rates for sorting
+        // Compute attendance rates and session counts for sorting
         students.forEach(student => {
             let totalDays = 0;
             let presentDays = 0;
@@ -2730,19 +2730,54 @@ async function initAdminDashboard() {
                     }
                 }
             });
+            student._totalDays = totalDays;
+            student._presentDays = presentDays;
+            student._absentDays = totalDays - presentDays;
             student._attendanceRate = totalDays > 0 ? (presentDays / totalDays) * 100 : -1;
         });
+
+        const CLASS_ORDER_MAP = { 'IX': 9, '9': 9, 'X': 10, '10': 10, 'XI': 11, '11': 11, 'XII': 12, '12': 12 };
+        const getClassRankMap = (c) => {
+            if (!c) return 999;
+            const norm = String(c).toUpperCase().trim();
+            for (const k in CLASS_ORDER_MAP) {
+                if (norm === k || norm.includes(k)) return CLASS_ORDER_MAP[k];
+            }
+            return 999;
+        };
 
         // Apply sorting based on select control
         const sortVal = adminAttendanceSortSelect ? adminAttendanceSortSelect.value : 'name-asc';
         students.sort((a, b) => {
-            if (sortVal === 'name-asc') return a.name.localeCompare(b.name);
-            if (sortVal === 'name-desc') return b.name.localeCompare(a.name);
-            if (sortVal === 'rate-desc') return b._attendanceRate - a._attendanceRate;
-            if (sortVal === 'rate-asc') return a._attendanceRate - b._attendanceRate;
-            if (sortVal === 'id-asc') return a.id.localeCompare(b.id, undefined, { numeric: true });
-            if (sortVal === 'id-desc') return b.id.localeCompare(a.id, undefined, { numeric: true });
-            return a.name.localeCompare(b.name);
+            if (sortVal === 'name-asc') return (a.name || '').localeCompare(b.name || '');
+            if (sortVal === 'name-desc') return (b.name || '').localeCompare(a.name || '');
+            if (sortVal === 'rate-desc') {
+                if (b._attendanceRate !== a._attendanceRate) return b._attendanceRate - a._attendanceRate;
+                return (a.name || '').localeCompare(b.name || '');
+            }
+            if (sortVal === 'rate-asc') {
+                if (a._attendanceRate !== b._attendanceRate) return a._attendanceRate - b._attendanceRate;
+                return (a.name || '').localeCompare(b.name || '');
+            }
+            if (sortVal === 'id-asc') return (a.id || '').localeCompare(b.id || '', undefined, { numeric: true });
+            if (sortVal === 'id-desc') return (b.id || '').localeCompare(a.id || '', undefined, { numeric: true });
+            if (sortVal === 'class-asc') {
+                const diff = getClassRankMap(a.class) - getClassRankMap(b.class);
+                return diff !== 0 ? diff : (a.name || '').localeCompare(b.name || '');
+            }
+            if (sortVal === 'class-desc') {
+                const diff = getClassRankMap(b.class) - getClassRankMap(a.class);
+                return diff !== 0 ? diff : (a.name || '').localeCompare(b.name || '');
+            }
+            if (sortVal === 'absent-desc') {
+                const diff = (b._absentDays || 0) - (a._absentDays || 0);
+                return diff !== 0 ? diff : (a._attendanceRate - b._attendanceRate);
+            }
+            if (sortVal === 'present-desc') {
+                const diff = (b._presentDays || 0) - (a._presentDays || 0);
+                return diff !== 0 ? diff : (b._attendanceRate - a._attendanceRate);
+            }
+            return (a.name || '').localeCompare(b.name || '');
         });
 
         students.forEach(student => {
@@ -2792,6 +2827,163 @@ async function initAdminDashboard() {
             const tr = document.createElement('tr');
             tr.innerHTML = rowHTML;
             adminAttendanceTabularReportTableBody.appendChild(tr);
+        });
+    }
+
+    // === Admin Attendance PDF Download Modal & Generation ===
+    window.toggleAttendancePdfCustomDates = () => {
+        const dateRangeSelect = document.getElementById('attPdfDateRangeSelect');
+        const customRow = document.getElementById('attPdfCustomDateRow');
+        if (dateRangeSelect && customRow) {
+            customRow.style.display = dateRangeSelect.value === 'custom' ? 'grid' : 'none';
+        }
+    };
+
+    const openAttendancePdfModalBtn = document.getElementById('openAttendancePdfModalBtn');
+    if (openAttendancePdfModalBtn) {
+        openAttendancePdfModalBtn.addEventListener('click', async () => {
+            // 1. Sync sort selection with current on-page sort
+            const onPageSort = document.getElementById('adminAttendanceSortSelect');
+            const attPdfSortSelect = document.getElementById('attPdfSortSelect');
+            if (onPageSort && attPdfSortSelect) {
+                attPdfSortSelect.value = onPageSort.value;
+            }
+
+            // 2. Populate Class Filter dynamically from database
+            const attPdfClassFilter = document.getElementById('attPdfClassFilter');
+            if (attPdfClassFilter) {
+                try {
+                    const students = await DB.getStudents();
+                    const classes = [...new Set(students.map(s => s.class).filter(Boolean))].sort();
+                    attPdfClassFilter.innerHTML = '<option value="all">All Classes (Entire Institute)</option>';
+                    classes.forEach(c => {
+                        const opt = document.createElement('option');
+                        opt.value = c;
+                        opt.textContent = `Class ${c}`;
+                        attPdfClassFilter.appendChild(opt);
+                    });
+                } catch (e) {
+                    console.error('Error populating attendance class filter:', e);
+                }
+            }
+
+            // 3. Reset dates and alert
+            const dateRangeSelect = document.getElementById('attPdfDateRangeSelect');
+            if (dateRangeSelect) dateRangeSelect.value = 'all';
+            window.toggleAttendancePdfCustomDates();
+
+            const statusAlert = document.getElementById('attPdfStatusAlert');
+            if (statusAlert) statusAlert.style.display = 'none';
+
+            window.openAdminModal('adminAttendancePdfModal');
+        });
+    }
+
+    const confirmDownloadAttendancePdfBtn = document.getElementById('confirmDownloadAttendancePdfBtn');
+    if (confirmDownloadAttendancePdfBtn) {
+        confirmDownloadAttendancePdfBtn.addEventListener('click', async () => {
+            const attPdfSortSelect = document.getElementById('attPdfSortSelect');
+            const attPdfClassFilter = document.getElementById('attPdfClassFilter');
+            const attPdfReportType = document.getElementById('attPdfReportType');
+            const attPdfDateRangeSelect = document.getElementById('attPdfDateRangeSelect');
+            const attPdfStartDate = document.getElementById('attPdfStartDate');
+            const attPdfEndDate = document.getElementById('attPdfEndDate');
+            const statusAlert = document.getElementById('attPdfStatusAlert');
+
+            const sortBy = attPdfSortSelect ? attPdfSortSelect.value : 'name-asc';
+            const classFilter = attPdfClassFilter ? attPdfClassFilter.value : 'all';
+            const reportType = attPdfReportType ? attPdfReportType.value : 'summary';
+            const dateRangeType = attPdfDateRangeSelect ? attPdfDateRangeSelect.value : 'all';
+            const startDate = attPdfStartDate ? attPdfStartDate.value : null;
+            const endDate = attPdfEndDate ? attPdfEndDate.value : null;
+
+            if (dateRangeType === 'custom' && (!startDate || !endDate)) {
+                alert('Please select both Start Date and End Date for custom date range.');
+                return;
+            }
+
+            try {
+                confirmDownloadAttendancePdfBtn.disabled = true;
+                const originalText = confirmDownloadAttendancePdfBtn.innerHTML;
+                confirmDownloadAttendancePdfBtn.innerHTML = '⏳ Generating PDF...';
+
+                if (statusAlert) {
+                    statusAlert.style.display = 'block';
+                    statusAlert.style.background = '#eff6ff';
+                    statusAlert.style.color = '#1e3a8a';
+                    statusAlert.textContent = 'Generating official Attendance PDF report, please wait...';
+                }
+
+                const students = await DB.getStudents();
+                const attendanceList = await DB.getAttendance();
+
+                if (!window.ParadigmPDF || typeof window.ParadigmPDF.downloadAttendancePDF !== 'function') {
+                    throw new Error('ParadigmPDF utility is not available.');
+                }
+
+                await window.ParadigmPDF.downloadAttendancePDF(students, attendanceList, {
+                    sortBy,
+                    classFilter,
+                    reportType,
+                    dateRangeType,
+                    startDate,
+                    endDate
+                });
+
+                if (statusAlert) {
+                    statusAlert.style.background = '#dcfce7';
+                    statusAlert.style.color = '#166534';
+                    statusAlert.textContent = '✓ Attendance PDF generated and download initiated successfully!';
+                }
+
+                setTimeout(() => {
+                    closeAdminModal('adminAttendancePdfModal');
+                    confirmDownloadAttendancePdfBtn.disabled = false;
+                    confirmDownloadAttendancePdfBtn.innerHTML = originalText;
+                    if (statusAlert) statusAlert.style.display = 'none';
+                }, 1200);
+
+            } catch (err) {
+                console.error('Error generating attendance PDF:', err);
+                alert('Error generating attendance PDF: ' + err.message);
+                confirmDownloadAttendancePdfBtn.disabled = false;
+                confirmDownloadAttendancePdfBtn.innerHTML = 'Download PDF';
+                if (statusAlert) statusAlert.style.display = 'none';
+            }
+        });
+    }
+
+    const printAttendanceReportPreviewBtn = document.getElementById('printAttendanceReportPreviewBtn');
+    if (printAttendanceReportPreviewBtn) {
+        printAttendanceReportPreviewBtn.addEventListener('click', async () => {
+            const attPdfSortSelect = document.getElementById('attPdfSortSelect');
+            const attPdfClassFilter = document.getElementById('attPdfClassFilter');
+            const attPdfReportType = document.getElementById('attPdfReportType');
+            const attPdfDateRangeSelect = document.getElementById('attPdfDateRangeSelect');
+            const attPdfStartDate = document.getElementById('attPdfStartDate');
+            const attPdfEndDate = document.getElementById('attPdfEndDate');
+
+            const sortBy = attPdfSortSelect ? attPdfSortSelect.value : 'name-asc';
+            const classFilter = attPdfClassFilter ? attPdfClassFilter.value : 'all';
+            const reportType = attPdfReportType ? attPdfReportType.value : 'summary';
+            const dateRangeType = attPdfDateRangeSelect ? attPdfDateRangeSelect.value : 'all';
+            const startDate = attPdfStartDate ? attPdfStartDate.value : null;
+            const endDate = attPdfEndDate ? attPdfEndDate.value : null;
+
+            const students = await DB.getStudents();
+            const attendanceList = await DB.getAttendance();
+
+            if (window.ParadigmPDF && typeof window.ParadigmPDF.generateAttendanceReportHTML === 'function') {
+                const html = window.ParadigmPDF.generateAttendanceReportHTML(students, attendanceList, {
+                    sortBy,
+                    classFilter,
+                    reportType,
+                    dateRangeType,
+                    startDate,
+                    endDate
+                });
+                window.ParadigmPDF.printAttendanceFallback(html, 'Paradigm Classes Attendance Report');
+            }
         });
     }
 
@@ -3779,77 +3971,21 @@ async function initAdminDashboard() {
         if (!student) return;
 
         const payment = (student.feePayments || []).find(p => p.cycleStart === cycleStart);
-        const baseFee = student.fees || 0;
-        const finePaid = payment ? (payment.finePaid || 0) : 0;
-        const totalPaid = baseFee + finePaid;
-        const receiptNo = `PC-REC-${student.id.toUpperCase()}-${cycleStart.replace(/-/g, '')}`;
-
         const content = document.getElementById('adminFeeReceiptContent');
         if (!content) return;
 
-        content.innerHTML = `
-            <div class="receipt-print-wrapper" style="border: 2px solid #1e3a8a; border-radius: 12px; padding: 2rem; background: white;">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #b91c1c; padding-bottom: 1rem; margin-bottom: 1.5rem;">
-                    <div>
-                        <h2 style="margin: 0; font-size: 1.5rem; font-weight: 800; color: #1e3a8a; letter-spacing: 0.05em;">PARADIGM CLASSES</h2>
-                        <div style="font-size: 0.8rem; color: #b91c1c; font-weight: 700; letter-spacing: 0.08em;">CENTER FOR ACADEMIC EXCELLENCE</div>
-                        <div style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.25rem;">Reg. Coaching Institute · CBSE Classes IX–XII &amp; NDA Foundation</div>
-                    </div>
-                    <div style="text-align: right;">
-                        <span class="badge badge-success" style="font-size: 0.85rem; padding: 0.35rem 0.75rem;">OFFICIAL RECEIPT</span>
-                        <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-dark); margin-top: 0.4rem;">${receiptNo}</div>
-                        <div style="font-size: 0.8rem; color: var(--text-light);">Date: ${DB.formatDate(payment ? payment.paidOn : new Date().toISOString())}</div>
-                    </div>
-                </div>
+        if (window.ParadigmPDF && typeof window.ParadigmPDF.generateReceiptHTML === 'function') {
+            content.innerHTML = window.ParadigmPDF.generateReceiptHTML(student, payment, cycleStart);
+        }
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.9rem; margin-bottom: 1.5rem; background: #f8fafc; padding: 1rem; border-radius: 8px;">
-                    <div>
-                        <div style="color: var(--text-light); font-size: 0.8rem;">STUDENT NAME</div>
-                        <div style="font-weight: 700; color: #0f172a;">${window.escapeHTML(student.name)}</div>
-                        <div style="color: var(--text-light); font-size: 0.8rem; margin-top: 0.5rem;">STUDENT ID / CLASS</div>
-                        <div style="font-weight: 600;">${window.escapeHTML(student.id)} (Class ${window.escapeHTML(student.class || 'N/A')})</div>
-                    </div>
-                    <div>
-                        <div style="color: var(--text-light); font-size: 0.8rem;">BILLING CYCLE PERIOD</div>
-                        <div style="font-weight: 700; color: #0f172a;">${DB.formatDate(cycleStart)} to Cycle End</div>
-                        <div style="color: var(--text-light); font-size: 0.8rem; margin-top: 0.5rem;">PAYMENT COLLECTOR</div>
-                        <div style="font-weight: 600;">${window.escapeHTML(payment ? payment.markedBy : 'Administration')}</div>
-                    </div>
-                </div>
-
-                <table style="width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 0.9rem;">
-                    <thead>
-                        <tr style="border-bottom: 1px solid var(--gray-300); text-align: left;">
-                            <th style="padding: 0.5rem 0; color: var(--text-light);">Particulars</th>
-                            <th style="padding: 0.5rem 0; text-align: right; color: var(--text-light);">Amount (INR)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr style="border-bottom: 1px solid var(--gray-200);">
-                            <td style="padding: 0.6rem 0;">Monthly Tuition Tuition Fee</td>
-                            <td style="padding: 0.6rem 0; text-align: right; font-weight: 600;">₹${baseFee.toLocaleString('en-IN')}</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid var(--gray-200);">
-                            <td style="padding: 0.6rem 0;">Late Fine / Miscellaneous Fee</td>
-                            <td style="padding: 0.6rem 0; text-align: right; font-weight: 600;">₹${finePaid.toLocaleString('en-IN')}</td>
-                        </tr>
-                        <tr style="border-top: 2px solid #0f172a;">
-                            <td style="padding: 0.75rem 0; font-weight: 800; font-size: 1.05rem;">Total Amount Paid</td>
-                            <td style="padding: 0.75rem 0; text-align: right; font-weight: 800; font-size: 1.15rem; color: #166534;">₹${totalPaid.toLocaleString('en-IN')}</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 2rem; padding-top: 1rem;">
-                    <div style="font-size: 0.75rem; color: var(--text-light); max-width: 320px;">
-                        This is an official computer-generated receipt from Paradigm Classes ERP. No manual signature required.
-                    </div>
-                    <div style="text-align: center; border-top: 1px dashed #64748b; padding-top: 0.4rem; min-width: 140px;">
-                        <span style="font-size: 0.8rem; font-weight: 700; color: #1e3a8a;">Authorized Signatory</span>
-                    </div>
-                </div>
-            </div>
-        `;
+        const downloadPdfBtn = document.getElementById('adminDownloadFeeReceiptPdfBtn');
+        if (downloadPdfBtn) {
+            downloadPdfBtn.onclick = () => {
+                if (window.ParadigmPDF && typeof window.ParadigmPDF.downloadReceiptPDF === 'function') {
+                    window.ParadigmPDF.downloadReceiptPDF(student, payment, cycleStart);
+                }
+            };
+        }
 
         window.openAdminModal('adminFeeReceiptModal');
     };

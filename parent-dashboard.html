@@ -276,6 +276,7 @@
                                 <th class="text-right">Fine</th>
                                 <th class="text-right">Total Payable</th>
                                 <th>Status</th>
+                                <th style="text-align: center;">Receipt</th>
                             </tr>
                         </thead>
                         <tbody><!-- Filled by JS --></tbody>
@@ -305,10 +306,40 @@
         </div>
     </div>
 
+    <!-- ================= OFFICIAL FEE RECEIPT MODAL FOR PARENT ================= -->
+    <div class="pc-modal-backdrop" id="parentFeeReceiptModal">
+        <div class="pc-modal-card" style="max-width: 680px;">
+            <div class="no-print" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid var(--gray-200); padding-bottom: 0.75rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <div style="background: #eff6ff; color: #1e3a8a; border-radius: 8px; padding: 0.35rem; display: flex; align-items: center;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                    </div>
+                    <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Official Tuition Fee Receipt</h3>
+                </div>
+                <button type="button" onclick="document.getElementById('parentFeeReceiptModal').classList.remove('open')" style="border: none; background: none; font-size: 1.5rem; cursor: pointer; color: #64748b;">&times;</button>
+            </div>
+            <div id="parentFeeReceiptContent" style="padding: 0.25rem 0;">
+                <!-- Populated dynamically -->
+            </div>
+            <div class="no-print" style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--gray-200);">
+                <button type="button" class="btn btn-outline" onclick="document.getElementById('parentFeeReceiptModal').classList.remove('open')">Close</button>
+                <button type="button" class="btn btn-primary" id="parentDownloadReceiptPdfBtn" style="background: #1e3a8a; border-color: #1e3a8a; display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 700;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Download PDF
+                </button>
+                <button type="button" class="btn btn-outline" onclick="window.print()" style="display: inline-flex; align-items: center; gap: 0.35rem;">
+                    🖨️ Print
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="js/db.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/pdf-util.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             const user = Auth.checkAuth('parent');
@@ -382,7 +413,7 @@
 
                     if (paymentRecord) {
                         const fine = paymentRecord.finePaid || 0;
-                        const totalPaid = baseFees + fine;
+                        const totalPaid = (paymentRecord.feePaid !== undefined) ? paymentRecord.feePaid : (baseFees + fine);
                         tr.innerHTML = `
                             <td>Cycle ${cycleNum}</td>
                             <td>${DB.formatDate(startStr)}</td>
@@ -391,6 +422,18 @@
                             <td class="text-right">₹${fine.toLocaleString('en-IN')}</td>
                             <td class="text-right" style="font-weight:700; color:#166534;">₹${totalPaid.toLocaleString('en-IN')}</td>
                             <td><span class="badge" style="background:#dcfce7;color:#166534;padding:0.25rem 0.65rem;border-radius:99px;font-weight:700;">Paid</span></td>
+                            <td style="text-align: center;">
+                                <div style="display: inline-flex; gap: 0.35rem; align-items: center; justify-content: center; flex-wrap: wrap;">
+                                    <button type="button" class="btn btn-outline" style="padding: 0.25rem 0.6rem; font-size: 0.8rem; color: #1e3a8a; border-color: #1e3a8a; display: inline-flex; align-items: center; gap: 0.3rem;" onclick="window.viewParentFeeReceipt('${startStr}')" title="View receipt">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                                        View
+                                    </button>
+                                    <button type="button" class="btn btn-primary" style="padding: 0.25rem 0.6rem; font-size: 0.8rem; background: #1e3a8a; border-color: #1e3a8a; display: inline-flex; align-items: center; gap: 0.3rem;" onclick="window.downloadParentFeeReceiptPdf('${startStr}')" title="Download receipt as PDF">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                        PDF
+                                    </button>
+                                </div>
+                            </td>
                         `;
                     } else {
                         hasUnpaid = true;
@@ -407,11 +450,41 @@
                             <td class="text-right">₹${currentFine.toLocaleString('en-IN')}</td>
                             <td class="text-right" style="font-weight:700; color:#dc2626;">₹${totalDue.toLocaleString('en-IN')}</td>
                             <td><span class="badge" style="background:#fef08a;color:#854d0e;padding:0.25rem 0.65rem;border-radius:99px;font-weight:700;">Unpaid</span></td>
+                            <td style="text-align: center; color: var(--text-light); font-size: 0.8rem;">—</td>
                         `;
                     }
                     feeTableBody.appendChild(tr);
                     cycleStartDate = endCycle;
                     cycleNum++;
+                }
+
+                // Window helpers for parent fee receipt view & download
+                let currentParentCycleStart = null;
+                window.viewParentFeeReceipt = (cycleStart) => {
+                    currentParentCycleStart = cycleStart;
+                    const payment = payments.find(p => p.cycleStart === cycleStart);
+                    const content = document.getElementById('parentFeeReceiptContent');
+                    if (content && window.ParadigmPDF) {
+                        content.innerHTML = window.ParadigmPDF.generateReceiptHTML(student, payment, cycleStart);
+                    }
+                    const m = document.getElementById('parentFeeReceiptModal');
+                    if (m) m.classList.add('open');
+                };
+
+                window.downloadParentFeeReceiptPdf = async (cycleStart) => {
+                    const payment = payments.find(p => p.cycleStart === cycleStart);
+                    if (window.ParadigmPDF) {
+                        await window.ParadigmPDF.downloadReceiptPDF(student, payment, cycleStart);
+                    }
+                };
+
+                const parentDownloadBtn = document.getElementById('parentDownloadReceiptPdfBtn');
+                if (parentDownloadBtn) {
+                    parentDownloadBtn.onclick = async () => {
+                        if (currentParentCycleStart) {
+                            await window.downloadParentFeeReceiptPdf(currentParentCycleStart);
+                        }
+                    };
                 }
 
                 if (childFeeStatusEl) {

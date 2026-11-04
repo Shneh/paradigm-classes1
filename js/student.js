@@ -45,12 +45,65 @@ async function initStudentDashboard() {
     }
 
     // ================= 1. FEE CYCLES & RECEIPTS =================
+    const studentFeeReceiptModal = document.getElementById('studentFeeReceiptModal');
+    const closeStudentFeeReceiptBtn = document.getElementById('closeStudentFeeReceiptBtn');
+    const dismissStudentFeeReceiptBtn = document.getElementById('dismissStudentFeeReceiptBtn');
+    const studentDownloadReceiptPdfBtn = document.getElementById('studentDownloadReceiptPdfBtn');
+    let currentReceiptCycleStart = null;
+
+    if (closeStudentFeeReceiptBtn) {
+        closeStudentFeeReceiptBtn.addEventListener('click', () => {
+            if (studentFeeReceiptModal) studentFeeReceiptModal.classList.remove('open');
+        });
+    }
+    if (dismissStudentFeeReceiptBtn) {
+        dismissStudentFeeReceiptBtn.addEventListener('click', () => {
+            if (studentFeeReceiptModal) studentFeeReceiptModal.classList.remove('open');
+        });
+    }
+
+    window.viewStudentFeeReceipt = (cycleStart) => {
+        if (!student) return;
+        currentReceiptCycleStart = cycleStart;
+        const payments = student.feePayments || [];
+        const payment = payments.find(p => p.cycleStart === cycleStart);
+        const content = document.getElementById('studentFeeReceiptContent');
+        if (!content) return;
+
+        if (window.ParadigmPDF && typeof window.ParadigmPDF.generateReceiptHTML === 'function') {
+            content.innerHTML = window.ParadigmPDF.generateReceiptHTML(student, payment, cycleStart);
+        }
+
+        if (studentFeeReceiptModal) {
+            studentFeeReceiptModal.classList.add('open');
+        }
+    };
+
+    window.downloadStudentFeeReceiptPdf = async (cycleStart) => {
+        if (!student) return;
+        const payments = student.feePayments || [];
+        const payment = payments.find(p => p.cycleStart === cycleStart);
+        if (window.ParadigmPDF && typeof window.ParadigmPDF.downloadReceiptPDF === 'function') {
+            await window.ParadigmPDF.downloadReceiptPDF(student, payment, cycleStart);
+        } else {
+            alert('PDF utility is loading, please try again.');
+        }
+    };
+
+    if (studentDownloadReceiptPdfBtn) {
+        studentDownloadReceiptPdfBtn.addEventListener('click', async () => {
+            if (currentReceiptCycleStart) {
+                await window.downloadStudentFeeReceiptPdf(currentReceiptCycleStart);
+            }
+        });
+    }
+
     async function renderFees() {
         const feeCyclesTableBody = document.querySelector('#feeCyclesTable tbody');
         if (!feeCyclesTableBody) return;
 
         if (!student || !student.dateOfJoining) {
-            feeCyclesTableBody.innerHTML = '<tr><td colspan="7" style="text-align:center; color: var(--text-light);">No enrollment date recorded. Please contact Paradigm Admin.</td></tr>';
+            feeCyclesTableBody.innerHTML = '<tr><td colspan="8" style="text-align:center; color: var(--text-light);">No enrollment date recorded. Please contact Paradigm Admin.</td></tr>';
             return;
         }
 
@@ -73,7 +126,7 @@ async function initStudentDashboard() {
             const paymentRecord = payments.find(p => p.cycleStart === startStr);
             if (paymentRecord) {
                 const fine = paymentRecord.finePaid || 0;
-                const totalPaid = baseFees + fine;
+                const totalPaid = (paymentRecord.feePaid !== undefined) ? paymentRecord.feePaid : (baseFees + fine);
                 const statusBadge = `<span class="badge" style="background:#dcfce7;color:#166534;padding:0.25rem 0.65rem;border-radius:99px;font-weight:700;">Paid</span>`;
 
                 rowHtml += `
@@ -81,6 +134,18 @@ async function initStudentDashboard() {
                     <td class="text-right">₹${fine.toLocaleString('en-IN')}</td>
                     <td class="text-right" style="font-weight:700; color:#166534;">₹${totalPaid.toLocaleString('en-IN')}</td>
                     <td>${statusBadge}<br><small style="color:var(--text-light);">by ${paymentRecord.markedBy || 'Admin'}</small><br><small style="color:var(--text-light);">on ${DB.formatDate(paymentRecord.paidOn)}</small></td>
+                    <td style="text-align: center;">
+                        <div style="display: inline-flex; gap: 0.35rem; align-items: center; justify-content: center; flex-wrap: wrap;">
+                            <button type="button" class="btn btn-outline" style="padding: 0.25rem 0.6rem; font-size: 0.8rem; color: #1e3a8a; border-color: #1e3a8a; display: inline-flex; align-items: center; gap: 0.3rem;" onclick="window.viewStudentFeeReceipt('${startStr}')" title="View official receipt">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                                View
+                            </button>
+                            <button type="button" class="btn btn-primary" style="padding: 0.25rem 0.6rem; font-size: 0.8rem; background: #1e3a8a; border-color: #1e3a8a; display: inline-flex; align-items: center; gap: 0.3rem;" onclick="window.downloadStudentFeeReceiptPdf('${startStr}')" title="Download official fee receipt as PDF">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                PDF
+                            </button>
+                        </div>
+                    </td>
                 `;
             } else {
                 const dueDate = new Date(cycleStartDate);
@@ -94,6 +159,7 @@ async function initStudentDashboard() {
                     <td class="text-right">₹${currentFine.toLocaleString('en-IN')}</td>
                     <td class="text-right" style="font-weight:700; color:#1e40af;">₹${totalDue.toLocaleString('en-IN')}</td>
                     <td><span class="badge" style="background:#fef08a;color:#854d0e;padding:0.25rem 0.65rem;border-radius:99px;font-weight:700;">Unpaid</span></td>
+                    <td style="text-align: center; color: var(--text-light); font-size: 0.8rem;">—</td>
                 `;
             }
             
