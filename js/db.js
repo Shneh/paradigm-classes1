@@ -39,30 +39,145 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-// Helper to fetch list from a specific document
-async function getList(docId) {
-    try {
-        const snapshot = await db.collection('appData').doc(docId).get();
-        if (snapshot.exists) {
-            return snapshot.data().list || [];
+// 1. Enable Firestore Offline Persistence (IndexedDB cache for instant repeat loads)
+try {
+    db.enablePersistence({ synchronizeTabs: true }).catch((err) => {
+        if (err.code === 'failed-precondition') {
+            console.warn('Firestore persistence enabled in another tab.');
+        } else if (err.code === 'unimplemented') {
+            console.warn('Browser does not support Firestore persistence.');
         }
-        return [];
-    } catch (error) {
-        console.error(`🔥 Firebase Permission Error getting ${docId}:`, error.message);
-        if(docId !== 'admin') {
-            alert(`Database Read Error: Firebase is blocking data access. Please check your internet connection or Firestore rules.\n\n${error.message}`);
-        }
-        throw error; // Stop execution to prevent empty arrays from overwriting existing data
-    }
+    });
+} catch (e) {
+    console.warn('Firestore persistence init error:', e);
 }
 
-// Helper to save list to a specific document
+// 2. High-Speed In-Memory Cache & In-Flight Request De-duplication
+const _memoryCache = new Map();
+const _inFlightPromises = new Map();
+const CACHE_TTL_MS = 45 * 1000; // 45 seconds TTL (instant page interactions, fresh enough for real-time edits)
+
+// Helper to fetch list from a specific document with automatic caching & de-duplication
+async function getList(docId, forceRefresh = false) {
+    const now = Date.now();
+
+    // A. Check in-memory cache
+    if (!forceRefresh && _memoryCache.has(docId)) {
+        const cached = _memoryCache.get(docId);
+        if (now - cached.timestamp < CACHE_TTL_MS) {
+            return JSON.parse(JSON.stringify(cached.data));
+        }
+    }
+
+    // B. Check in-flight request de-duplication (reuse active promise if already fetching)
+    if (!forceRefresh && _inFlightPromises.has(docId)) {
+        const data = await _inFlightPromises.get(docId);
+        return JSON.parse(JSON.stringify(data));
+    }
+
+    // C. Network / Firestore fetch
+    const fetchPromise = (async () => {
+        try {
+            const snapshot = await db.collection('appData').doc(docId).get();
+            let list = [];
+            if (snapshot.exists) {
+                list = snapshot.data().list || [];
+            }
+            _memoryCache.set(docId, { data: list, timestamp: Date.now() });
+            return list;
+        } catch (error) {
+            console.error(`🔥 Firebase Error getting ${docId}:`, error.message);
+            // Fallback to cached data if offline or network error
+            if (_memoryCache.has(docId)) {
+                console.warn(`Serving cached data for ${docId} due to network error.`);
+                return _memoryCache.get(docId).data;
+            }
+            if (docId !== 'admin') {
+                alert(`Database Read Error: Firebase is blocking data access. Please check your internet connection or Firestore rules.\n\n${error.message}`);
+            }
+            throw error;
+        } finally {
+            _inFlightPromises.delete(docId);
+        }
+    })();
+
+    _inFlightPromises.set(docId, fetchPromise);
+    const result = await fetchPromise;
+    return JSON.parse(JSON.stringify(result));
+}
+
+// Helper to save list to a specific document with optimistic local cache update
 async function setList(docId, list) {
+    // Optimistically update memory cache immediately so UI reflects changes instantly
+    _memoryCache.set(docId, { data: list, timestamp: Date.now() });
+    _inFlightPromises.delete(docId);
+
     try {
         await db.collection('appData').doc(docId).set({ list });
     } catch (error) {
         console.error(`🔥 Firebase Permission Error setting ${docId}:`, error.message);
         alert(`Database Write Error: Firebase is blocking data modifications. Please set Firestore Security Rules to 'true'.\n\n${error.message}`);
+        _memoryCache.delete(docId);
+        throw error;
+    }
+}
+
+// Helper to fetch an arbitrary object document with automatic caching & de-duplication
+async function getDoc(docId, defaultVal = null, forceRefresh = false) {
+    const now = Date.now();
+
+    // A. Check in-memory cache
+    if (!forceRefresh && _memoryCache.has(docId)) {
+        const cached = _memoryCache.get(docId);
+        if (now - cached.timestamp < CACHE_TTL_MS) {
+            return JSON.parse(JSON.stringify(cached.data));
+        }
+    }
+
+    // B. Check in-flight request de-duplication
+    if (!forceRefresh && _inFlightPromises.has(docId)) {
+        const data = await _inFlightPromises.get(docId);
+        return JSON.parse(JSON.stringify(data));
+    }
+
+    // C. Network / Firestore fetch
+    const fetchPromise = (async () => {
+        try {
+            const snapshot = await db.collection('appData').doc(docId).get();
+            let data = defaultVal;
+            if (snapshot.exists) {
+                data = snapshot.data();
+            }
+            _memoryCache.set(docId, { data, timestamp: Date.now() });
+            return data;
+        } catch (error) {
+            console.error(`🔥 Firebase Error getting doc ${docId}:`, error.message);
+            if (_memoryCache.has(docId)) {
+                return _memoryCache.get(docId).data;
+            }
+            if (defaultVal !== null) return defaultVal;
+            throw error;
+        } finally {
+            _inFlightPromises.delete(docId);
+        }
+    })();
+
+    _inFlightPromises.set(docId, fetchPromise);
+    const result = await fetchPromise;
+    return JSON.parse(JSON.stringify(result));
+}
+
+// Helper to save an arbitrary object document with optimistic local cache update
+async function setDoc(docId, data) {
+    _memoryCache.set(docId, { data, timestamp: Date.now() });
+    _inFlightPromises.delete(docId);
+
+    try {
+        await db.collection('appData').doc(docId).set(data);
+    } catch (error) {
+        console.error(`🔥 Firebase Permission Error setting doc ${docId}:`, error.message);
+        _memoryCache.delete(docId);
+        throw error;
     }
 }
 
@@ -100,33 +215,44 @@ async function syncStudentCoins(students) {
 }
 
 const DB = {
-    getStudents: async () => {
-        const students = await getList('students');
+    // Invalidate cached document or all cache
+    invalidateCache: (docId) => {
+        if (docId) {
+            _memoryCache.delete(docId);
+            _inFlightPromises.delete(docId);
+        } else {
+            _memoryCache.clear();
+            _inFlightPromises.clear();
+        }
+    },
+
+    getStudents: async (forceRefresh = false) => {
+        const students = await getList('students', forceRefresh);
         return await syncStudentCoins(students);
     },
     setStudents: async (students) => await setList('students', students),
     
-    getAlumni: async () => await getList('alumni'),
+    getAlumni: async (forceRefresh = false) => await getList('alumni', forceRefresh),
     setAlumni: async (alumni) => await setList('alumni', alumni),
     
-    getTeachers: async () => await getList('teachers'),
+    getTeachers: async (forceRefresh = false) => await getList('teachers', forceRefresh),
     setTeachers: async (teachers) => await setList('teachers', teachers),
     
-    getSalaries: async () => await getList('salaries'),
+    getSalaries: async (forceRefresh = false) => await getList('salaries', forceRefresh),
     setSalaries: async (salaries) => await setList('salaries', salaries),
 
-    getAttendance: async () => await getList('attendance'),
+    getAttendance: async (forceRefresh = false) => await getList('attendance', forceRefresh),
     setAttendance: async (attendance) => await setList('attendance', attendance),
 
-    getCourses: async () => await getList('courses'),
+    getCourses: async (forceRefresh = false) => await getList('courses', forceRefresh),
     setCourses: async (courses) => await setList('courses', courses),
     
-    getSlides: async () => await getList('slides'),
+    getSlides: async (forceRefresh = false) => await getList('slides', forceRefresh),
     setSlides: async (slides) => await setList('slides', slides),
 
-    getSlideSections: async () => {
+    getSlideSections: async (forceRefresh = false) => {
         try {
-            const list = await getList('slideSections');
+            const list = await getList('slideSections', forceRefresh);
             if (!list || list.length === 0) {
                 const defaultSections = [
                     { id: "IX", title: "Class IX Slides" },
@@ -152,9 +278,9 @@ const DB = {
     },
     setSlideSections: async (sections) => await setList('slideSections', sections),
 
-    getNoteSections: async () => {
+    getNoteSections: async (forceRefresh = false) => {
         try {
-            const list = await getList('noteSections');
+            const list = await getList('noteSections', forceRefresh);
             if (!list || list.length === 0) {
                 const defaultNoteSections = [
                     { id: "sec_ix_chem", title: "Chemistry (Class IX)" },
@@ -184,9 +310,9 @@ const DB = {
     },
     setNoteSections: async (sections) => await setList('noteSections', sections),
 
-    getNotes: async () => {
+    getNotes: async (forceRefresh = false) => {
         try {
-            const list = await getList('notes');
+            const list = await getList('notes', forceRefresh);
             if (!list || list.length === 0) {
                 const defaultNotes = [
                     { id: "n1", sectionId: "sec_ix_chem", title: "Chemistry CH 3 Atoms & Molecules", link: "Notes/IX_SCIENCE/ATOMSANDMOLECULES.pdf" },
@@ -219,9 +345,9 @@ const DB = {
     },
     setNotes: async (notes) => await setList('notes', notes),
 
-    getVideoLectures: async () => {
+    getVideoLectures: async (forceRefresh = false) => {
         try {
-            const list = await getList('videoLectures');
+            const list = await getList('videoLectures', forceRefresh);
             if (list.length === 0) {
                 const response = await fetch('js/default_lectures.json');
                 const defaultList = await response.json();
@@ -236,27 +362,19 @@ const DB = {
     },
     setVideoLectures: async (lectures) => await setList('videoLectures', lectures),
     
-    getAdmin: async () => {
-        try {
-            const snapshot = await db.collection('appData').doc('admin').get();
-            if (snapshot.exists) {
-                return snapshot.data();
-            }
-            return { id: "admin", password: "admin123" };
-        } catch (e) {
-            throw e;
-        }
+    getAdmin: async (forceRefresh = false) => {
+        return await getDoc('admin', { id: "admin", password: "admin123" }, forceRefresh);
     },
     setAdmin: async (admin) => {
-        await db.collection('appData').doc('admin').set(admin);
+        await setDoc('admin', admin);
     },
 
-    getTests: async () => await getList('tests'),
+    getTests: async (forceRefresh = false) => await getList('tests', forceRefresh),
     setTests: async (tests) => await setList('tests', tests),
 
-    getAssignments: async () => {
+    getAssignments: async (forceRefresh = false) => {
         try {
-            const list = await getList('assignments');
+            const list = await getList('assignments', forceRefresh);
             if (!list || list.length === 0) {
                 const defaultAssignments = [
                     {
@@ -319,9 +437,9 @@ const DB = {
     },
     setAssignments: async (assignments) => await setList('assignments', assignments),
 
-    getOnlineAssessments: async () => {
+    getOnlineAssessments: async (forceRefresh = false) => {
         try {
-            const list = await getList('onlineAssessments');
+            const list = await getList('onlineAssessments', forceRefresh);
             if (!list || list.length === 0) {
                 const defaultAssessments = [
                     {
@@ -643,30 +761,19 @@ const DB = {
     setCurrentUser: (user) => localStorage.setItem('pc_currentUser', JSON.stringify(user)),
     logout: () => localStorage.removeItem('pc_currentUser'),
 
-    getAnnouncement: async () => {
-        try {
-            const snapshot = await db.collection('appData').doc('announcement').get();
-            if (snapshot.exists) {
-                return snapshot.data() || { text: "", enabled: false };
-            }
-            return { text: "Welcome to Paradigm Classes! Admissions are now open for the academic session 2026-2027. Enroll today!", enabled: true };
-        } catch (e) {
-            console.error("Error getting announcement:", e.message);
-            return { text: "", enabled: false };
-        }
+    getAnnouncement: async (forceRefresh = false) => {
+        return await getDoc('announcement', {
+            text: "Welcome to Paradigm Classes! Admissions are now open for the academic session 2026-2027. Enroll today!",
+            enabled: true
+        }, forceRefresh);
     },
     setAnnouncement: async (announcement) => {
-        try {
-            await db.collection('appData').doc('announcement').set(announcement);
-        } catch (e) {
-            console.error("Error setting announcement:", e.message);
-            alert("Database Error setting announcement: " + e.message);
-        }
+        await setDoc('announcement', announcement);
     },
 
-    getAuditLogs: async () => {
+    getAuditLogs: async (forceRefresh = false) => {
         try {
-            const logs = await getList('auditLogs');
+            const logs = await getList('auditLogs', forceRefresh);
             return logs || [];
         } catch (e) {
             console.warn("Error getting audit logs:", e);
@@ -692,9 +799,9 @@ const DB = {
         }
     },
 
-    getClassAnnouncements: async () => {
+    getClassAnnouncements: async (forceRefresh = false) => {
         try {
-            const list = await getList('classAnnouncements');
+            const list = await getList('classAnnouncements', forceRefresh);
             return list || [];
         } catch (e) {
             console.warn("Error getting class announcements:", e);
@@ -705,14 +812,12 @@ const DB = {
     
     initData: async () => {
         try {
-            // Only set default admin if the admin doc truly doesn't exist
-            const snapshot = await db.collection('appData').doc('admin').get();
-            if (!snapshot.exists) {
+            const admin = await DB.getAdmin();
+            if (!admin || !admin.id) {
                 await DB.setAdmin({ id: "admin", password: "admin123" });
             }
         } catch (e) {
-            console.error("Firebase init check failed:", e.message);
-            // Do not seed any dummy data to prevent accidental overwrites
+            console.warn("Firebase init check failed:", e.message);
         }
     }
 };
