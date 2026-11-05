@@ -432,7 +432,7 @@
         }
 
         .admin-modal-overlay.show {
-            display: flex;
+            display: flex !important;
             animation: modalFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -1773,7 +1773,7 @@
                                                 <option value="present-desc">Highest Present Days</option>
                                             </select>
                                         </div>
-                                        <button type="button" id="openAttendancePdfModalBtn" class="btn btn-primary" style="background: #1e3a8a; border-color: #1e3a8a; padding: 0.35rem 0.85rem; font-size: 0.82rem; font-weight: 700; border-radius: var(--radius-md); cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem;" title="Export and download attendance as PDF">
+                                        <button type="button" id="openAttendancePdfModalBtn" onclick="openAttendancePdfModal()" class="btn btn-primary" style="background: #1e3a8a; border-color: #1e3a8a; padding: 0.35rem 0.85rem; font-size: 0.82rem; font-weight: 700; border-radius: var(--radius-md); cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem;" title="Export and download attendance as PDF">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                                             Download PDF
                                         </button>
@@ -2226,7 +2226,7 @@
     </div>
 
     <!-- 6. Attendance PDF Download Modal -->
-    <div class="admin-modal-overlay" id="adminAttendancePdfModal">
+    <div class="admin-modal-overlay" id="adminAttendancePdfModal" onclick="if(event.target === this) closeAdminModal('adminAttendancePdfModal')">
         <div class="admin-modal-container" style="max-width: 600px;">
             <div class="admin-modal-header no-print">
                 <div style="display: flex; align-items: center; gap: 0.5rem;">
@@ -2309,10 +2309,10 @@
             </div>
             <div class="admin-modal-footer no-print">
                 <button type="button" class="btn btn-outline" onclick="closeAdminModal('adminAttendancePdfModal')">Cancel</button>
-                <button type="button" class="btn btn-outline" id="printAttendanceReportPreviewBtn" style="display: inline-flex; align-items: center; gap: 0.35rem;">
+                <button type="button" class="btn btn-outline" id="printAttendanceReportPreviewBtn" onclick="printAttendanceReportPreview()" style="display: inline-flex; align-items: center; gap: 0.35rem;">
                     🖨️ Print / Preview
                 </button>
-                <button type="button" class="btn btn-primary" id="confirmDownloadAttendancePdfBtn" style="background: #1e3a8a; border-color: #1e3a8a; display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 700;">
+                <button type="button" class="btn btn-primary" id="confirmDownloadAttendancePdfBtn" onclick="confirmDownloadAttendancePdf()" style="background: #1e3a8a; border-color: #1e3a8a; display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 700;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                     Download PDF
                 </button>

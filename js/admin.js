@@ -1,3 +1,195 @@
+// ==========================================
+// Global Admin Modal & Attendance PDF Controls
+// (Defined immediately at top-level so UI never blocks)
+// ==========================================
+
+window.closeAdminModal = function(modalId) {
+    const m = document.getElementById(modalId);
+    if (m) {
+        m.classList.remove('show');
+        m.style.display = 'none';
+    }
+};
+
+window.openAdminModal = function(modalId) {
+    const m = document.getElementById(modalId);
+    if (m) {
+        m.classList.add('show');
+        m.style.display = 'flex';
+    }
+};
+
+window.toggleAttendancePdfCustomDates = function() {
+    const dateRangeSelect = document.getElementById('attPdfDateRangeSelect');
+    const customRow = document.getElementById('attPdfCustomDateRow');
+    if (dateRangeSelect && customRow) {
+        customRow.style.display = dateRangeSelect.value === 'custom' ? 'grid' : 'none';
+    }
+};
+
+window.openAttendancePdfModal = function() {
+    // 1. Immediately display modal popup without any delay
+    window.openAdminModal('adminAttendancePdfModal');
+
+    // 2. Sync sort selection with current on-page sort
+    try {
+        const onPageSort = document.getElementById('adminAttendanceSortSelect');
+        const attPdfSortSelect = document.getElementById('attPdfSortSelect');
+        if (onPageSort && attPdfSortSelect) {
+            attPdfSortSelect.value = onPageSort.value;
+        }
+    } catch (e) {
+        console.warn('Sort sync error:', e);
+    }
+
+    // 3. Reset dates and alert
+    try {
+        const dateRangeSelect = document.getElementById('attPdfDateRangeSelect');
+        if (dateRangeSelect) dateRangeSelect.value = 'all';
+        if (typeof window.toggleAttendancePdfCustomDates === 'function') {
+            window.toggleAttendancePdfCustomDates();
+        }
+
+        const statusAlert = document.getElementById('attPdfStatusAlert');
+        if (statusAlert) statusAlert.style.display = 'none';
+    } catch (e) {
+        console.warn('Modal reset error:', e);
+    }
+
+    // 4. Asynchronously populate Class Filter in the background
+    const attPdfClassFilter = document.getElementById('attPdfClassFilter');
+    if (attPdfClassFilter && window.DB && typeof window.DB.getStudents === 'function') {
+        window.DB.getStudents().then(students => {
+            if (!students || !Array.isArray(students)) return;
+            const classes = [...new Set(students.map(s => s.class).filter(Boolean))].sort();
+            attPdfClassFilter.innerHTML = '<option value="all">All Classes (Entire Institute)</option>';
+            classes.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c;
+                opt.textContent = `Class ${c}`;
+                attPdfClassFilter.appendChild(opt);
+            });
+        }).catch(e => {
+            console.error('Error populating attendance class filter:', e);
+        });
+    }
+};
+
+window.confirmDownloadAttendancePdf = async function() {
+    const attPdfSortSelect = document.getElementById('attPdfSortSelect');
+    const attPdfClassFilter = document.getElementById('attPdfClassFilter');
+    const attPdfReportType = document.getElementById('attPdfReportType');
+    const attPdfDateRangeSelect = document.getElementById('attPdfDateRangeSelect');
+    const attPdfStartDate = document.getElementById('attPdfStartDate');
+    const attPdfEndDate = document.getElementById('attPdfEndDate');
+    const statusAlert = document.getElementById('attPdfStatusAlert');
+    const confirmBtn = document.getElementById('confirmDownloadAttendancePdfBtn');
+
+    const sortBy = attPdfSortSelect ? attPdfSortSelect.value : 'name-asc';
+    const classFilter = attPdfClassFilter ? attPdfClassFilter.value : 'all';
+    const reportType = attPdfReportType ? attPdfReportType.value : 'summary';
+    const dateRangeType = attPdfDateRangeSelect ? attPdfDateRangeSelect.value : 'all';
+    const startDate = attPdfStartDate ? attPdfStartDate.value : null;
+    const endDate = attPdfEndDate ? attPdfEndDate.value : null;
+
+    if (dateRangeType === 'custom' && (!startDate || !endDate)) {
+        alert('Please select both Start Date and End Date for custom date range.');
+        return;
+    }
+
+    const originalText = confirmBtn ? confirmBtn.innerHTML : 'Download PDF';
+
+    try {
+        if (confirmBtn) {
+            confirmBtn.disabled = true;
+            confirmBtn.innerHTML = '⏳ Generating PDF...';
+        }
+
+        if (statusAlert) {
+            statusAlert.style.display = 'block';
+            statusAlert.style.background = '#eff6ff';
+            statusAlert.style.color = '#1e3a8a';
+            statusAlert.textContent = 'Generating official Attendance PDF report, please wait...';
+        }
+
+        const students = await DB.getStudents();
+        const attendanceList = await DB.getAttendance();
+
+        if (!window.ParadigmPDF || typeof window.ParadigmPDF.downloadAttendancePDF !== 'function') {
+            throw new Error('ParadigmPDF utility is not available.');
+        }
+
+        await window.ParadigmPDF.downloadAttendancePDF(students, attendanceList, {
+            sortBy,
+            classFilter,
+            reportType,
+            dateRangeType,
+            startDate,
+            endDate
+        });
+
+        if (statusAlert) {
+            statusAlert.style.background = '#dcfce7';
+            statusAlert.style.color = '#166534';
+            statusAlert.textContent = '✓ Attendance PDF generated and download initiated successfully!';
+        }
+
+        setTimeout(() => {
+            window.closeAdminModal('adminAttendancePdfModal');
+            if (confirmBtn) {
+                confirmBtn.disabled = false;
+                confirmBtn.innerHTML = originalText;
+            }
+            if (statusAlert) statusAlert.style.display = 'none';
+        }, 1200);
+
+    } catch (err) {
+        console.error('Error generating attendance PDF:', err);
+        alert('Error generating attendance PDF: ' + err.message);
+        if (confirmBtn) {
+            confirmBtn.disabled = false;
+            confirmBtn.innerHTML = originalText;
+        }
+        if (statusAlert) statusAlert.style.display = 'none';
+    }
+};
+
+window.printAttendanceReportPreview = async function() {
+    const attPdfSortSelect = document.getElementById('attPdfSortSelect');
+    const attPdfClassFilter = document.getElementById('attPdfClassFilter');
+    const attPdfReportType = document.getElementById('attPdfReportType');
+    const attPdfDateRangeSelect = document.getElementById('attPdfDateRangeSelect');
+    const attPdfStartDate = document.getElementById('attPdfStartDate');
+    const attPdfEndDate = document.getElementById('attPdfEndDate');
+
+    const sortBy = attPdfSortSelect ? attPdfSortSelect.value : 'name-asc';
+    const classFilter = attPdfClassFilter ? attPdfClassFilter.value : 'all';
+    const reportType = attPdfReportType ? attPdfReportType.value : 'summary';
+    const dateRangeType = attPdfDateRangeSelect ? attPdfDateRangeSelect.value : 'all';
+    const startDate = attPdfStartDate ? attPdfStartDate.value : null;
+    const endDate = attPdfEndDate ? attPdfEndDate.value : null;
+
+    try {
+        const students = await DB.getStudents();
+        const attendanceList = await DB.getAttendance();
+
+        if (window.ParadigmPDF && typeof window.ParadigmPDF.generateAttendanceReportHTML === 'function') {
+            const html = window.ParadigmPDF.generateAttendanceReportHTML(students, attendanceList, {
+                sortBy,
+                classFilter,
+                reportType,
+                dateRangeType,
+                startDate,
+                endDate
+            });
+            window.ParadigmPDF.printAttendanceFallback(html, 'Paradigm Classes Attendance Report');
+        }
+    } catch (e) {
+        console.error('Preview error:', e);
+        alert('Failed to preview attendance report: ' + e.message);
+    }
+};
+
 async function initAdminDashboard() {
     const user = Auth.checkAuth('admin');
     if (!user) return;
@@ -122,11 +314,17 @@ async function initAdminDashboard() {
     window.switchAdminTab = switchTab;
     window.closeAdminModal = (modalId) => {
         const m = document.getElementById(modalId);
-        if (m) m.classList.remove('show');
+        if (m) {
+            m.classList.remove('show');
+            m.style.display = 'none';
+        }
     };
     window.openAdminModal = (modalId) => {
         const m = document.getElementById(modalId);
-        if (m) m.classList.add('show');
+        if (m) {
+            m.classList.add('show');
+            m.style.display = 'flex';
+        }
     };
 
     const cachedTab = sessionStorage.getItem('adminActiveTab') || 'overview';
@@ -2830,161 +3028,20 @@ async function initAdminDashboard() {
         });
     }
 
-    // === Admin Attendance PDF Download Modal & Generation ===
-    window.toggleAttendancePdfCustomDates = () => {
-        const dateRangeSelect = document.getElementById('attPdfDateRangeSelect');
-        const customRow = document.getElementById('attPdfCustomDateRow');
-        if (dateRangeSelect && customRow) {
-            customRow.style.display = dateRangeSelect.value === 'custom' ? 'grid' : 'none';
-        }
-    };
-
+    // === Admin Attendance PDF Download Event Bindings ===
     const openAttendancePdfModalBtn = document.getElementById('openAttendancePdfModalBtn');
     if (openAttendancePdfModalBtn) {
-        openAttendancePdfModalBtn.addEventListener('click', async () => {
-            // 1. Sync sort selection with current on-page sort
-            const onPageSort = document.getElementById('adminAttendanceSortSelect');
-            const attPdfSortSelect = document.getElementById('attPdfSortSelect');
-            if (onPageSort && attPdfSortSelect) {
-                attPdfSortSelect.value = onPageSort.value;
-            }
-
-            // 2. Populate Class Filter dynamically from database
-            const attPdfClassFilter = document.getElementById('attPdfClassFilter');
-            if (attPdfClassFilter) {
-                try {
-                    const students = await DB.getStudents();
-                    const classes = [...new Set(students.map(s => s.class).filter(Boolean))].sort();
-                    attPdfClassFilter.innerHTML = '<option value="all">All Classes (Entire Institute)</option>';
-                    classes.forEach(c => {
-                        const opt = document.createElement('option');
-                        opt.value = c;
-                        opt.textContent = `Class ${c}`;
-                        attPdfClassFilter.appendChild(opt);
-                    });
-                } catch (e) {
-                    console.error('Error populating attendance class filter:', e);
-                }
-            }
-
-            // 3. Reset dates and alert
-            const dateRangeSelect = document.getElementById('attPdfDateRangeSelect');
-            if (dateRangeSelect) dateRangeSelect.value = 'all';
-            window.toggleAttendancePdfCustomDates();
-
-            const statusAlert = document.getElementById('attPdfStatusAlert');
-            if (statusAlert) statusAlert.style.display = 'none';
-
-            window.openAdminModal('adminAttendancePdfModal');
-        });
+        openAttendancePdfModalBtn.addEventListener('click', window.openAttendancePdfModal);
     }
 
     const confirmDownloadAttendancePdfBtn = document.getElementById('confirmDownloadAttendancePdfBtn');
     if (confirmDownloadAttendancePdfBtn) {
-        confirmDownloadAttendancePdfBtn.addEventListener('click', async () => {
-            const attPdfSortSelect = document.getElementById('attPdfSortSelect');
-            const attPdfClassFilter = document.getElementById('attPdfClassFilter');
-            const attPdfReportType = document.getElementById('attPdfReportType');
-            const attPdfDateRangeSelect = document.getElementById('attPdfDateRangeSelect');
-            const attPdfStartDate = document.getElementById('attPdfStartDate');
-            const attPdfEndDate = document.getElementById('attPdfEndDate');
-            const statusAlert = document.getElementById('attPdfStatusAlert');
-
-            const sortBy = attPdfSortSelect ? attPdfSortSelect.value : 'name-asc';
-            const classFilter = attPdfClassFilter ? attPdfClassFilter.value : 'all';
-            const reportType = attPdfReportType ? attPdfReportType.value : 'summary';
-            const dateRangeType = attPdfDateRangeSelect ? attPdfDateRangeSelect.value : 'all';
-            const startDate = attPdfStartDate ? attPdfStartDate.value : null;
-            const endDate = attPdfEndDate ? attPdfEndDate.value : null;
-
-            if (dateRangeType === 'custom' && (!startDate || !endDate)) {
-                alert('Please select both Start Date and End Date for custom date range.');
-                return;
-            }
-
-            try {
-                confirmDownloadAttendancePdfBtn.disabled = true;
-                const originalText = confirmDownloadAttendancePdfBtn.innerHTML;
-                confirmDownloadAttendancePdfBtn.innerHTML = '⏳ Generating PDF...';
-
-                if (statusAlert) {
-                    statusAlert.style.display = 'block';
-                    statusAlert.style.background = '#eff6ff';
-                    statusAlert.style.color = '#1e3a8a';
-                    statusAlert.textContent = 'Generating official Attendance PDF report, please wait...';
-                }
-
-                const students = await DB.getStudents();
-                const attendanceList = await DB.getAttendance();
-
-                if (!window.ParadigmPDF || typeof window.ParadigmPDF.downloadAttendancePDF !== 'function') {
-                    throw new Error('ParadigmPDF utility is not available.');
-                }
-
-                await window.ParadigmPDF.downloadAttendancePDF(students, attendanceList, {
-                    sortBy,
-                    classFilter,
-                    reportType,
-                    dateRangeType,
-                    startDate,
-                    endDate
-                });
-
-                if (statusAlert) {
-                    statusAlert.style.background = '#dcfce7';
-                    statusAlert.style.color = '#166534';
-                    statusAlert.textContent = '✓ Attendance PDF generated and download initiated successfully!';
-                }
-
-                setTimeout(() => {
-                    closeAdminModal('adminAttendancePdfModal');
-                    confirmDownloadAttendancePdfBtn.disabled = false;
-                    confirmDownloadAttendancePdfBtn.innerHTML = originalText;
-                    if (statusAlert) statusAlert.style.display = 'none';
-                }, 1200);
-
-            } catch (err) {
-                console.error('Error generating attendance PDF:', err);
-                alert('Error generating attendance PDF: ' + err.message);
-                confirmDownloadAttendancePdfBtn.disabled = false;
-                confirmDownloadAttendancePdfBtn.innerHTML = 'Download PDF';
-                if (statusAlert) statusAlert.style.display = 'none';
-            }
-        });
+        confirmDownloadAttendancePdfBtn.addEventListener('click', window.confirmDownloadAttendancePdf);
     }
 
     const printAttendanceReportPreviewBtn = document.getElementById('printAttendanceReportPreviewBtn');
     if (printAttendanceReportPreviewBtn) {
-        printAttendanceReportPreviewBtn.addEventListener('click', async () => {
-            const attPdfSortSelect = document.getElementById('attPdfSortSelect');
-            const attPdfClassFilter = document.getElementById('attPdfClassFilter');
-            const attPdfReportType = document.getElementById('attPdfReportType');
-            const attPdfDateRangeSelect = document.getElementById('attPdfDateRangeSelect');
-            const attPdfStartDate = document.getElementById('attPdfStartDate');
-            const attPdfEndDate = document.getElementById('attPdfEndDate');
-
-            const sortBy = attPdfSortSelect ? attPdfSortSelect.value : 'name-asc';
-            const classFilter = attPdfClassFilter ? attPdfClassFilter.value : 'all';
-            const reportType = attPdfReportType ? attPdfReportType.value : 'summary';
-            const dateRangeType = attPdfDateRangeSelect ? attPdfDateRangeSelect.value : 'all';
-            const startDate = attPdfStartDate ? attPdfStartDate.value : null;
-            const endDate = attPdfEndDate ? attPdfEndDate.value : null;
-
-            const students = await DB.getStudents();
-            const attendanceList = await DB.getAttendance();
-
-            if (window.ParadigmPDF && typeof window.ParadigmPDF.generateAttendanceReportHTML === 'function') {
-                const html = window.ParadigmPDF.generateAttendanceReportHTML(students, attendanceList, {
-                    sortBy,
-                    classFilter,
-                    reportType,
-                    dateRangeType,
-                    startDate,
-                    endDate
-                });
-                window.ParadigmPDF.printAttendanceFallback(html, 'Paradigm Classes Attendance Report');
-            }
-        });
+        printAttendanceReportPreviewBtn.addEventListener('click', window.printAttendanceReportPreview);
     }
 
     // === OVERVIEW, TESTS, RESULTS, RECEIPTS & AUDIT LOGS IMPLEMENTATION ===
