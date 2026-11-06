@@ -1457,15 +1457,29 @@ async function initAdminDashboard() {
         const dueDate = new Date(startDate);
         dueDate.setDate(dueDate.getDate() + 5);
         const delayDays = isNaN(payDateObj.getTime()) || isNaN(dueDate.getTime()) ? 0 : Math.max(0, Math.floor((payDateObj - dueDate) / (1000 * 60 * 60 * 24)));
-        const fine = delayDays * 30;
+        const calculatedFine = delayDays * 30;
+
+        const includeFineEl = document.getElementById(`includeFine-${startStr}`);
+        const includeFine = includeFineEl ? includeFineEl.checked : true;
+
+        const fine = includeFine ? calculatedFine : 0;
         const total = (baseFees || 0) + fine;
+
         const fineEl = document.getElementById(`fineDisplay-${startStr}`);
         const totalEl = document.getElementById(`totalDisplay-${startStr}`);
-        if (fineEl) fineEl.textContent = `₹${fine.toLocaleString('en-IN')}`;
+        if (fineEl) {
+            if (!includeFine && calculatedFine > 0) {
+                fineEl.innerHTML = `<span style="text-decoration: line-through; color: #94a3b8; font-size: 0.8rem;">₹${calculatedFine.toLocaleString('en-IN')}</span> <span class="badge" style="background: #f1f5f9; color: #475569; font-size: 0.72rem; padding: 0.1rem 0.35rem; border-radius: 4px;">Waived (₹0)</span>`;
+            } else if (fine > 0) {
+                fineEl.innerHTML = `<span style="color: #b91c1c; font-weight: 700;">₹${fine.toLocaleString('en-IN')}</span>`;
+            } else {
+                fineEl.textContent = '₹0';
+            }
+        }
         if (totalEl) totalEl.textContent = `₹${total.toLocaleString('en-IN')}`;
     };
 
-    window.markFeePaid = async (studentId, cycleStart, payDate) => {
+    window.markFeePaid = async (studentId, cycleStart, payDate, includeFine = true) => {
         const students = await DB.getStudents();
         const studentIndex = students.findIndex(s => s.id === studentId);
         if(studentIndex === -1) return;
@@ -1475,12 +1489,13 @@ async function initAdminDashboard() {
         const paymentDateStr = payDate || new Date().toISOString().split('T')[0];
         const payDateObj = new Date(paymentDateStr);
 
-        // Compute the fine locked in at the time of payment
+        // Compute the fine based on payment date and includeFine flag
         const startDate = new Date(cycleStart);
         const dueDate = new Date(startDate);
         dueDate.setDate(dueDate.getDate() + 5);
         const delayDays = isNaN(payDateObj.getTime()) || isNaN(dueDate.getTime()) ? 0 : Math.max(0, Math.floor((payDateObj - dueDate) / (1000 * 60 * 60 * 24)));
-        const fineLock = delayDays * 30;
+        const calculatedFine = delayDays * 30;
+        const fineLock = (includeFine === false || includeFine === 'false') ? 0 : calculatedFine;
         const baseFee = student.fees || 0;
         const totalFee = baseFee + fineLock;
 
@@ -1491,6 +1506,7 @@ async function initAdminDashboard() {
             feePaid: totalFee,
             balance: 0,
             finePaid: fineLock,
+            fineWaived: !fineLock && calculatedFine > 0,
             paidOn: paymentDateStr,
             markedBy: 'Admin'
         };
@@ -1550,6 +1566,66 @@ async function initAdminDashboard() {
         alert('Fees marked as paid and teacher salary payouts distributed successfully.');
     };
 
+    window.editPaidFeeCycle = (studentId, startStr) => {
+        const row = document.getElementById(`feeCycleRow-${startStr}`);
+        if (!row) return;
+
+        DB.getStudents().then(students => {
+            const student = students.find(s => s.id === studentId);
+            if (!student) return;
+            const payments = student.feePayments || [];
+            const paymentRecord = payments.find(p => p.cycleStart === startStr);
+            if (!paymentRecord) return;
+
+            const baseFees = student.fees || 0;
+            const paidOnVal = paymentRecord.paidOn || new Date().toISOString().split('T')[0];
+            const startDate = new Date(startStr);
+            const dueDate = new Date(startDate);
+            dueDate.setDate(dueDate.getDate() + 5);
+            const paidDateObj = new Date(paidOnVal);
+            const delayDays = isNaN(paidDateObj.getTime()) || isNaN(dueDate.getTime()) ? 0 : Math.max(0, Math.floor((paidDateObj - dueDate) / (1000 * 60 * 60 * 24)));
+            const calculatedFine = delayDays * 30;
+            const isFineIncluded = (paymentRecord.finePaid || 0) > 0 || (calculatedFine > 0 && !paymentRecord.fineWaived);
+
+            const currentFine = isFineIncluded ? calculatedFine : 0;
+            const totalDue = baseFees + currentFine;
+
+            let fineHTML = `₹${currentFine.toLocaleString('en-IN')}`;
+            if (!isFineIncluded && calculatedFine > 0) {
+                fineHTML = `<span style="text-decoration: line-through; color: #94a3b8; font-size: 0.8rem;">₹${calculatedFine.toLocaleString('en-IN')}</span> <span class="badge" style="background: #f1f5f9; color: #475569; font-size: 0.72rem; padding: 0.1rem 0.35rem; border-radius: 4px;">Waived (₹0)</span>`;
+            } else if (currentFine > 0) {
+                fineHTML = `<span style="color: #b91c1c; font-weight: 700;">₹${currentFine.toLocaleString('en-IN')}</span>`;
+            }
+
+            const endCycle = new Date(startDate);
+            endCycle.setDate(endCycle.getDate() + 30);
+            const endStr = endCycle.toISOString().split('T')[0];
+
+            row.innerHTML = `
+                <td>${row.cells[0]?.textContent || 'Cycle'}</td>
+                <td>${DB.formatDate(startStr)}</td>
+                <td>${DB.formatDate(endStr)}</td>
+                <td class="text-right">₹${baseFees.toLocaleString('en-IN')}</td>
+                <td class="text-right" id="fineDisplay-${startStr}">${fineHTML}</td>
+                <td class="text-right" style="font-weight: 700; color: #166534;" id="totalDisplay-${startStr}">₹${totalDue.toLocaleString('en-IN')}</td>
+                <td><span class="badge badge-info" style="background:#e0f2fe;color:#0369a1;">Editing</span></td>
+                <td>
+                    <div style="display: flex; flex-direction: column; gap: 0.35rem; min-width: 175px;">
+                        <input type="date" id="payDate-${startStr}" class="form-input" style="padding: 0.25rem 0.5rem; font-size: 0.82rem; border-radius: 4px;" value="${paidOnVal}" onchange="window.updateAdminFeeCycleCalc('${startStr}', '${startStr}', ${baseFees})">
+                        <label style="display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; font-weight: 600; color: #334155; cursor: pointer; user-select: none; background: #f8fafc; padding: 0.2rem 0.4rem; border: 1px solid #e2e8f0; border-radius: 4px;" title="Check to include late fine; uncheck to waive fine">
+                            <input type="checkbox" id="includeFine-${startStr}" ${isFineIncluded ? 'checked' : ''} onchange="window.updateAdminFeeCycleCalc('${startStr}', '${startStr}', ${baseFees})" style="cursor: pointer; accent-color: #1e3a8a; width: 14px; height: 14px;">
+                            <span>Include Fine</span>
+                        </label>
+                        <div style="display: flex; gap: 0.3rem;">
+                            <button class="btn btn-primary" style="flex: 1; padding: 0.3rem 0.5rem; font-size: 0.8rem; font-weight: 700; background: #1e3a8a; border-color: #1e3a8a; border-radius: 4px;" onclick="markFeePaid('${student.id}', '${startStr}', document.getElementById('payDate-${startStr}').value, document.getElementById('includeFine-${startStr}') ? document.getElementById('includeFine-${startStr}').checked : true)">Update</button>
+                            <button class="btn btn-outline" style="padding: 0.3rem 0.5rem; font-size: 0.8rem; border-radius: 4px;" onclick="renderFeeCycles('${student.id}')">Cancel</button>
+                        </div>
+                    </div>
+                </td>
+            `;
+        });
+    };
+
     async function renderFeeCycles(studentId) {
         if(!feeCyclesTableBody) return;
         feeCyclesTableBody.innerHTML = '';
@@ -1582,16 +1658,28 @@ async function initAdminDashboard() {
                 const fine = paymentRecord.finePaid || 0;
                 const totalPaid = baseFees + fine;
 
+                let fineCellHTML = `₹${fine.toLocaleString('en-IN')}`;
+                if (paymentRecord.fineWaived || (fine === 0 && paymentRecord.feePaid === baseFees && (new Date(paymentRecord.paidOn) - new Date(startStr)) > 5 * 24 * 3600 * 1000)) {
+                    fineCellHTML = `<span class="badge" style="background:#f1f5f9;color:#475569;font-size:0.75rem;padding:0.15rem 0.4rem;border-radius:4px;">Waived (₹0)</span>`;
+                } else if (fine > 0) {
+                    fineCellHTML = `<span style="color:#b91c1c;font-weight:700;">₹${fine.toLocaleString('en-IN')}</span>`;
+                }
+
                 rowHtml += `
                     <td class="text-right">₹${baseFees.toLocaleString('en-IN')}</td>
-                    <td class="text-right">₹${fine.toLocaleString('en-IN')}</td>
+                    <td class="text-right">${fineCellHTML}</td>
                     <td class="text-right" style="font-weight: 700; color: #166534;">₹${totalPaid.toLocaleString('en-IN')}</td>
                     <td><span class="badge badge-success" style="background:#dcfce7;color:#166534;">Paid</span><br><small>by ${paymentRecord.markedBy}</small><br><small>on ${DB.formatDate(paymentRecord.paidOn)}</small></td>
                     <td>
-                        <button class="btn btn-outline" style="padding: 0.25rem 0.6rem; font-size: 0.8rem; color: #1e3a8a; border-color: #1e3a8a; display: inline-flex; align-items: center; gap: 0.3rem;" onclick="openAdminFeeReceiptModal('${student.id}', '${startStr}')">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-                            Receipt
-                        </button>
+                        <div style="display: flex; gap: 0.35rem; align-items: center; flex-wrap: wrap;">
+                            <button class="btn btn-outline" style="padding: 0.25rem 0.6rem; font-size: 0.8rem; color: #1e3a8a; border-color: #1e3a8a; display: inline-flex; align-items: center; gap: 0.3rem;" onclick="openAdminFeeReceiptModal('${student.id}', '${startStr}')">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                                Receipt
+                            </button>
+                            <button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; color: #475569; border-color: #cbd5e1; display: inline-flex; align-items: center; gap: 0.25rem;" onclick="window.editPaidFeeCycle('${student.id}', '${startStr}')" title="Edit payment details or waive/include fine">
+                                ✏️ Edit
+                            </button>
+                        </div>
                     </td>
                 `;
             } else {
@@ -1602,19 +1690,34 @@ async function initAdminDashboard() {
                 const currentFine = delayDays * 30;
                 const totalDue = baseFees + currentFine;
                 
+                let fineDisplayHTML = `₹${currentFine.toLocaleString('en-IN')}`;
+                if (currentFine > 0) {
+                    fineDisplayHTML = `<span style="color: #b91c1c; font-weight: 700;">₹${currentFine.toLocaleString('en-IN')}</span>`;
+                }
+
                 rowHtml += `
                     <td class="text-right">₹${baseFees.toLocaleString('en-IN')}</td>
-                    <td class="text-right" id="fineDisplay-${startStr}">₹${currentFine.toLocaleString('en-IN')}</td>
+                    <td class="text-right" id="fineDisplay-${startStr}">${fineDisplayHTML}</td>
                     <td class="text-right" style="font-weight: 700; color: #166534;" id="totalDisplay-${startStr}">₹${totalDue.toLocaleString('en-IN')}</td>
                     <td><span class="badge badge-warning" style="background:#fef08a;color:#854d0e;">Unpaid</span></td>
-                    <td style="display: flex; flex-direction: column; gap: 0.3rem;">
-                        <input type="date" id="payDate-${startStr}" class="form-input" style="padding: 0.2rem; font-size: 0.85rem;" value="${todayStr}" onchange="window.updateAdminFeeCycleCalc('${startStr}', '${startStr}', ${baseFees})">
-                        <button class="btn btn-primary" style="padding: 0.25rem 0.6rem; font-size: 0.85rem; background:#b91c1c; border-color:#b91c1c;" onclick="markFeePaid('${student.id}', '${startStr}', document.getElementById('payDate-${startStr}').value)">Mark Paid</button>
+                    <td>
+                        <div style="display: flex; flex-direction: column; gap: 0.35rem; min-width: 175px;">
+                            <input type="date" id="payDate-${startStr}" class="form-input" style="padding: 0.25rem 0.5rem; font-size: 0.82rem; border-radius: 4px;" value="${todayStr}" onchange="window.updateAdminFeeCycleCalc('${startStr}', '${startStr}', ${baseFees})" title="Payment Date">
+                            <label style="display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; font-weight: 600; color: #334155; cursor: pointer; user-select: none; background: #f8fafc; padding: 0.2rem 0.4rem; border: 1px solid #e2e8f0; border-radius: 4px;" title="Check to include late fine (₹30/day after 5 days); uncheck to waive fine">
+                                <input type="checkbox" id="includeFine-${startStr}" checked onchange="window.updateAdminFeeCycleCalc('${startStr}', '${startStr}', ${baseFees})" style="cursor: pointer; accent-color: #1e3a8a; width: 14px; height: 14px;">
+                                <span>Include Fine</span>
+                            </label>
+                            <button class="btn btn-primary" style="padding: 0.3rem 0.6rem; font-size: 0.82rem; font-weight: 700; background:#b91c1c; border-color:#b91c1c; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; gap: 0.3rem;" onclick="markFeePaid('${student.id}', '${startStr}', document.getElementById('payDate-${startStr}').value, document.getElementById('includeFine-${startStr}') ? document.getElementById('includeFine-${startStr}').checked : true)">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                Mark Paid
+                            </button>
+                        </div>
                     </td>
                 `;
             }
             
             const tr = document.createElement('tr');
+            tr.id = `feeCycleRow-${startStr}`;
             tr.innerHTML = rowHtml;
             feeCyclesTableBody.appendChild(tr);
 
