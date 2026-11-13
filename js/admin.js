@@ -345,9 +345,11 @@ async function initAdminDashboard() {
 
     // Financial Overview Calculation
     async function calculateFinancials() {
-        const students = await DB.getStudents();
-        const alumni = await DB.getAlumni();
-        const teachers = await DB.getTeachers();
+        const [students, alumni, teachers] = await Promise.all([
+            DB.getStudents(),
+            DB.getAlumni(),
+            DB.getTeachers()
+        ]);
 
         let totalExpected = 0;
         let totalCollected = 0;
@@ -3186,11 +3188,13 @@ async function initAdminDashboard() {
     }
 
     async function renderAdminOverview() {
-        const students = await DB.getStudents();
-        const alumni = await DB.getAlumni();
-        const teachers = await DB.getTeachers();
-        const tests = await DB.getTests();
-        const attendanceList = await DB.getAttendance();
+        const [students, alumni, teachers, tests, attendanceList] = await Promise.all([
+            DB.getStudents(),
+            DB.getAlumni(),
+            DB.getTeachers(),
+            DB.getTests(),
+            DB.getAttendance()
+        ]);
 
         const totalStudents = students.length + alumni.length;
         const activeStudents = students.length;
@@ -4265,23 +4269,27 @@ async function initAdminDashboard() {
         });
     }
 
-    // Initial render across all modules
+    // Fast initial render of overview (the active default tab)
     await renderAdminOverview();
-    await renderStudents();
-    await renderAlumni();
-    await renderTeachers();
-    await renderSalaries();
-    await renderCourses();
-    await calculateFinancials();
-    await renderAdminTests();
-    await renderAdminResultsGradebook();
-    await renderScrollersList();
-    await renderNoteScrollersList();
-    await renderSlideScrollersList();
-    await renderAdminAttendanceForm();
-    await renderAdminAttendanceOverviewTable();
-    await renderBroadcastsTable();
-    await renderAuditLogs();
+
+    // Render remaining modules concurrently in background without blocking dashboard interaction
+    Promise.allSettled([
+        renderStudents(),
+        renderAlumni(),
+        renderTeachers(),
+        renderSalaries(),
+        renderCourses(),
+        calculateFinancials(),
+        renderAdminTests(),
+        renderAdminResultsGradebook(),
+        renderScrollersList(),
+        renderNoteScrollersList(),
+        renderSlideScrollersList(),
+        renderAdminAttendanceForm(),
+        renderAdminAttendanceOverviewTable(),
+        renderBroadcastsTable(),
+        renderAuditLogs()
+    ]).catch(err => console.warn('Background tabs render warning:', err));
 }
 
 if (document.readyState === 'loading') {

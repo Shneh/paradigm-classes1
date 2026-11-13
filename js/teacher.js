@@ -899,14 +899,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // Initial render
-    await populateTestTargetClasses();
-    await renderSalaries();
-    await renderTests();
-    await renderFeeStudents();
-    await renderAttendanceForm();
-    await renderAttendanceOverview();
-    await renderTeacherAssignments();
+    // Fast initial render across all teacher tabs concurrently
+    await Promise.allSettled([
+        populateTestTargetClasses(),
+        renderSalaries(),
+        renderTests(),
+        renderFeeStudents(),
+        renderAttendanceForm(),
+        renderAttendanceOverview(),
+        renderTeacherAssignments()
+    ]);
 
     const salaryMonthSelector = document.getElementById('salaryMonthSelector');
     if (salaryMonthSelector) {

@@ -26,8 +26,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     let publishedTests = [];
 
     async function loadData() {
-        allTests = await DB.getTests();
-        allStudents = await DB.getStudents();
+        [allTests, allStudents] = await Promise.all([
+            DB.getTests(),
+            DB.getStudents()
+        ]);
         publishedTests = allTests.filter(t => t.published);
         renderBatchTabs();
         renderResults();

@@ -951,14 +951,16 @@ async function initStudentDashboard() {
         });
     }
 
-    // Initialize all components
-    await renderFees();
-    await renderResultsAndAnalytics();
-    await renderAssessments();
-    await renderAssignments();
-    await renderAttendance();
-    await renderLectureProgress();
-    await renderStudentNotes();
+    // Initialize all components concurrently for instant load
+    await Promise.allSettled([
+        renderFees(),
+        renderResultsAndAnalytics(),
+        renderAssessments(),
+        renderAssignments(),
+        renderAttendance(),
+        renderLectureProgress(),
+        renderStudentNotes()
+    ]);
     renderProfile();
 }
 

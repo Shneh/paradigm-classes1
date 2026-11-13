@@ -39,29 +39,95 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-// 1. Enable Firestore Offline Persistence (IndexedDB cache for instant repeat loads)
-try {
-    db.enablePersistence({ synchronizeTabs: true }).catch((err) => {
-        if (err.code === 'failed-precondition') {
-            console.warn('Firestore persistence enabled in another tab.');
-        } else if (err.code === 'unimplemented') {
-            console.warn('Browser does not support Firestore persistence.');
-        }
-    });
-} catch (e) {
-    console.warn('Firestore persistence init error:', e);
+// Detect Safari or WebKit-based browsers (including iOS WebKit)
+const isSafariOrWebKit = (function() {
+    try {
+        const ua = navigator.userAgent;
+        const isWebKit = /AppleWebKit/i.test(ua);
+        const isChrome = /Chrome|CriOS|Edg/i.test(ua);
+        const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+        const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        return (isWebKit && (!isChrome || isIOS)) || isSafari;
+    } catch (e) {
+        return false;
+    }
+})();
+
+// 1. Configure Firestore Offline Persistence
+// WebKit / Safari has documented IndexedDB multi-tab locking bugs (WebKit Bug 223594/225344)
+// that cause db.enablePersistence({ synchronizeTabs: true }) to stall for 5-15s, blocking all queries.
+// On Safari/WebKit, we skip IndexedDB multi-tab locks and use our synchronous localStorage cache layer.
+if (!isSafariOrWebKit && typeof db.enablePersistence === 'function') {
+    try {
+        db.enablePersistence({ synchronizeTabs: true }).catch((err) => {
+            if (err.code === 'failed-precondition') {
+                console.warn('Firestore persistence enabled in another tab.');
+            } else if (err.code === 'unimplemented') {
+                console.warn('Browser does not support Firestore persistence.');
+            }
+        });
+    } catch (e) {
+        console.warn('Firestore persistence init error:', e);
+    }
+} else {
+    console.log('⚡ Safari/WebKit detected: Running fast memory + localStorage cache (bypassing slow IndexedDB lock delay).');
 }
 
-// 2. High-Speed In-Memory Cache & In-Flight Request De-duplication
+// 2. High-Speed Multi-Tier Cache (In-Memory RAM + Persistent LocalStorage + In-Flight De-duplication)
 const _memoryCache = new Map();
 const _inFlightPromises = new Map();
-const CACHE_TTL_MS = 45 * 1000; // 45 seconds TTL (instant page interactions, fresh enough for real-time edits)
+const CACHE_TTL_MS = 60 * 1000; // 60 seconds RAM TTL
+const LS_CACHE_TTL_MS = 3 * 60 * 1000; // 3 minutes persistent LocalStorage TTL
+const LS_PREFIX = 'pc_cache_';
+
+function _readFromStorage(docId) {
+    try {
+        const raw = localStorage.getItem(LS_PREFIX + docId);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed.timestamp !== 'number') return null;
+        if (Date.now() - parsed.timestamp < LS_CACHE_TTL_MS) {
+            return parsed.data;
+        }
+        return null;
+    } catch (e) {
+        return null;
+    }
+}
+
+function _readStaleFromStorage(docId) {
+    try {
+        const raw = localStorage.getItem(LS_PREFIX + docId);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        return (parsed && parsed.data !== undefined) ? parsed.data : null;
+    } catch (e) {
+        return null;
+    }
+}
+
+function _saveToStorage(docId, data) {
+    try {
+        localStorage.setItem(LS_PREFIX + docId, JSON.stringify({
+            timestamp: Date.now(),
+            data: data
+        }));
+    } catch (e) {
+        // Safe fail on quota exceeded or Safari private browsing restriction
+    }
+}
+
+function _removeFromStorage(docId) {
+    try {
+        localStorage.removeItem(LS_PREFIX + docId);
+    } catch (e) {}
+}
 
 // Helper to fetch list from a specific document with automatic caching & de-duplication
 async function getList(docId, forceRefresh = false) {
     const now = Date.now();
 
-    // A. Check in-memory cache
+    // A. Check in-memory RAM cache (< 0.1ms)
     if (!forceRefresh && _memoryCache.has(docId)) {
         const cached = _memoryCache.get(docId);
         if (now - cached.timestamp < CACHE_TTL_MS) {
@@ -69,28 +135,49 @@ async function getList(docId, forceRefresh = false) {
         }
     }
 
-    // B. Check in-flight request de-duplication (reuse active promise if already fetching)
+    // B. Check persistent localStorage cache (< 1ms, instant across reloads & page changes)
+    if (!forceRefresh) {
+        const stored = _readFromStorage(docId);
+        if (stored !== null && Array.isArray(stored)) {
+            _memoryCache.set(docId, { data: stored, timestamp: now });
+            return JSON.parse(JSON.stringify(stored));
+        }
+    }
+
+    // C. Check in-flight request de-duplication (reuse active promise if already fetching)
     if (!forceRefresh && _inFlightPromises.has(docId)) {
         const data = await _inFlightPromises.get(docId);
         return JSON.parse(JSON.stringify(data));
     }
 
-    // C. Network / Firestore fetch
+    // D. Network / Firestore fetch with timeout safety guard
     const fetchPromise = (async () => {
         try {
-            const snapshot = await db.collection('appData').doc(docId).get();
+            const timeoutPromise = new Promise((_, reject) => 
+                setTimeout(() => reject(new Error(`Timeout fetching ${docId}`)), 5000)
+            );
+            const getDocPromise = db.collection('appData').doc(docId).get();
+
+            const snapshot = await Promise.race([getDocPromise, timeoutPromise]);
             let list = [];
             if (snapshot.exists) {
                 list = snapshot.data().list || [];
             }
             _memoryCache.set(docId, { data: list, timestamp: Date.now() });
+            _saveToStorage(docId, list);
             return list;
         } catch (error) {
             console.error(`🔥 Firebase Error getting ${docId}:`, error.message);
-            // Fallback to cached data if offline or network error
+            // Fallback to cached data if offline, slow network, or timeout
             if (_memoryCache.has(docId)) {
-                console.warn(`Serving cached data for ${docId} due to network error.`);
+                console.warn(`Serving RAM-cached data for ${docId} due to network error.`);
                 return _memoryCache.get(docId).data;
+            }
+            const stale = _readStaleFromStorage(docId);
+            if (stale !== null && Array.isArray(stale)) {
+                console.warn(`Serving stale localStorage data for ${docId} due to network error.`);
+                _memoryCache.set(docId, { data: stale, timestamp: Date.now() });
+                return stale;
             }
             if (docId !== 'admin') {
                 alert(`Database Read Error: Firebase is blocking data access. Please check your internet connection or Firestore rules.\n\n${error.message}`);
@@ -108,8 +195,9 @@ async function getList(docId, forceRefresh = false) {
 
 // Helper to save list to a specific document with optimistic local cache update
 async function setList(docId, list) {
-    // Optimistically update memory cache immediately so UI reflects changes instantly
+    // Optimistically update memory and localStorage cache immediately so UI reflects changes instantly
     _memoryCache.set(docId, { data: list, timestamp: Date.now() });
+    _saveToStorage(docId, list);
     _inFlightPromises.delete(docId);
 
     try {
@@ -118,6 +206,7 @@ async function setList(docId, list) {
         console.error(`🔥 Firebase Permission Error setting ${docId}:`, error.message);
         alert(`Database Write Error: Firebase is blocking data modifications. Please set Firestore Security Rules to 'true'.\n\n${error.message}`);
         _memoryCache.delete(docId);
+        _removeFromStorage(docId);
         throw error;
     }
 }
@@ -126,7 +215,7 @@ async function setList(docId, list) {
 async function getDoc(docId, defaultVal = null, forceRefresh = false) {
     const now = Date.now();
 
-    // A. Check in-memory cache
+    // A. Check in-memory RAM cache
     if (!forceRefresh && _memoryCache.has(docId)) {
         const cached = _memoryCache.get(docId);
         if (now - cached.timestamp < CACHE_TTL_MS) {
@@ -134,26 +223,46 @@ async function getDoc(docId, defaultVal = null, forceRefresh = false) {
         }
     }
 
-    // B. Check in-flight request de-duplication
+    // B. Check persistent localStorage cache
+    if (!forceRefresh) {
+        const stored = _readFromStorage(docId);
+        if (stored !== null && typeof stored === 'object') {
+            _memoryCache.set(docId, { data: stored, timestamp: now });
+            return JSON.parse(JSON.stringify(stored));
+        }
+    }
+
+    // C. Check in-flight request de-duplication
     if (!forceRefresh && _inFlightPromises.has(docId)) {
         const data = await _inFlightPromises.get(docId);
         return JSON.parse(JSON.stringify(data));
     }
 
-    // C. Network / Firestore fetch
+    // D. Network / Firestore fetch with timeout safety guard
     const fetchPromise = (async () => {
         try {
-            const snapshot = await db.collection('appData').doc(docId).get();
+            const timeoutPromise = new Promise((_, reject) => 
+                setTimeout(() => reject(new Error(`Timeout fetching doc ${docId}`)), 5000)
+            );
+            const getDocPromise = db.collection('appData').doc(docId).get();
+
+            const snapshot = await Promise.race([getDocPromise, timeoutPromise]);
             let data = defaultVal;
             if (snapshot.exists) {
                 data = snapshot.data();
             }
             _memoryCache.set(docId, { data, timestamp: Date.now() });
+            _saveToStorage(docId, data);
             return data;
         } catch (error) {
             console.error(`🔥 Firebase Error getting doc ${docId}:`, error.message);
             if (_memoryCache.has(docId)) {
                 return _memoryCache.get(docId).data;
+            }
+            const stale = _readStaleFromStorage(docId);
+            if (stale !== null && typeof stale === 'object') {
+                _memoryCache.set(docId, { data: stale, timestamp: Date.now() });
+                return stale;
             }
             if (defaultVal !== null) return defaultVal;
             throw error;
@@ -170,6 +279,7 @@ async function getDoc(docId, defaultVal = null, forceRefresh = false) {
 // Helper to save an arbitrary object document with optimistic local cache update
 async function setDoc(docId, data) {
     _memoryCache.set(docId, { data, timestamp: Date.now() });
+    _saveToStorage(docId, data);
     _inFlightPromises.delete(docId);
 
     try {
@@ -177,6 +287,7 @@ async function setDoc(docId, data) {
     } catch (error) {
         console.error(`🔥 Firebase Permission Error setting doc ${docId}:`, error.message);
         _memoryCache.delete(docId);
+        _removeFromStorage(docId);
         throw error;
     }
 }
@@ -215,14 +326,22 @@ async function syncStudentCoins(students) {
 }
 
 const DB = {
-    // Invalidate cached document or all cache
+    // Invalidate cached document or all cache across memory and localStorage
     invalidateCache: (docId) => {
         if (docId) {
             _memoryCache.delete(docId);
             _inFlightPromises.delete(docId);
+            _removeFromStorage(docId);
         } else {
             _memoryCache.clear();
             _inFlightPromises.clear();
+            try {
+                Object.keys(localStorage).forEach(key => {
+                    if (key.startsWith(LS_PREFIX)) {
+                        localStorage.removeItem(key);
+                    }
+                });
+            } catch (e) {}
         }
     },
 
@@ -821,6 +940,8 @@ const DB = {
         }
     }
 };
+
+window.DB = DB;
 
 // Dynamic Announcement Marquee Injector
 async function initAnnouncementBanner() {
