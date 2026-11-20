@@ -3379,8 +3379,9 @@ async function initAdminDashboard() {
         let highestScore = 0;
 
         tests.forEach(t => {
-            if (t.marks && t.marks[student.id] !== undefined && t.marks[student.id] !== null) {
-                const score = parseFloat(t.marks[student.id]) || 0;
+            const markVal = DB.getStudentMark(t, student.id);
+            if (markVal !== undefined && markVal !== null) {
+                const score = parseFloat(markVal) || 0;
                 const max = parseFloat(t.maxMarks) || 1;
                 const pct = Math.round((score / max) * 100);
                 totalMarksScored += score;
@@ -3710,7 +3711,7 @@ async function initAdminDashboard() {
         }
 
         filteredTests.forEach(t => {
-            const marksCount = Object.keys(t.marks || {}).length;
+            const marksCount = Array.isArray(t.marks) ? t.marks.length : Object.keys(t.marks || {}).length;
             const targetClassStr = t.targetClass && t.targetClass !== 'All' ? `Class ${t.targetClass}` : 'All Batches';
             const statusBadge = t.published 
                 ? '<span class="badge badge-success">Published</span>' 
@@ -3775,7 +3776,8 @@ async function initAdminDashboard() {
 
         let csv = `StudentID,StudentName,Class,MarksObtained,MaxMarks,Percentage\n`;
         targetStudents.forEach(st => {
-            const marks = (test.marks && test.marks[st.id] !== undefined) ? test.marks[st.id] : '';
+            const markVal = DB.getStudentMark(test, st.id);
+            const marks = (markVal !== undefined && markVal !== null) ? markVal : '';
             const pct = (marks !== '' && test.maxMarks > 0) ? Math.round((parseFloat(marks) / parseFloat(test.maxMarks)) * 100) : '';
             csv += `"${st.id}","${st.name}","${st.class || ''}",${marks},${test.maxMarks},${pct}\n`;
         });
@@ -3815,7 +3817,8 @@ async function initAdminDashboard() {
             tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-light); padding: 1.5rem;">No students found in this target class.</td></tr>';
         } else {
             targetStudents.forEach(st => {
-                const currentScore = (test.marks && test.marks[st.id] !== undefined) ? test.marks[st.id] : '';
+                const markVal = DB.getStudentMark(test, st.id);
+                const currentScore = (markVal !== undefined && markVal !== null) ? markVal : '';
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td style="font-weight: 700; color: #1e3a8a;">${window.escapeHTML(st.id)}</td>
@@ -3855,25 +3858,26 @@ async function initAdminDashboard() {
         const test = tests.find(t => t.id === testId);
         if (!test) return;
 
-        if (!test.marks) test.marks = {};
-
+        const newMarks = [];
         const inputs = document.querySelectorAll('.mark-entry-input');
         inputs.forEach(inp => {
             const sId = inp.dataset.studentId;
             const val = inp.value.trim();
-            if (val === '') {
-                delete test.marks[sId];
-            } else {
-                test.marks[sId] = parseFloat(val);
+            if (val !== '') {
+                newMarks.push({
+                    studentId: sId,
+                    mark: parseFloat(val)
+                });
             }
         });
+        test.marks = newMarks;
 
         if (publish) {
             test.published = true;
         }
 
         await DB.setTests(tests);
-        await logAdminAudit('Marks Saved', `Updated marks for test "${test.subject}" (${Object.keys(test.marks).length} students)${publish ? ' and published' : ''}`);
+        await logAdminAudit('Marks Saved', `Updated marks for test "${test.subject}" (${newMarks.length} students)${publish ? ' and published' : ''}`);
         window.closeAdminModal('adminMarkEntryModal');
         await renderAdminTests();
         await renderAdminResultsGradebook();
@@ -3993,8 +3997,9 @@ async function initAdminDashboard() {
             const marksMap = {};
 
             activeBatchTests.forEach(t => {
-                if (t.marks && t.marks[student.id] !== undefined && t.marks[student.id] !== null) {
-                    const sc = parseFloat(t.marks[student.id]);
+                const markVal = DB.getStudentMark(t, student.id);
+                if (markVal !== undefined && markVal !== null) {
+                    const sc = parseFloat(markVal);
                     marksMap[t.id] = sc;
                     totalScored += sc;
                     totalMax += parseFloat(t.maxMarks) || 0;
@@ -4088,8 +4093,9 @@ async function initAdminDashboard() {
             let totalMax = 0;
             const marks = {};
             publishedTests.forEach(t => {
-                if (t.marks && t.marks[s.id] !== undefined) {
-                    const sc = parseFloat(t.marks[s.id]) || 0;
+                const markVal = DB.getStudentMark(t, s.id);
+                if (markVal !== undefined && markVal !== null) {
+                    const sc = parseFloat(markVal) || 0;
                     marks[t.id] = sc;
                     totalScored += sc;
                     totalMax += parseFloat(t.maxMarks) || 0;

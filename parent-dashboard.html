@@ -505,13 +505,13 @@
             if (resTableBody) {
                 resTableBody.innerHTML = '';
                 publishedTests.forEach(test => {
-                    const marksList = test.marks || [];
-                    const studentMark = marksList.find(m => m.studentId.toLowerCase() === targetStudentId);
+                    const marksList = Array.isArray(test.marks) ? test.marks : [];
+                    const studentMark = marksList.find(m => m && m.studentId && m.studentId.toLowerCase() === targetStudentId);
 
                     let classTotal = 0;
                     let classCount = 0;
                     marksList.forEach(m => {
-                        if (typeof m.mark === 'number') {
+                        if (m && typeof m.mark === 'number') {
                             classTotal += m.mark;
                             classCount++;
                         }

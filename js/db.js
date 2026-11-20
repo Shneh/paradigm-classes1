@@ -325,6 +325,45 @@ async function syncStudentCoins(students) {
     return students;
 }
 
+// Universal normalization helper for tests and examination marks across all dashboards
+function normalizeTests(rawTests) {
+    if (!Array.isArray(rawTests)) return [];
+    return rawTests.map(test => {
+        if (!test) return test;
+        const normalized = { ...test };
+        const marksArray = [];
+        const marksMap = {};
+
+        if (Array.isArray(test.marks)) {
+            test.marks.forEach(item => {
+                if (item && item.studentId !== undefined && item.studentId !== null) {
+                    const sId = String(item.studentId).trim();
+                    const mark = (item.mark !== undefined && item.mark !== null && item.mark !== '') ? parseFloat(item.mark) : 0;
+                    marksArray.push({ studentId: sId, mark: mark });
+                    marksMap[sId] = mark;
+                    marksMap[sId.toLowerCase()] = mark;
+                }
+            });
+        } else if (test.marks && typeof test.marks === 'object') {
+            Object.entries(test.marks).forEach(([sId, val]) => {
+                if (sId && val !== undefined && val !== null && val !== '') {
+                    const mark = parseFloat(val);
+                    if (!isNaN(mark)) {
+                        const trimmedId = String(sId).trim();
+                        marksArray.push({ studentId: trimmedId, mark: mark });
+                        marksMap[trimmedId] = mark;
+                        marksMap[trimmedId.toLowerCase()] = mark;
+                    }
+                }
+            });
+        }
+
+        normalized.marks = marksArray;
+        normalized.marksMap = marksMap;
+        return normalized;
+    });
+}
+
 const DB = {
     // Invalidate cached document or all cache across memory and localStorage
     invalidateCache: (docId) => {
@@ -488,8 +527,42 @@ const DB = {
         await setDoc('admin', admin);
     },
 
-    getTests: async (forceRefresh = false) => await getList('tests', forceRefresh),
-    setTests: async (tests) => await setList('tests', tests),
+    getStudentMark: (test, studentId) => {
+        if (!test || !studentId) return undefined;
+        const targetId = String(studentId).toLowerCase().trim();
+        if (test.marksMap && test.marksMap[targetId] !== undefined) {
+            return test.marksMap[targetId];
+        }
+        if (Array.isArray(test.marks)) {
+            const item = test.marks.find(m => m && m.studentId && String(m.studentId).toLowerCase().trim() === targetId);
+            return item ? item.mark : undefined;
+        }
+        if (test.marks && typeof test.marks === 'object') {
+            for (const [key, val] of Object.entries(test.marks)) {
+                if (String(key).toLowerCase().trim() === targetId) return val;
+            }
+        }
+        return undefined;
+    },
+
+    getTests: async (forceRefresh = false) => {
+        const list = await getList('tests', forceRefresh);
+        return normalizeTests(list);
+    },
+    setTests: async (tests) => {
+        const cleaned = (tests || []).map(t => {
+            const copy = { ...t };
+            if (!Array.isArray(copy.marks) && copy.marks && typeof copy.marks === 'object') {
+                copy.marks = Object.entries(copy.marks).map(([sId, m]) => ({
+                    studentId: sId,
+                    mark: parseFloat(m) || 0
+                }));
+            }
+            delete copy.marksMap;
+            return copy;
+        });
+        await setList('tests', cleaned);
+    },
 
     getAssignments: async (forceRefresh = false) => {
         try {

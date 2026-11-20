@@ -306,8 +306,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         targetStudents.forEach(student => {
             // Check if mark already exists
-            const existingMark = test.marks.find(m => m.studentId === student.id);
-            const markVal = existingMark ? existingMark.mark : '';
+            const studentMark = (typeof DB !== 'undefined' && typeof DB.getStudentMark === 'function') 
+                ? DB.getStudentMark(test, student.id)
+                : (Array.isArray(test.marks) ? (test.marks.find(m => m && m.studentId === student.id) || {}).mark : '');
+            const markVal = (studentMark !== undefined && studentMark !== null) ? studentMark : '';
 
             const tr = document.createElement('tr');
             tr.innerHTML = `

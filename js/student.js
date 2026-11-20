@@ -197,14 +197,14 @@ async function initStudentDashboard() {
         const weakItems = [];
 
         publishedTests.forEach(test => {
-            const marksList = test.marks || [];
-            const studentMarkObj = marksList.find(m => m.studentId.toLowerCase() === user.id.toLowerCase());
+            const marksList = Array.isArray(test.marks) ? test.marks : [];
+            const studentMarkObj = marksList.find(m => m && m.studentId && m.studentId.toLowerCase() === user.id.toLowerCase());
             
             // Calculate Class Average for this test
             let classTotalMarks = 0;
             let classStudentCount = 0;
             marksList.forEach(m => {
-                if (typeof m.mark === 'number') {
+                if (m && typeof m.mark === 'number') {
                     classTotalMarks += m.mark;
                     classStudentCount++;
                 }
@@ -306,9 +306,9 @@ async function initStudentDashboard() {
             document.getElementById('analyticsAccuracy').textContent = `${((totalObtained / totalMax) * 100).toFixed(1)}%`;
 
             // Calculate overall cohort average
-            const allPublishedMarks = publishedTests.flatMap(t => t.marks || []).map(m => m.mark).filter(m => typeof m === 'number');
+            const allPublishedMarks = publishedTests.flatMap(t => Array.isArray(t.marks) ? t.marks : []).map(m => m ? m.mark : null).filter(m => typeof m === 'number');
             const totalCohortObtained = allPublishedMarks.reduce((a, b) => a + b, 0);
-            const totalCohortMax = publishedTests.reduce((sum, t) => sum + (t.maxMarks * (t.marks || []).length), 0);
+            const totalCohortMax = publishedTests.reduce((sum, t) => sum + (t.maxMarks * (Array.isArray(t.marks) ? t.marks.length : 0)), 0);
             const cohortAvgOverall = totalCohortMax > 0 ? ((totalCohortObtained / totalCohortMax) * 100).toFixed(1) + '%' : 'N/A';
             document.getElementById('analyticsCohortAvg').textContent = cohortAvgOverall;
         }

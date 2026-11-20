@@ -166,7 +166,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // Tally marks for published tests for this batch
             batchTests.forEach(test => {
-                test.marks.forEach(m => {
+                const marksList = Array.isArray(test.marks) ? test.marks : [];
+                marksList.forEach(m => {
+                    if (!m || !m.studentId) return;
                     // If student is in this batch or if in ALL mode
                     let s = studentStats[m.studentId];
                     if (!s) {
